@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Intro from '../pages/Intro';
 import Login from '../pages/Login';
+import RoomList from '../pages/RoomList';
 import Auth from '../shared/auth';
 
 const Router = () => {
@@ -10,6 +11,7 @@ const Router = () => {
 			<Route path='/' component={Auth(Intro, null)} exact />
 			<Route path='/login' component={Auth(Login, null)} exact />
 			<Route path='/login' component={Auth(Login, null)} exact />
+			<Route path='/roomlist' component={Auth(RoomList, null)} exact />
 		</Switch>
 	);
 };

@@ -1,6 +1,8 @@
 // redux
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import user from "./modules/user";
+import room from "./modules/room";
+import image from "./modules/image";
 
 // middlewares
 import thunk from "redux-thunk";
@@ -12,6 +14,8 @@ export const history = createBrowserHistory();
 
 const rootReducer = combineReducers({
   user,
+  room,
+  image,
   router: connectRouter(history),
 });
 

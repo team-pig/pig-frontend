@@ -1,14 +1,13 @@
 import AWS from "aws-sdk";
 import React from "react";
 import styled from "styled-components";
+import {useDispatch} from "react-redux";
 
 //element
 import Input from "../elem/Input";
 
 //redux
 import image from "../redux/modules/image";
-
-import {useDispatch} from "react-redux";
 
 const ImgUploader = (props) => {
 

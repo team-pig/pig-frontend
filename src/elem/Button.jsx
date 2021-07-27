@@ -1,8 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-const Button = ({ children, _onClick }) => {
-	return <Wrapper onClick={_onClick}>{children}</Wrapper>;
+const Button = ({ children, _onClick, type }) => {
+  return (
+    <Wrapper onClick={_onClick} type={type}>
+      {children}
+    </Wrapper>
+  );
 };
 
 const Wrapper = styled.button``;

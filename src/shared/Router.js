@@ -4,6 +4,7 @@ import { Switch, Route } from "react-router-dom";
 // pages
 import Intro from "../pages/Intro";
 import Login from "../pages/Login";
+
 import Register from "../pages/Register";
 import RoomList from "../pages/RoomList";
 import Auth from "../shared/auth";

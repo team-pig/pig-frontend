@@ -1,26 +1,24 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
-import AWS from 'aws-sdk';
+import React, { useState } from "react";
+import styled from "styled-components";
+import AWS from "aws-sdk";
 
 //components
-import ImgUploader from '../components/ImgUploader';
+import ImgUploader from "../components/ImgUploader";
 
 // elements
-import Input from '../elem/Input';
+import Input from "../elem/Input";
 
-const AddRoomModal = ({showModal, closeModal}) => {
-
-
-
+const AddRoomModal = ({ showModal, closeModal }) => {
   return (
     <>
-        {showModal ? (<ModalContainer>
+      {showModal ? (
+        <ModalContainer>
           <ModalOverlay onClick={closeModal}></ModalOverlay>
           <ModalContent>
-           <ImgUploader />
+            <ImgUploader />
           </ModalContent>
-        </ModalContainer>) : null}
-     
+        </ModalContainer>
+      ) : null}
     </>
   );
 };
@@ -56,7 +54,5 @@ const ModalContent = styled.div`
   
   }
 `;
-
-
 
 export default AddRoomModal;

@@ -1,21 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import AWS from "aws-sdk";
+
+import {useDispatch, useSelector} from "react-redux";
 
 //components
 import ImgUploader from "../components/ImgUploader";
 
 // elements
 import Input from "../elem/Input";
+import Button from "../elem/Button";
+
+//redux
+import { __addRoom } from "../redux/modules/room";
+import { setPreview, uploadImageToS3 } from "../redux/modules/image";
 
 const AddRoomModal = ({ showModal, closeModal }) => {
+  const dispatch = useDispatch();
+  const [contents, setContents] = useState({
+    roomImage:"",
+    roomName:"",
+    subtitle:"",
+    tag:[],
+  });
+  const fileInput = useRef();
+  const previewUrl = useSelector((state) => state.image.preview);
+
+  const changeHandler = (e) => {
+    const {value, name} = e.target;
+    setContents({...contents, [name]: value});
+  }
+
+  // Upload to S3 image bucket!
+  const handleFileInput = async (e) => {
+    const file = fileInput.current.files[0];
+
+    const upload = new AWS.S3.ManagedUpload({
+      params: {
+        Bucket: "teampigbucket",
+        Key: file.name,
+        Body: file,
+      },
+    });
+
+    const {Location} = await upload.promise();
+    dispatch(uploadImageToS3(Location));
+    dispatch(__addRoom(contents));
+  };
+
   return (
     <>
       {showModal ? (
         <ModalContainer>
           <ModalOverlay onClick={closeModal}></ModalOverlay>
           <ModalContent>
-            <ImgUploader />
+            <ImgUploader fileInput={fileInput}/>
+            <input name="roomName" placeholder="방 이름" onChange={changeHandler}/>
+            <input name="subtitle" placeholder="부제목" onChange={changeHandler}/>
+            {/* <input name="tag" placeholder="태그" onChange={changeHandler}/> */}
+            
+            <Button _onClick={handleFileInput}>저장</Button>
           </ModalContent>
         </ModalContainer>
       ) : null}

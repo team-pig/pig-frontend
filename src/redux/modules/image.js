@@ -1,7 +1,5 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
-import ImgUploader from "../../components/ImgUploader";
-import { DRAFT_STATE } from "immer/dist/internal";
 
 //action
 const SET_PREVIEW = "image/SET_PREVIEW";
@@ -13,10 +11,11 @@ export const uploadImageToS3 = createAction(UPLOAD, (imgUrl) => ({ imgUrl }));
 //initialState
 const initialState = {
   preview: null,
+  imgUrl: "",
 };
 
 //reducer
-const image = handleActions(
+export const image = handleActions(
   {
     [SET_PREVIEW]: (state, action) =>
       produce(state, (draft) => {

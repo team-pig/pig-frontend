@@ -2,6 +2,7 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import user from "./modules/user";
 import document from "./modules/document";
+import calendar from "./modules/calendar";
 
 // middlewares
 import thunk from "redux-thunk";
@@ -14,6 +15,7 @@ export const history = createBrowserHistory();
 const rootReducer = combineReducers({
   user,
   document,
+  calendar,
   router: connectRouter(history),
 });
 

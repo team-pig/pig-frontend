@@ -8,7 +8,7 @@ import Auth from "../shared/auth";
 const WSRouter = ({ path }) => {
   return (
     <Switch>
-      {/* <Route path={path} component={Main} exact /> */}\
+      {/* <Route path={path} component={Main} exact /> */}
       <Route path={`${path}/doc/add`} component={Auth(DocAdd, null)} exact />
       <Route
         path={`${path}/doc/:docId`}

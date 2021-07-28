@@ -3,6 +3,8 @@ import { Switch, Route } from "react-router-dom";
 import DocAdd from "../pages/DocAdd";
 import DocEdit from "../pages/DocEdit";
 import DocView from "../pages/DocView";
+import Calendar from "../pages/Calendar";
+
 import Auth from "../shared/auth";
 
 const WSRouter = ({ path }) => {
@@ -20,6 +22,7 @@ const WSRouter = ({ path }) => {
         component={Auth(DocEdit, null)}
         exact
       />
+      <Route path={`${path}/calendar`} component={Auth(Calendar, null)} exact />
     </Switch>
   );
 };

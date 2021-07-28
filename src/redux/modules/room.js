@@ -14,7 +14,7 @@ const LOADING = "LOADING";
 const initialState = {
   roomList: [],
   room: null,
-  willAddRoom: null,
+  isLoading: false,
 };
 
 //action creator
@@ -51,7 +51,11 @@ export const __getRoomList =
   () =>
   async (dispatch, getState, { history }) => {
     try {
-    } catch (e) {}
+      const { data } = await roomApi.getRoomList();
+      dispatch(getRoomList(data));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
 export const __getOneRoom =

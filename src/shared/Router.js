@@ -7,6 +7,7 @@ import Login from "../pages/Login";
 
 import Register from "../pages/Register";
 import RoomList from "../pages/RoomList";
+import Workspace from "../pages/Workspace";
 import Auth from "../shared/auth";
 
 const Router = () => {
@@ -16,6 +17,7 @@ const Router = () => {
       <Route path="/login" component={Auth(Login, null)} exact />
       <Route path="/register" component={Auth(Register, null)} exact />
       <Route path="/roomlist" component={Auth(RoomList, null)} exact />
+      <Route path="/workspace/:roomId" component={Auth(Workspace, null)} />
     </Switch>
   );
 };

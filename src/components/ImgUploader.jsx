@@ -1,5 +1,5 @@
 import AWS from "aws-sdk";
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -9,7 +9,7 @@ import Input from "../elem/Input";
 //redux
 import {setPreview} from "../redux/modules/image";
 
-const ImgUploader = ({fileInput}) => {
+const ImgUploader = ({fileInput, name}) => {
 
   const dispatch = useDispatch();
   const preview = useSelector((state) => state.image.preview);
@@ -25,6 +25,7 @@ const ImgUploader = ({fileInput}) => {
       dispatch(setPreview(reader.result));
     }
   }
+
   
   AWS.config.update({
     region: "ap-northeast-2",
@@ -44,7 +45,10 @@ const ImgUploader = ({fileInput}) => {
         onChange={imagePreview}
         ref={fileInput}
       />
-      <label htmlFor="upload" preview={preview} className="image-upload-wrapper"></label>
+      <label htmlFor="upload" className="image-upload-wrapper"></label>
+      <img
+        src={preview ? preview : "http://via.placeholder.com/400x300"}
+      />
     </>
   );
 };

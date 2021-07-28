@@ -1,17 +1,57 @@
 import React from "react";
+import styled from "styled-components";
+import { useHistory, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 // toast UI viewer
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Viewer } from "@toast-ui/react-editor";
+import { Button } from "../elem";
+import { __deleteDoc } from "../redux/modules/document";
 
 const DocViewer = () => {
-  // 현재 문서의 html형태 string을 불러와서 initialValue로 보여줘야 함.
+  const history = useHistory();
+  const { roomId, docId } = useParams();
+
+  const dispatch = useDispatch();
+
+  const { title, content } = useSelector((state) => {
+    const idx = state.document.docList.findIndex(
+      (doc) => doc.docId === Number(docId)
+    );
+    return state.document.docList[idx];
+  });
+
   const viewerOpt = {
-    // 더미 데이터
-    // initialValue: "<h1>123456</h1>\n\r<h2>gkgkgkgk</h2>\n\r<p>zzzzz</p>",
+    initialValue: content ? content : "",
   };
 
-  return <Viewer {...viewerOpt}></Viewer>;
+  const clickDelete = () => {
+    // 정말 삭제할거냐는 안내 모달 필요
+    dispatch(__deleteDoc(docId, roomId));
+  };
+
+  return (
+    <>
+      <DocTitle>{title ? title : ""}</DocTitle>
+      <div>
+        <Button
+          _onClick={() =>
+            history.push(`/workspace/${roomId}/doc/${docId}/edit`)
+          }
+        >
+          수정
+        </Button>
+        <Button _onClick={clickDelete}>삭제</Button>
+      </div>
+      <Viewer {...viewerOpt}></Viewer>
+    </>
+  );
 };
 
+const DocTitle = styled.div`
+  // 임시 적용 스타일
+  font-size: 30px;
+  font-weight: bolder;
+`;
 export default DocViewer;

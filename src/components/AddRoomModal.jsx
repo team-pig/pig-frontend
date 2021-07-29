@@ -30,11 +30,6 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
 
   const isEdit = roomId ? true : false;
 
-
-  React.useEffect(() => {
-    console.log(roomId);
-  })
-
   const changeHandler = (e) => {
     const {value, name} = e.target;
     setContents({...contents, [name]: value});

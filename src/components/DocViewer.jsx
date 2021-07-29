@@ -25,20 +25,17 @@ const DocViewer = () => {
   });
 
   // 최적화 반드시 필요✨
-  const currentDoc =
-    useSelector((state) => {
-      const idx = state.document.docList.findIndex(
-        (doc) => doc.docId === docId
-      );
-      return state.document.docList[idx];
-    }) || {};
+  const currentDoc = useSelector((state) => {
+    const idx = state.document.docList.findIndex((doc) => doc.docId === docId);
+    return state.document.docList[idx];
+  });
 
   useEffect(() => {
     setCurrent({
-      title: currentDoc.title,
-      content: currentDoc.content,
+      title: currentDoc ? currentDoc.title : "",
+      content: currentDoc ? currentDoc.content : "",
     });
-  }, [currentDoc]);
+  }, [currentDoc, dispatch]);
 
   const viewerOpt = {
     initialValue: current.content,

@@ -9,6 +9,7 @@ const GET_ROOM_LIST = "room/GET_ROOM_LIST";
 const GET_ONE_ROOM = "room/GET_ONE_ROOM";
 const EDIT_ROOM = "room/EDIT_ROOM";
 const DELETE_ROOM = "room/DELETE_ROOM";
+const JOIN_ROOM = "room/JOIN_ROOM";
 const LOADING = "LOADING";
 
 //initialState
@@ -48,9 +49,23 @@ export const editRoom = createAction(EDIT_ROOM, (roomId, newContent) => ({
   newContent,
 }));
 export const deleteRoom = createAction(DELETE_ROOM, (roomId) => ({ roomId }));
+export const joinRoom = createAction(JOIN_ROOM, (inviteCode) => ({
+  inviteCode,
+}));
 export const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
 
 //thunk function
+export const __joinRoom =
+  (inviteCode) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      const { data } = await roomApi.joinRoom();
+      dispatch(joinRoom(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
 export const __addRoom =
   (contents) =>
   async (dispatch, getState, { history }) => {
@@ -62,9 +77,9 @@ export const __addRoom =
       };
       console.log(willDispatchContents);
       //api post
-      // const { data } = await roomApi.addRoom(willDispatchContents);
-      // dispatch(addRoom(data));
-      dispatch(addRoom(willDispatchContents));
+      const { data } = await roomApi.addRoom(willDispatchContents);
+      dispatch(addRoom(data));
+      // dispatch(addRoom(willDispatchContents));
     } catch (e) {
       console.log(e);
     }
@@ -86,9 +101,9 @@ export const __editRoom =
         roomImage: _image,
       };
 
-      // const { data } = await roomApi.editRoom(roomId, willDispatchContents);
-      // dispatch(editRoom(data));
-      dispatch(editRoom(roomId, willDispatchContents));
+      const { data } = await roomApi.editRoom(roomId, willDispatchContents);
+      dispatch(editRoom(data));
+      // dispatch(editRoom(roomId, willDispatchContents));
     } catch (e) {
       console.log(e);
     }
@@ -100,6 +115,8 @@ export const __getRoomList =
     try {
       const { data } = await roomApi.getRoomList();
       dispatch(getRoomList(data));
+      // const data = getState().room.roomList;
+      // dispatch(getRoomList(data));
     } catch (e) {
       console.log(e);
     }
@@ -120,8 +137,7 @@ export const __deleteRoom =
   (roomId) =>
   async (dispatch, getState, { history }) => {
     try {
-      // await roomApi.deleteRoom(roomId);
-      console.log(roomId);
+      await roomApi.deleteRoom(roomId);
       dispatch(deleteRoom(roomId));
     } catch (e) {
       console.log(e);
@@ -132,6 +148,10 @@ export const __deleteRoom =
 const room = handleActions(
   {
     [ADD_ROOM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.roomList.unshift(action.payload.room);
+      }),
+    [JOIN_ROOM]: (state, action) =>
       produce(state, (draft) => {
         draft.roomList.unshift(action.payload.room);
       }),

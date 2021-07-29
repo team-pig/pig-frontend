@@ -15,25 +15,8 @@ const LOADING = "LOADING";
 //initialState
 const initialState = {
   roomList: [],
-  room: [
-    {
-      _id: "1",
-      roomImage:
-        "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EC%9D%BC%EC%B6%9C.jpg",
-      roomName: "1번이다",
-      subtitle: "1번 서브",
-      tag: ["밥", "맛있다"],
-    },
-    {
-      _id: "2",
-      roomImage:
-        "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%ED%95%98%EB%8A%98%EC%82%AC%EC%A7%84.jpg",
-      roomName: "2번이다",
-      subtitle: "2번 서브",
-      tag: ["태그1", "태그2"],
-    },
-  ],
-  isLoading: false,
+  room: [],
+  isLoading: null,
 };
 
 //action creator

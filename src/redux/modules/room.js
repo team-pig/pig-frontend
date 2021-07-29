@@ -15,25 +15,8 @@ const LOADING = "LOADING";
 //initialState
 const initialState = {
   roomList: [],
-  room: [
-    {
-      _id: "1",
-      roomImage:
-        "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EC%9D%BC%EC%B6%9C.jpg",
-      roomName: "1번이다",
-      subtitle: "1번 서브",
-      tag: ["밥", "맛있다"],
-    },
-    {
-      _id: "2",
-      roomImage:
-        "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%ED%95%98%EB%8A%98%EC%82%AC%EC%A7%84.jpg",
-      roomName: "2번이다",
-      subtitle: "2번 서브",
-      tag: ["태그1", "태그2"],
-    },
-  ],
-  isLoading: false,
+  room: [],
+  isLoading: null,
 };
 
 //action creator
@@ -44,8 +27,7 @@ export const getRoomList = createAction(GET_ROOM_LIST, (roomList) => ({
 export const getOneRoom = createAction(GET_ONE_ROOM, (roomId) => ({
   roomId,
 }));
-export const editRoom = createAction(EDIT_ROOM, (roomId, newContent) => ({
-  roomId,
+export const editRoom = createAction(EDIT_ROOM, (newContent) => ({
   newContent,
 }));
 export const deleteRoom = createAction(DELETE_ROOM, (roomId) => ({ roomId }));
@@ -86,23 +68,20 @@ export const __addRoom =
   };
 
 export const __editRoom =
-  (roomId, newContent, isEdit) =>
+  (roomId, contents, isEdit) =>
   async (dispatch, getState, { history }) => {
     try {
-      console.log(roomId);
       const _image = getState().image.preview;
-      const _room_idx = getState().room.room.findIndex((r) => r._id === roomId);
-
-      const _room = getState().room.roomList[_room_idx];
-
-      const willDispatchContents = {
-        ...newContent,
+      const newContent = {
+        ...contents,
         roomImage: _image,
+        roomId,
       };
 
-      const { data } = await roomApi.editRoom(roomId, willDispatchContents);
-
-      dispatch(editRoom(data));
+      console.log(newContent);
+      console.log(roomId);
+      await roomApi.editRoom(newContent);
+      dispatch(editRoom(newContent));
       // dispatch(editRoom(roomId, willDispatchContents));
     } catch (e) {
       console.log(e);
@@ -139,7 +118,6 @@ export const __deleteRoom =
     try {
       console.log(roomId);
       await roomApi.deleteRoom(roomId);
-      console.log("이젠 되자");
       dispatch(deleteRoom(roomId));
     } catch (e) {
       console.log(e);
@@ -164,9 +142,12 @@ const room = handleActions(
       }),
     [EDIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.room.findIndex((r) => r._id === action.payload.roomId);
+        console.log(action.payload.newContent.roomId);
+        let idx = draft.room.findIndex(
+          (r) => r._id === action.payload.newContent.roomId
+        );
 
-        draft.room[idx] = action.payload.newContent;
+        draft.room[idx] = { ...draft.room[idx], ...action.payload.newContent };
         // {
         //   ...draft.roomList[idx],
         //   ...action.payload.room,

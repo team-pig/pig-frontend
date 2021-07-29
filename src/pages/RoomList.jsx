@@ -11,10 +11,9 @@ import RoomCard from "../components/RoomCard";
 import Button from "../elem/Button";
 
 //redux
-import { history } from "../redux/configStore";
 import { __getRoomList } from "../redux/modules/room";
 
-const RoomList = (props) => {
+const RoomList = ({history}) => {
   const dispatch = useDispatch();
   const roomList = useSelector((state) => state.room.room) || [];
   const [showModal, setShowModal] = useState(false);
@@ -24,21 +23,21 @@ const RoomList = (props) => {
     dispatch(__getRoomList());
   }, []);
 
-  const openModal = () => {
-    setShowModal(true);
-    setIsJoin(false);
-  };
 
   const openJoinModal = () => {
     setShowModal(true);
     setIsJoin(true);
   };
 
+  const openModal = () => {
+    setShowModal(true);
+    setIsJoin(false);
+  };
+
   const closeModal = () => {
     setShowModal(false);
   };
 
-  const enterRooom = (_id) => history.push(`/workspace/${_id}`);
   return (
     <Template>
       <div>roomlist</div>
@@ -56,7 +55,7 @@ const RoomList = (props) => {
             <RoomCard
               key={idx}
               {...room}
-              onClick={() => enterRooom(room._id)}
+              history={history}
             />
           );
         })}

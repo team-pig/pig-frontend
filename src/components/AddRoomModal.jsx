@@ -23,6 +23,7 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
     subtitle: "",
     tag: "",
   });
+  const [isImage, setIsImage] = useState(false);
   const roomList = useSelector((state) => state.room.room);
   const preview = useSelector((state) => state.image.preview);
 
@@ -48,7 +49,14 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
     const { Location } = await upload.promise();
     dispatch(uploadImageToS3(Location));
     dispatch(__addRoom(contents));
+    
   };
+
+  const saveFile = () => {
+    handleFileInput();
+    closeModal();
+    setIsImage(false);
+  }
 
   return (
     <>
@@ -56,7 +64,7 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
         <ModalContainer>
           <ModalOverlay onClick={closeModal}></ModalOverlay>
           <ModalContent>
-            <ImgUploader name="roomImage" fileInput={fileInput} />
+            <ImgUploader setIsImage={setIsImage} isImage={isImage} name="roomImage" fileInput={fileInput} />
 
             <input
               name="roomName"
@@ -70,8 +78,8 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
             />
             <input name="tag" placeholder="태그" onChange={changeHandler} />
 
-            <Button _onClick={handleFileInput}>저장</Button>
-            {/* <Button _onClick={editRoom}>수정</Button> */}
+            <Button _onClick={saveFile}>저장</Button>
+           
           </ModalContent>
         </ModalContainer>
       ) : null}

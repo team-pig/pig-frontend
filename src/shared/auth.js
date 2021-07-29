@@ -1,25 +1,46 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { userApi } from "../api/userApi";
+import { __loginCheck } from "../redux/modules/user";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (SpecialComponent, option, adminRoute = null) => {
-	/* 
-     예)  option: null -> 누구나 출입이 가능한 페이지 (home)
-                 true -> 로그인한 유저만 출입이 가능한 페이지
-                 false -> 로그인한 유저는 출입이 불가능한 페이지
-  */
+  const dispatch = useDispatch();
+  const AuthenticateCheck = ({ history, match, location }) => {
+    useEffect(() => {
+      // 권한 설정 필요 없는 경우 return
+      if (option === null) return;
 
-	const AuthenticateCheck = (props) => {
-		const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+      const loginCheck = async () => {
+        try {
+          // login checking
+          const {
+            data: { ok: isLogin, user },
+          } = await userApi.loginCheck();
+          // 로그인 한 사용자 login, register 페이지 접근 차단
+          if (
+            isLogin === true &&
+            option === false &&
+            (match.path === "/login" || match.path === "/register")
+          ) {
+            history.replace("/roomlist");
+          }
+          // 리덕스 업데이트
+          dispatch(__loginCheck(isLogin, user));
+        } catch (e) {
+          // login, register 페이지로 가는 것은 예외처리
+          if (match.path === "/login" || match.path === "/register") return;
 
-		useEffect(() => {
-			// if (!isLoggedIn && option) {
-			// 	props.history.push('/login');
-			// }
-		}, []);
+          // 위 2개를 제외한 모든 url에 login 하지 않은 사용자가 접근하면 login 페이지로
+          if (!!e.response.data) history.replace("/login");
+          dispatch(__loginCheck(false));
+        }
+      };
 
-		return <SpecialComponent history={props.history} />;
-	};
+      loginCheck();
+    }, []);
 
-	return AuthenticateCheck;
+    return <SpecialComponent history={history} />;
+  };
+  return AuthenticateCheck;
 };

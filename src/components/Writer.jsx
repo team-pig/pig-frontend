@@ -55,9 +55,10 @@ const Writer = ({ targetDoc }) => {
     }
 
     const instance = editorRef.current.getInstance();
-    const content_html = instance.getHTML();
+    // const content_html = instance.getHTML();
+    const content_md = instance.getMarkdown();
 
-    return { title, content: content_html };
+    return { title, content: content_md };
   };
 
   const clickSave = () => {

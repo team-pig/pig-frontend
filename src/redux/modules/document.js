@@ -11,11 +11,7 @@ const DELETE_DOC = "document/DELETE_DOC";
 // action creator
 const getDocs = createAction(GET_DOCS, (docs) => ({ docs }));
 const createDoc = createAction(CREATE_DOC, (doc) => ({ doc }));
-const editDoc = createAction(EDIT_DOC, (docId, title, content) => ({
-  docId,
-  title,
-  content,
-}));
+const editDoc = createAction(EDIT_DOC, (doc) => ({ doc }));
 const deleteDoc = createAction(DELETE_DOC, (docId) => ({ docId }));
 
 // Thunk
@@ -75,12 +71,16 @@ export const __editDoc =
   (docObj, roomId) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { ok, message } = await docApi.editDoc(roomId, docObj);
+      const { title, content, docId: documentId } = docObj;
+      const newDocObj = { title, content, documentId };
 
-      if (!ok) {
-        console.log(message);
-        return;
-      }
+      const { ok, message } = await docApi.editDoc(roomId, newDocObj);
+
+      // response에서 ok가 잘못와서 일단 주석처리
+      // if (!ok) {
+      //   console.log(message);
+      //   return;
+      // }
 
       dispatch(editDoc(docObj));
       history.push(`/workspace/${roomId}/doc/${docObj.docId}`);
@@ -128,7 +128,7 @@ const document = handleActions(
       }),
     [EDIT_DOC]: (state, action) =>
       produce(state, (draft) => {
-        const { docId, title, content } = action.payload;
+        const { docId, title, content } = action.payload.doc;
         const idx = draft.docList.findIndex((doc) => doc.docId === docId);
         draft.docList[idx].title = title;
         draft.docList[idx].content = content;

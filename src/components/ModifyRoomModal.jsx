@@ -17,12 +17,13 @@ import { setPreview, uploadImageToS3 } from "../redux/modules/image";
 
 const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
   const dispatch = useDispatch();
-  const [contents, setContents] = useState({
+  const [newContent, setNewContent] = useState({
     roomImage: "",
     roomName: "",
     subtitle: "",
     tag: "",
   });
+  const [isImage, setIsImage] = useState(false);
   const roomList = useSelector((state) => state.room.roomList);
   const preview = useSelector((state) => state.image.preview);
 
@@ -36,7 +37,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
-    setContents({ ...contents, [name]: value });
+    setNewContent({ ...newContent, [name]: value });
   };
 
   // Upload to S3 image bucket!
@@ -53,14 +54,13 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
 
     const { Location } = await upload.promise();
     dispatch(uploadImageToS3(Location));
-    dispatch(__addRoom(contents));
   };
 
-  const editRoom = () => {
-    console.log(isEdit);
-    console.log(roomId);
-    dispatch(__editRoom(roomId, contents));
-  };
+  const modifyFile = () => {
+    dispatch(__editRoom(roomId, newContent));
+    closeModModal();
+    setIsImage(false);
+  }
 
   return (
     <>
@@ -68,7 +68,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
         <ModalContainer>
           <ModalOverlay onClick={closeModModal}></ModalOverlay>
           <ModalContent>
-            <ImgUploader name="roomImage" fileInput={fileInput} />
+            <ImgUploader setIsImage={setIsImage} isImage={isImage} name="roomImage" fileInput={fileInput} />
 
             <input
               name="roomName"
@@ -82,7 +82,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
             />
             <input name="tag" placeholder="태그" onChange={changeHandler} />
 
-            <Button _onClick={editRoom}>수정</Button>
+            <Button _onClick={modifyFile}>수정</Button>
           </ModalContent>
         </ModalContainer>
       ) : null}

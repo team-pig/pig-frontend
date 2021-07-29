@@ -11,6 +11,6 @@ export const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
   const accessToken = cookies.get("accessToken");
-  config.headers.common["Authorization"] = `${accessToken}`;
+  config.headers.common["Authorization"] = `Bearer ${accessToken}`;
   return config;
 });

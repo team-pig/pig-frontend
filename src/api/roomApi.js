@@ -6,5 +6,6 @@ export const roomApi = {
   getOneRoom: (roomId) => instance.get(`/rooms/${roomId}/main`, roomId),
   addRoom: (room) => instance.post("/room", room),
   editRoom: (roomId, content) => instance.put("/room", { content }),
+  joinRoom: () => instance.post("/room"),
   deleteRoom: (roomId) => instance.delete("/room"),
 };

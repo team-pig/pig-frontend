@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,15 +15,29 @@ const DocViewer = () => {
 
   const dispatch = useDispatch();
 
-  const { title, content } = useSelector((state) => {
-    const idx = state.document.docList.findIndex(
-      (doc) => doc.docId === Number(docId)
-    );
-    return state.document.docList[idx];
+  const [current, setCurrent] = useState({
+    title: "",
+    content: "",
   });
 
+  // 최적화 반드시 필요✨
+  const currentDoc =
+    useSelector((state) => {
+      const idx = state.document.docList.findIndex(
+        (doc) => doc.docId === docId
+      );
+      return state.document.docList[idx];
+    }) || {};
+
+  useEffect(() => {
+    setCurrent({
+      title: currentDoc.title,
+      content: currentDoc.content,
+    });
+  }, [currentDoc]);
+
   const viewerOpt = {
-    initialValue: content ? content : "",
+    initialValue: current.content,
   };
 
   const clickDelete = () => {
@@ -33,7 +47,7 @@ const DocViewer = () => {
 
   return (
     <>
-      <DocTitle>{title ? title : ""}</DocTitle>
+      <DocTitle>{current.title}</DocTitle>
       <div>
         <Button
           _onClick={() =>
@@ -44,7 +58,7 @@ const DocViewer = () => {
         </Button>
         <Button _onClick={clickDelete}>삭제</Button>
       </div>
-      <Viewer {...viewerOpt}></Viewer>
+      {current.content && <Viewer {...viewerOpt}></Viewer>}
     </>
   );
 };

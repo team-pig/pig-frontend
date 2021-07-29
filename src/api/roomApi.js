@@ -5,6 +5,14 @@ export const roomApi = {
   getRoomList: () => instance.get("/rooms"),
   getOneRoom: (roomId) => instance.get(`/rooms/${roomId}/main`, roomId),
   addRoom: (room) => instance.post("/room", room),
-  editRoom: (roomId, content) => instance.put("/room", { content }),
-  deleteRoom: (roomId) => instance.delete("/room"),
+  editRoom: (roomId, content) => instance.put("/room", { roomId, content }),
+  joinRoom: () => instance.post("/room"),
+  deleteRoom: (roomId) => {
+    console.log(`roomId`, roomId);
+    instance.delete("/room", {
+      data: {
+        roomId,
+      },
+    });
+  },
 };

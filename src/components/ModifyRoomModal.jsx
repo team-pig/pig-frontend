@@ -81,11 +81,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
               onChange={changeHandler}
             />
             <input name="tag" placeholder="태그" onChange={changeHandler} />
-            {/* {isEdit ? (
-              <Button _onClick={editRoom}>수정</Button>
-            ) : (
-              <Button _onClick={handleFileInput}>저장</Button>
-            )} */}
+
             <Button _onClick={editRoom}>수정</Button>
           </ModalContent>
         </ModalContainer>

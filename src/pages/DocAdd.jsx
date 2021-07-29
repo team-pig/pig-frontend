@@ -1,6 +1,8 @@
 import React from "react";
-import Template from "../components/Template";
+
+// component
 import Writer from "../components/Writer";
+import Template from "../components/Template";
 
 const DocAdd = () => {
   return (

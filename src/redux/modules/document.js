@@ -94,15 +94,16 @@ export const __deleteDoc =
   (docId, roomId) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { ok, message } = await docApi.deleteDoc(roomId);
+      const { ok, message } = await docApi.deleteDoc(roomId, docId);
 
-      if (!ok) {
-        console.log(message);
-        return;
-      }
+      // ok를 받지 못했을 때의 처리가 필요함
+      // if (!ok) {
+      //   console.log(message);
+      //   return;
+      // }
 
       dispatch(deleteDoc(docId));
-      history.replace(`/workplace/${roomId}/doc/3`);
+      history.replace(`/workspace/${roomId}/doc/add`);
     } catch (e) {
       console.log("문서 삭제에 실패했습니다.", e);
     }

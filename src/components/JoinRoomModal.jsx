@@ -15,63 +15,25 @@ import Button from "../elem/Button";
 import { __addRoom, __editRoom } from "../redux/modules/room";
 import { setPreview, uploadImageToS3 } from "../redux/modules/image";
 
-const AddRoomModal = ({ roomId, showModal, closeModal }) => {
+const JoinRoomModal = ({ showModal, closeModal }) => {
   const dispatch = useDispatch();
-  const [contents, setContents] = useState({
-    roomImage: "",
-    roomName: "",
-    subtitle: "",
-    tag: "",
-  });
-  const roomList = useSelector((state) => state.room.room);
-  const preview = useSelector((state) => state.image.preview);
-
-  const fileInput = useRef();
-
+  const [inviteCode, setInviteCode] = useState();
   const changeHandler = (e) => {
     const { value, name } = e.target;
-    setContents({ ...contents, [name]: value });
+    setInviteCode({ ...inviteCode, [name]: value });
   };
-
-  // Upload to S3 image bucket!
-  const handleFileInput = async (e) => {
-    const file = fileInput.current.files[0];
-
-    const upload = new AWS.S3.ManagedUpload({
-      params: {
-        Bucket: "teampigbucket",
-        Key: file.name,
-        Body: file,
-      },
-    });
-
-    const { Location } = await upload.promise();
-    dispatch(uploadImageToS3(Location));
-    dispatch(__addRoom(contents));
-  };
-
   return (
     <>
       {showModal ? (
         <ModalContainer>
           <ModalOverlay onClick={closeModal}></ModalOverlay>
           <ModalContent>
-            <ImgUploader name="roomImage" fileInput={fileInput} />
-
             <input
-              name="roomName"
-              placeholder="방 이름"
+              name="inviteCode"
+              placeholder="초대코드 입력해주세요!"
               onChange={changeHandler}
             />
-            <input
-              name="subtitle"
-              placeholder="부제목"
-              onChange={changeHandler}
-            />
-            <input name="tag" placeholder="태그" onChange={changeHandler} />
-
-            <Button _onClick={handleFileInput}>저장</Button>
-            {/* <Button _onClick={editRoom}>수정</Button> */}
+            <Button>방 참여하기</Button>
           </ModalContent>
         </ModalContainer>
       ) : null}
@@ -109,4 +71,4 @@ const ModalContent = styled.div`
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 `;
 
-export default AddRoomModal;
+export default JoinRoomModal;

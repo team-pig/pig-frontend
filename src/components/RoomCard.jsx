@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 //components
 
@@ -11,22 +11,25 @@ import Button from "../elem/Button";
 import { __deleteRoom } from "../redux/modules/room";
 
 //map의 list에서 받아오는 값
-const RoomCard = ({ roomId, roomImage, roomName, subtitle, master, tag }) => {
+const RoomCard = ({ _id, roomImage, roomName, subtitle, master, tag }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
-  
+
   const openModModal = () => {
     setShowModModal(true);
-  }
+  };
 
   const closeModModal = () => {
     setShowModModal(false);
-  }
- 
+  };
 
   return (
     <>
-      <ModifyRoomModal roomId={roomId} showModModal={showModModal} closeModModal={closeModModal}/>
+      <ModifyRoomModal
+        roomId={_id}
+        showModModal={showModModal}
+        closeModModal={closeModModal}
+      />
       <div>
         <img src={roomImage} />
         <div>
@@ -37,9 +40,14 @@ const RoomCard = ({ roomId, roomImage, roomName, subtitle, master, tag }) => {
         </div>
         <div>
           <Button _onClick={openModModal}>수정하기</Button>
-          <Button _onClick={(e) => {
-            dispatch(__deleteRoom(roomId))
-          }}>삭제하기</Button>
+          <Button
+            _onClick={(e) => {
+              console.log(_id)
+              dispatch(__deleteRoom(_id));
+            }}
+          >
+            삭제하기
+          </Button>
         </div>
       </div>
     </>

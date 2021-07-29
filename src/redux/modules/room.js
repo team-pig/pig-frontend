@@ -9,29 +9,30 @@ const GET_ROOM_LIST = "room/GET_ROOM_LIST";
 const GET_ONE_ROOM = "room/GET_ONE_ROOM";
 const EDIT_ROOM = "room/EDIT_ROOM";
 const DELETE_ROOM = "room/DELETE_ROOM";
+const JOIN_ROOM = "room/JOIN_ROOM";
 const LOADING = "LOADING";
 
 //initialState
 const initialState = {
-  roomList: [
+  roomList: [],
+  room: [
     {
-      roomId: 1,
+      _id: "1",
       roomImage:
         "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EC%9D%BC%EC%B6%9C.jpg",
       roomName: "1번이다",
       subtitle: "1번 서브",
-      tag: "#1번 태그",
+      tag: ["밥", "맛있다"],
     },
     {
-      roomId: 2,
+      _id: "2",
       roomImage:
         "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%ED%95%98%EB%8A%98%EC%82%AC%EC%A7%84.jpg",
       roomName: "2번이다",
       subtitle: "2번 서브",
-      tag: "#2번 태그",
+      tag: ["태그1", "태그2"],
     },
   ],
-  room: null,
   isLoading: false,
 };
 
@@ -48,9 +49,23 @@ export const editRoom = createAction(EDIT_ROOM, (roomId, newContent) => ({
   newContent,
 }));
 export const deleteRoom = createAction(DELETE_ROOM, (roomId) => ({ roomId }));
+export const joinRoom = createAction(JOIN_ROOM, (inviteCode) => ({
+  inviteCode,
+}));
 export const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
 
 //thunk function
+export const __joinRoom =
+  (inviteCode) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      const { data } = await roomApi.joinRoom();
+      dispatch(joinRoom(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
 export const __addRoom =
   (contents) =>
   async (dispatch, getState, { history }) => {
@@ -62,9 +77,9 @@ export const __addRoom =
       };
       console.log(willDispatchContents);
       //api post
-      // const { data } = await roomApi.addRoom(willDispatchContents);
-      // dispatch(addRoom(data));
-      dispatch(addRoom(willDispatchContents));
+      const { data } = await roomApi.addRoom(willDispatchContents);
+      dispatch(addRoom(data));
+      // dispatch(addRoom(willDispatchContents));
     } catch (e) {
       console.log(e);
     }
@@ -74,10 +89,9 @@ export const __editRoom =
   (roomId, newContent, isEdit) =>
   async (dispatch, getState, { history }) => {
     try {
+      console.log(roomId);
       const _image = getState().image.preview;
-      const _room_idx = getState().room.roomList.findIndex(
-        (r) => r.roomId === roomId
-      );
+      const _room_idx = getState().room.room.findIndex((r) => r._id === roomId);
 
       const _room = getState().room.roomList[_room_idx];
 
@@ -86,9 +100,10 @@ export const __editRoom =
         roomImage: _image,
       };
 
-      // const { data } = await roomApi.editRoom(roomId, willDispatchContents);
-      // dispatch(editRoom(data));
-      dispatch(editRoom(roomId, willDispatchContents));
+      const { data } = await roomApi.editRoom(roomId, willDispatchContents);
+
+      dispatch(editRoom(data));
+      // dispatch(editRoom(roomId, willDispatchContents));
     } catch (e) {
       console.log(e);
     }
@@ -100,6 +115,8 @@ export const __getRoomList =
     try {
       const { data } = await roomApi.getRoomList();
       dispatch(getRoomList(data));
+      // const data = getState().room.roomList;
+      // dispatch(getRoomList(data));
     } catch (e) {
       console.log(e);
     }
@@ -120,8 +137,9 @@ export const __deleteRoom =
   (roomId) =>
   async (dispatch, getState, { history }) => {
     try {
-      // await roomApi.deleteRoom(roomId);
       console.log(roomId);
+      await roomApi.deleteRoom(roomId);
+      console.log("이젠 되자");
       dispatch(deleteRoom(roomId));
     } catch (e) {
       console.log(e);
@@ -133,20 +151,22 @@ const room = handleActions(
   {
     [ADD_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        draft.roomList.unshift(action.payload.room);
+        draft.room.unshift(action.payload.room.room);
+      }),
+    [JOIN_ROOM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.room.unshift(action.payload.room);
       }),
     [GET_ROOM_LIST]: (state, action) =>
       produce(state, (draft) => {
-        draft.roomList = action.payload.roomList;
+        draft.room = action.payload.roomList.room;
         draft.isLoading = false;
       }),
     [EDIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.roomList.findIndex(
-          (r) => r.roomId === action.payload.roomId
-        );
+        let idx = draft.room.findIndex((r) => r._id === action.payload.roomId);
 
-        draft.roomList[idx] = action.payload.newContent;
+        draft.room[idx] = action.payload.newContent;
         // {
         //   ...draft.roomList[idx],
         //   ...action.payload.room,
@@ -154,12 +174,10 @@ const room = handleActions(
       }),
     [DELETE_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.roomList.findIndex(
-          (r) => r.roomId === action.payload.roomId
-        );
+        let idx = draft.room.findIndex((r) => r._id === action.payload.roomId);
 
         if (idx !== -1) {
-          draft.roomList.splice(idx, 1);
+          draft.room.splice(idx, 1);
         }
       }),
   },

@@ -20,6 +20,8 @@ const WSRouter = ({ path }) => {
         component={Auth(DocEdit, null)}
         exact
       />
+      {/* <Route path={`${path}/board`} component={Auth(Board, null)} exact /> */}
+      {/* <Route path={`${path}/calendar`} component={Auth(Calendar, null)} exact /> */}
     </Switch>
   );
 };

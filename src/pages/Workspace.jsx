@@ -2,9 +2,10 @@ import React from "react";
 import { useRouteMatch } from "react-router-dom";
 
 import WSRouter from "../shared/WSRouter";
+import WSTabs from "../components/WSTabs";
 
 const Workspace = (props) => {
-  let { path } = useRouteMatch();
+  let { path, url } = useRouteMatch();
 
   return (
     <>
@@ -12,7 +13,7 @@ const Workspace = (props) => {
       {/* <RoomHeader /> */}
       <div>
         <div>
-          {/* <RoomTabs /> */}
+          <WSTabs url={url} />
           <section>
             <WSRouter path={path} />
           </section>

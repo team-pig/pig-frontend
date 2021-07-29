@@ -11,7 +11,7 @@ import Button from "../elem/Button";
 import { __deleteRoom } from "../redux/modules/room";
 
 //map의 list에서 받아오는 값
-const RoomCard = ({ roomId, roomImage, roomName, subtitle, master, tag }) => {
+const RoomCard = ({ _id, roomImage, roomName, subtitle, master, tag }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
 
@@ -26,7 +26,7 @@ const RoomCard = ({ roomId, roomImage, roomName, subtitle, master, tag }) => {
   return (
     <>
       <ModifyRoomModal
-        roomId={roomId}
+        roomId={_id}
         showModModal={showModModal}
         closeModModal={closeModModal}
       />
@@ -42,7 +42,8 @@ const RoomCard = ({ roomId, roomImage, roomName, subtitle, master, tag }) => {
           <Button _onClick={openModModal}>수정하기</Button>
           <Button
             _onClick={(e) => {
-              dispatch(__deleteRoom(roomId));
+              console.log(_id)
+              dispatch(__deleteRoom(_id));
             }}
           >
             삭제하기

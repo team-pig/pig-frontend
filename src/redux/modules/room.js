@@ -89,10 +89,9 @@ export const __editRoom =
   (roomId, newContent, isEdit) =>
   async (dispatch, getState, { history }) => {
     try {
+      console.log(roomId);
       const _image = getState().image.preview;
-      const _room_idx = getState().room.roomList.findIndex(
-        (r) => r.roomId === roomId
-      );
+      const _room_idx = getState().room.room.findIndex((r) => r._id === roomId);
 
       const _room = getState().room.roomList[_room_idx];
 
@@ -102,6 +101,7 @@ export const __editRoom =
       };
 
       const { data } = await roomApi.editRoom(roomId, willDispatchContents);
+
       dispatch(editRoom(data));
       // dispatch(editRoom(roomId, willDispatchContents));
     } catch (e) {
@@ -138,9 +138,9 @@ export const __deleteRoom =
   async (dispatch, getState, { history }) => {
     try {
       console.log(roomId);
-      const data = await roomApi.deleteRoom(roomId);
+      await roomApi.deleteRoom(roomId);
       console.log("이젠 되자");
-      // dispatch(deleteRoom(roomId));
+      dispatch(deleteRoom(roomId));
     } catch (e) {
       console.log(e);
     }
@@ -151,7 +151,7 @@ const room = handleActions(
   {
     [ADD_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        draft.room.unshift(action.payload.roomList.room);
+        draft.room.unshift(action.payload.room.room);
       }),
     [JOIN_ROOM]: (state, action) =>
       produce(state, (draft) => {
@@ -164,11 +164,9 @@ const room = handleActions(
       }),
     [EDIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.roomList.findIndex(
-          (r) => r.roomId === action.payload.roomId
-        );
+        let idx = draft.room.findIndex((r) => r._id === action.payload.roomId);
 
-        draft.roomList[idx] = action.payload.newContent;
+        draft.room[idx] = action.payload.newContent;
         // {
         //   ...draft.roomList[idx],
         //   ...action.payload.room,
@@ -176,10 +174,7 @@ const room = handleActions(
       }),
     [DELETE_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.roomList.room._id);
-        let idx = draft.room.findIndex(
-          (r) => r._id === action.payload.roomList.room._id
-        );
+        let idx = draft.room.findIndex((r) => r._id === action.payload.roomId);
 
         if (idx !== -1) {
           draft.room.splice(idx, 1);

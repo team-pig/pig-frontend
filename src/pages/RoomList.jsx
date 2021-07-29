@@ -16,7 +16,7 @@ import { __getRoomList } from "../redux/modules/room";
 
 const RoomList = (props) => {
   const dispatch = useDispatch();
-  const roomList = useSelector((state) => state.room.roomList) || [];
+  const roomList = useSelector((state) => state.room.room) || [];
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
 
@@ -38,7 +38,7 @@ const RoomList = (props) => {
     setShowModal(false);
   };
 
-  const enterRooom = (roomId) => history.push(`/workspace/${roomId}`);
+  const enterRooom = (_id) => history.push(`/workspace/${_id}`);
   return (
     <Template>
       <div>roomlist</div>
@@ -56,7 +56,7 @@ const RoomList = (props) => {
             <RoomCard
               key={idx}
               {...room}
-              onClick={() => enterRooom(room.roomId)}
+              onClick={() => enterRooom(room._id)}
             />
           );
         })}

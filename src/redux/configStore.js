@@ -1,6 +1,8 @@
 // redux
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import user from "./modules/user";
+import room from "./modules/room";
+import image from "./modules/image";
 import document from "./modules/document";
 import calendar from "./modules/calendar";
 
@@ -14,6 +16,8 @@ export const history = createBrowserHistory();
 
 const rootReducer = combineReducers({
   user,
+  room,
+  image,
   document,
   calendar,
   router: connectRouter(history),

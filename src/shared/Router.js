@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 // pages
 import Intro from "../pages/Intro";
@@ -16,11 +16,12 @@ const Router = () => {
   return (
     <Switch>
       <Route path="/" component={Auth(Intro, null)} exact />
-      <Route path="/login" component={Auth(Login, null)} exact />
-      <Route path="/register" component={Auth(Register, null)} exact />
-      <Route path="/roomlist" component={Auth(RoomList, null)} exact />
-      <Route path="/hidden_board" component={Auth(Board, null)} exact />
-      <Route path="/workspace/:roomId" component={Auth(Workspace, null)} />
+      <Route path="/login" component={Auth(Login, false)} exact />
+      <Route path="/register" component={Auth(Register, false)} exact />
+      <Route path="/roomlist" component={Auth(RoomList, true)} exact />
+      <Route path="/hidden_board" component={Auth(Board, true)} exact />
+      <Route path="/workspace/:roomId" component={Auth(Workspace, true)} />
+      <Redirect from="*" to="/" />
     </Switch>
   );
 };

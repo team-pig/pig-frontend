@@ -1,8 +1,10 @@
 import { createAction, handleActions } from "redux-actions";
-import { userApi } from "../../api/userApi";
 import jwt_decode from "jwt-decode";
-import { cookies } from "../../shared/cookie";
 import produce from "immer";
+
+// shared & api
+import { cookies } from "../../shared/cookie";
+import { userApi } from "../../api/userApi";
 
 // action
 const LOGIN = "user/LOGIN";
@@ -12,7 +14,10 @@ const LOGOUT = "user/LOGOUT";
 
 // action creator
 const login = createAction(LOGIN, (userInfo) => ({ userInfo }));
-const loginCheck = createAction(LOGIN_CHECK, (userInfo) => ({ userInfo }));
+const loginCheck = createAction(LOGIN_CHECK, (isLogin, user) => ({
+  isLogin,
+  ...user,
+}));
 const register = createAction(REGISTER, (userInfo) => ({ userInfo }));
 const logout = createAction(LOGOUT, (userInfo) => ({ userInfo }));
 
@@ -24,7 +29,6 @@ export const __login =
       const {
         data: { token, email },
       } = await userApi.login(userInfo);
-      console.log(token);
       const { id } = jwt_decode(token);
       cookies.set("accessToken", token, {
         path: "/",
@@ -41,30 +45,24 @@ export const __login =
 export const __logout =
   () =>
   (dispatch, getState, { history }) => {
-    localStorage.removeItem("userObjectId");
-    // deleteCookie("token");
+    localStorage.removeItem("userId");
+    cookies.remove("accessToken");
     dispatch(logout());
     history.push("/login");
   };
 
 export const __loginCheck =
-  () =>
+  (isLogin, user) =>
   async (dispatch, getState, { history }) => {
-    try {
-      const { data } = userApi.loginCheck(); // token만 보내고, 유효한 토큰인지 확인
-      console.log(data);
-      dispatch(loginCheck());
-    } catch (e) {
-      console.log(`유효하지 않은 토큰입니다. :  ${e}`);
-      // history.replace("/login");
-    }
+    dispatch(loginCheck(isLogin, user));
   };
 
 export const __register =
   (userInfo) =>
   async (dispatch, getState, { history }) => {
     try {
-      console.log(userInfo);
+      const { data } = userApi.register(userInfo);
+      console.log(data);
       dispatch(register(userInfo));
       history.replace("/login");
     } catch (e) {
@@ -72,23 +70,23 @@ export const __register =
     }
   };
 
-// reducer
 const initialState = {
-  isLogin: false, //
-  userInfo: { email: null, userId: null },
+  isLogin: false,
+  user: { email: null, nickname: null, userId: null },
 };
 const user = handleActions(
   {
     [LOGIN]: (state, action) =>
       produce(state, (draft) => {
         draft.isLogin = true;
-        draft.userInfo.email = action.payload.userInfo.email;
-        draft.userInfo.userId = action.payload.userInfo.userId;
       }),
 
     [LOGIN_CHECK]: (state, action) =>
       produce(state, (draft) => {
-        draft.isLogin = true;
+        draft.isLogin = action.payload.isLogin;
+        draft.user.email = action.payload.email;
+        draft.user.nickname = action.payload.nickname;
+        draft.user.userId = action.payload._id;
       }),
     [REGISTER]: (state, action) =>
       produce(state, (draft) => {
@@ -97,6 +95,9 @@ const user = handleActions(
     [LOGOUT]: (state, action) =>
       produce(state, (draft) => {
         draft.isLogin = false;
+        draft.user.email = null;
+        draft.user.nickname = null;
+        draft.user.userId = null;
       }),
   },
   initialState

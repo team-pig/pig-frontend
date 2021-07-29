@@ -67,13 +67,6 @@ const Login = ({ history }) => {
       >
         회원가입 하러가기
       </div>
-      <Button
-        _onClick={() => {
-          dispatch(__logout());
-        }}
-      >
-        로그아웃
-      </Button>
     </Template>
   );
 };

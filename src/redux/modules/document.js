@@ -23,14 +23,26 @@ const deleteDoc = createAction(DELETE_DOC, (docId) => ({ docId }));
 export const __getDocs =
   (roomId) =>
   async (dispatch, getState, { history }) => {
-    const { ok, message, result: docs } = await docApi.getDocs(roomId);
+    try {
+      const {
+        data: { ok, message, result: docs },
+      } = await docApi.getDocs(roomId);
 
-    if (!ok) {
-      console.log(message);
-      return;
+      if (!ok) {
+        console.log(message);
+        return;
+      }
+
+      const newDocs = docs.map((doc) => ({
+        title: doc.title,
+        content: doc.content,
+        docId: doc.documentId,
+      }));
+
+      dispatch(getDocs(newDocs));
+    } catch (e) {
+      console.log("문서 목록을 불러오지 못했습니다.", e);
     }
-
-    dispatch(getDocs(docs));
   };
 
 // document 생성 thunk 함수
@@ -40,9 +52,7 @@ export const __createDoc =
   async (dispatch, getState, { history }) => {
     try {
       const {
-        ok,
-        message,
-        result: { documentId },
+        data: { ok, message, documentId },
       } = await docApi.createDoc(roomId, docObj);
 
       if (!ok) {
@@ -100,23 +110,7 @@ export const __deleteDoc =
 
 // initialState
 const initialState = {
-  docList: [
-    {
-      docId: 1,
-      title: "1번타이틀",
-      content: "<h1>이 데이터는 initialState에 있습니다.</h1>",
-    },
-    {
-      docId: 2,
-      title: "2번타이틀",
-      content: "<h1>이 데이터는 initialState에 있습니다.</h1>",
-    },
-    {
-      docId: 3,
-      title: "3번타이틀",
-      content: "<h1>이 데이터는 initialState에 있습니다.</h1>",
-    },
-  ],
+  docList: [],
   currentDoc: null,
 };
 
@@ -126,11 +120,11 @@ const document = handleActions(
   {
     [GET_DOCS]: (state, action) =>
       produce(state, (draft) => {
-        draft.docList = action.docs;
+        draft.docList = action.payload.docs;
       }),
     [CREATE_DOC]: (state, action) =>
       produce(state, (draft) => {
-        draft.docList.unshift(action.payload.doc);
+        draft.docList.unshift(action.payload.doc.newDocObj);
       }),
     [EDIT_DOC]: (state, action) =>
       produce(state, (draft) => {

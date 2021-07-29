@@ -1,8 +1,24 @@
 import React from "react";
 import styled from "styled-components";
+import { Button } from "../elem";
+import { __logout } from "../redux/modules/user";
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
-  return <Container></Container>;
+  const dispatch = useDispatch();
+  const isLogin = useSelector((state) => state.user.isLogin);
+  console.log(isLogin);
+  return (
+    <Container>
+      <Button
+        _onClick={() => {
+          dispatch(__logout());
+        }}
+      >
+        {isLogin ? "로그아웃" : "로그인"}
+      </Button>
+    </Container>
+  );
 };
 
 const Container = styled.header`

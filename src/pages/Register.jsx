@@ -18,7 +18,7 @@ const Register = ({ history }) => {
       email: "",
       nickname: "",
       password: "",
-      checkPassword: "",
+      confirmPassword: "",
     },
 
     validationSchema: Yup.object({
@@ -30,7 +30,7 @@ const Register = ({ history }) => {
         .min(6, "비밀번호가 너무 짧네요! 6자 이상 입력하세요.")
         .matches(/[a-zA-Z]/, "더 강력한 비밀번호를 사용하세요.")
         .required("패스워드를 입력해주세요."),
-      checkPassword: Yup.string()
+      confirmPassword: Yup.string()
         .min(6, "비밀번호가 너무 짧네요! 6자 이상 입력하세요.")
         .matches(/[a-zA-Z]/, "더 강력한 비밀번호를 사용하세요.")
         .required("패스워드를 한번 더 입력해주세요.")
@@ -38,8 +38,8 @@ const Register = ({ history }) => {
     }),
 
     onSubmit: (values, { resetForm }) => {
-      const { checkPassword, ...rest } = values;
-      dispatch(__register(rest));
+      dispatch(__register(values));
+      resetForm();
     },
   });
 
@@ -50,7 +50,7 @@ const Register = ({ history }) => {
           name="email"
           type="text"
           _onChange={formik.handleChange}
-          value={formik.values.userName}
+          value={formik.values.email}
           placeholder="이메일"
         />
         {formik.touched.email && formik.errors.email ? (
@@ -77,14 +77,14 @@ const Register = ({ history }) => {
           <div>{formik.errors.password}</div>
         ) : null}
         <Input
-          name="checkPassword"
+          name="confirmPassword"
           type="password"
           _onChange={formik.handleChange}
-          value={formik.values.checkPassword}
+          value={formik.values.confirmPassword}
           placeholder="비밀번호를 한번 더 입력하세요"
         />
-        {formik.touched.checkPassword && formik.errors.checkPassword ? (
-          <div>{formik.errors.checkPassword}</div>
+        {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+          <div>{formik.errors.confirmPassword}</div>
         ) : null}
         <Button type="submit">회원가입</Button>
       </form>

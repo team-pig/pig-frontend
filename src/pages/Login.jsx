@@ -8,7 +8,7 @@ import { Button, Input } from "../elem";
 
 //redux
 import { useDispatch } from "react-redux";
-import { __logout, __login } from "../redux/modules/user";
+import { __login } from "../redux/modules/user";
 
 const Login = ({ history }) => {
   const dispatch = useDispatch();
@@ -29,9 +29,9 @@ const Login = ({ history }) => {
         .required("패스워드를 입력해주세요."),
     }),
 
-    onSubmit: (values) => {
-      // dispatch 예정
+    onSubmit: (values, { resetForm }) => {
       dispatch(__login(values));
+      // resetForm();
     },
   });
 
@@ -67,13 +67,6 @@ const Login = ({ history }) => {
       >
         회원가입 하러가기
       </div>
-      <Button
-        _onClick={() => {
-          dispatch(__logout());
-        }}
-      >
-        로그아웃
-      </Button>
     </Template>
   );
 };

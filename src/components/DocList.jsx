@@ -21,7 +21,7 @@ const DocList = () => {
           </Link>
         ))}
       </ul>
-      <Button _onClick={() => history.push("/workspace/1/doc/add")}>
+      <Button _onClick={() => history.push(`/workspace/${roomId}/doc/add`)}>
         페이지 추가
       </Button>
     </div>

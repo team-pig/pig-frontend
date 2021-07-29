@@ -15,7 +15,7 @@ import Button from "../elem/Button";
 import { __addRoom, __editRoom } from "../redux/modules/room";
 import { setPreview, uploadImageToS3 } from "../redux/modules/image";
 
-const AddRoomModal = ({ roomId, showModal, closeModal }) => {
+const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
   const dispatch = useDispatch();
   const [contents, setContents] = useState({
     roomImage:"",
@@ -25,15 +25,14 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
   });
   const roomList = useSelector((state) => state.room.roomList);
   const preview = useSelector((state) => state.image.preview);
-
+  
   const fileInput = useRef();
 
   const isEdit = roomId ? true : false;
 
+  // let _room = isEdit ? roomList.find((r) => r.roomId === roomId) : null;
 
-  React.useEffect(() => {
-    console.log(roomId);
-  })
+  // const [contents, setContents] = useState(_room ? _room.contents : "");
 
   const changeHandler = (e) => {
     const {value, name} = e.target;
@@ -58,15 +57,16 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
   };
 
   const editRoom = () => {
+    console.log(isEdit);
     console.log(roomId);
-    dispatch(__editRoom(roomId, {contents: contents}))
+    dispatch(__editRoom(roomId, contents))
   }
 
   return (
     <>
-      {showModal ? (
+      {showModModal ? (
         <ModalContainer>
-          <ModalOverlay onClick={closeModal}></ModalOverlay>
+          <ModalOverlay onClick={closeModModal}></ModalOverlay>
           <ModalContent>
             <ImgUploader name="roomImage" fileInput={fileInput}/>
             
@@ -78,8 +78,7 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
             ) : (
               <Button _onClick={handleFileInput}>저장</Button>
             )} */}
-            <Button _onClick={handleFileInput}>저장</Button>
-            {/* <Button _onClick={editRoom}>수정</Button> */}
+            <Button _onClick={editRoom}>수정</Button>
           </ModalContent>
         </ModalContainer>
       ) : null}
@@ -117,4 +116,4 @@ const ModalContent = styled.div`
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 `;
 
-export default AddRoomModal;
+export default ModifyRoomModal;

@@ -32,6 +32,7 @@ export const __login =
       });
       localStorage.setItem("userId", id);
       dispatch(login({ email, id }));
+      history.replace("/roomlist");
     } catch (e) {
       console.log(e);
     }

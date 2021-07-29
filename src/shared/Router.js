@@ -19,11 +19,7 @@ const Router = () => {
       <Route path="/login" component={Auth(Login, null)} exact />
       <Route path="/register" component={Auth(Register, null)} exact />
       <Route path="/roomlist" component={Auth(RoomList, null)} exact />
-      <Route
-        path="/workspace/:roomId/board"
-        component={Auth(Board, null)}
-        exact
-      />
+      <Route path="/hidden_board" component={Auth(Board, null)} exact />
       <Route path="/workspace/:roomId" component={Auth(Workspace, null)} />
     </Switch>
   );

@@ -1,7 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { userApi } from "../../api/userApi";
 import jwt_decode from "jwt-decode";
-import { setCookie, deleteCookie } from "../../shared/cookie";
+import { cookies } from "../../shared/cookie";
 import produce from "immer";
 
 // action
@@ -21,12 +21,17 @@ export const __login =
   (userInfo) =>
   async (dispatch, getState, { history }) => {
     try {
-      // const { data } = await userApi.login(userApi);
-      // const decoded = jwt_decode(data);
-      // localStorage.setItem("userObjectId", decoded.sub);
-      // setCookie("token", data, 1);
-      dispatch(login(userInfo));
-      // history.replace("/register");
+      const {
+        data: { token, email },
+      } = await userApi.login(userInfo);
+      console.log(token);
+      const { id } = jwt_decode(token);
+      cookies.set("accessToken", token, {
+        path: "/",
+        maxAge: 172800, // 2 day
+      });
+      localStorage.setItem("userId", id);
+      dispatch(login({ email, id }));
     } catch (e) {
       console.log(e);
     }
@@ -36,7 +41,7 @@ export const __logout =
   () =>
   (dispatch, getState, { history }) => {
     localStorage.removeItem("userObjectId");
-    deleteCookie("token");
+    // deleteCookie("token");
     dispatch(logout());
     history.push("/login");
   };
@@ -69,22 +74,24 @@ export const __register =
 // reducer
 const initialState = {
   isLogin: false, //
-  userInfo: {},
+  userInfo: { email: null, userId: null },
 };
 const user = handleActions(
   {
     [LOGIN]: (state, action) =>
       produce(state, (draft) => {
         draft.isLogin = true;
-        // draft.userInfo
+        draft.userInfo.email = action.payload.userInfo.email;
+        draft.userInfo.userId = action.payload.userInfo.userId;
       }),
+
     [LOGIN_CHECK]: (state, action) =>
       produce(state, (draft) => {
         draft.isLogin = true;
       }),
     [REGISTER]: (state, action) =>
       produce(state, (draft) => {
-        draft.userInfo = action.payload.userInfo; // api 연결 후 수정 필요
+        // draft.userInfo = action.payload.userInfo; // api 연결 후 수정 필요
       }),
     [LOGOUT]: (state, action) =>
       produce(state, (draft) => {

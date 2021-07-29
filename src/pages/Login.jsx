@@ -15,8 +15,8 @@ const Login = ({ history }) => {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: "asdf@gmail.com",
+      password: "12345aag",
     },
 
     validationSchema: Yup.object({
@@ -42,7 +42,7 @@ const Login = ({ history }) => {
           name="email"
           type="text"
           _onChange={formik.handleChange}
-          value={formik.values.userName}
+          value={formik.values.email}
           placeholder="이메일"
         />
         {formik.touched.email && formik.errors.email ? (

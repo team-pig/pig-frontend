@@ -64,7 +64,7 @@ export const __register =
       const { data } = userApi.register(userInfo);
       console.log(data);
       dispatch(register(userInfo));
-      // history.replace("/login");
+      history.replace("/login");
     } catch (e) {
       console.log(e);
     }

@@ -23,7 +23,7 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
     subtitle: "",
     tag: "",
   });
-  const roomList = useSelector((state) => state.room.roomList);
+  const roomList = useSelector((state) => state.room.room);
   const preview = useSelector((state) => state.image.preview);
 
   const fileInput = useRef();
@@ -69,11 +69,7 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
               onChange={changeHandler}
             />
             <input name="tag" placeholder="태그" onChange={changeHandler} />
-            {/* {isEdit ? (
-              <Button _onClick={editRoom}>수정</Button>
-            ) : (
-              <Button _onClick={handleFileInput}>저장</Button>
-            )} */}
+
             <Button _onClick={handleFileInput}>저장</Button>
             {/* <Button _onClick={editRoom}>수정</Button> */}
           </ModalContent>

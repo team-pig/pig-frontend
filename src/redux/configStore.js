@@ -4,6 +4,7 @@ import user from "./modules/user";
 import room from "./modules/room";
 import image from "./modules/image";
 import document from "./modules/document";
+import board from "./modules/board";
 
 // middlewares
 import thunk from "redux-thunk";
@@ -14,6 +15,7 @@ import { connectRouter } from "connected-react-router";
 export const history = createBrowserHistory();
 
 const rootReducer = combineReducers({
+  board,
   user,
   room,
   image,

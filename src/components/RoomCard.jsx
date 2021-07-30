@@ -8,7 +8,7 @@ import ModifyRoomModal from "../components/ModifyRoomModal";
 //elements
 import Button from "../elem/Button";
 //redux
-import { __deleteRoom } from "../redux/modules/room";
+import { __deleteRoom, __exitRoom } from "../redux/modules/room";
 
 //map의 list에서 받아오는 값
 const RoomCard = ({ _id, roomImage, roomName, subtitle, master, tag, history }) => {
@@ -50,6 +50,9 @@ const RoomCard = ({ _id, roomImage, roomName, subtitle, master, tag, history }) 
           >
             삭제하기
           </Button>
+          <Button _onClick={(e) => {
+            dispatch(__exitRoom(_id));
+          }}>나가기</Button>
         </div>
       </div>
     </>

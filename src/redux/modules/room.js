@@ -10,6 +10,7 @@ const GET_ONE_ROOM = "room/GET_ONE_ROOM";
 const EDIT_ROOM = "room/EDIT_ROOM";
 const DELETE_ROOM = "room/DELETE_ROOM";
 const JOIN_ROOM = "room/JOIN_ROOM";
+const EXIT_ROOM = "room/EXIT_ROOM";
 const LOADING = "LOADING";
 
 //initialState
@@ -34,6 +35,7 @@ export const deleteRoom = createAction(DELETE_ROOM, (roomId) => ({ roomId }));
 export const joinRoom = createAction(JOIN_ROOM, (inviteCode) => ({
   inviteCode,
 }));
+export const exitRoom = createAction(EXIT_ROOM, (roomId) => ({ roomId }));
 export const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
 
 //thunk function
@@ -43,6 +45,17 @@ export const __joinRoom =
     try {
       const { data } = await roomApi.joinRoom();
       dispatch(joinRoom(data));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+export const __exitRoom =
+  (roomId) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      await roomApi.exitRoom(roomId);
+      dispatch(exitRoom(roomId));
     } catch (e) {
       console.log(e);
     }
@@ -154,6 +167,14 @@ const room = handleActions(
         // };
       }),
     [DELETE_ROOM]: (state, action) =>
+      produce(state, (draft) => {
+        let idx = draft.room.findIndex((r) => r._id === action.payload.roomId);
+
+        if (idx !== -1) {
+          draft.room.splice(idx, 1);
+        }
+      }),
+    [EXIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
         let idx = draft.room.findIndex((r) => r._id === action.payload.roomId);
 

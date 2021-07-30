@@ -19,4 +19,5 @@ export const roomApi = {
       },
     });
   },
+  exitRoom: (roomId) => instance.delete(`/room/member/${roomId}`, roomId),
 };

@@ -10,7 +10,8 @@ export const roomApi = {
     instance.put("/room", room);
   },
 
-  joinRoom: (inviteCode) => instance.post("/room", inviteCode),
+  joinRoom: (inviteCode) => instance.post("/room/member", inviteCode),
+
   deleteRoom: (roomId) => {
     console.log(`roomId`, roomId);
     instance.delete("/room", {

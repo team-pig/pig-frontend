@@ -30,9 +30,9 @@ const RoomCard = ({ _id, roomImage, roomName, subtitle, master, tag, history }) 
         showModModal={showModModal}
         closeModModal={closeModModal}
       />
-      <div>
+      <Div>
         <div onClick={() => {history.push(`/workspace/${_id}`)}}>
-          <img src={roomImage} />
+          <Image src={roomImage} />
           <div>
             <div>{roomName}</div>
             <div>{subtitle}</div>
@@ -54,9 +54,22 @@ const RoomCard = ({ _id, roomImage, roomName, subtitle, master, tag, history }) 
             dispatch(__exitRoom(_id));
           }}>나가기</Button>
         </div>
-      </div>
+      </Div>
     </>
   );
 };
+
+const Image = styled.img`
+/* max-width: 400px;
+max-height: 300px; */
+width: 300px;
+height: 200px;
+/* height: auto; */
+`;
+
+const Div = styled.div`
+width: 350px;
+height: 300px;
+`;
 
 export default RoomCard;

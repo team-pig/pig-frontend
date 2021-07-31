@@ -19,5 +19,15 @@ export const roomApi = {
       },
     });
   },
-  exitRoom: (roomId) => instance.delete(`/room/member/${roomId}`, roomId),
+  exitRoom: (roomId) => {
+    instance.delete(`/room/member/${roomId}`);
+  },
+
+  // exitRoom: (roomId) => {
+  //   instance.delete(`/room/member/${roomId}`, {
+  //     data: {},
+  //   });
+  // },
+
+  // exitRoom: (roomId) => instance.delete(`/room/member/${roomId}`, roomId),
 };

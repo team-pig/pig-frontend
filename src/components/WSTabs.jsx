@@ -23,10 +23,10 @@ const WSTabs = ({ url }) => {
 
   return (
     <List>
-      <li onClick={toMain}>메인</li>
-      <li onClick={toDocs}>문서</li>
-      <li onClick={toBoard}>보드</li>
-      <li onClick={toCalendar}>일정</li>
+      <Item onClick={toMain}>메인</Item>
+      <Item onClick={toDocs}>문서</Item>
+      <Item onClick={toBoard}>보드</Item>
+      <Item onClick={toCalendar}>일정</Item>
     </List>
   );
 };
@@ -35,6 +35,16 @@ const WSTabs = ({ url }) => {
 const List = styled.ul`
   position: relative;
   z-index: 99;
+  display: flex;
+  padding-top: 50px;
+`;
+
+const Item = styled.li`
+  padding: 10px;
+  margin-right: 10px;
+  font-size: 2rem;
+  border: 2px solid gray;
+  cursor: pointer;
 `;
 
 export default WSTabs;

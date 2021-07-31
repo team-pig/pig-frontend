@@ -4,6 +4,8 @@ import DocBlank from "../pages/DocBlank";
 import DocAdd from "../pages/DocAdd";
 import DocEdit from "../pages/DocEdit";
 import DocView from "../pages/DocView";
+import Calendar from "../pages/Calendar";
+
 import Auth from "../shared/auth";
 
 const WSRouter = ({ path }) => {
@@ -27,7 +29,7 @@ const WSRouter = ({ path }) => {
         exact
       />
       {/* <Route path={`${path}/board`} component={Auth(Board, null)} exact /> */}
-      {/* <Route path={`${path}/calendar`} component={Auth(Calendar, null)} exact /> */}
+      <Route path={`${path}/calendar`} component={Auth(Calendar, null)} exact />
     </Switch>
   );
 };

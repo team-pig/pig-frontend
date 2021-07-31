@@ -74,7 +74,7 @@ const Writer = ({ targetDoc }) => {
   const clickCancle = () => {
     targetDoc
       ? history.push(`/workspace/${roomId}/doc/${docId}`)
-      : history.goBack();
+      : history.replace(`/workspace/${roomId}/doc/blank`);
   };
 
   return (

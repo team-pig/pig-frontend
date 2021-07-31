@@ -1,15 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { Link, useHistory, useParams } from "react-router-dom";
 
 // elem
 import { Button } from "../elem";
 
-const DocList = () => {
+const DocList = ({ docList }) => {
   const history = useHistory();
   const { roomId } = useParams();
-
-  const docList = useSelector((state) => state.document.docList) || [];
 
   return (
     <div>

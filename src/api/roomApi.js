@@ -10,7 +10,8 @@ export const roomApi = {
     instance.put("/room", room);
   },
 
-  joinRoom: () => instance.post("/room"),
+  joinRoom: (inviteCode) => instance.post("/room/member", inviteCode),
+
   deleteRoom: (roomId) => {
     console.log(`roomId`, roomId);
     instance.delete("/room", {
@@ -19,4 +20,15 @@ export const roomApi = {
       },
     });
   },
+  exitRoom: (roomId) => {
+    instance.delete(`/room/member/${roomId}`);
+  },
+
+  // exitRoom: (roomId) => {
+  //   instance.delete(`/room/member/${roomId}`, {
+  //     data: {},
+  //   });
+  // },
+
+  // exitRoom: (roomId) => instance.delete(`/room/member/${roomId}`, roomId),
 };

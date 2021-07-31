@@ -46,12 +46,16 @@ const ImgUploader = ({ fileInput, name, isImage, setIsImage}) => {
         files
       />
       <label htmlFor="upload" className="image-upload-wrapper"></label>
-      {isImage && <img src={preview}/>}
-      {!isImage && <img src="http://via.placeholder.com/400x300" />}
+      {isImage && <Image src={preview}/>}
+      {!isImage && <Image src="http://via.placeholder.com/400x300" />}
       {/* <img src={preview ? preview : "http://via.placeholder.com/400x300"} /> */}
      
     </>
   );
 };
 
+const Image = styled.img`
+width: 400px;
+height: 300px;
+`;
 export default ImgUploader;

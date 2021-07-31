@@ -11,11 +11,7 @@ const DELETE_DOC = "document/DELETE_DOC";
 // action creator
 const getDocs = createAction(GET_DOCS, (docs) => ({ docs }));
 const createDoc = createAction(CREATE_DOC, (doc) => ({ doc }));
-const editDoc = createAction(EDIT_DOC, (docId, title, content) => ({
-  docId,
-  title,
-  content,
-}));
+const editDoc = createAction(EDIT_DOC, (doc) => ({ doc }));
 const deleteDoc = createAction(DELETE_DOC, (docId) => ({ docId }));
 
 // Thunk
@@ -23,14 +19,26 @@ const deleteDoc = createAction(DELETE_DOC, (docId) => ({ docId }));
 export const __getDocs =
   (roomId) =>
   async (dispatch, getState, { history }) => {
-    const { ok, message, result: docs } = await docApi.getDocs(roomId);
+    try {
+      const {
+        data: { ok, message, result: docs },
+      } = await docApi.getDocs(roomId);
 
-    if (!ok) {
-      console.log(message);
-      return;
+      if (!ok) {
+        console.log(message);
+        return;
+      }
+
+      const newDocs = docs.map((doc) => ({
+        title: doc.title,
+        content: doc.content,
+        docId: doc.documentId,
+      }));
+
+      dispatch(getDocs(newDocs));
+    } catch (e) {
+      console.log("문서 목록을 불러오지 못했습니다.", e);
     }
-
-    dispatch(getDocs(docs));
   };
 
 // document 생성 thunk 함수
@@ -40,9 +48,7 @@ export const __createDoc =
   async (dispatch, getState, { history }) => {
     try {
       const {
-        ok,
-        message,
-        result: { documentId },
+        data: { ok, message, documentId },
       } = await docApi.createDoc(roomId, docObj);
 
       if (!ok) {
@@ -65,12 +71,16 @@ export const __editDoc =
   (docObj, roomId) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { ok, message } = await docApi.editDoc(roomId, docObj);
+      const { title, content, docId: documentId } = docObj;
+      const newDocObj = { title, content, documentId };
 
-      if (!ok) {
-        console.log(message);
-        return;
-      }
+      const { ok, message } = await docApi.editDoc(roomId, newDocObj);
+
+      // response에서 ok가 잘못와서 일단 주석처리
+      // if (!ok) {
+      //   console.log(message);
+      //   return;
+      // }
 
       dispatch(editDoc(docObj));
       history.push(`/workspace/${roomId}/doc/${docObj.docId}`);
@@ -84,15 +94,19 @@ export const __deleteDoc =
   (docId, roomId) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { ok, message } = await docApi.deleteDoc(roomId);
+      const { ok, message } = await docApi.deleteDoc(roomId, docId);
 
-      if (!ok) {
-        console.log(message);
-        return;
-      }
+      // ok를 받지 못했을 때의 처리가 필요함
+      // if (!ok) {
+      //   console.log(message);
+      //   return;
+      // }
 
-      dispatch(deleteDoc(docId));
-      history.replace(`/workplace/${roomId}/doc/3`);
+      await dispatch(deleteDoc(docId));
+      const lastDoc = getState().document.docList[0];
+      lastDoc
+        ? history.replace(`/workspace/${roomId}/doc/${lastDoc.docId}`)
+        : history.replace(`/workspace/${roomId}/doc/blank`);
     } catch (e) {
       console.log("문서 삭제에 실패했습니다.", e);
     }
@@ -100,23 +114,7 @@ export const __deleteDoc =
 
 // initialState
 const initialState = {
-  docList: [
-    {
-      docId: 1,
-      title: "1번타이틀",
-      content: "<h1>이 데이터는 initialState에 있습니다.</h1>",
-    },
-    {
-      docId: 2,
-      title: "2번타이틀",
-      content: "<h1>이 데이터는 initialState에 있습니다.</h1>",
-    },
-    {
-      docId: 3,
-      title: "3번타이틀",
-      content: "<h1>이 데이터는 initialState에 있습니다.</h1>",
-    },
-  ],
+  docList: [],
   currentDoc: null,
 };
 
@@ -126,15 +124,15 @@ const document = handleActions(
   {
     [GET_DOCS]: (state, action) =>
       produce(state, (draft) => {
-        draft.docList = action.docs;
+        draft.docList = action.payload.docs;
       }),
     [CREATE_DOC]: (state, action) =>
       produce(state, (draft) => {
-        draft.docList.unshift(action.payload.doc);
+        draft.docList.unshift(action.payload.doc.newDocObj);
       }),
     [EDIT_DOC]: (state, action) =>
       produce(state, (draft) => {
-        const { docId, title, content } = action.payload;
+        const { docId, title, content } = action.payload.doc;
         const idx = draft.docList.findIndex((doc) => doc.docId === docId);
         draft.docList[idx].title = title;
         draft.docList[idx].content = content;

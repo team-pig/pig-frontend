@@ -5,5 +5,10 @@ export const docApi = {
   createDoc: (roomId, docObj) =>
     instance.post(`/room/${roomId}/document`, docObj),
   editDoc: (roomId, docObj) => instance.put(`/room/${roomId}/document`, docObj),
-  deleteDoc: (roomId) => instance.delete(`/room/${roomId}/document`),
+  deleteDoc: (roomId, documentId) =>
+    instance.delete(`/room/${roomId}/document`, {
+      data: {
+        documentId,
+      },
+    }),
 };

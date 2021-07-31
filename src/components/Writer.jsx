@@ -19,6 +19,7 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 
 // elem
 import { Button } from "../elem";
+import { uploadFile } from "../shared/uploadFile";
 
 const Writer = ({ targetDoc }) => {
   const history = useHistory();
@@ -39,6 +40,12 @@ const Writer = ({ targetDoc }) => {
     initialValue: targetDoc ? targetDoc.content : "",
     // colorSyntax: 글자 색 바꾸는 기능 / condeSyntaxHighlight : 언어에 따른 코드 색 변경
     plugins: [colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]],
+    hooks: {
+      addImageBlobHook: async (blob, callback) => {
+        const imgUrl = await uploadFile(blob);
+        callback(imgUrl, "alt text");
+      },
+    },
   };
 
   const getContent = () => {
@@ -48,28 +55,26 @@ const Writer = ({ targetDoc }) => {
     }
 
     const instance = editorRef.current.getInstance();
-    const content_html = instance.getHTML();
+    // const content_html = instance.getHTML();
+    const content_md = instance.getMarkdown();
 
-    return { title, content: content_html };
+    return { title, content: content_md };
   };
 
   const clickSave = () => {
     const docObj = getContent();
-    console.log(docObj);
     dispatch(__createDoc(docObj, roomId));
   };
 
   const clickEdit = () => {
     const docObj = { ...getContent(), docId };
-    console.log(docObj);
-
     dispatch(__editDoc(docObj, roomId));
   };
 
   const clickCancle = () => {
     targetDoc
       ? history.push(`/workspace/${roomId}/doc/${docId}`)
-      : history.goBack();
+      : history.replace(`/workspace/${roomId}/doc/blank`);
   };
 
   return (

@@ -1,15 +1,13 @@
 import React from "react";
-
-// component
-import Writer from "../components/Writer";
+import Chart from "../feature/board/Chart";
 import Template from "../components/Template";
 
-const DocAdd = () => {
+const Board = () => {
   return (
     <Template>
-      <Writer />
+      <Chart />
     </Template>
   );
 };
 
-export default DocAdd;
+export default Board;

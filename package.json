@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@atlaskit/css-reset": "^6.1.0",
 		"@testing-library/jest-dom": "^5.14.1",
 		"@testing-library/react": "^11.2.7",
 		"@testing-library/user-event": "^12.8.3",
@@ -19,6 +20,7 @@
 		"moment": "^2.29.1",
 		"prismjs": "^1.24.1",
 		"react": "^17.0.2",
+		"react-beautiful-dnd": "^13.1.0",
 		"react-dom": "^17.0.2",
 		"react-motion": "^0.5.2",
 		"react-redux": "^7.2.4",
@@ -29,6 +31,7 @@
 		"redux-thunk": "^2.3.0",
 		"styled-components": "^5.3.0",
 		"styled-reset": "^4.3.4",
+		"universal-cookie": "^4.0.4",
 		"web-vitals": "^1.1.2",
 		"yup": "^0.32.9"
 	},

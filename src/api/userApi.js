@@ -1,6 +1,7 @@
 import { instance } from "./index";
 
 export const userApi = {
-  login: () => instance.get("/user"),
-  loginCheck: () => instance.get("/api/login"),
+  login: (userInfo) => instance.post("/login", userInfo),
+  loginCheck: () => instance.get("/token"),
+  register: (userInfo) => instance.post("register", userInfo),
 };

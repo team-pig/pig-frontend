@@ -146,7 +146,7 @@ const room = handleActions(
       }),
     [JOIN_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        draft.room.unshift(action.payload.room.room);
+        draft.room.unshift(action.payload.inviteCode.room);
       }),
     [GET_ROOM_LIST]: (state, action) =>
       produce(state, (draft) => {

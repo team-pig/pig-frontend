@@ -12,8 +12,7 @@ import Input from "../elem/Input";
 import Button from "../elem/Button";
 
 //redux
-import { __addRoom, __editRoom } from "../redux/modules/room";
-import { setPreview, uploadImageToS3 } from "../redux/modules/image";
+import {__joinRoom} from "../redux/modules/room";
 
 const JoinRoomModal = ({ showModal, closeModal }) => {
   const dispatch = useDispatch();
@@ -22,6 +21,12 @@ const JoinRoomModal = ({ showModal, closeModal }) => {
     const { value, name } = e.target;
     setInviteCode({ ...inviteCode, [name]: value });
   };
+
+  const join = () => {
+    dispatch(__joinRoom(inviteCode));
+    closeModal();
+  }
+
   return (
     <>
       {showModal ? (
@@ -33,7 +38,7 @@ const JoinRoomModal = ({ showModal, closeModal }) => {
               placeholder="초대코드 입력해주세요!"
               onChange={changeHandler}
             />
-            <Button>방 참여하기</Button>
+            <Button _onClick={join}>방 참여하기</Button>
           </ModalContent>
         </ModalContainer>
       ) : null}

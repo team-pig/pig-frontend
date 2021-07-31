@@ -10,7 +10,7 @@ const WSTabs = ({ url }) => {
   };
 
   const toDocs = () => {
-    history.push(`${url}/docs`);
+    history.push(`${url}/doc/blank`);
   };
 
   const toBoard = () => {

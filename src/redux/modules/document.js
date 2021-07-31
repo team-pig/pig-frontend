@@ -102,8 +102,11 @@ export const __deleteDoc =
       //   return;
       // }
 
-      dispatch(deleteDoc(docId));
-      history.replace(`/workspace/${roomId}/doc/add`);
+      await dispatch(deleteDoc(docId));
+      const lastDoc = getState().document.docList[0];
+      lastDoc
+        ? history.replace(`/workspace/${roomId}/doc/${lastDoc.docId}`)
+        : history.replace(`/workspace/${roomId}/doc/blank`);
     } catch (e) {
       console.log("문서 삭제에 실패했습니다.", e);
     }

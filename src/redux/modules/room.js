@@ -43,7 +43,7 @@ export const __joinRoom =
   (inviteCode) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { data } = await roomApi.joinRoom();
+      const { data } = await roomApi.joinRoom(inviteCode);
       dispatch(joinRoom(data));
     } catch (e) {
       console.log(e);
@@ -146,7 +146,7 @@ const room = handleActions(
       }),
     [JOIN_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        draft.room.unshift(action.payload.room);
+        draft.room.unshift(action.payload.room.room);
       }),
     [GET_ROOM_LIST]: (state, action) =>
       produce(state, (draft) => {

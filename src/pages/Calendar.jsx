@@ -10,11 +10,10 @@ import { __addSchedule, __loadSchedules } from "../redux/modules/calendar";
 import CalendarHeader from "../feature/timeline/CalendarHeader";
 import CalendarBody from "../feature/timeline/CalendarBody";
 import CardModal from "../feature/board/CardModal";
-import Todos from "../feature/board/Todos";
 
 // elem
-import { Button, Input, Text } from "../elem";
-import Textarea from "../elem/Textarea";
+import { Button } from "../elem";
+import CalendarModal from "../feature/timeline/CalendarModal";
 
 const Calendar = (props) => {
   const { roomId } = useParams();
@@ -51,30 +50,7 @@ const Calendar = (props) => {
       <CalendarBody />
       {showModal && modalContent && (
         <CardModal showModal={showModal} setShowModal={setShowModal}>
-          <Input
-            type="date"
-            _onChange={(e) =>
-              setModalContent({
-                ...modalContent,
-                startDate: (e) => e.target.value,
-              })
-            }
-            value={modalContent.startDate}
-          />
-          <Input
-            type="date"
-            _onChange={(e) =>
-              setModalContent({
-                ...modalContent,
-                startDate: (e) => e.target.value,
-              })
-            }
-            value={modalContent.endDate}
-          />
-          <Textarea />
-          <Todos todos={[]} />
-          <Button _onClick={() => {}}>취소</Button>
-          <Button _onClick={() => {}}>확인</Button>
+          <CalendarModal content={modalContent} setContent={setModalContent} />
         </CardModal>
       )}
     </CalendarBox>

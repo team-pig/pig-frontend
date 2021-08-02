@@ -37,8 +37,17 @@ const deleteSchedule = createAction(DELETE_SCHEDULE, (scheduleId) => ({
   scheduleId,
 }));
 
-// thunk
+// initialSchedule
+const initialSchedule = {
+  scheduleTitle: "",
+  startDate: moment().clone().format("YYYY-MM-DD"),
+  endDate: moment().clone().format("YYYY-MM-DD"),
+  desc: "",
+  color: null,
+  taskMembers: [],
+};
 
+// thunk
 // 모든 일정을 받아오는 thunk 함수 (월 이동 시 불러옴, lodash-debounce 사용)
 export const __loadSchedules =
   (roomId, date) =>
@@ -50,9 +59,9 @@ export const __loadSchedules =
 
 // 특정 일의 일정과 todo를 받아오는 thunk 함수
 export const __loadDaySchedules =
-  (roomId, date) =>
+  (roomId, scheduleAry) =>
   (dispatch, getState, { history }) => {
-    // date 형식 서버랑 정해야 함
+    // scheduleAry = 해당 날짜의 모든
     // 해당 날짜의 모든 일정 정보 가져오기
     let schedules; // 임시
     dispatch(loadDaySchedules(schedules));
@@ -60,12 +69,13 @@ export const __loadDaySchedules =
 
 // schedule 새로 생성 thunk 함수
 export const __addSchedule =
-  (roomId, scheduleObj) =>
+  (roomId) =>
   (dispatch, getState, { history }) => {
-    // scheduleObj를 보내서 저장
-    // response로 오는 id를 저장해서 해당 월에 저장
-    let schedule;
-    dispatch(addSchedule(schedule));
+    // 모두 빈 값으로 저장
+    // response로 오는 id를 currentId에 저장
+    let scheduleId = Date.now();
+    let scheduleObj = { ...initialSchedule, scheduleId };
+    dispatch(addSchedule(scheduleObj));
   };
 
 // schedule 수정 thunk 함수(patch)
@@ -86,8 +96,6 @@ export const __deleteSchedule =
     dispatch(deleteSchedule(scheduleId));
   };
 
-//
-
 // initialState
 const initialState = {
   now: moment(),
@@ -96,23 +104,30 @@ const initialState = {
     {
       scheduleId: 1,
       scheduleTitle: "과제 제출하기",
-      startDate: "20210803",
-      endDate: "20210805",
+      startDate: "2021-08-03",
+      endDate: "2021-08-05",
       desc: "hahaha",
       taskMembers: [],
-      todos: [],
     },
     {
       scheduleId: 2,
       scheduleTitle: "휴식 취하기",
-      startDate: "20210808",
-      endDate: "20210814",
+      startDate: "2021-08-08",
+      endDate: "2021-08-14",
       desc: "아무것도 안하고 쉬기",
       taskMembers: [],
-      todos: [],
+    },
+    {
+      scheduleId: 3,
+      scheduleTitle: "프로젝트 하기",
+      startDate: "2021-08-01",
+      endDate: "2021-08-16",
+      desc: "프로젝트...",
+      taskMembers: [],
     },
   ],
   currentList: [],
+  currentScheduleId: null,
 };
 
 // reducer
@@ -136,6 +151,8 @@ const calendar = handleActions(
       }),
     [ADD_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
+        const { schedule } = action.payload;
+        draft.currentScheduleId = schedule.scheduleId;
         draft.scheduleList.push(action.payload.schedule);
       }),
     [EDIT_SCHEDULE]: (state, action) =>

@@ -19,9 +19,10 @@ const Dates = () => {
         // let today = parseInt(target.clone().format("YYYYMMDD")) === nowFormat; // 오늘 확인용
         let targetList = scheduleList.filter(
           (schedule, idx) =>
-            parseInt(schedule.startDate) <= targetFormat &&
-            parseInt(schedule.endDate) >= targetFormat
+            parseInt(schedule.startDate.split("-").join("")) <= targetFormat &&
+            parseInt(schedule.endDate.split("-").join("")) >= targetFormat
         );
+        console.log(targetList);
         return (
           <Date key={idx} list={targetList}>
             {target.format("D")}

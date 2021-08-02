@@ -29,9 +29,8 @@ const loadDaySchedules = createAction(LOAD_DETAIL, (schedules) => ({
 const addSchedule = createAction(ADD_SCHEDULE, (schedule) => ({
   schedule,
 }));
-const editSchedule = createAction(EDIT_SCHEDULE, (scheduleId, newSchedule) => ({
-  scheduleId,
-  newSchedule,
+const editSchedule = createAction(EDIT_SCHEDULE, (scheduleObj) => ({
+  scheduleObj,
 }));
 const deleteSchedule = createAction(DELETE_SCHEDULE, (scheduleId) => ({
   scheduleId,
@@ -39,7 +38,7 @@ const deleteSchedule = createAction(DELETE_SCHEDULE, (scheduleId) => ({
 
 // initialSchedule
 const initialSchedule = {
-  scheduleTitle: "",
+  cardTitle: "",
   startDate: moment().clone().format("YYYY-MM-DD"),
   endDate: moment().clone().format("YYYY-MM-DD"),
   desc: "",
@@ -73,19 +72,22 @@ export const __addSchedule =
   (dispatch, getState, { history }) => {
     // 모두 빈 값으로 저장
     // response로 오는 id를 currentId에 저장
-    let scheduleId = Date.now();
-    let scheduleObj = { ...initialSchedule, scheduleId };
+    let cardId = Date.now();
+    let scheduleObj = { ...initialSchedule, cardId };
     dispatch(addSchedule(scheduleObj));
   };
 
 // schedule 수정 thunk 함수(patch)
 // cardId(Board와 연결) + 바꾸려는 정보만 담아서 보냄
 export const __editSchedule =
-  (roomId, infoObj) =>
-  (dispatch, getState, { history }) => {
-    let scheduleId; // 임시
-    let newSchedule; // 임시
-    dispatch(editSchedule(scheduleId, newSchedule));
+  (roomId, editObj) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      // const {data} = await api.editCard(roomId, editObj)
+      dispatch(editSchedule(editObj));
+    } catch (e) {
+      console.log("수정에 실패했습니다.", e);
+    }
   };
 
 // schedule 삭제 thunk 함수
@@ -102,24 +104,24 @@ const initialState = {
   current: moment(),
   scheduleList: [
     {
-      scheduleId: 1,
-      scheduleTitle: "과제 제출하기",
+      cardId: 1,
+      cardTitle: "과제 제출하기",
       startDate: "2021-08-03",
       endDate: "2021-08-05",
       desc: "hahaha",
       taskMembers: [],
     },
     {
-      scheduleId: 2,
-      scheduleTitle: "휴식 취하기",
+      cardId: 2,
+      cardTitle: "휴식 취하기",
       startDate: "2021-08-08",
       endDate: "2021-08-14",
       desc: "아무것도 안하고 쉬기",
       taskMembers: [],
     },
     {
-      scheduleId: 3,
-      scheduleTitle: "프로젝트 하기",
+      cardId: 3,
+      cardTitle: "프로젝트 하기",
       startDate: "2021-08-01",
       endDate: "2021-08-16",
       desc: "프로젝트...",
@@ -152,16 +154,19 @@ const calendar = handleActions(
     [ADD_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
         const { schedule } = action.payload;
-        draft.currentScheduleId = schedule.scheduleId;
+        draft.currentScheduleId = schedule.cardId;
         draft.scheduleList.push(action.payload.schedule);
       }),
     [EDIT_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
-        const { scheduleId, newSchedule } = action.payload;
+        const { cardId, ...rest } = action.payload.scheduleObj;
         const idx = draft.scheduleList.findIndex(
-          (schedule) => schedule.cardId === scheduleId
+          (schedule) => schedule.cardId === cardId
         );
-        draft.scheduleList[idx] = newSchedule;
+        for (const [key, value] of Object.entries(rest)) {
+          console.log(key, value);
+          draft.scheduleList[idx][key] = value;
+        }
       }),
     [DELETE_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {

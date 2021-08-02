@@ -22,7 +22,7 @@ const Calendar = (props) => {
   const current = useSelector((state) => state.calendar.current);
   const currentContent = useSelector((state) =>
     state.calendar.scheduleList.find(
-      (item) => item.scheduleId === state.calendar.currentScheduleId
+      (item) => item.cardId === state.calendar.currentScheduleId
     )
   );
 
@@ -39,8 +39,8 @@ const Calendar = (props) => {
   useEffect(() => setModalContent(currentContent), [currentContent]);
 
   const clickCreateBtn = () => {
-    dispatch(__addSchedule());
     setShowModal((pre) => !pre);
+    dispatch(__addSchedule());
   };
 
   return (

@@ -4,20 +4,22 @@ import styled from "styled-components";
 // elem
 import { Text } from "../elem";
 
-const InputToggle = ({ value = "", saveFunc, shape }) => {
+const InputToggle = ({ name, shape, value = "", saveFunc }) => {
   const [editMode, setEditMode] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const myRef = useRef();
 
-  const handleSave = () => {
+  const handleSave = (saveValue) => {
+    saveFunc(name, saveValue);
     setEditMode((pre) => !pre);
-    // saveFunc();
   };
 
   // Input 외 영역 클릭 시 저장
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (myRef.current && !myRef.current.contains(e.target)) handleSave();
+      if (myRef.current && !myRef.current.contains(e.target)) {
+        handleSave(myRef.current.value);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -25,7 +27,7 @@ const InputToggle = ({ value = "", saveFunc, shape }) => {
 
   // 엔터 눌렀을 때 저장
   const handleEnterEvent = (e) => {
-    if (e.key === "Enter") handleSave();
+    if (e.key === "Enter") handleSave(currentValue);
   };
 
   const returnShape = () => {
@@ -33,6 +35,7 @@ const InputToggle = ({ value = "", saveFunc, shape }) => {
       return (
         <EditTextarea
           ref={myRef}
+          name={name}
           value={currentValue}
           onChange={(e) => setCurrentValue(e.target.value)}
           onKeyPress={handleEnterEvent}
@@ -43,8 +46,9 @@ const InputToggle = ({ value = "", saveFunc, shape }) => {
     return (
       <EditInput
         type="text"
-        value={currentValue}
         ref={myRef}
+        name={name}
+        value={currentValue}
         onChange={(e) => setCurrentValue(e.target.value)}
         onKeyPress={handleEnterEvent}
       />

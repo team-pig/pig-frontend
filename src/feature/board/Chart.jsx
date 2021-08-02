@@ -1,11 +1,16 @@
 import styled from "styled-components";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import Column from "./Column";
+import Bucket from "./Bucket";
 import { useState } from "react";
 import "@atlaskit/css-reset";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setBoard } from "../../redux/modules/board";
+import {
+  setBoard,
+  updateBucket,
+  __createBucket,
+  __updateCardLocate,
+} from "../../redux/modules/board";
 
 let nextId = 3;
 const Chart = () => {
@@ -36,55 +41,45 @@ const Chart = () => {
       newColumnOrder.splice(source.index, 1); // dnd된 컬럼을 제외하고,
       newColumnOrder.splice(destination.index, 0, draggableId); // drop된 위치(index)에 다시 넣는다.
 
-      const newState = {
-        ...boardData,
-        columnOrder: newColumnOrder,
-      };
-
-      dispatch(setBoard(newState));
+      dispatch(__createBucket(newColumnOrder));
       return;
     }
 
     // 같은 버킷리스트에서 Todo을 옮겼을 때
-    const home = boardData.columns[source.droppableId];
-    const foreign = boardData.columns[destination.droppableId];
+    const sourceBucket = boardData.columns[source.droppableId];
+    const destinationBucket = boardData.columns[destination.droppableId];
 
-    if (home === foreign) {
-      const newTodoIds = Array.from(home.todoIds);
-      newTodoIds.splice(source.index, 1);
-      newTodoIds.splice(destination.index, 0, draggableId);
+    if (sourceBucket === destinationBucket) {
+      const sourceBucketOrder = sourceBucket.cardIds;
+      const destinationBucketOrder = Array.from(sourceBucket.cardIds);
+      destinationBucketOrder.splice(source.index, 1);
+      destinationBucketOrder.splice(destination.index, 0, draggableId);
 
-      const newHome = {
-        ...home,
-        todoIds: newTodoIds,
+      const newBucket = {
+        sourceBucketId: sourceBucket.id,
+        destinationBucketId: destinationBucket.id,
+        sourceBucketOrder,
+        destinationBucketOrder,
       };
 
-      const newState = {
-        ...boardData,
-        columns: {
-          ...boardData.columns,
-          [newHome.id]: newHome,
-        },
-      };
-
-      dispatch(setBoard(newState));
+      dispatch(__updateCardLocate(newBucket));
       return;
     }
 
     // Todo를 다른 버킷으로 옮겼을 때
-    const homeTodoIds = Array.from(home.todoIds);
-    homeTodoIds.splice(source.index, 1);
+    const homecardIds = Array.from(sourceBucket.cardIds);
+    homecardIds.splice(source.index, 1);
     const newHome = {
-      ...home,
-      todoIds: homeTodoIds,
+      ...sourceBucket,
+      cardIds: homecardIds,
     };
 
-    const foreignTodoIds = Array.from(foreign.todoIds);
-    foreignTodoIds.splice(destination.index, 0, draggableId);
+    const foreigncardIds = Array.from(destinationBucket.cardIds);
+    foreigncardIds.splice(destination.index, 0, draggableId);
 
     const newForeign = {
-      ...foreign,
-      todoIds: foreignTodoIds,
+      ...destinationBucket,
+      cardIds: foreigncardIds,
     };
 
     const newState = {
@@ -96,6 +91,7 @@ const Chart = () => {
       },
     };
     dispatch(setBoard(newState));
+    console.log(3);
   };
 
   // 새로운 버킷리스트 만들기 (onClick Event Handler)
@@ -103,7 +99,7 @@ const Chart = () => {
     const newColumn = {
       id: `column-${nextId}`,
       title: bucketName,
-      todoIds: [],
+      cardIds: [],
     };
 
     const newColumnOrder = boardData.columnOrder.concat(`column-${nextId}`);
@@ -115,6 +111,7 @@ const Chart = () => {
     };
 
     dispatch(setBoard(newBucketList));
+    console.log(4);
     nextId++;
   };
 
@@ -142,15 +139,15 @@ const Chart = () => {
             <Container {...provided.droppableProps} ref={provided.innerRef}>
               {boardData.columnOrder.map((columnId, index) => {
                 const column = boardData.columns[columnId];
-                const tasks = column.todoIds.map(
-                  (todoId) => boardData.tasks[todoId]
+                const cards = column.cardIds.map(
+                  (todoId) => boardData.cards[todoId]
                 );
                 return (
-                  <Column
+                  <Bucket
                     column={column}
                     key={column.id}
                     index={index}
-                    tasks={tasks}
+                    cards={cards}
                   />
                 );
               })}

@@ -7,8 +7,8 @@ import styled from "styled-components";
 import { __addSchedule, __loadSchedules } from "../redux/modules/calendar";
 
 // component
-import CalendarBody from "../components/Calendar/CalendarBody";
-import CalendarHeader from "../components/Calendar/CalendarHeader";
+import CalendarHeader from "../feature/timeline/CalendarHeader";
+import CalendarBody from "../feature/timeline/CalendarBody";
 import CardModal from "../feature/board/CardModal";
 import Todos from "../feature/board/Todos";
 
@@ -51,9 +51,6 @@ const Calendar = (props) => {
       <CalendarBody />
       {showModal && modalContent && (
         <CardModal showModal={showModal} setShowModal={setShowModal}>
-          <Text>
-            {modalContent.scheduleTitle ? modalContent.scheduleTitle : ""}
-          </Text>
           <Input
             type="date"
             _onChange={(e) =>
@@ -64,7 +61,16 @@ const Calendar = (props) => {
             }
             value={modalContent.startDate}
           />
-          <Input type="date" value={modalContent.endDate} />
+          <Input
+            type="date"
+            _onChange={(e) =>
+              setModalContent({
+                ...modalContent,
+                startDate: (e) => e.target.value,
+              })
+            }
+            value={modalContent.endDate}
+          />
           <Textarea />
           <Todos todos={[]} />
           <Button _onClick={() => {}}>취소</Button>

@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import { Input, Text, Button } from "../../elem";
 import Todos from "./Todos";
-import TaskDetail from "./TaskDetail";
+import CardModal from "./CardModal";
 import Textarea from "../../elem/Textarea";
 
 const Card = ({ card, index }) => {
@@ -27,7 +27,7 @@ const Card = ({ card, index }) => {
           </Container>
         )}
       </Draggable>
-      <TaskDetail showModal={showModal} setShowModal={setShowModal}>
+      <CardModal showModal={showModal} setShowModal={setShowModal}>
         <Text>{card.cardTitle}</Text>
         <Input type="date" />
         <Input type="date" />
@@ -35,7 +35,7 @@ const Card = ({ card, index }) => {
         <Todos todos={card.todos} />
         <Button _onClick={() => {}}>취소</Button>
         <Button _onClick={() => {}}>확인</Button>
-      </TaskDetail>
+      </CardModal>
     </>
   );
 };

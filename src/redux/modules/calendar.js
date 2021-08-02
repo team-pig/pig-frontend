@@ -44,8 +44,8 @@ export const __loadSchedules =
   (roomId, date) =>
   (dispatch, getState, { history }) => {
     // 모든 일정 받아와서 action creator로 전달
-    let schedules; // 임시
-    dispatch(loadSchedules(schedules));
+    // let schedules; // 임시
+    // dispatch(loadSchedules(schedules));
   };
 
 // 특정 일의 일정과 todo를 받아오는 thunk 함수
@@ -92,7 +92,26 @@ export const __deleteSchedule =
 const initialState = {
   now: moment(),
   current: moment(),
-  scheduleList: [],
+  scheduleList: [
+    {
+      scheduleId: 1,
+      scheduleTitle: "과제 제출하기",
+      startDate: "20210803",
+      endDate: "20210805",
+      desc: "hahaha",
+      taskMembers: [],
+      todos: [],
+    },
+    {
+      scheduleId: 2,
+      scheduleTitle: "휴식 취하기",
+      startDate: "20210808",
+      endDate: "20210814",
+      desc: "아무것도 안하고 쉬기",
+      taskMembers: [],
+      todos: [],
+    },
+  ],
   currentList: [],
 };
 

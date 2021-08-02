@@ -4,7 +4,7 @@ import styled from "styled-components";
 // elem
 import { Text } from "../elem";
 
-const InputToggle = ({ value = "", saveFunc }) => {
+const InputToggle = ({ value = "", saveFunc, shape }) => {
   const [editMode, setEditMode] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const myRef = useRef();
@@ -20,7 +20,7 @@ const InputToggle = ({ value = "", saveFunc }) => {
       if (myRef.current && !myRef.current.contains(e.target)) handleSave();
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mosedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [myRef]);
 
   // 엔터 눌렀을 때 저장
@@ -28,19 +28,32 @@ const InputToggle = ({ value = "", saveFunc }) => {
     if (e.key === "Enter") handleSave();
   };
 
-  return (
-    <Container onClick={!editMode ? () => setEditMode((pre) => !pre) : null}>
-      {editMode ? (
-        <EditInput
-          type="text"
-          value={currentValue}
+  const returnShape = () => {
+    if (shape === "textarea") {
+      return (
+        <EditTextarea
           ref={myRef}
+          value={currentValue}
           onChange={(e) => setCurrentValue(e.target.value)}
           onKeyPress={handleEnterEvent}
         />
-      ) : (
-        <Text>{currentValue}</Text>
-      )}
+      );
+    }
+
+    return (
+      <EditInput
+        type="text"
+        value={currentValue}
+        ref={myRef}
+        onChange={(e) => setCurrentValue(e.target.value)}
+        onKeyPress={handleEnterEvent}
+      />
+    );
+  };
+
+  return (
+    <Container onClick={!editMode ? () => setEditMode((pre) => !pre) : null}>
+      {editMode ? returnShape() : <Text>{currentValue}</Text>}
     </Container>
   );
 };
@@ -62,6 +75,11 @@ const EditInput = styled.input`
   height: 60px;
   width: 90%;
   text-align: center;
+`;
+
+const EditTextarea = styled.textarea`
+  width: 100%;
+  height: 100%;
 `;
 
 export default InputToggle;

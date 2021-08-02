@@ -5,34 +5,34 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import { setBoard } from "../../redux/modules/board";
 import { useDispatch, useSelector } from "react-redux";
 
-// compo
-import Task from "./Task";
+// content
+import Card from "./Card";
 
-let taskId = 5;
-const Column = ({ column, index, tasks }) => {
+let num = 2;
+const Bucket = ({ column, index, cards }) => {
   const dispatch = useDispatch();
   const [taskName, setTaskName] = useState("");
   const [editTitleMone, setEditTitleMone] = useState(false);
   const boardData = useSelector((state) => state.board);
-  console.log(boardData);
 
-  // 새로운 투두 만들기 (onClick Event Handler)
+  // 새로운 card 만들기 (onClick Event Handler)
   const addTask = (provided) => {
     const columnId = provided.droppableProps["data-rbd-droppable-id"];
-    const newTask = { id: `task-${taskId}`, content: taskName };
-    const newTasks = { ...boardData.tasks, [`task-${taskId}`]: newTask };
-    const newTaskIds = [...boardData.columns[columnId].todoIds].concat(
-      `task-${taskId}`
+    const newTask = { cardId: `card-${num}`, cardTitle: taskName };
+    const newTasks = { ...boardData.cards, [`card-${num}`]: newTask };
+    const newTaskIds = [...boardData.columns[columnId].cardIds].concat(
+      `card-${num}`
     );
-    const newColumn = { ...boardData.columns[columnId], todoIds: newTaskIds };
+
+    const newColumn = { ...boardData.columns[columnId], cardIds: newTaskIds };
     const newColumns = { ...boardData.columns, [columnId]: newColumn };
-    const newState = { ...boardData, columns: newColumns, tasks: newTasks };
+    const newState = { ...boardData, columns: newColumns, cards: newTasks };
+
     dispatch(setBoard(newState));
-    taskId++;
+    num++;
   };
 
   const updateBucketTitle = () => {
-    console.log("hello dblclick");
     setEditTitleMone(true);
   };
 
@@ -48,15 +48,15 @@ const Column = ({ column, index, tasks }) => {
                 {column.title}
               </Title>
             )}
-            <Droppable droppableId={column.id} type="task">
+            <Droppable droppableId={column.id} type="card">
               {(provided, snapshot) => (
                 <TaskList
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                   isDraggingOver={snapshot.isDraggingOver} // dragging 상태 감지 (css 활용)
                 >
-                  {tasks.map((task, index) => (
-                    <Task key={task.id} task={task} index={index} />
+                  {cards.map((card, index) => (
+                    <Card key={card.cardId} card={card} index={index} />
                   ))}
                   {provided.placeholder}
                   <AddTodoBtn>
@@ -112,7 +112,7 @@ const Button = styled.button`
 
 const Container = styled.div`
   margin: 8px;
-  /* border: 1px solid lightgrey; */
+  border: 1px solid lightgrey;
   background-color: white;
   border-radius: 2px;
 
@@ -145,20 +145,20 @@ const TaskList = styled.div`
   min-height: 100px;
 `;
 
-export default Column;
+export default Bucket;
 
 // 👇 최적화 - 지금당장은 필요없음
 // class InnerList extends React.Component {
 //   shouldComponentUpdate(nextProps) {
-//     if (nextProps.tasks === this.props.tasks) {
+//     if (nextProps.cards === this.props.cards) {
 //       return false;
 //     }
 //     return true;
 //   }
 
 //   render() {
-//     return this.props.tasks.map((task, index) => (
-//       <Task key={task.id} task={task} index={index} />
+//     return this.props.cards.map((card, index) => (
+//       <Task key={card.id} card={card} index={index} />
 //     ));
 //   }
 // }

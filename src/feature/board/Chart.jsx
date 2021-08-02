@@ -6,10 +6,11 @@ import "@atlaskit/css-reset";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
-  setBoard,
-  updateBucket,
+  __updateBucket,
+  __updateCardLocateOtherBucket,
   __createBucket,
   __updateCardLocate,
+  __deleteBucket,
 } from "../../redux/modules/board";
 
 let nextId = 3;
@@ -19,15 +20,13 @@ const Chart = () => {
   const boardData = useSelector((state) => state.board);
 
   // 아이템을 떨어뜨렸을 때 실행할 작업들
-  const onDragEnd = (result) => {
-    const { destination, source, draggableId, type } = result;
-
-    // 지정한 곳에 떨어뜨리지 않으면 실행멈춤
+  const onDragEnd = ({ destination, source, draggableId, type }) => {
+    // 지정한 곳에 떨어뜨리지 않으면 실행
     if (!destination) {
       return;
     }
 
-    // 처음과 같은 곳에 떨어뜨리면 실행멈춤
+    // 처음과 같은 곳에 떨어뜨리면 실행
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -35,84 +34,68 @@ const Chart = () => {
       return;
     }
 
+    // bucket ID 추출
+    const sourceBucket = boardData.columns[source.droppableId];
+    const destinationBucket = boardData.columns[destination.droppableId];
+
     // 버킷리스트를 옮겼을 때 실행됨
     if (type === "column") {
       const newColumnOrder = Array.from(boardData.columnOrder); // 새로운 컬럼오더 배열을 만들고,
       newColumnOrder.splice(source.index, 1); // dnd된 컬럼을 제외하고,
       newColumnOrder.splice(destination.index, 0, draggableId); // drop된 위치(index)에 다시 넣는다.
 
-      dispatch(__createBucket(newColumnOrder));
+      dispatch(__updateBucket(newColumnOrder));
       return;
     }
 
-    // 같은 버킷리스트에서 Todo을 옮겼을 때
-    const sourceBucket = boardData.columns[source.droppableId];
-    const destinationBucket = boardData.columns[destination.droppableId];
-
+    // 같은 버킷으로 Todo를 옮겼을 때
     if (sourceBucket === destinationBucket) {
-      const sourceBucketOrder = sourceBucket.cardIds;
       const destinationBucketOrder = Array.from(sourceBucket.cardIds);
       destinationBucketOrder.splice(source.index, 1);
       destinationBucketOrder.splice(destination.index, 0, draggableId);
 
-      const newBucket = {
+      const newBucketInfo = {
+        destinationBucketId: destinationBucket.id,
+        destinationBucketOrder,
+      };
+
+      dispatch(__updateCardLocate(newBucketInfo));
+      return;
+    }
+
+    // 다른 버킷으로 Todo를 옮겼을 때
+    if (sourceBucket !== destinationBucket) {
+      const sourceBucketOrder = Array.from(sourceBucket.cardIds);
+      sourceBucketOrder.splice(source.index, 1);
+
+      const destinationBucketOrder = Array.from(destinationBucket.cardIds);
+      destinationBucketOrder.splice(destination.index, 0, draggableId);
+
+      const newBucketInfo = {
         sourceBucketId: sourceBucket.id,
         destinationBucketId: destinationBucket.id,
         sourceBucketOrder,
         destinationBucketOrder,
       };
 
-      dispatch(__updateCardLocate(newBucket));
+      dispatch(__updateCardLocateOtherBucket(newBucketInfo));
       return;
     }
-
-    // Todo를 다른 버킷으로 옮겼을 때
-    const homecardIds = Array.from(sourceBucket.cardIds);
-    homecardIds.splice(source.index, 1);
-    const newHome = {
-      ...sourceBucket,
-      cardIds: homecardIds,
-    };
-
-    const foreigncardIds = Array.from(destinationBucket.cardIds);
-    foreigncardIds.splice(destination.index, 0, draggableId);
-
-    const newForeign = {
-      ...destinationBucket,
-      cardIds: foreigncardIds,
-    };
-
-    const newState = {
-      ...boardData,
-      columns: {
-        ...boardData.columns,
-        [newHome.id]: newHome,
-        [newForeign.id]: newForeign,
-      },
-    };
-    dispatch(setBoard(newState));
-    console.log(3);
   };
 
-  // 새로운 버킷리스트 만들기 (onClick Event Handler)
+  // 새로운 버킷리스트 만들기 (변경되는 것 : columns, columnOrder)
   const addbucketList = () => {
-    const newColumn = {
-      id: `column-${nextId}`,
-      title: bucketName,
-      cardIds: [],
+    const newBucketInfo = {
+      bucketId: `bucket-${nextId}`,
+      bucketName,
     };
 
-    const newColumnOrder = boardData.columnOrder.concat(`column-${nextId}`);
-
-    const newBucketList = {
-      ...boardData,
-      columnOrder: newColumnOrder,
-      columns: { ...boardData.columns, [`column-${nextId}`]: newColumn },
-    };
-
-    dispatch(setBoard(newBucketList));
-    console.log(4);
+    dispatch(__createBucket(newBucketInfo));
     nextId++;
+  };
+
+  const deleteBucket = (bucket) => {
+    dispatch(__deleteBucket(bucket.id));
   };
 
   return (
@@ -144,6 +127,7 @@ const Chart = () => {
                 );
                 return (
                   <Bucket
+                    deleteBucket={deleteBucket}
                     column={column}
                     key={column.id}
                     index={index}

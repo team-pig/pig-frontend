@@ -6,25 +6,25 @@ import Todos from "./Todos";
 import CardModal from "./CardModal";
 import Textarea from "../../elem/Textarea";
 
-const Card = ({ card, index }) => {
-  console.log(card);
+const Card = ({ card, index, deleteCardHandler }) => {
   const [showModal, setShowModal] = useState(false);
-
   return (
     <>
       <Draggable draggableId={card.cardId} index={index}>
         {(provided, snapshot) => (
-          <Container
-            onClick={() => {
-              setShowModal((pre) => !pre);
-            }}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-            isDragging={snapshot.isDragging}
-          >
-            {card.cardTitle}
-          </Container>
+          <Flex>
+            <Container
+              onClick={() => {
+                setShowModal((pre) => !pre);
+              }}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+              isDragging={snapshot.isDragging}
+            >
+              {card.cardTitle}
+            </Container>
+          </Flex>
         )}
       </Draggable>
       <CardModal showModal={showModal} setShowModal={setShowModal}>
@@ -32,9 +32,15 @@ const Card = ({ card, index }) => {
         <Input type="date" />
         <Input type="date" />
         <Textarea />
-        <Todos todos={card.todos} />
-        <Button _onClick={() => {}}>취소</Button>
-        <Button _onClick={() => {}}>확인</Button>
+        <Todos />
+        <Button
+          _onClick={() => {
+            deleteCardHandler(card.cardId, setShowModal);
+            setShowModal((pre) => !pre);
+          }}
+        >
+          삭제
+        </Button>
       </CardModal>
     </>
   );
@@ -51,5 +57,8 @@ const Container = styled.div`
 `;
 
 const Content = styled.div``;
+const Flex = styled.div`
+  display: flex;
+`;
 
 export default Card;

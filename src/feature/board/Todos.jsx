@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { Input, Text } from "../../elem";
 
-const Todos = ({ todos }) => {
+const Todos = () => {
   return (
     <Container>
-      {todos.map((todo, idx) => (
+      {/* {todos.map((todo, idx) => (
         <Todo>
           <Input type="checkbox"></Input>
           <Flex>
@@ -16,7 +16,7 @@ const Todos = ({ todos }) => {
             </Flex>
           </Flex>
         </Todo>
-      ))}
+      ))} */}
       <form onSubmit={() => {}}>
         <Input></Input>
       </form>

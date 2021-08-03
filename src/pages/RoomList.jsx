@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
 //components
 import Template from "../components/Template";
 import AddRoomModal from "../components/AddRoomModal";
 import JoinRoomModal from "../components/JoinRoomModal";
 import RoomCard from "../components/RoomCard";
+import InfinityScroll from "../components/InfinityScroll";
 
 //elements
 import Button from "../elem/Button";
@@ -16,13 +18,16 @@ import { __getRoomList } from "../redux/modules/room";
 const RoomList = ({history}) => {
   const dispatch = useDispatch();
   const roomList = useSelector((state) => state.room.room) || [];
+  const isLoading = useSelector((state) => state.room.isLoading);
+  const paging = useSelector((state) => state.room.paging);
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
 
   useEffect(() => {
-    dispatch(__getRoomList());
+    if(roomList.length === 0){
+      dispatch(__getRoomList());
+    }
   }, []);
-
 
   const openJoinModal = () => {
     setShowModal(true);
@@ -49,7 +54,15 @@ const RoomList = ({history}) => {
       {isJoin && (
         <JoinRoomModal showModal={showModal} closeModal={closeModal} />
       )}
-      <div>
+      <InfinityScroll
+        callNext={() => {
+          console.log("next");
+          dispatch(__getRoomList(paging.next));
+        }}
+        isNext={paging.next? true : false}
+        isLoading={isLoading}
+        >
+        <RoomContainer>
         {roomList.map((room, idx) => {
           return (
             <RoomCard
@@ -59,9 +72,16 @@ const RoomList = ({history}) => {
             />
           );
         })}
-      </div>
+        </RoomContainer>
+      </InfinityScroll>
     </Template>
   );
 };
+
+const RoomContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  
+`;
 
 export default RoomList;

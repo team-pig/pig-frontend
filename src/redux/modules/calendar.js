@@ -6,8 +6,7 @@ import produce from "immer";
 import moment from "moment";
 
 // action
-const SET_NOW = "calendar/SET_NOW";
-const SET_CURRENT = "calendar/SET_CURRENT";
+const SET_CURRENT_ID = "calendar/SET_CURRENT_ID";
 const LOAD_SCHEDULES = "calendar/LOAD_SCHEDULES";
 const LOAD_DETAIL = "calendar/LOAD_DETAIL";
 const LOAD_DAY_SCHEDULES = "calendar/LOAD_DAY_SCHEDULES";
@@ -16,15 +15,13 @@ const EDIT_SCHEDULE = "calendar/EDIT_SCHEDULE";
 const DELETE_SCHEDULE = "calendar/DELETE_SCHEDULE";
 
 // action creator
-export const setNow = createAction(SET_NOW, (now) => ({ now: moment() }));
-export const setCurrent = createAction(SET_CURRENT, (date) => ({
-  date,
-}));
+
+export const setCurrentId = createAction(SET_CURRENT_ID, (id) => ({ id }));
 const loadSchedules = createAction(LOAD_SCHEDULES, (schedules) => ({
   schedules,
 }));
-const loadDaySchedules = createAction(LOAD_DETAIL, (schedules) => ({
-  schedules,
+export const loadDaySchedules = createAction(LOAD_DAY_SCHEDULES, (idAry) => ({
+  idAry,
 }));
 const addSchedule = createAction(ADD_SCHEDULE, (schedule) => ({
   schedule,
@@ -56,16 +53,6 @@ export const __loadSchedules =
     // dispatch(loadSchedules(schedules));
   };
 
-// 특정 일의 일정과 todo를 받아오는 thunk 함수
-export const __loadDaySchedules =
-  (roomId, scheduleAry) =>
-  (dispatch, getState, { history }) => {
-    // scheduleAry = 해당 날짜의 모든
-    // 해당 날짜의 모든 일정 정보 가져오기
-    let schedules; // 임시
-    dispatch(loadDaySchedules(schedules));
-  };
-
 // schedule 새로 생성 thunk 함수
 export const __addSchedule =
   (roomId) =>
@@ -93,15 +80,18 @@ export const __editSchedule =
 // schedule 삭제 thunk 함수
 // Board에서 __deleteCard(예상 thunk함수)와 같은 api 사용
 export const __deleteSchedule =
-  (roomId, scheduleId) =>
-  (dispatch, getState, { history }) => {
-    dispatch(deleteSchedule(scheduleId));
+  (roomId, cardId) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      // const {data} = await api.deleteCard(roomId, cardId)
+      dispatch(deleteSchedule(cardId));
+    } catch (e) {
+      console.log("삭제에 실패했습니다.", e);
+    }
   };
 
 // initialState
 const initialState = {
-  now: moment(),
-  current: moment(),
   scheduleList: [
     {
       cardId: 1,
@@ -135,13 +125,9 @@ const initialState = {
 // reducer
 const calendar = handleActions(
   {
-    [SET_NOW]: (state, action) =>
+    [SET_CURRENT_ID]: (state, action) =>
       produce(state, (draft) => {
-        draft.now = action.payload.now;
-      }),
-    [SET_CURRENT]: (state, action) =>
-      produce(state, (draft) => {
-        draft.current = action.payload.date;
+        draft.currentScheduleId = action.payload.id;
       }),
     [LOAD_SCHEDULES]: (state, action) =>
       produce(state, (draft) => {
@@ -149,7 +135,11 @@ const calendar = handleActions(
       }),
     [LOAD_DAY_SCHEDULES]: (state, action) =>
       produce(state, (draft) => {
-        draft.currentList = action.payload.schedules;
+        const { idAry } = action.payload;
+        const newAry = draft.scheduleList.filter((schedule) =>
+          idAry.includes(schedule.cardId)
+        );
+        draft.currentList = newAry;
       }),
     [ADD_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
@@ -164,7 +154,6 @@ const calendar = handleActions(
           (schedule) => schedule.cardId === cardId
         );
         for (const [key, value] of Object.entries(rest)) {
-          console.log(key, value);
           draft.scheduleList[idx][key] = value;
         }
       }),

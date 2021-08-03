@@ -22,7 +22,6 @@ const Dates = () => {
             parseInt(schedule.startDate.split("-").join("")) <= targetFormat &&
             parseInt(schedule.endDate.split("-").join("")) >= targetFormat
         );
-        console.log(targetList);
         return (
           <Date key={idx} list={targetList}>
             {target.format("D")}

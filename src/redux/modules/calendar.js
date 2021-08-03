@@ -8,6 +8,7 @@ import moment from "moment";
 // action
 const SET_NOW = "calendar/SET_NOW";
 const SET_CURRENT = "calendar/SET_CURRENT";
+const SET_CURRENT_ID = "calendar/SET_CURRENT_ID";
 const LOAD_SCHEDULES = "calendar/LOAD_SCHEDULES";
 const LOAD_DETAIL = "calendar/LOAD_DETAIL";
 const LOAD_DAY_SCHEDULES = "calendar/LOAD_DAY_SCHEDULES";
@@ -20,6 +21,7 @@ export const setNow = createAction(SET_NOW, (now) => ({ now: moment() }));
 export const setCurrent = createAction(SET_CURRENT, (date) => ({
   date,
 }));
+export const setCurrentId = createAction(SET_CURRENT_ID, (id) => ({ id }));
 const loadSchedules = createAction(LOAD_SCHEDULES, (schedules) => ({
   schedules,
 }));
@@ -142,6 +144,10 @@ const calendar = handleActions(
     [SET_CURRENT]: (state, action) =>
       produce(state, (draft) => {
         draft.current = action.payload.date;
+      }),
+    [SET_CURRENT_ID]: (state, action) =>
+      produce(state, (draft) => {
+        draft.currentScheduleId = action.payload.id;
       }),
     [LOAD_SCHEDULES]: (state, action) =>
       produce(state, (draft) => {

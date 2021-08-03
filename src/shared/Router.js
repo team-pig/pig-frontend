@@ -9,6 +9,7 @@ import Register from "../pages/Register";
 import RoomList from "../pages/RoomList";
 import Workspace from "../pages/Workspace";
 import Board from "../pages/Board";
+import Develop from "../pages/Develop";
 
 import Auth from "../shared/auth";
 
@@ -21,6 +22,7 @@ const Router = () => {
       <Route path="/roomlist" component={Auth(RoomList, true)} exact />
       <Route path="/hidden_board" component={Auth(Board, true)} exact />
       <Route path="/workspace/:roomId" component={Auth(Workspace, true)} />
+      <Route path="/develop" component={Auth(Develop, null)} />
       <Redirect from="*" to="/" />
     </Switch>
   );

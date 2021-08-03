@@ -15,8 +15,8 @@ const Login = ({ history }) => {
 
   const formik = useFormik({
     initialValues: {
-      email: "asdf@gmail.com",
-      password: "12345aag",
+      email: "",
+      password: "",
     },
 
     validationSchema: Yup.object({
@@ -31,7 +31,7 @@ const Login = ({ history }) => {
 
     onSubmit: (values, { resetForm }) => {
       dispatch(__login(values));
-      // resetForm();
+      resetForm();
     },
   });
 
@@ -39,25 +39,29 @@ const Login = ({ history }) => {
     <Template>
       <form onSubmit={formik.handleSubmit}>
         <Input
+          isError={formik.touched.email && Boolean(formik.errors.email)} // formik에서 validation error가 있는 경우 Input 으로 error 결과를 boolean으로 보냄
+          useHelper={formik}
+          _onClick={() => {
+            formik.setFieldValue("email", "");
+          }}
+          _onChange={formik.handleChange}
           name="email"
           type="text"
-          _onChange={formik.handleChange}
           value={formik.values.email}
           placeholder="이메일"
         />
-        {formik.touched.email && formik.errors.email ? (
-          <div>{formik.errors.email}</div>
-        ) : null}
         <Input
+          isError={formik.touched.password && Boolean(formik.errors.password)}
+          useHelper={formik}
+          _onClick={() => {
+            formik.setFieldValue("password", "");
+          }}
+          _onChange={formik.handleChange}
           name="password"
           type="password"
-          _onChange={formik.handleChange}
           value={formik.values.password}
           placeholder="비밀번호를 입력하세요"
         />
-        {formik.touched.password && formik.errors.password ? (
-          <div>{formik.errors.password}</div>
-        ) : null}
         <Button type="submit">로그인</Button>
       </form>
       <div

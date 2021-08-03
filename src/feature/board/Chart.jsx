@@ -1,11 +1,17 @@
 import styled from "styled-components";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import Column from "./Column";
+import Bucket from "./Bucket";
 import { useState } from "react";
 import "@atlaskit/css-reset";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setBoard } from "../../redux/modules/board";
+import {
+  __updateBucket,
+  __updateCardLocateOtherBucket,
+  __createBucket,
+  __updateCardLocate,
+  __deleteBucket,
+} from "../../redux/modules/board";
 
 let nextId = 3;
 const Chart = () => {
@@ -14,15 +20,13 @@ const Chart = () => {
   const boardData = useSelector((state) => state.board);
 
   // 아이템을 떨어뜨렸을 때 실행할 작업들
-  const onDragEnd = (result) => {
-    const { destination, source, draggableId, type } = result;
-
-    // 지정한 곳에 떨어뜨리지 않으면 실행멈춤
+  const onDragEnd = ({ destination, source, draggableId, type }) => {
+    // 지정한 곳에 떨어뜨리지 않으면 실행
     if (!destination) {
       return;
     }
 
-    // 처음과 같은 곳에 떨어뜨리면 실행멈춤
+    // 처음과 같은 곳에 떨어뜨리면 실행
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -30,92 +34,68 @@ const Chart = () => {
       return;
     }
 
+    // bucket ID 추출
+    const sourceBucket = boardData.columns[source.droppableId];
+    const destinationBucket = boardData.columns[destination.droppableId];
+
     // 버킷리스트를 옮겼을 때 실행됨
     if (type === "column") {
       const newColumnOrder = Array.from(boardData.columnOrder); // 새로운 컬럼오더 배열을 만들고,
       newColumnOrder.splice(source.index, 1); // dnd된 컬럼을 제외하고,
       newColumnOrder.splice(destination.index, 0, draggableId); // drop된 위치(index)에 다시 넣는다.
 
-      const newState = {
-        ...boardData,
-        columnOrder: newColumnOrder,
-      };
-
-      dispatch(setBoard(newState));
+      dispatch(__updateBucket(newColumnOrder));
       return;
     }
 
-    // 같은 버킷리스트에서 Todo을 옮겼을 때
-    const home = boardData.columns[source.droppableId];
-    const foreign = boardData.columns[destination.droppableId];
+    // 같은 버킷으로 Todo를 옮겼을 때
+    if (sourceBucket === destinationBucket) {
+      const destinationBucketOrder = Array.from(sourceBucket.cardIds);
+      destinationBucketOrder.splice(source.index, 1);
+      destinationBucketOrder.splice(destination.index, 0, draggableId);
 
-    if (home === foreign) {
-      const newTodoIds = Array.from(home.todoIds);
-      newTodoIds.splice(source.index, 1);
-      newTodoIds.splice(destination.index, 0, draggableId);
-
-      const newHome = {
-        ...home,
-        todoIds: newTodoIds,
+      const newBucketInfo = {
+        destinationBucketId: destinationBucket.id,
+        destinationBucketOrder,
       };
 
-      const newState = {
-        ...boardData,
-        columns: {
-          ...boardData.columns,
-          [newHome.id]: newHome,
-        },
-      };
-
-      dispatch(setBoard(newState));
+      dispatch(__updateCardLocate(newBucketInfo));
       return;
     }
 
-    // Todo를 다른 버킷으로 옮겼을 때
-    const homeTodoIds = Array.from(home.todoIds);
-    homeTodoIds.splice(source.index, 1);
-    const newHome = {
-      ...home,
-      todoIds: homeTodoIds,
-    };
+    // 다른 버킷으로 Todo를 옮겼을 때
+    if (sourceBucket !== destinationBucket) {
+      const sourceBucketOrder = Array.from(sourceBucket.cardIds);
+      sourceBucketOrder.splice(source.index, 1);
 
-    const foreignTodoIds = Array.from(foreign.todoIds);
-    foreignTodoIds.splice(destination.index, 0, draggableId);
+      const destinationBucketOrder = Array.from(destinationBucket.cardIds);
+      destinationBucketOrder.splice(destination.index, 0, draggableId);
 
-    const newForeign = {
-      ...foreign,
-      todoIds: foreignTodoIds,
-    };
+      const newBucketInfo = {
+        sourceBucketId: sourceBucket.id,
+        destinationBucketId: destinationBucket.id,
+        sourceBucketOrder,
+        destinationBucketOrder,
+      };
 
-    const newState = {
-      ...boardData,
-      columns: {
-        ...boardData.columns,
-        [newHome.id]: newHome,
-        [newForeign.id]: newForeign,
-      },
-    };
-    dispatch(setBoard(newState));
+      dispatch(__updateCardLocateOtherBucket(newBucketInfo));
+      return;
+    }
   };
 
-  // 새로운 버킷리스트 만들기 (onClick Event Handler)
+  // 새로운 버킷리스트 만들기 (변경되는 것 : columns, columnOrder)
   const addbucketList = () => {
-    const newColumn = {
-      id: `column-${nextId}`,
-      title: bucketName,
-      todoIds: [],
+    const newBucketInfo = {
+      bucketId: `bucket-${nextId}`,
+      bucketName,
     };
 
-    const newColumnOrder = boardData.columnOrder.concat(`column-${nextId}`);
-
-    const newBucketList = {
-      ...boardData,
-      columnOrder: newColumnOrder,
-      columns: { ...boardData.columns, [`column-${nextId}`]: newColumn },
-    };
-
-    dispatch(setBoard(newBucketList));
+    dispatch(__createBucket(newBucketInfo));
     nextId++;
+  };
+
+  const deleteBucket = (bucket) => {
+    dispatch(__deleteBucket(bucket.id));
   };
 
   return (
@@ -142,15 +122,16 @@ const Chart = () => {
             <Container {...provided.droppableProps} ref={provided.innerRef}>
               {boardData.columnOrder.map((columnId, index) => {
                 const column = boardData.columns[columnId];
-                const tasks = column.todoIds.map(
-                  (todoId) => boardData.tasks[todoId]
+                const cards = column.cardIds.map(
+                  (todoId) => boardData.cards[todoId]
                 );
                 return (
-                  <Column
+                  <Bucket
+                    deleteBucket={deleteBucket}
                     column={column}
                     key={column.id}
                     index={index}
-                    tasks={tasks}
+                    cards={cards}
                   />
                 );
               })}

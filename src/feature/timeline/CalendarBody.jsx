@@ -1,25 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import styled, { css } from "styled-components";
 
+// component
+import Dates from "./Dates";
+
 const CalendarBody = () => {
-  const { current } = useSelector((state) => state.calendar);
-
-  const firstDay = current.clone().startOf("month");
-  const startDate = firstDay.clone().subtract("day", firstDay.day());
-
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-
-  const renderDate = () => {
-    return (
-      <>
-        {[...Array(42)].map((n, idx) => {
-          let target = startDate.clone().add(idx, "d");
-          return <CalendarDate key={idx}>{target.format("D")}</CalendarDate>;
-        })}
-      </>
-    );
-  };
 
   return (
     <>
@@ -28,7 +14,9 @@ const CalendarBody = () => {
           <div key={idx}>{day}</div>
         ))}
       </CalendarDays>
-      <CalendarDate>{renderDate()}</CalendarDate>
+      <CalendarDate>
+        <Dates />
+      </CalendarDate>
     </>
   );
 };

@@ -2,38 +2,32 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
-import { setBoard } from "../../redux/modules/board";
-import { useDispatch, useSelector } from "react-redux";
+import { __createCard, __deleteCard } from "../../redux/modules/board";
+import { useDispatch } from "react-redux";
 
-// compo
-import Task from "./Task";
+// content
+import Card from "./Card";
 
-let taskId = 5;
-const Column = ({ column, index, tasks }) => {
+const Bucket = ({ column, index, cards, deleteBucket }) => {
   const dispatch = useDispatch();
-  const [taskName, setTaskName] = useState("");
+  const [cardTitle, setCardTitle] = useState("");
   const [editTitleMone, setEditTitleMone] = useState(false);
-  const boardData = useSelector((state) => state.board);
-  console.log(boardData);
 
-  // 새로운 투두 만들기 (onClick Event Handler)
+  // 새로운 card 만들기 (onClick Event Handler)
   const addTask = (provided) => {
-    const columnId = provided.droppableProps["data-rbd-droppable-id"];
-    const newTask = { id: `task-${taskId}`, content: taskName };
-    const newTasks = { ...boardData.tasks, [`task-${taskId}`]: newTask };
-    const newTaskIds = [...boardData.columns[columnId].todoIds].concat(
-      `task-${taskId}`
-    );
-    const newColumn = { ...boardData.columns[columnId], todoIds: newTaskIds };
-    const newColumns = { ...boardData.columns, [columnId]: newColumn };
-    const newState = { ...boardData, columns: newColumns, tasks: newTasks };
-    dispatch(setBoard(newState));
-    taskId++;
+    // const bucketId = provided.droppableProps["data-rbd-droppable-id"];
+    const bucketId = column.id;
+    const newCardInfo = { bucketId, cardTitle };
+    dispatch(__createCard(newCardInfo));
   };
 
   const updateBucketTitle = () => {
-    console.log("hello dblclick");
     setEditTitleMone(true);
+  };
+
+  const deleteCardHandler = (cardId) => {
+    const bucketId = column.id;
+    dispatch(__deleteCard(bucketId, cardId));
   };
 
   return (
@@ -44,26 +38,38 @@ const Column = ({ column, index, tasks }) => {
             {editTitleMone ? (
               <EditInput type="text" {...provided.dragHandleProps} />
             ) : (
-              <Title onClick={updateBucketTitle} {...provided.dragHandleProps}>
-                {column.title}
-              </Title>
+              <Flex verti="space-between" {...provided.dragHandleProps}>
+                <Title onClick={updateBucketTitle}>{column.title}</Title>
+                <div
+                  style={{ padding: "10px", cursor: "pointer" }}
+                  onClick={() => deleteBucket(column)}
+                >
+                  X
+                </div>
+              </Flex>
             )}
-            <Droppable droppableId={column.id} type="task">
+
+            <Droppable droppableId={column.id} type="card">
               {(provided, snapshot) => (
                 <TaskList
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  isDraggingOver={snapshot.isDraggingOver} // dragging 상태 감지 (css 활용)
+                  isDraggingOver={snapshot.isDraggingOver}
                 >
-                  {tasks.map((task, index) => (
-                    <Task key={task.id} task={task} index={index} />
+                  {cards.map((card, index) => (
+                    <Card
+                      key={card.cardId}
+                      card={card}
+                      index={index}
+                      deleteCardHandler={deleteCardHandler}
+                    />
                   ))}
                   {provided.placeholder}
                   <AddTodoBtn>
                     <Input
-                      value={taskName}
+                      value={cardTitle}
                       onChange={({ target: { value } }) => {
-                        setTaskName(value);
+                        setCardTitle(value);
                       }}
                     />
                     <Button
@@ -112,10 +118,9 @@ const Button = styled.button`
 
 const Container = styled.div`
   margin: 8px;
-  /* border: 1px solid lightgrey; */
+  border: 1px solid red;
   background-color: white;
   border-radius: 2px;
-
   min-height: 500px;
   width: 350px;
   display: flex;
@@ -140,25 +145,29 @@ const TaskList = styled.div`
   border-radius: 10px;
   background-color: ${(props) =>
     props.isDraggingOver ? "#fbfbfb" : "inherit"};
-
   flex-grow: 1;
   min-height: 100px;
 `;
 
-export default Column;
+const Flex = styled.div`
+  display: flex;
+  justify-content: ${(props) => props.verti};
+`;
+
+export default Bucket;
 
 // 👇 최적화 - 지금당장은 필요없음
 // class InnerList extends React.Component {
 //   shouldComponentUpdate(nextProps) {
-//     if (nextProps.tasks === this.props.tasks) {
+//     if (nextProps.cards === this.props.cards) {
 //       return false;
 //     }
 //     return true;
 //   }
 
 //   render() {
-//     return this.props.tasks.map((task, index) => (
-//       <Task key={task.id} task={task} index={index} />
+//     return this.props.cards.map((card, index) => (
+//       <Task key={card.id} card={card} index={index} />
 //     ));
 //   }
 // }

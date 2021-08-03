@@ -2,7 +2,14 @@ import RoomList from "../pages/RoomList";
 import { instance } from "./index";
 
 export const roomApi = {
-  getRoomList: () => instance.get("/rooms"),
+  getRoomList: (page, size) =>
+    instance.get("/test", {
+      params: {
+        page: page,
+        size: size,
+      },
+    }),
+
   getOneRoom: (roomId) => instance.get(`/rooms/${roomId}/main`, roomId),
   addRoom: (room) => instance.post("/room", room),
   editRoom: (room) => {
@@ -23,12 +30,4 @@ export const roomApi = {
   exitRoom: (roomId) => {
     instance.delete(`/room/member/${roomId}`);
   },
-
-  // exitRoom: (roomId) => {
-  //   instance.delete(`/room/member/${roomId}`, {
-  //     data: {},
-  //   });
-  // },
-
-  // exitRoom: (roomId) => instance.delete(`/room/member/${roomId}`, roomId),
 };

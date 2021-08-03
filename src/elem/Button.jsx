@@ -1,57 +1,87 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-const Button = ({ children, ...rest }) => {
-  return (
-    <Wrapper onClick={rest._onClick} {...rest}>
-      {children}
-    </Wrapper>
-  );
+const Button = ({ shape, children, ...rest }) => {
+  switch (shape) {
+    case "green-fill":
+      return (
+        <GreenFill color="main" onClick={rest._onClick} {...rest}>
+          {children}
+        </GreenFill>
+      );
+    case "green-outline":
+      return (
+        <GreenLine color="main" onClick={rest._onClick} {...rest}>
+          {children}
+        </GreenLine>
+      );
+    case "pink-fill":
+      return (
+        <PinkFill color="point" onClick={rest._onClick} {...rest}>
+          {children}
+        </PinkFill>
+      );
+    case "pink-outline":
+      return (
+        <PinkLine color="point" onClick={rest._onClick} {...rest}>
+          {children}
+        </PinkLine>
+      );
+    default:
+      return (
+        <GreenFill color="main" onClick={rest._onClick} {...rest}>
+          {children}
+        </GreenFill>
+      );
+  }
 };
 
-const Wrapper = styled.button`
+const BtnDefault = css`
+  width: 100%;
+  height: 50px; // 변경 가능성 있음
+  border: 1px solid ${(props) => `var(--${props.color})`};
   font-size: 1.6rem;
-  font-family: "NanumSquareRound";
   font-weight: bold;
   line-height: 2.2rem;
-  height: 50px;
+  transition: color 300ms ease-in-out, background-color 300ms ease-in-out;
+`;
+
+const FillBtn = css`
+  ${BtnDefault};
   color: var(--white);
-  transition: 100ms all ease-in-out;
-  background-color: var(--main);
-  border: 1px solid var(--main);
+  background-color: ${(props) => `var(--${props.color})`};
 
-  width: ${(props) =>
-    props.large
-      ? "380px"
-      : props.small
-      ? "120px"
-      : props.full
-      ? "100%"
-      : "140px"};
+  &:hover {
+    color: ${(props) => `var(--${props.color})`};
+    background-color: var(--white);
+  }
+`;
 
-  ${(props) =>
-    props.fill &&
-    css`
-      cursor: pointer;
-      &:hover {
-        background-color: var(--white);
-        border: 1px solid var(--main);
-        color: var(--main);
-      }
-    `}
+const LineBtn = css`
+  ${BtnDefault};
+  color: ${(props) => `var(--${props.color})`};
+  background-color: var(--white);
 
-  ${(props) =>
-    props.outline &&
-    css`
-      background-color: var(--white);
-      border: 1px solid var(--main);
-      color: var(--main);
-      cursor: pointer;
-      &:hover {
-        border: 1px solid var(--point);
-        color: var(--point);
-      }
-    `};
+  &:hover {
+    color: var(--white);
+    background-color: ${(props) => `var(--${props.color})`};
+  }
+`;
+
+const GreenFill = styled.button`
+  ${FillBtn};
+`;
+
+const GreenLine = styled.button`
+  ${LineBtn};
+`;
+
+const PinkFill = styled.button`
+  ${FillBtn};
+`;
+
+const PinkLine = styled.button`
+  ${LineBtn};
 `;
 
 export default Button;

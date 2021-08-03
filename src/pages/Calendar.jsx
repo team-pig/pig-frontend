@@ -19,7 +19,7 @@ const Calendar = (props) => {
   const { roomId } = useParams();
 
   const dispatch = useDispatch();
-  const current = useSelector((state) => state.calendar.current);
+  const current = useSelector((state) => state.date.current);
   const currentContent = useSelector((state) =>
     state.calendar.scheduleList.find(
       (item) => item.cardId === state.calendar.currentScheduleId

@@ -6,8 +6,7 @@ import produce from "immer";
 import moment from "moment";
 
 // action
-const SET_NOW = "calendar/SET_NOW";
-const SET_CURRENT = "calendar/SET_CURRENT";
+
 const SET_CURRENT_ID = "calendar/SET_CURRENT_ID";
 const LOAD_SCHEDULES = "calendar/LOAD_SCHEDULES";
 const LOAD_DETAIL = "calendar/LOAD_DETAIL";
@@ -17,10 +16,7 @@ const EDIT_SCHEDULE = "calendar/EDIT_SCHEDULE";
 const DELETE_SCHEDULE = "calendar/DELETE_SCHEDULE";
 
 // action creator
-export const setNow = createAction(SET_NOW, (now) => ({ now: moment() }));
-export const setCurrent = createAction(SET_CURRENT, (date) => ({
-  date,
-}));
+
 export const setCurrentId = createAction(SET_CURRENT_ID, (id) => ({ id }));
 const loadSchedules = createAction(LOAD_SCHEDULES, (schedules) => ({
   schedules,
@@ -102,8 +98,6 @@ export const __deleteSchedule =
 
 // initialState
 const initialState = {
-  now: moment(),
-  current: moment(),
   scheduleList: [
     {
       cardId: 1,
@@ -137,14 +131,6 @@ const initialState = {
 // reducer
 const calendar = handleActions(
   {
-    [SET_NOW]: (state, action) =>
-      produce(state, (draft) => {
-        draft.now = action.payload.now;
-      }),
-    [SET_CURRENT]: (state, action) =>
-      produce(state, (draft) => {
-        draft.current = action.payload.date;
-      }),
     [SET_CURRENT_ID]: (state, action) =>
       produce(state, (draft) => {
         draft.currentScheduleId = action.payload.id;

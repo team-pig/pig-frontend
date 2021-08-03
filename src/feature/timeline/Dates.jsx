@@ -5,7 +5,8 @@ import { useSelector } from "react-redux";
 import Date from "./Date";
 
 const Dates = () => {
-  const { now, current, scheduleList } = useSelector((state) => state.calendar);
+  const { now, current } = useSelector((state) => state.date);
+  const { scheduleList } = useSelector((state) => state.calendar);
 
   const firstDay = current.clone().startOf("month");
   const startDate = firstDay.clone().subtract("day", firstDay.day());

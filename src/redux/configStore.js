@@ -4,6 +4,7 @@ import user from "./modules/user";
 import room from "./modules/room";
 import image from "./modules/image";
 import document from "./modules/document";
+import date from "./modules/date";
 import calendar from "./modules/calendar";
 import board from "./modules/board";
 
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   room,
   image,
   document,
+  date,
   calendar,
   router: connectRouter(history),
 });

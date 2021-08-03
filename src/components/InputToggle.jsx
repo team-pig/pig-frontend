@@ -17,6 +17,7 @@ const InputToggle = ({ name, shape, value = "", saveFunc }) => {
   // Input 외 영역 클릭 시 저장
   useEffect(() => {
     const handleClickOutside = (e) => {
+      e.stopPropagation();
       if (myRef.current && !myRef.current.contains(e.target)) {
         handleSave(myRef.current.value);
       }

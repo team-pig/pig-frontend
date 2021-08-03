@@ -1,89 +1,98 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
-const Input = ({
-  _onChange,
-  _onClick,
-  type,
-  value,
-  name,
-  placeholder,
-  isError,
-  useHelper,
-  ...styles
-}) => {
-  console.log(useHelper && useHelper.errors[name]);
-  return (
-    <>
-      <Wrapper>
-        <InputBx
-          onChange={_onChange}
-          type={type}
-          value={value}
-          name={name}
-          placeholder={placeholder}
-          isError={isError}
-          {...styles}
+import Icon from "../components/Icon";
+import { Text } from "../elem";
+import { body_3 } from "../themes/textStyle";
+
+const Input = (props) => {
+  if (props.type === "text" || props.type === "password") {
+    return (
+      <Wrapper isError={props.isError}>
+        <InputText
+          onChange={props._onChange}
+          type={props.type}
+          value={props.value}
+          name={props.name}
+          placeholder={props.placeholder}
+          isError={props.isError}
         />
-        {value === "" ? "" : <IconX onClick={_onClick}>아이콘자리</IconX>}
+        {props.value !== "" ? (
+          <IconX onClick={props._onClick}>
+            <Icon icon="delete" size="14px" />
+          </IconX>
+        ) : (
+          ""
+        )}
 
         {/* helper msg */}
-        {useHelper && useHelper.touched[name] && useHelper.errors[name] ? (
-          <Helper>{useHelper.errors[name]}</Helper>
+        {props.useHelper &&
+        props.useHelper.touched[props.name] &&
+        props.useHelper.errors[props.name] ? (
+          <Helper>
+            <Text type="body_4">{props.useHelper.errors[props.name]}</Text>
+          </Helper>
         ) : (
           ""
         )}
       </Wrapper>
-    </>
-  );
+    );
+  }
+
+  if (props.type === "checkbox") {
+    return <Checkbox type={props.type} />;
+  }
 };
 
-const Helper = styled.div`
-  position: absolute;
-  right: 0;
-  transform: translateY(100%);
-  bottom: -0.5rem;
-  color: var(--notice);
-`;
+const Wrapper = styled.div`
+  --noticeSize: 12px;
+  --noticeTop: 4px;
 
-const Wrapper = styled.form`
   position: relative;
-  margin: 2rem 0;
-  width: 38rem;
-  height: 4.6rem;
+  margin-bottom: ${(props) =>
+    props.isError
+      ? `calc(12px + var(--noticeSize) + var(--noticeTop))`
+      : `12px`};
 `;
 
 const IconX = styled.div`
   position: absolute;
-  right: 1.4rem;
   top: 50%;
+  right: 14px;
   transform: translateY(-50%);
+  cursor: pointer;
 `;
 
-const InputBx = styled.input`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 38rem;
-  padding: 1.2rem 1.4rem;
+const InputText = styled.input`
+  ${body_3};
+  width: 100%;
+  height: 46px;
+  padding: 12px 14px;
   color: var(--black);
-  font-size: 1.4rem;
-  line-height: 2.2rem;
-  letter-spacing: -0.02rem;
-  height: 4.6rem;
-  font-family: "NanumSquareRound";
-  outline: none;
   border: ${(props) =>
     props.isError
-      ? "0.1rem solid var(--notice) !important"
-      : "0.1rem solid var(--darkgrey)"};
+      ? "1px solid var(--notice) !important"
+      : "1px solid var(--darkgrey)"};
+  outline: none;
+  transition: border-color 150ms ease-in-out;
 
   ::placeholder {
     color: var(--grey);
   }
+
   &:focus {
-    border: 0.1rem solid var(--main);
+    border: 1px solid var(--main);
   }
 `;
+
+const Helper = styled.div`
+  position: absolute;
+  bottom: -4px;
+  right: 0;
+  color: var(--notice);
+  transform: translateY(100%);
+`;
+
+const Checkbox = styled.input``;
 
 export default Input;

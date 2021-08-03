@@ -80,9 +80,14 @@ export const __editSchedule =
 // schedule 삭제 thunk 함수
 // Board에서 __deleteCard(예상 thunk함수)와 같은 api 사용
 export const __deleteSchedule =
-  (roomId, scheduleId) =>
-  (dispatch, getState, { history }) => {
-    dispatch(deleteSchedule(scheduleId));
+  (roomId, cardId) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      // const {data} = await api.deleteCard(roomId, cardId)
+      dispatch(deleteSchedule(cardId));
+    } catch (e) {
+      console.log("삭제에 실패했습니다.", e);
+    }
   };
 
 // initialState

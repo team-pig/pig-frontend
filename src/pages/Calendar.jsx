@@ -52,7 +52,11 @@ const Calendar = (props) => {
       <CalendarInfo />
       {showModal && modalContent && (
         <CardModal showModal={showModal} setShowModal={setShowModal}>
-          <CalendarModal content={modalContent} setContent={setModalContent} />
+          <CalendarModal
+            content={modalContent}
+            setContent={setModalContent}
+            setShowModal={setShowModal}
+          />
         </CardModal>
       )}
     </CalendarBox>

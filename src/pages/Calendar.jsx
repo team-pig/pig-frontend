@@ -9,11 +9,12 @@ import { __addSchedule, __loadSchedules } from "../redux/modules/calendar";
 // component
 import CalendarHeader from "../feature/timeline/CalendarHeader";
 import CalendarBody from "../feature/timeline/CalendarBody";
+import CalendarInfo from "../feature/timeline/CalendarInfo";
 import CardModal from "../feature/board/CardModal";
+import CalendarModal from "../feature/timeline/CalendarModal";
 
 // elem
 import { Button } from "../elem";
-import CalendarModal from "../feature/timeline/CalendarModal";
 
 const Calendar = (props) => {
   const { roomId } = useParams();
@@ -48,6 +49,7 @@ const Calendar = (props) => {
       <Button _onClick={clickCreateBtn}>일정 추가</Button>
       <CalendarHeader />
       <CalendarBody />
+      <CalendarInfo />
       {showModal && modalContent && (
         <CardModal showModal={showModal} setShowModal={setShowModal}>
           <CalendarModal content={modalContent} setContent={setModalContent} />

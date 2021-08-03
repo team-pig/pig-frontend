@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
 
 import CardModal from "../board/CardModal";
 import CalendarModal from "./CalendarModal";
-import { setCurrentId } from "../../redux/modules/calendar";
+
+// redux
+import { loadDaySchedules, setCurrentId } from "../../redux/modules/calendar";
 
 const Date = ({ list, children }) => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const Date = ({ list, children }) => {
   useEffect(() => setModalContent(currentContent), [currentContent]);
 
   const clickDate = (idAry) => {
-    // dispatch(__loadDaySchedules(roomId, idAry));
+    dispatch(loadDaySchedules(idAry));
   };
 
   const clickSchedule = (cardId) => {
@@ -34,8 +35,8 @@ const Date = ({ list, children }) => {
     <>
       <DateBox
         onClick={(e) => {
-          const idAry = list.map((item) => item.cardId);
           e.stopPropagation();
+          const idAry = list.map((item) => item.cardId);
           clickDate(idAry);
         }}
       >

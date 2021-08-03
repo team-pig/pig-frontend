@@ -6,7 +6,6 @@ import produce from "immer";
 import moment from "moment";
 
 // action
-
 const SET_CURRENT_ID = "calendar/SET_CURRENT_ID";
 const LOAD_SCHEDULES = "calendar/LOAD_SCHEDULES";
 const LOAD_DETAIL = "calendar/LOAD_DETAIL";
@@ -21,8 +20,8 @@ export const setCurrentId = createAction(SET_CURRENT_ID, (id) => ({ id }));
 const loadSchedules = createAction(LOAD_SCHEDULES, (schedules) => ({
   schedules,
 }));
-const loadDaySchedules = createAction(LOAD_DETAIL, (schedules) => ({
-  schedules,
+export const loadDaySchedules = createAction(LOAD_DAY_SCHEDULES, (idAry) => ({
+  idAry,
 }));
 const addSchedule = createAction(ADD_SCHEDULE, (schedule) => ({
   schedule,
@@ -52,16 +51,6 @@ export const __loadSchedules =
     // 모든 일정 받아와서 action creator로 전달
     // let schedules; // 임시
     // dispatch(loadSchedules(schedules));
-  };
-
-// 특정 일의 일정과 todo를 받아오는 thunk 함수
-export const __loadDaySchedules =
-  (roomId, scheduleAry) =>
-  (dispatch, getState, { history }) => {
-    // scheduleAry = 해당 날짜의 모든
-    // 해당 날짜의 모든 일정 정보 가져오기
-    let schedules; // 임시
-    dispatch(loadDaySchedules(schedules));
   };
 
 // schedule 새로 생성 thunk 함수
@@ -141,7 +130,11 @@ const calendar = handleActions(
       }),
     [LOAD_DAY_SCHEDULES]: (state, action) =>
       produce(state, (draft) => {
-        draft.currentList = action.payload.schedules;
+        const { idAry } = action.payload;
+        const newAry = draft.scheduleList.filter((schedule) =>
+          idAry.includes(schedule.cardId)
+        );
+        draft.currentList = newAry;
       }),
     [ADD_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
@@ -156,7 +149,6 @@ const calendar = handleActions(
           (schedule) => schedule.cardId === cardId
         );
         for (const [key, value] of Object.entries(rest)) {
-          console.log(key, value);
           draft.scheduleList[idx][key] = value;
         }
       }),

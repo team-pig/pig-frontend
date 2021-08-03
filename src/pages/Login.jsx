@@ -62,7 +62,9 @@ const Login = ({ history }) => {
           value={formik.values.password}
           placeholder="비밀번호를 입력하세요"
         />
-        <Button type="submit">로그인</Button>
+        <Button shape="green-fill" type="submit">
+          로그인
+        </Button>
       </form>
       <div
         onClick={() => {

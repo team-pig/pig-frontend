@@ -17,13 +17,15 @@ const LOADING = "LOADING";
 const initialState = {
   roomList: [],
   room: [],
-  isLoading: null,
+  isLoading: false,
+  paging: { page: 1, next: null, size: 12 },
 };
 
 //action creator
 export const addRoom = createAction(ADD_ROOM, (room) => ({ room }));
-export const getRoomList = createAction(GET_ROOM_LIST, (roomList) => ({
+export const getRoomList = createAction(GET_ROOM_LIST, (roomList, paging) => ({
   roomList,
+  paging,
 }));
 export const getOneRoom = createAction(GET_ONE_ROOM, (roomId) => ({
   roomId,
@@ -36,7 +38,7 @@ export const joinRoom = createAction(JOIN_ROOM, (inviteCode) => ({
   inviteCode,
 }));
 export const exitRoom = createAction(EXIT_ROOM, (roomId) => ({ roomId }));
-export const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
+export const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 
 //thunk function
 export const __joinRoom =
@@ -65,7 +67,8 @@ export const __addRoom =
   (contents) =>
   async (dispatch, getState, { history }) => {
     try {
-      const _image = getState().image.preview;
+      const _image = getState().image.imgUrl;
+      // const _image = getState().image.preview;
       const willDispatchContents = {
         ...contents,
         roomImage: _image,
@@ -105,10 +108,21 @@ export const __getRoomList =
   () =>
   async (dispatch, getState, { history }) => {
     try {
-      const { data } = await roomApi.getRoomList();
-      dispatch(getRoomList(data));
-      // const data = getState().room.roomList;
-      // dispatch(getRoomList(data));
+      const _next = getState().room.paging.next;
+      const _page = getState().room.paging.page;
+      const _size = getState().room.paging.size;
+      if (_page === false && _next === false) return;
+
+      const { data } = await roomApi.getRoomList(_page, _size);
+
+      const totalPages = data.totalPages;
+
+      let paging = {
+        page: data.room.length < _size ? false : _page + 1,
+        next: _page === totalPages ? false : true,
+        size: _size,
+      };
+      dispatch(getRoomList(data.room, paging));
     } catch (e) {
       console.log(e);
     }
@@ -150,7 +164,9 @@ const room = handleActions(
       }),
     [GET_ROOM_LIST]: (state, action) =>
       produce(state, (draft) => {
-        draft.room = action.payload.roomList.room;
+        // draft.room = action.payload.room;
+        draft.room.push(...action.payload.roomList);
+        draft.paging = action.payload.paging;
         draft.isLoading = false;
       }),
     [EDIT_ROOM]: (state, action) =>

@@ -1,16 +1,20 @@
 import Router from "./Router";
+import { ThemeProvider } from "styled-components";
+
 import Header from "../components/Header";
-import GlobalStyles from "../shared/GlobalStyles";
-import styled from "styled-components";
 import Footer from "../components/Footer";
+import GlobalStyles from "../shared/GlobalStyles";
+import theme from "../themes/theme";
 
 const App = () => {
   return (
     <>
-      <GlobalStyles />
-      <Header />
-      <Router />
-      {/* <Footer /> */}
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <Header />
+        <Router />
+        {/* <Footer /> */}
+      </ThemeProvider>
     </>
   );
 };

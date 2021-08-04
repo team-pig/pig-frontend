@@ -101,10 +101,10 @@ const RoomCard = ({
 };
 
 const Container = styled.div`
+  position: relative;
+
   display: flex;
   flex-direction: column;
-
-  position: relative;
 
   width: 302px;
   height: 274px;
@@ -114,12 +114,15 @@ const Container = styled.div`
 `;
 
 const CardSection = styled.div`
+  position: relative;
+
   display: flex;
   flex-direction: column;
-  position: relative;
-  padding: 20px 20px 15px 20px;
+
   width: 302px;
   height: 202px;
+
+  padding: 20px 20px 15px 20px;
 `;
 
 const StarIcon = styled.div`
@@ -130,15 +133,17 @@ const StarIcon = styled.div`
 
 const CardProfile = styled.div`
   display: flex;
-  align-items: center;
   justify-content: flex-start;
+  align-items: center;
 `;
 
 const RoundImg = styled.img`
   width: 100px;
   height: 100px;
-  border-radius: 50%;
+
   margin-right: 15px;
+
+  border-radius: 50%;
 `;
 
 const TextBox = styled.div`
@@ -149,37 +154,42 @@ const TextBox = styled.div`
 const TagBox = styled.div`
   margin-top: 10px;
   margin-bottom: 18px;
+
   color: var(--darkgrey);
 `;
 
 const SubTitleBox = styled.div`
   display: block;
-  margin-top: auto;
-  border: 1px solid black;
-  width: 262px;
 
+  overflow: hidden;
+
+  width: 262px;
+  margin-top: auto;
+
+  border: 1px solid black;
   color: var(--darkgrey);
 
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 `;
 
 const CardFooter = styled.div`
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 
-  padding: 20px;
   margin-top: auto;
+  padding: 20px;
+
   border-top: 1px solid var(--line);
 `;
 
 const FooterItem = styled.div`
-  width: auto;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+
+  width: auto;
 `;
 
 export default RoomCard;

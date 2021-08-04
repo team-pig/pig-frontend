@@ -27,10 +27,10 @@ export const __login =
   async (dispatch, getState, { history }) => {
     try {
       const {
-        data: { token, email },
+        data: { accessToken, email },
       } = await userApi.login(userInfo);
-      const { id } = jwt_decode(token);
-      cookies.set("accessToken", token, {
+      const { id } = jwt_decode(accessToken);
+      cookies.set("accessToken", accessToken, {
         path: "/",
         maxAge: 172800, // 2 day
       });

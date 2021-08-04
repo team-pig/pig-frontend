@@ -4,10 +4,11 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import Icon from "../Icon";
-import { __loginCheck, __logout } from "../../redux/modules/user";
+import { __logout } from "../../redux/modules/user";
 import { button } from "../../themes/textStyle";
 import NameTag from "./NameTag";
 import TextLogo from "../../assets/logo/textlogo.svg";
+import { mobileHidden, mobileOnly } from "../../themes/responsive";
 
 const Header = () => {
   const history = useHistory();
@@ -33,24 +34,27 @@ const Header = () => {
               </List>
             </Nav>
           ) : (
-            <Btns>
-              <IconBtn>
-                <Icon icon="notice-focus" size="28px" />
-              </IconBtn>
-              <NameBtn>
-                <NameTag name={"Anna"} />
-              </NameBtn>
-            </Btns>
+            <>
+              <Btns>
+                <IconBtn>
+                  <Icon icon="notice-focus" size="28px" />
+                </IconBtn>
+                <NameBtn>
+                  <NameTag name={"Anna"} />
+                </NameBtn>
+              </Btns>
+              <Logout
+                onClick={() => {
+                  dispatch(__logout());
+                }}
+              >
+                로그아웃
+              </Logout>
+            </>
           )}
         </RightSide>
         {/* 로그아웃 모달 필요  */}
-        {/* <Button
-          _onClick={() => {
-            dispatch(__logout());
-          }}
-        >
-          {isLogin ? "로그아웃" : "로그인"}
-        </Button> */}
+        {/* 임시버튼 */}
       </InsideBox>
     </Container>
   );
@@ -65,6 +69,10 @@ const Container = styled.header`
   height: 72px;
   background-color: var(--white);
   border: 1px solid var(--line);
+
+  ${({ theme }) => theme.device.mobile} {
+    height: 50px;
+  }
 `;
 
 const InsideBox = styled.div`
@@ -82,6 +90,7 @@ const LeftSide = styled.section`
 `;
 
 const RightSide = styled.section`
+  ${mobileHidden};
   margin-right: -16px;
 `;
 
@@ -116,6 +125,17 @@ const IconBtn = styled.button`
 
 const NameBtn = styled.button`
   padding: 12px 24px;
+`;
+
+// 임시버튼
+const Logout = styled.button`
+  ${button}
+  position: absolute;
+  bottom: -50px;
+  right: 0;
+  padding: 8px 16px;
+  color: white;
+  background-color: var(--notice);
 `;
 
 export default Header;

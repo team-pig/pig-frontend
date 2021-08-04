@@ -8,7 +8,7 @@ import { __logout } from "../../redux/modules/user";
 import { button } from "../../themes/textStyle";
 import NameTag from "./NameTag";
 import TextLogo from "../../assets/logo/textlogo.svg";
-import { mobileHidden, mobileOnly } from "../../themes/responsive";
+import { mobileHidden } from "../../themes/responsive";
 
 const Header = () => {
   const history = useHistory();
@@ -20,7 +20,13 @@ const Header = () => {
     <Container>
       <InsideBox>
         <LeftSide>
-          <LogoBox onClick={() => history.push("/")}>
+          <LogoBox
+            onClick={
+              isLogin
+                ? () => history.push("/roomlist")
+                : () => history.push("/")
+            }
+          >
             <img src={TextLogo} alt="협업돼지" />
           </LogoBox>
         </LeftSide>

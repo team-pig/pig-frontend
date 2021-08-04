@@ -4,14 +4,14 @@ import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // redux
-import { __deleteDoc } from "../redux/modules/document";
+import { __deleteDoc } from "../../redux/modules/document";
 
 // toast UI viewer
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Viewer } from "@toast-ui/react-editor";
 
 // elem
-import { Button } from "../elem";
+import { Button } from "../../elem";
 
 const DocViewer = () => {
   const history = useHistory();

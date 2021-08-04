@@ -4,14 +4,23 @@ import { useDispatch, useSelector } from "react-redux";
 
 //components
 
-import ModifyRoomModal from "../components/ModifyRoomModal";
+import ModifyRoomModal from "./ModifyRoomModal";
 //elements
-import Button from "../elem/Button";
+import { Button } from "../../elem";
+
 //redux
-import { __deleteRoom, __exitRoom } from "../redux/modules/room";
+import { __deleteRoom, __exitRoom } from "../../redux/modules/room";
 
 //map의 list에서 받아오는 값
-const RoomCard = ({ _id, roomImage, roomName, subtitle, master, tag, history }) => {
+const RoomCard = ({
+  _id,
+  roomImage,
+  roomName,
+  subtitle,
+  master,
+  tag,
+  history,
+}) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
 
@@ -31,7 +40,11 @@ const RoomCard = ({ _id, roomImage, roomName, subtitle, master, tag, history }) 
         closeModModal={closeModModal}
       />
       <Div>
-        <div onClick={() => {history.push(`/workspace/${_id}`)}}>
+        <div
+          onClick={() => {
+            history.push(`/workspace/${_id}`);
+          }}
+        >
           <Image src={roomImage} />
           <div>
             <div>{roomName}</div>
@@ -44,15 +57,19 @@ const RoomCard = ({ _id, roomImage, roomName, subtitle, master, tag, history }) 
           <Button _onClick={openModModal}>수정하기</Button>
           <Button
             _onClick={(e) => {
-              console.log(_id)
+              console.log(_id);
               dispatch(__deleteRoom(_id));
             }}
           >
             삭제하기
           </Button>
-          <Button _onClick={(e) => {
-            dispatch(__exitRoom(_id));
-          }}>나가기</Button>
+          <Button
+            _onClick={(e) => {
+              dispatch(__exitRoom(_id));
+            }}
+          >
+            나가기
+          </Button>
         </div>
       </Div>
     </>
@@ -60,16 +77,16 @@ const RoomCard = ({ _id, roomImage, roomName, subtitle, master, tag, history }) 
 };
 
 const Image = styled.img`
-/* max-width: 400px;
+  /* max-width: 400px;
 max-height: 300px; */
-width: 300px;
-height: 200px;
-/* height: auto; */
+  width: 300px;
+  height: 200px;
+  /* height: auto; */
 `;
 
 const Div = styled.div`
-width: 350px;
-height: 300px;
+  width: 350px;
+  height: 300px;
 `;
 
 export default RoomCard;

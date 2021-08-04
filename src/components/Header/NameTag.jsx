@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Text } from "../elem";
+import { Text } from "../../elem";
 
 const NameTag = ({ img, name }) => {
   return (

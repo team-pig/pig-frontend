@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import Icon from "./Icon";
-import { __loginCheck, __logout } from "../redux/modules/user";
-import { button } from "../themes/textStyle";
+import Icon from "../Icon";
+import { __loginCheck, __logout } from "../../redux/modules/user";
+import { button } from "../../themes/textStyle";
 import NameTag from "./NameTag";
 
 const Header = () => {

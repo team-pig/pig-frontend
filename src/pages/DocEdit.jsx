@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // component
-import Writer from "../components/Writer";
+import Writer from "../feature/document/Writer";
 import Template from "../components/Template";
 
 const DocEdit = () => {

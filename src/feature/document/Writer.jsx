@@ -5,7 +5,7 @@ import { useHistory, useParams } from "react-router-dom";
 import Prism from "prismjs";
 
 // redux
-import { __createDoc, __editDoc } from "../redux/modules/document";
+import { __createDoc, __editDoc } from "../../redux/modules/document";
 
 // toast UI editor
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -18,8 +18,8 @@ import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 
 // elem
-import { Button } from "../elem";
-import { uploadFile } from "../shared/uploadFile";
+import { Button } from "../../elem";
+import { uploadFile } from "../../shared/uploadFile";
 
 const Writer = ({ targetDoc }) => {
   const history = useHistory();

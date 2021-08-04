@@ -4,7 +4,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // component
-import DocList from "../components/DocList";
+import DocList from "../feature/document/DocList";
 import Template from "../components/Template";
 
 // redux

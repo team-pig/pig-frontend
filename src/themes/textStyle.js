@@ -70,6 +70,12 @@ export const body_4 = css`
   line-height: 1.8rem;
 `;
 
+export const button = css`
+  font-size: 16px;
+  line-height: 2.2rem;
+  font-weight: 700 !important;
+`;
+
 export const gnb = css`
   font-family: "Montserrat";
   font-size: 1.8rem;

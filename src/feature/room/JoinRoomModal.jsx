@@ -5,14 +5,13 @@ import AWS from "aws-sdk";
 import { useDispatch, useSelector } from "react-redux";
 
 //components
-import ImgUploader from "../components/ImgUploader";
+import ImgUploader from "../../components/ImgUploader";
 
 // elements
-import Input from "../elem/Input";
-import Button from "../elem/Button";
+import { Button } from "../../elem";
 
 //redux
-import {__joinRoom} from "../redux/modules/room";
+import { __joinRoom } from "../../redux/modules/room";
 
 const JoinRoomModal = ({ showModal, closeModal }) => {
   const dispatch = useDispatch();
@@ -25,7 +24,7 @@ const JoinRoomModal = ({ showModal, closeModal }) => {
   const join = () => {
     dispatch(__joinRoom(inviteCode));
     closeModal();
-  }
+  };
 
   return (
     <>

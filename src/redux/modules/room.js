@@ -184,7 +184,9 @@ const room = handleActions(
       }),
     [DELETE_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.room.findIndex((r) => r._id === action.payload.roomId);
+        let idx = draft.room.findIndex(
+          (r) => r.roomId === action.payload.roomId
+        );
 
         if (idx !== -1) {
           draft.room.splice(idx, 1);
@@ -192,7 +194,9 @@ const room = handleActions(
       }),
     [EXIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.room.findIndex((r) => r._id === action.payload.roomId);
+        let idx = draft.room.findIndex(
+          (r) => r.roomId === action.payload.roomId
+        );
 
         if (idx !== -1) {
           draft.room.splice(idx, 1);

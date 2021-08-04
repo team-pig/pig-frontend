@@ -17,8 +17,8 @@ const CalendarInfo = () => {
     <Container>
       <Left>
         {currentList &&
-          currentList.map((item) => (
-            <CurrentSchedule onClick={clickSchedule}>
+          currentList.map((item, idx) => (
+            <CurrentSchedule key={idx} onClick={clickSchedule}>
               {item.cardTitle}
             </CurrentSchedule>
           ))}

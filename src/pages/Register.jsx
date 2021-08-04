@@ -132,7 +132,7 @@ const Title = styled(Text)`
 `;
 
 const RegisterBtn = styled(Button)`
-  margin-top: 40px;
+  margin-top: 60px;
 `;
 
 export default Register;

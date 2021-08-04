@@ -7,6 +7,7 @@ import Icon from "../Icon";
 import { __loginCheck, __logout } from "../../redux/modules/user";
 import { button } from "../../themes/textStyle";
 import NameTag from "./NameTag";
+import TextLogo from "../../assets/logo/textlogo.svg";
 
 const Header = () => {
   const history = useHistory();
@@ -14,18 +15,12 @@ const Header = () => {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user.isLogin);
 
-  // useEffect(() => {
-  //   dispatch(__loginCheck());
-  // }, []);
-
-  console.log(isLogin);
-
   return (
     <Container>
       <InsideBox>
         <LeftSide>
           <LogoBox onClick={() => history.push("/")}>
-            <TextLogo>협업돼지</TextLogo>
+            <img src={TextLogo} alt="협업돼지" />
           </LogoBox>
         </LeftSide>
         <RightSide>
@@ -67,7 +62,7 @@ const Container = styled.header`
   left: 0;
   z-index: var(--indexHeader);
   width: 100%;
-  height: 80px;
+  height: 72px;
   background-color: var(--white);
   border: 1px solid var(--line);
 `;
@@ -94,14 +89,6 @@ const LogoBox = styled.div`
   cursor: pointer;
 `;
 
-const TextLogo = styled.p`
-  color: var(--main);
-  font-size: 4rem;
-  line-height: 6rem;
-  letter-spacing: -0.7rem;
-  font-weight: lighter;
-`;
-
 const Nav = styled.nav``;
 
 const List = styled.ul`
@@ -117,7 +104,7 @@ const Item = styled.li`
   cursor: pointer;
 `;
 
-const Btns = styled.button`
+const Btns = styled.div`
   display: flex;
   align-items: center;
   margin-right: -24px;

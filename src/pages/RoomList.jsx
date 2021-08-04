@@ -63,9 +63,11 @@ const RoomList = ({ history }) => {
         isLoading={isLoading}
       >
         <RoomContainer>
-          {roomList.map((room, idx) => {
-            return <RoomCard key={idx} {...room} history={history} />;
-          })}
+          <RoomBox>
+            {roomList.map((room, idx) => {
+              return <RoomCard key={idx} {...room} history={history} />;
+            })}
+          </RoomBox>
         </RoomContainer>
       </InfinityScroll>
     </Template>
@@ -73,8 +75,16 @@ const RoomList = ({ history }) => {
 };
 
 const RoomContainer = styled.div`
+  display: flex;
+`;
+
+const RoomBox = styled.div`
   display: grid;
+  /* grid-template-columns: repeat(2, 1fr); */
+  grid-gap: 2.5rem;
   grid-template-columns: repeat(4, 1fr);
+
+  margin: 0 auto;
 `;
 
 export default RoomList;

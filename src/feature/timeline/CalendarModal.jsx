@@ -71,7 +71,7 @@ const CalendarModal = ({ content, setContent, setShowModal }) => {
         value={content.desc}
         saveFunc={editFunc}
       />
-      <Todos todos={[]} />
+      {/* <Todos todos={[]} /> */}
     </>
   );
 };

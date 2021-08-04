@@ -42,6 +42,10 @@ const Input = (props) => {
   if (props.type === "checkbox") {
     return <Checkbox type={props.type} />;
   }
+
+  if (props.type === "date") {
+    return <Date type={props.type} />;
+  }
 };
 
 const Wrapper = styled.div`
@@ -94,5 +98,7 @@ const Helper = styled.div`
 `;
 
 const Checkbox = styled.input``;
+
+const Date = styled.input``;
 
 export default Input;

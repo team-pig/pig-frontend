@@ -7,8 +7,8 @@ const Template = ({ children }) => {
 
 const Main = styled.main`
   width: 100%;
-  border: 1px solid red;
-  padding: 80px 0 0 0;
+  padding: 88px 0 5vh 0;
   min-height: calc(100vh - 100px);
 `;
+
 export default Template;

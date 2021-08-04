@@ -10,7 +10,7 @@ const App = () => {
       <GlobalStyles />
       <Header />
       <Router />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

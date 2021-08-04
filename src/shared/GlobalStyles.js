@@ -6,6 +6,7 @@ const GlobalStyles = createGlobalStyle`
 
 
     :root {
+			/* color */
     --main: #4D6C56;
     --black: #151515;
     --darkgrey: #757575;
@@ -13,7 +14,10 @@ const GlobalStyles = createGlobalStyle`
     --line: #eaeaea;
 		--white : #ffffff;
 		--point : #ffcccc;
-		--notice : #ff7776
+		--notice : #ff7776;
+
+		/* z-index */
+		--indexHeader : 30;
   };
 
   * {

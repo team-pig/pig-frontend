@@ -65,6 +65,7 @@ const Container = styled.header`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: var(--indexHeader);
   width: 100%;
   height: 80px;
   background-color: var(--white);

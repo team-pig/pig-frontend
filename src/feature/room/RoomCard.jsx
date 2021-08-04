@@ -7,7 +7,7 @@ import ModifyRoomModal from "./ModifyRoomModal";
 import Icon from "../../components/Icon";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 //elements
-import { Button } from "../../elem";
+import { Button, Text } from "../../elem/index";
 
 //redux
 import { __deleteRoom, __exitRoom } from "../../redux/modules/room";
@@ -53,20 +53,24 @@ const RoomCard = ({
           <Star />
         </StarIcon>
         <CardSection>
-          <div>
-            <CardProfile>
-              <RoundImg src={roomImage} />
-              <div>
-                <div>{roomName}</div>
-                <div>{tag}</div>
-              </div>
-            </CardProfile>
-          </div>
-          <div>{subtitle}</div>
+          <CardProfile>
+            <RoundImg src={roomImage} />
+            <TextBox>
+              <Text type="sub_1">{roomName}</Text>
+              <TagBox>
+                <Text type="body_2">{tag}</Text>
+              </TagBox>
+            </TextBox>
+          </CardProfile>
+          <SubTitleBox>
+            <Text type="body_3">{subtitle}</Text>
+          </SubTitleBox>
         </CardSection>
         <CardFooter>
           <FooterItem>
-            {createDate[0] + ". " + createDate[1] + ". " + createDate[2]}
+            <Text type="body_4">
+              {createDate[0] + ". " + createDate[1] + ". " + createDate[2]}
+            </Text>
           </FooterItem>
           <FooterItem>
             <div>멤버사진</div>
@@ -110,6 +114,8 @@ const Container = styled.div`
 `;
 
 const CardSection = styled.div`
+  display: flex;
+  flex-direction: column;
   position: relative;
   padding: 20px;
 `;
@@ -131,6 +137,21 @@ const RoundImg = styled.img`
   height: 100px;
   border-radius: 50%;
   margin-right: 15px;
+`;
+
+const TextBox = styled.div`
+  width: 148px;
+  height: 74px;
+`;
+
+const TagBox = styled.div`
+  margin-bottom: 15px;
+  color: var(--darkgrey);
+`;
+
+const SubTitleBox = styled.div`
+  margin-top: auto;
+  color: var(--darkgrey);
 `;
 
 const CardFooter = styled.div`

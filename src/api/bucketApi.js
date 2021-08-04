@@ -8,6 +8,11 @@ export const bucketApi = {
       bucketName,
       bucketOrder,
     }),
+  editBucketTitle: (roomId, bucketId, bucketName) =>
+    instance.patch(`/room/${roomId}/bucket`, {
+      bucketId,
+      bucketName,
+    }),
   deleteBucket: (roomId, bucketId) =>
     instance.delete(`/room/${roomId}/bucket`, {
       data: {

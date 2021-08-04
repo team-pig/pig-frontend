@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
 //components
-import ModifyRoomModal from "../components/ModifyRoomModal";
-import Icon from "./Icon";
-import { ReactComponent as Star } from "../assets/icons/star.svg";
+import ModifyRoomModal from "./ModifyRoomModal";
+import Icon from "../../components/Icon";
+import { ReactComponent as Star } from "../../assets/icons/star.svg";
 //elements
 import { Button } from "../../elem";
 
@@ -14,7 +14,7 @@ import { __deleteRoom, __exitRoom } from "../../redux/modules/room";
 
 //map의 list에서 받아오는 값
 const RoomCard = ({
-  _id,
+  roomId,
   roomImage,
   roomName,
   subtitle,
@@ -39,14 +39,14 @@ const RoomCard = ({
   return (
     <>
       <ModifyRoomModal
-        roomId={_id}
+        roomId={roomId}
         showModModal={showModModal}
         closeModModal={closeModModal}
       />
 
       <Container
         onClick={() => {
-          history.push(`/workspace/${_id}`);
+          history.push(`/workspace/${roomId}`);
         }}
       >
         <StarIcon>
@@ -78,15 +78,15 @@ const RoomCard = ({
           <Button _onClick={openModModal}>수정하기</Button>
           <Button
             _onClick={(e) => {
-              console.log(_id);
-              dispatch(__deleteRoom(_id));
+              console.log(roomId);
+              dispatch(__deleteRoom(roomId));
             }}
           >
             삭제하기
           </Button>
           <Button
             _onClick={(e) => {
-              dispatch(__exitRoom(_id));
+              dispatch(__exitRoom(roomId));
             }}
           >
             나가기

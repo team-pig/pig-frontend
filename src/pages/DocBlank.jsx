@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 // component
 import DocList from "../feature/document/DocList";
-import Template from "../components/Template";
 
 // redux
 import { __getDocs } from "../redux/modules/document";
@@ -32,24 +31,28 @@ const DocBlank = () => {
   }
 
   return (
-    <Template>
-      <Container>
-        <DocList docList={[]} />
-        <section>
-          <p>아직 작성한 문서가 없습니다.</p>
-          <Button _onClick={() => history.push(`/workspace/${roomId}/doc/add`)}>
-            첫 문서 작성하기
-          </Button>
-        </section>
-      </Container>
-    </Template>
+    <Container>
+      <DocList docList={[]} />
+      <Content>
+        <p>아직 작성한 문서가 없습니다.</p>
+        <Button _onClick={() => history.push(`/workspace/${roomId}/doc/add`)}>
+          첫 문서 작성하기
+        </Button>
+      </Content>
+    </Container>
   );
 };
 
 // 임시 스타일
 const Container = styled.section`
-  position: relative;
-  z-index: 99;
+  display: flex;
+  gap: 20px;
+  padding-top: 20px;
+`;
+
+const Content = styled.section`
+  font-size: 2rem;
+  flex-grow: 1;
 `;
 
 export default DocBlank;

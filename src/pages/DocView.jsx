@@ -9,7 +9,6 @@ import { __getDocs } from "../redux/modules/document";
 // component
 import DocList from "../feature/document/DocList";
 import DocViewer from "../feature/document/DocViewer";
-import Template from "../components/Template";
 
 const DocView = (props) => {
   const dispatch = useDispatch();
@@ -22,19 +21,16 @@ const DocView = (props) => {
   }, []);
 
   return (
-    <Template>
-      <Container>
-        <DocList docList={docList} />
-        <DocViewer />
-      </Container>
-    </Template>
+    <Container>
+      <DocList docList={docList} />
+      <DocViewer />
+    </Container>
   );
 };
 
 // 임시 스타일
 const Container = styled.section`
-  position: relative;
-  z-index: 99;
+  display: flex;
 `;
 
 export default DocView;

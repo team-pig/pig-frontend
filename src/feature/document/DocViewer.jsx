@@ -47,22 +47,26 @@ const DocViewer = () => {
   };
 
   return (
-    <>
+    <Container>
       <DocTitle>{current.title}</DocTitle>
       <div>
-        <Button
-          _onClick={() =>
-            history.push(`/workspace/${roomId}/doc/${docId}/edit`)
-          }
+        <button
+          onClick={() => history.push(`/workspace/${roomId}/doc/${docId}/edit`)}
         >
           수정
-        </Button>
-        <Button _onClick={clickDelete}>삭제</Button>
+        </button>
+        <button onClick={clickDelete}>삭제</button>
       </div>
       {current.content && <Viewer {...viewerOpt}></Viewer>}
-    </>
+    </Container>
   );
 };
+
+// 임시 스타일
+const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+`;
 
 const DocTitle = styled.div`
   // 임시 적용 스타일

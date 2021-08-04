@@ -80,11 +80,15 @@ const RoomContainer = styled.div`
 
 const RoomBox = styled.div`
   display: grid;
-  /* grid-template-columns: repeat(2, 1fr); */
+  
   grid-gap: 2.5rem;
   grid-template-columns: repeat(4, 1fr);
 
   margin: 0 auto;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 export default RoomList;

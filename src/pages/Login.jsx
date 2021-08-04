@@ -102,7 +102,7 @@ const Title = styled(Text)`
 `;
 
 const LoginBtn = styled(Button)`
-  margin-top: 40px;
+  margin-top: 60px;
 `;
 
 export default Login;

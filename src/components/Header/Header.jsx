@@ -14,16 +14,12 @@ const Header = () => {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user.isLogin);
 
-  // useEffect(() => {
-  //   dispatch(__loginCheck());
-  // }, []);
-
   return (
     <Container>
       <InsideBox>
         <LeftSide>
           <LogoBox onClick={() => history.push("/")}>
-            <TextLogo>협업돼지</TextLogo>
+            <Icon icon="textlogo" size="140px" />
           </LogoBox>
         </LeftSide>
         <RightSide>
@@ -65,7 +61,7 @@ const Container = styled.header`
   left: 0;
   z-index: var(--indexHeader);
   width: 100%;
-  height: 80px;
+  height: 72px;
   background-color: var(--white);
   border: 1px solid var(--line);
 `;
@@ -90,14 +86,6 @@ const RightSide = styled.section`
 
 const LogoBox = styled.div`
   cursor: pointer;
-`;
-
-const TextLogo = styled.p`
-  color: var(--main);
-  font-size: 4rem;
-  line-height: 6rem;
-  letter-spacing: -0.7rem;
-  font-weight: lighter;
 `;
 
 const Nav = styled.nav``;

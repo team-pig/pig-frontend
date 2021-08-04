@@ -18,8 +18,6 @@ const Header = () => {
   //   dispatch(__loginCheck());
   // }, []);
 
-  console.log(isLogin);
-
   return (
     <Container>
       <InsideBox>
@@ -117,7 +115,7 @@ const Item = styled.li`
   cursor: pointer;
 `;
 
-const Btns = styled.button`
+const Btns = styled.div`
   display: flex;
   align-items: center;
   margin-right: -24px;

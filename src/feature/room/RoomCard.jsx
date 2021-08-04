@@ -117,7 +117,9 @@ const CardSection = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 20px;
+  padding: 20px 20px 15px 20px;
+  width: 302px;
+  height: 202px;
 `;
 
 const StarIcon = styled.div`
@@ -145,13 +147,22 @@ const TextBox = styled.div`
 `;
 
 const TagBox = styled.div`
-  margin-bottom: 15px;
+  margin-top: 10px;
+  margin-bottom: 18px;
   color: var(--darkgrey);
 `;
 
 const SubTitleBox = styled.div`
+  display: block;
   margin-top: auto;
+  border: 1px solid black;
+  width: 262px;
+
   color: var(--darkgrey);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const CardFooter = styled.div`

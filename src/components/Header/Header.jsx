@@ -7,6 +7,7 @@ import Icon from "../Icon";
 import { __loginCheck, __logout } from "../../redux/modules/user";
 import { button } from "../../themes/textStyle";
 import NameTag from "./NameTag";
+import TextLogo from "../../assets/logo/textlogo.svg";
 
 const Header = () => {
   const history = useHistory();
@@ -19,7 +20,7 @@ const Header = () => {
       <InsideBox>
         <LeftSide>
           <LogoBox onClick={() => history.push("/")}>
-            <Icon icon="textlogo" size="140px" />
+            <img src={TextLogo} alt="협업돼지" />
           </LogoBox>
         </LeftSide>
         <RightSide>

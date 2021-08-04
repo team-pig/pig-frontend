@@ -8,6 +8,7 @@ import Icon from "../../components/Icon";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 //elements
 import { Button, Text } from "../../elem/index";
+import { body_3 } from "../../themes/textStyle";
 
 //redux
 import { __deleteRoom, __exitRoom } from "../../redux/modules/room";
@@ -56,14 +57,17 @@ const RoomCard = ({
           <CardProfile>
             <RoundImg src={roomImage} />
             <TextBox>
-              <Text type="sub_1">{roomName}</Text>
+              <RoomNameBox>
+                <Text type="sub_1">{roomName}</Text>
+              </RoomNameBox>
               <TagBox>
                 <Text type="body_2">{tag}</Text>
               </TagBox>
             </TextBox>
           </CardProfile>
           <SubTitleBox>
-            <Text type="body_3">{subtitle}</Text>
+            {subtitle}
+            {/* <Text type="body_3">{subtitle}</Text> */}
           </SubTitleBox>
         </CardSection>
         <CardFooter>
@@ -132,6 +136,8 @@ const StarIcon = styled.div`
 `;
 
 const CardProfile = styled.div`
+  position: relative;
+
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -147,30 +153,48 @@ const RoundImg = styled.img`
 `;
 
 const TextBox = styled.div`
-  width: 148px;
-  height: 74px;
-`;
+  position: absolute;
+  top: 40px;
+  left: 110px;
+  overflow: hidden;
 
+  width: 138px;
+  height: 100px;
+`;
+const RoomNameBox = styled.div`
+  overflow: hidden;
+
+  width: 138px;
+  max-height: 52px;
+
+  line-height: normal;
+`;
 const TagBox = styled.div`
-  margin-top: 10px;
-  margin-bottom: 18px;
+  overflow: hidden;
+
+  width: 138px;
+  max-height: 44px;
+  margin-top: 3px;
+  margin-bottom: 20px;
 
   color: var(--darkgrey);
+
+  line-height: normal;
 `;
 
 const SubTitleBox = styled.div`
-  display: block;
-
   overflow: hidden;
 
   width: 262px;
+  max-height: 44px;
   margin-top: auto;
 
-  border: 1px solid black;
   color: var(--darkgrey);
 
+  ${body_3};
   white-space: nowrap;
   text-overflow: ellipsis;
+  line-height: normal;
 `;
 
 const CardFooter = styled.div`
@@ -181,6 +205,7 @@ const CardFooter = styled.div`
   margin-top: auto;
   padding: 20px;
 
+  color: var(--grey);
   border-top: 1px solid var(--line);
 `;
 

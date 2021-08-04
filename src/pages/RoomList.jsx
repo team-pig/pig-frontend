@@ -15,7 +15,7 @@ import Button from "../elem/Button";
 //redux
 import { __getRoomList } from "../redux/modules/room";
 
-const RoomList = ({history}) => {
+const RoomList = ({ history }) => {
   const dispatch = useDispatch();
   const roomList = useSelector((state) => state.room.room) || [];
   const isLoading = useSelector((state) => state.room.isLoading);
@@ -24,7 +24,7 @@ const RoomList = ({history}) => {
   const [isJoin, setIsJoin] = useState(false);
 
   useEffect(() => {
-    if(roomList.length === 0){
+    if (roomList.length === 0) {
       dispatch(__getRoomList());
     }
   }, []);
@@ -59,19 +59,15 @@ const RoomList = ({history}) => {
           console.log("next");
           dispatch(__getRoomList(paging.next));
         }}
-        isNext={paging.next? true : false}
+        isNext={paging.next ? true : false}
         isLoading={isLoading}
-        >
+      >
         <RoomContainer>
-        {roomList.map((room, idx) => {
-          return (
-            <RoomCard
-              key={idx}
-              {...room}
-              history={history}
-            />
-          );
-        })}
+          <RoomBox>
+            {roomList.map((room, idx) => {
+              return <RoomCard key={idx} {...room} history={history} />;
+            })}
+          </RoomBox>
         </RoomContainer>
       </InfinityScroll>
     </Template>
@@ -79,9 +75,16 @@ const RoomList = ({history}) => {
 };
 
 const RoomContainer = styled.div`
+  display: flex;
+`;
+
+const RoomBox = styled.div`
   display: grid;
+  margin: 0 auto;
+  /* grid-template-columns: repeat(2, 1fr); */
+  grid-gap: 2.5rem;
+
   grid-template-columns: repeat(4, 1fr);
-  
 `;
 
 export default RoomList;

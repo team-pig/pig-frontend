@@ -58,11 +58,16 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
     setIsImage(false);
   }
 
+  const cancelFile = () => {
+    closeModal();
+    setIsImage(false);
+  }
+
   return (
     <>
       {showModal ? (
         <ModalContainer>
-          <ModalOverlay onClick={closeModal}></ModalOverlay>
+          <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
             <ImgUploader setIsImage={setIsImage} isImage={isImage} name="roomImage" fileInput={fileInput} />
 

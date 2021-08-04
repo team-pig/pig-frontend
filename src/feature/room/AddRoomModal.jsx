@@ -5,39 +5,33 @@ import AWS from "aws-sdk";
 import { useDispatch, useSelector } from "react-redux";
 
 //components
-import ImgUploader from "../components/ImgUploader";
+import ImgUploader from "../../components/ImgUploader";
 
 // elements
-import Input from "../elem/Input";
-import Button from "../elem/Button";
+import Input from "../../elem/Input";
+import Button from "../../elem/Button";
 
 //redux
-import { __addRoom, __editRoom } from "../redux/modules/room";
-import { setPreview, uploadImageToS3 } from "../redux/modules/image";
+import { __addRoom, __editRoom } from "../../redux/modules/room";
+import { setPreview, uploadImageToS3 } from "../../redux/modules/image";
 
-const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
+const AddRoomModal = ({ roomId, showModal, closeModal }) => {
   const dispatch = useDispatch();
-  const [newContent, setNewContent] = useState({
+  const [contents, setContents] = useState({
     roomImage: "",
     roomName: "",
     subtitle: "",
     tag: "",
   });
   const [isImage, setIsImage] = useState(false);
-  const roomList = useSelector((state) => state.room.roomList);
+  const roomList = useSelector((state) => state.room.room);
   const preview = useSelector((state) => state.image.preview);
 
   const fileInput = useRef();
 
-  const isEdit = roomId ? true : false;
-
-  // let _room = isEdit ? roomList.find((r) => r.roomId === roomId) : null;
-
-  // const [contents, setContents] = useState(_room ? _room.contents : "");
-
   const changeHandler = (e) => {
     const { value, name } = e.target;
-    setNewContent({ ...newContent, [name]: value });
+    setContents({ ...contents, [name]: value });
   };
 
   // Upload to S3 image bucket!
@@ -54,26 +48,32 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
 
     const { Location } = await upload.promise();
     dispatch(uploadImageToS3(Location));
+    dispatch(__addRoom(contents));
   };
 
-  const modifyFile = () => {
-    dispatch(__editRoom(roomId, newContent));
-    closeModModal();
+  const saveFile = () => {
+    handleFileInput();
+    closeModal();
     setIsImage(false);
-  }
+  };
 
   const cancelFile = () => {
-    closeModModal();
+    closeModal();
     setIsImage(false);
   }
 
   return (
     <>
-      {showModModal ? (
+      {showModal ? (
         <ModalContainer>
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
-            <ImgUploader setIsImage={setIsImage} isImage={isImage} name="roomImage" fileInput={fileInput} />
+            <ImgUploader
+              setIsImage={setIsImage}
+              isImage={isImage}
+              name="roomImage"
+              fileInput={fileInput}
+            />
 
             <input
               name="roomName"
@@ -87,7 +87,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
             />
             <input name="tag" placeholder="태그" onChange={changeHandler} />
 
-            <Button _onClick={modifyFile}>수정</Button>
+            <Button _onClick={saveFile}>저장</Button>
           </ModalContent>
         </ModalContainer>
       ) : null}
@@ -125,4 +125,4 @@ const ModalContent = styled.div`
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 `;
 
-export default ModifyRoomModal;
+export default AddRoomModal;

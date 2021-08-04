@@ -7,9 +7,10 @@ import ModifyRoomModal from "../components/ModifyRoomModal";
 import Icon from "./Icon";
 import { ReactComponent as Star } from "../assets/icons/star.svg";
 //elements
-import Button from "../elem/Button";
+import { Button } from "../../elem";
+
 //redux
-import { __deleteRoom, __exitRoom } from "../redux/modules/room";
+import { __deleteRoom, __exitRoom } from "../../redux/modules/room";
 
 //map의 list에서 받아오는 값
 const RoomCard = ({

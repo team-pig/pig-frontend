@@ -1,117 +1,61 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import {
+  head_1,
+  head_2,
+  head_3,
+  head_4,
+  head_5,
+  head_6,
+  sub_1,
+  sub_2,
+  body_1,
+  body_2,
+  body_3,
+  body_4,
+  gnb,
+  caption,
+} from "../themes/textStyle";
 
 const Text = ({ children, ...rest }) => {
   return <Wrapper {...rest}>{children}</Wrapper>;
 };
 
 const Wrapper = styled.div`
-  color: var(--black);
-
-  ${(props) =>
-    props.type === "head_1" &&
-    css`
-      font-size: 6rem;
-      line-height: 7rem;
-    `}
-  ${(props) =>
-    props.type === "head_2" &&
-    css`
-      font-size: 4.4rem;
-      line-height: 5.2rem;
-      letter-spacing: -0.05rem;
-    `}
-    ${(props) =>
-    props.type === "head_3" &&
-    css`
-      font-size: 4rem;
-      line-height: 5rem;
-    `}
-    ${(props) =>
-    props.type === "head_4" &&
-    css`
-      font-size: 3.4rem;
-      line-height: 4rem;
-      letter-spacing: 0.05rem;
-    `}
-    ${(props) =>
-    props.type === "head_5" &&
-    css`
-      font-size: 3rem;
-      line-height: 3.4rem;
-    `}
-    ${(props) =>
-    props.type === "head_6" &&
-    css`
-      font-size: 2.2rem;
-      line-height: 2.4rem;
-    `}
-    ${(props) =>
-    props.type === "sub_1" &&
-    css`
-      font-size: 2rem;
-      line-height: 2.6rem;
-      letter-spacing: 0.02rem;
-      font-weight: bold !important;
-    `}
-    ${(props) =>
-    props.type === "sub_2" &&
-    css`
-      font-size: 1.6rem;
-      line-height: 2.4rem;
-      letter-spacing: 0.05rem;
-    `}
-    ${(props) =>
-    props.type === "body_1" &&
-    css`
-      font-size: 1.8rem;
-      line-height: 2.4rem;
-      letter-spacing: -0.02rem;
-      font-weight: bold !important;
-    `}
-
-    ${(props) =>
-    props.type === "body_2" &&
-    css`
-      font-size: 1.4rem;
-      line-height: 2.2rem;
-      font-weight: 700;
-      font-weight: bold !important;
-    `}
-
-    ${(props) =>
-    props.type === "body_3" &&
-    css`
-      font-size: 1.4rem;
-      line-height: 2.2rem;
-      letter-spacing: -0.02rem;
-    `}
-
-    ${(props) =>
-    props.type === "body_4" &&
-    css`
-      font-size: 1.2rem;
-      line-height: 1.8rem;
-    `};
-
-  ${(props) =>
-    props.type === "gnb" &&
-    css`
-      font-family: "Montserrat";
-      font-size: 1.8rem;
-      line-height: 2.4rem;
-      letter-spacing: -0.04rem;
-      font-weight: 700 !important;
-    `};
-
-  ${(props) =>
-    props.type === "caption" &&
-    css`
-      font-family: "Lato";
-      font-size: 1.2rem;
-      line-height: 1.8rem;
-      font-weight: 700 !important;
-    `};
+  ${({ type }) => {
+    switch (type) {
+      case "head_1":
+        return `${head_1}`;
+      case "head_2":
+        return `${head_2}`;
+      case "head_3":
+        return `${head_3}`;
+      case "head_4":
+        return `${head_4}`;
+      case "head_5":
+        return `${head_5}`;
+      case "head_6":
+        return `${head_6}`;
+      case "sub_1":
+        return `${sub_1}`;
+      case "sub_2":
+        return `${sub_2}`;
+      case "body_1":
+        return `${body_1}`;
+      case "body_2":
+        return `${body_2}`;
+      case "body_3":
+        return `${body_3}`;
+      case "body_4":
+        return `${body_4}`;
+      case "gnb":
+        return `${gnb}`;
+      case "caption":
+        return `${caption}`;
+      default:
+        return;
+    }
+  }};
 `;
 
 export default Text;

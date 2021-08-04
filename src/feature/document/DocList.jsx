@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 
 // elem
-import { Button } from "../elem";
+import { Button } from "../../elem";
 
 const DocList = ({ docList }) => {
   const history = useHistory();

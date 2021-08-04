@@ -7,8 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { __getDocs } from "../redux/modules/document";
 
 // component
-import DocList from "../components/DocList";
-import DocViewer from "../components/DocViewer";
+import DocList from "../feature/document/DocList";
+import DocViewer from "../feature/document/DocViewer";
 import Template from "../components/Template";
 
 const DocView = (props) => {

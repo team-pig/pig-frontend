@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
 // redux
-import { setCurrent } from "../../redux/modules/calendar";
+import { setCurrent } from "../../redux/modules/date";
 
 // elem
 import { Button } from "../../elem";
 
 const CalendarHeader = () => {
   const dispatch = useDispatch();
-  const current = useSelector((state) => state.calendar.current);
+  const current = useSelector((state) => state.date.current);
 
   const showLastMonth = () => {
     dispatch(setCurrent(current.clone().subtract(1, "month")));

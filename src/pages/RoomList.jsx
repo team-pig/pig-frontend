@@ -4,9 +4,9 @@ import styled from "styled-components";
 
 //components
 import Template from "../components/Template";
-import AddRoomModal from "../components/AddRoomModal";
-import JoinRoomModal from "../components/JoinRoomModal";
-import RoomCard from "../components/RoomCard";
+import AddRoomModal from "../feature/room/AddRoomModal";
+import JoinRoomModal from "../feature/room/JoinRoomModal";
+import RoomCard from "../feature/room/RoomCard";
 import InfinityScroll from "../components/InfinityScroll";
 
 //elements

@@ -7,16 +7,18 @@ import { useDispatch } from "react-redux";
 
 // content
 import Card from "./Card";
+import { Text } from "../../elem";
 
-const Bucket = ({ column, index, cards, deleteBucket }) => {
+const Bucket = ({ column, index, cards, deleteBucket, editTitleBucket }) => {
   const dispatch = useDispatch();
   const [cardTitle, setCardTitle] = useState("");
   const [editTitleMone, setEditTitleMone] = useState(false);
+  const [newBucketTitle, setNewBucketTitle] = useState("");
 
   // 새로운 card 만들기 (onClick Event Handler)
   const addTask = (provided) => {
     // const bucketId = provided.droppableProps["data-rbd-droppable-id"];
-    const bucketId = column.id;
+    const bucketId = column.bucketId;
     const newCardInfo = { bucketId, cardTitle };
     dispatch(__createCard(newCardInfo));
   };
@@ -26,30 +28,51 @@ const Bucket = ({ column, index, cards, deleteBucket }) => {
   };
 
   const deleteCardHandler = (cardId) => {
-    const bucketId = column.id;
+    const bucketId = column.bucketId;
     dispatch(__deleteCard(bucketId, cardId));
   };
 
   return (
     <>
-      <Draggable draggableId={column.id} index={index}>
+      <Draggable draggableId={column.bucketId} index={index}>
         {(provided) => (
           <Container {...provided.draggableProps} ref={provided.innerRef}>
             {editTitleMone ? (
-              <EditInput type="text" {...provided.dragHandleProps} />
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  editTitleBucket(newBucketTitle, column.bucketId);
+                  setEditTitleMone(false);
+                }}
+              >
+                <EditInput
+                  type="text"
+                  {...provided.dragHandleProps}
+                  onChange={(e) => {
+                    setNewBucketTitle(e.target.value);
+                  }}
+                />
+              </form>
             ) : (
-              <Flex verti="space-between" {...provided.dragHandleProps}>
-                <Title onClick={updateBucketTitle}>{column.title}</Title>
-                <div
-                  style={{ padding: "10px", cursor: "pointer" }}
-                  onClick={() => deleteBucket(column)}
-                >
-                  X
-                </div>
-              </Flex>
+              <>
+                <Flex verti="space-between" {...provided.dragHandleProps}>
+                  <Text type="head_5" onClick={updateBucketTitle}>
+                    {column.bucketName}
+                  </Text>
+                  <div
+                    style={{ padding: "10px", cursor: "pointer" }}
+                    onClick={() => deleteBucket(column)}
+                  >
+                    X
+                  </div>
+                </Flex>
+                <Text type="head_6" onClick={updateBucketTitle}>
+                  {column.bucketId}
+                </Text>
+              </>
             )}
 
-            <Droppable droppableId={column.id} type="card">
+            <Droppable droppableId={column.bucketId} type="card">
               {(provided, snapshot) => (
                 <TaskList
                   ref={provided.innerRef}

@@ -91,7 +91,7 @@ const RoomCard = ({
           </FooterItem>
         </CardFooter>
       </Container>
-      {/* <div>
+      <div>
         <Button _onClick={openModModal}>수정하기</Button>
         <Button
           _onClick={(e) => {
@@ -108,7 +108,7 @@ const RoomCard = ({
         >
           나가기
         </Button>
-      </div> */}
+      </div>
     </>
   );
 };

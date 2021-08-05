@@ -1,26 +1,23 @@
 import React from "react";
 import { useRouteMatch } from "react-router-dom";
 
+import WSHeader from "../components/Workspace/WSHeader";
 import WSRouter from "../shared/WSRouter";
-import WSTabs from "../components/WSTabs";
-import Template from "../components/Template";
 
 const Workspace = (props) => {
   let { path, url } = useRouteMatch();
 
   return (
     <>
-      <Template>
+      <div>
         <div>
-          <div>
-            <WSTabs url={url} />
-            <section>
-              <WSRouter path={path} />
-            </section>
-          </div>
-          {/* <RoomSideBar /> */}
+          <WSHeader url={url} />
+          <section>
+            <WSRouter path={path} />
+          </section>
         </div>
-      </Template>
+        {/* <RoomSideBar /> */}
+      </div>
     </>
   );
 };

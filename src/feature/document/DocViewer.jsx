@@ -11,7 +11,9 @@ import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Viewer } from "@toast-ui/react-editor";
 
 // elem
-import { Button } from "../../elem";
+import { Text } from "../../elem";
+import Icon from "../../components/Icon";
+import { body_4 } from "../../themes/textStyle";
 
 const DocViewer = () => {
   const history = useHistory();
@@ -41,6 +43,9 @@ const DocViewer = () => {
     initialValue: current.content,
   };
 
+  const toDocEdit = (docId) =>
+    history.push(`/workspace/${roomId}/doc/${docId}/edit`);
+
   const clickDelete = () => {
     // 정말 삭제할거냐는 안내 모달 필요
     dispatch(__deleteDoc(docId, roomId));
@@ -48,15 +53,22 @@ const DocViewer = () => {
 
   return (
     <Container>
-      <DocTitle>{current.title}</DocTitle>
-      <div>
-        <button
-          onClick={() => history.push(`/workspace/${roomId}/doc/${docId}/edit`)}
-        >
-          수정
-        </button>
-        <button onClick={clickDelete}>삭제</button>
-      </div>
+      <ViewerHeader>
+        <TitleBox>
+          <Text type="head_4">{current.title}</Text>
+          {/* 임시 적용 아이콘 => 변경 예정 */}
+          <IconBtn onClick={() => toDocEdit(docId)}>
+            <Icon icon="setting" size="24px" />
+            <button onClick={clickDelete}>삭제아이콘</button>
+          </IconBtn>
+        </TitleBox>
+        <InfoBox>
+          마지막 편집
+          <User>{"안나"}</User>
+          <ModifiedTime>10분 전</ModifiedTime>
+        </InfoBox>
+      </ViewerHeader>
+      <div></div>
       {current.content && <Viewer {...viewerOpt}></Viewer>}
     </Container>
   );
@@ -66,11 +78,44 @@ const DocViewer = () => {
 const Container = styled.section`
   display: flex;
   flex-direction: column;
+  width: calc(100% - 260px);
+  padding: var(--smMargin);
 `;
 
-const DocTitle = styled.div`
-  // 임시 적용 스타일
-  font-size: 30px;
-  font-weight: bolder;
+const ViewerHeader = styled.div`
+  width: 100%;
 `;
+
+const TitleBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 14px;
+`;
+
+const InfoBox = styled.div`
+  ${body_4};
+  display: flex;
+  justify-content: flex-end;
+  color: var(--grey);
+`;
+
+const IconBtn = styled.button``;
+
+const User = styled.span`
+  margin-left: 14px;
+`;
+
+const ModifiedTime = styled.span`
+  color: var(--notice);
+
+  &::before {
+    content: "·";
+    margin: 0 4px;
+    color: var(--grey);
+  }
+`;
+
 export default DocViewer;

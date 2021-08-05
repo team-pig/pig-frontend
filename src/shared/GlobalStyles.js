@@ -18,6 +18,10 @@ const GlobalStyles = createGlobalStyle`
 
 		/* z-index */
 		--indexHeader : 30;
+
+		/* margin */
+		--smMargin: 20px;
+		--mdMargin: 40px;
   };
 
   * {

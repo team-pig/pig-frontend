@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -15,10 +16,14 @@ const DocEdit = () => {
   });
 
   return (
-    <Template>
+    <Container>
       <Writer targetDoc={targetDoc} />
-    </Template>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  padding: var(--smMargin);
+`;
 
 export default DocEdit;

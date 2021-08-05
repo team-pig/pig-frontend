@@ -27,7 +27,7 @@ const Chart = () => {
   useEffect(() => {
     dispatch(__loadBucket(roomId));
     dispatch(__loadCard(roomId));
-  }, [dispatch, roomId]);
+  }, []);
 
   // 아이템을 떨어뜨렸을 때 실행할 작업들
   const onDragEnd = ({ destination, source, draggableId, type }) => {
@@ -145,7 +145,6 @@ const Chart = () => {
         />
         <Button onClick={createBucket}>버킷 추가하기</Button>
       </AddBucketZone>
-      {/* Dnd의 컴포넌트의 최상위는 무조건 DragDropContext */}
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="all-columns"
@@ -154,24 +153,25 @@ const Chart = () => {
         >
           {(provided) => (
             <Container {...provided.droppableProps} ref={provided.innerRef}>
-              {columnOrder.map((bucketId, index) => {
-                const column = columns[bucketId];
-                const bucketCards = column.cardOrder.map(
-                  (cardId) => cards[cardId]
-                );
-
-                return (
-                  <Bucket
-                    editTitleBucket={editTitleBucket}
-                    deleteBucket={deleteBucket}
-                    bucketCards={bucketCards}
-                    bucket={column}
-                    key={column.bucketId}
-                    index={index}
-                    roomId={roomId}
-                  />
-                );
-              })}
+              {cards &&
+                columnOrder.map((bucketId, index) => {
+                  const column = columns[bucketId];
+                  const bucketCards = column.cardOrder.map(
+                    (cardId) => cards[cardId]
+                  );
+                  console.log(bucketCards);
+                  return (
+                    <Bucket
+                      editTitleBucket={editTitleBucket}
+                      deleteBucket={deleteBucket}
+                      bucketCards={bucketCards}
+                      bucket={column}
+                      key={column.bucketId}
+                      index={index}
+                      roomId={roomId}
+                    />
+                  );
+                })}
               {provided.placeholder}
             </Container>
           )}

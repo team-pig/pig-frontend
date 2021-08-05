@@ -14,7 +14,7 @@ import MemberImg from "../../elem/MemberImg";
 //redux
 import { __deleteRoom, __exitRoom } from "../../redux/modules/room";
 
-//map의 list에서 받아오는 값
+//roomList map의 list에서 받아오는 값
 const RoomCard = ({
   roomId,
   roomImage,
@@ -46,8 +46,6 @@ const RoomCard = ({
   };
 
   const createDate = createdAt.slice(0, 10).split("-");
-
-  const memberImgList = members.slice(0, 3);
 
   return (
     <>
@@ -86,39 +84,9 @@ const RoomCard = ({
             </Text>
           </FooterItem>
           <FooterItem>
-            <MemberImgBox>
-              {/* members배열 나중에 membersImg로 바꿔주기 */}
-              {showAllMember
-                ? members.map((member, idx) => {
-                    return (
-                      <MemberImg
-                        style={{
-                          position: "relative",
-                          left: (members.length - 1 - idx) * 7,
-                        }}
-                        key={idx}
-                        {...member}
-                      />
-                    );
-                  })
-                : members.slice(0, 3).map((member, idx) => {
-                    return (
-                      <MemberImg
-                        style={{
-                          position: "relative",
-                          left: -idx * 7,
-                        }}
-                        key={idx}
-                        {...member}
-                      />
-                    );
-                  })}
-              {!showAllMember && (
-                <MemberCount>
-                  <Text type="body_3">+{members.length - 3}</Text>
-                </MemberCount>
-              )}
-            </MemberImgBox>
+            {/* members를 memberImg 배열로 바꾸기 */}
+            <MemberImg members={members} />
+
             <Icon icon="more" size="24px" />
           </FooterItem>
         </CardFooter>
@@ -256,28 +224,6 @@ const FooterItem = styled.div`
   align-items: center;
 
   width: auto;
-`;
-
-const MemberImgBox = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 105px;
-  height: 30px;
-  margin-right: 5px;
-`;
-
-const MemberCount = styled.div`
-  position: relative;
-  left: -7px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  width: 30px;
-  height: 30px;
 `;
 
 export default RoomCard;

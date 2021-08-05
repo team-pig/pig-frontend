@@ -13,24 +13,24 @@ const WSRouter = ({ path }) => {
   return (
     <Switch>
       {/* <Route path={path} component={Main} exact /> */}
-      <Route path={`${path}/doc/add`} component={Auth(DocAdd, null)} exact />
+      <Route path={`${path}/doc/add`} component={Auth(DocAdd, true)} exact />
       <Route
         path={`${path}/doc/blank`}
-        component={Auth(DocBlank, null)}
+        component={Auth(DocBlank, true)}
         exact
       />
       <Route
         path={`${path}/doc/:docId`}
-        component={Auth(DocView, null)}
+        component={Auth(DocView, true)}
         exact
       />
       <Route
         path={`${path}/doc/:docId/edit`}
-        component={Auth(DocEdit, null)}
+        component={Auth(DocEdit, true)}
         exact
       />
-      <Route path={`${path}/board`} component={Auth(Board, null)} exact />
-      <Route path={`${path}/calendar`} component={Auth(Calendar, null)} exact />
+      <Route path={`${path}/board`} component={Auth(Board, true)} exact />
+      <Route path={`${path}/calendar`} component={Auth(Calendar, true)} exact />
     </Switch>
   );
 };

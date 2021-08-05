@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -27,6 +27,15 @@ const RoomCard = ({
 }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
+  const [showAllMember, setShowAllMember] = useState(false);
+
+  useEffect(() => {
+    if (members.length > 4) {
+      setShowAllMember(false);
+    } else {
+      setShowAllMember(true);
+    }
+  });
 
   const openModModal = () => {
     setShowModModal(true);
@@ -38,11 +47,7 @@ const RoomCard = ({
 
   const createDate = createdAt.slice(0, 10).split("-");
 
-  if (members.length > 4) {
-    const memberImgList = members.slice(0, 4);
-  } else {
-    const memberImgList = members;
-  }
+  const memberImgList = members.slice(0, 3);
 
   return (
     <>
@@ -82,15 +87,37 @@ const RoomCard = ({
           </FooterItem>
           <FooterItem>
             <MemberImgBox>
-              {members.map((member, idx) => {
-                return (
-                  <MemberImg
-                    style={{ left: (members.length - 1 - idx) * 5 }}
-                    key={idx}
-                    {...member}
-                  />
-                );
-              })}
+              {/* members배열 나중에 membersImg로 바꿔주기 */}
+              {showAllMember
+                ? members.map((member, idx) => {
+                    return (
+                      <MemberImg
+                        style={{
+                          position: "relative",
+                          left: (members.length - 1 - idx) * 7,
+                        }}
+                        key={idx}
+                        {...member}
+                      />
+                    );
+                  })
+                : members.slice(0, 3).map((member, idx) => {
+                    return (
+                      <MemberImg
+                        style={{
+                          position: "relative",
+                          left: -idx * 7,
+                        }}
+                        key={idx}
+                        {...member}
+                      />
+                    );
+                  })}
+              {!showAllMember && (
+                <MemberCount>
+                  <Text type="body_3">+{members.length - 3}</Text>
+                </MemberCount>
+              )}
             </MemberImgBox>
             <Icon icon="more" size="24px" />
           </FooterItem>
@@ -235,18 +262,22 @@ const MemberImgBox = styled.div`
   position: relative;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   width: 105px;
+  height: 30px;
+  margin-right: 5px;
+`;
+
+const MemberCount = styled.div`
+  position: relative;
+  left: -7px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 30px;
   height: 30px;
 `;
 
-// const MemberImg = styled.div`
-//   position: relative;
-
-//   width: 30px;
-//   height: 30px;
-
-//   background-color: white;
-//   border: 1px solid black;
-//   border-radius: 50%;
-// `;
 export default RoomCard;

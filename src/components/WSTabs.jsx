@@ -2,6 +2,9 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
+// elem
+import { Text } from "../elem";
+
 const WSTabs = ({ url }) => {
   const history = useHistory();
 
@@ -23,26 +26,34 @@ const WSTabs = ({ url }) => {
 
   return (
     <List>
-      <Item onClick={toMain}>메인</Item>
-      <Item onClick={toDocs}>문서</Item>
-      <Item onClick={toBoard}>보드</Item>
-      <Item onClick={toCalendar}>일정</Item>
+      <Item onClick={toMain}>
+        <Text type="body_1">메인</Text>
+      </Item>
+      <Item onClick={toDocs}>
+        <Text type="body_1">문서</Text>
+      </Item>
+      <Item onClick={toBoard}>
+        <Text type="body_1">보드</Text>
+      </Item>
+      <Item onClick={toCalendar}>
+        <Text type="body_1">일정</Text>
+      </Item>
     </List>
   );
 };
 
 // 가짜 스타일
-const List = styled.div`
+const List = styled.nav`
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0 80px 0 60px;
+  height: 100%;
 `;
 
-const Item = styled.div`
-  padding: 10px 20px;
-  margin-right: 10px;
-  font-size: 2rem;
+const Item = styled.button`
+  height: 100%;
+  padding: 0 39px;
+  color: var(--darkgrey);
   cursor: pointer;
 `;
 

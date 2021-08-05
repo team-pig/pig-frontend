@@ -1,15 +1,19 @@
 import React from "react";
+import styled from "styled-components";
 
 // component
 import Writer from "../feature/document/Writer";
-import Template from "../components/Template";
 
 const DocAdd = () => {
   return (
-    <Template>
+    <Container>
       <Writer />
-    </Template>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  padding: var(--smMargin);
+`;
 
 export default DocAdd;

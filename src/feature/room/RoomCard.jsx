@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -8,11 +8,13 @@ import Icon from "../../components/Icon";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 //elements
 import { Button, Text } from "../../elem/index";
+import { body_3 } from "../../themes/textStyle";
+import MemberImg from "../../elem/MemberImg";
 
 //redux
 import { __deleteRoom, __exitRoom } from "../../redux/modules/room";
 
-//map의 list에서 받아오는 값
+//roomList map의 list에서 받아오는 값
 const RoomCard = ({
   roomId,
   roomImage,
@@ -25,6 +27,15 @@ const RoomCard = ({
 }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
+  const [showAllMember, setShowAllMember] = useState(false);
+
+  useEffect(() => {
+    if (members.length > 4) {
+      setShowAllMember(false);
+    } else {
+      setShowAllMember(true);
+    }
+  });
 
   const openModModal = () => {
     setShowModModal(true);
@@ -34,7 +45,7 @@ const RoomCard = ({
     setShowModModal(false);
   };
 
-  let createDate = createdAt.slice(0, 10).split("-");
+  const createDate = createdAt.slice(0, 10).split("-");
 
   return (
     <>
@@ -56,15 +67,15 @@ const RoomCard = ({
           <CardProfile>
             <RoundImg src={roomImage} />
             <TextBox>
-              <Text type="sub_1">{roomName}</Text>
+              <RoomNameBox>
+                <Text type="sub_1">{roomName}</Text>
+              </RoomNameBox>
               <TagBox>
                 <Text type="body_2">{tag}</Text>
               </TagBox>
             </TextBox>
           </CardProfile>
-          <SubTitleBox>
-            <Text type="body_3">{subtitle}</Text>
-          </SubTitleBox>
+          <SubTitleBox>{subtitle}</SubTitleBox>
         </CardSection>
         <CardFooter>
           <FooterItem>
@@ -73,29 +84,31 @@ const RoomCard = ({
             </Text>
           </FooterItem>
           <FooterItem>
-            <div>멤버사진</div>
+            {/* members를 memberImg 배열로 바꾸기 */}
+            <MemberImg members={members} />
+
             <Icon icon="more" size="24px" />
           </FooterItem>
         </CardFooter>
       </Container>
-      {/* <div>
-          <Button _onClick={openModModal}>수정하기</Button>
-          <Button
-            _onClick={(e) => {
-              console.log(roomId);
-              dispatch(__deleteRoom(roomId));
-            }}
-          >
-            삭제하기
-          </Button>
-          <Button
-            _onClick={(e) => {
-              dispatch(__exitRoom(roomId));
-            }}
-          >
-            나가기
-          </Button>
-        </div> */}
+      <div>
+        <Button _onClick={openModModal}>수정하기</Button>
+        <Button
+          _onClick={(e) => {
+            console.log(roomId);
+            dispatch(__deleteRoom(roomId));
+          }}
+        >
+          삭제하기
+        </Button>
+        <Button
+          _onClick={(e) => {
+            dispatch(__exitRoom(roomId));
+          }}
+        >
+          나가기
+        </Button>
+      </div>
     </>
   );
 };
@@ -132,6 +145,8 @@ const StarIcon = styled.div`
 `;
 
 const CardProfile = styled.div`
+  position: relative;
+
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -147,30 +162,48 @@ const RoundImg = styled.img`
 `;
 
 const TextBox = styled.div`
-  width: 148px;
-  height: 74px;
-`;
+  position: absolute;
+  top: 40px;
+  left: 110px;
+  overflow: hidden;
 
+  width: 138px;
+  height: 100px;
+`;
+const RoomNameBox = styled.div`
+  overflow: hidden;
+
+  width: 138px;
+  max-height: 52px;
+
+  line-height: normal;
+`;
 const TagBox = styled.div`
-  margin-top: 10px;
-  margin-bottom: 18px;
+  overflow: hidden;
+
+  width: 138px;
+  max-height: 44px;
+  margin-top: 3px;
+  margin-bottom: 20px;
 
   color: var(--darkgrey);
+
+  line-height: normal;
 `;
 
 const SubTitleBox = styled.div`
-  display: block;
-
   overflow: hidden;
 
   width: 262px;
+  max-height: 44px;
   margin-top: auto;
 
-  border: 1px solid black;
   color: var(--darkgrey);
 
+  ${body_3};
   white-space: nowrap;
   text-overflow: ellipsis;
+  line-height: normal;
 `;
 
 const CardFooter = styled.div`
@@ -181,6 +214,7 @@ const CardFooter = styled.div`
   margin-top: auto;
   padding: 20px;
 
+  color: var(--grey);
   border-top: 1px solid var(--line);
 `;
 

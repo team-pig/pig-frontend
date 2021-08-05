@@ -45,8 +45,8 @@ const RoomList = ({ history }) => {
 
   return (
     <Template>
-      <div>roomlist</div>
-      <Button _onClick={openJoinModal}>코드로 방 참여</Button>
+     
+      <Button _onClick={openJoinModal}>방 참여</Button>
       <Button _onClick={openModal}>방 생성하기</Button>
       {!isJoin && (
         <AddRoomModal showModal={showModal} closeModal={closeModal} />

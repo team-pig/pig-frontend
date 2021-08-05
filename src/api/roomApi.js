@@ -3,7 +3,7 @@ import { instance } from "./index";
 
 export const roomApi = {
   getRoomList: (page, size) =>
-    instance.get("/test", {
+    instance.get("/rooms", {
       params: {
         page: page,
         size: size,

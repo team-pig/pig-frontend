@@ -150,20 +150,22 @@ const Chart = () => {
             <Container {...provided.droppableProps} ref={provided.innerRef}>
               {boardData.columnOrder.map((columnId, index) => {
                 const column = boardData.columns[columnId];
-                const cards = column.cardOrder.map(
-                  (todoId) => boardData.cards[todoId]
-                );
-                return (
-                  <Bucket
-                    editTitleBucket={editTitleBucket}
-                    deleteBucket={deleteBucket}
-                    column={column}
-                    key={column.bucketId}
-                    index={index}
-                    cards={cards}
-                    roomId={roomId}
-                  />
-                );
+                if (column !== undefined) {
+                  const cards = column.cardOrder.map(
+                    (todoId) => boardData.cards[todoId]
+                  );
+                  return (
+                    <Bucket
+                      editTitleBucket={editTitleBucket}
+                      deleteBucket={deleteBucket}
+                      column={column}
+                      key={column.bucketId}
+                      index={index}
+                      cards={cards}
+                      roomId={roomId}
+                    />
+                  );
+                }
               })}
               {provided.placeholder}
             </Container>

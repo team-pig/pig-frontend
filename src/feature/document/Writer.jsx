@@ -20,6 +20,7 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 // elem
 import { Button } from "../../elem";
 import { uploadFile } from "../../shared/uploadFile";
+import { head_4 } from "../../themes/textStyle";
 
 const Writer = ({ targetDoc }) => {
   const history = useHistory();
@@ -79,12 +80,14 @@ const Writer = ({ targetDoc }) => {
 
   return (
     <>
-      <TitleInput
-        type="text"
-        placeholder="제목을 입력하세요"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+      <TitleBox>
+        <TitleInput
+          type="text"
+          placeholder="제목을 입력하세요"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </TitleBox>
       <Editor {...editorOpt} />
       <div>
         {targetDoc && <Button _onClick={clickEdit}>수정</Button>}
@@ -95,9 +98,16 @@ const Writer = ({ targetDoc }) => {
   );
 };
 
+const TitleBox = styled.div`
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--smMargin);
+  margin-bottom: 14px;
+`;
+
 const TitleInput = styled.input`
-  position: relative;
-  z-index: 90;
+  ${head_4};
+  width: 100%;
 `;
 
 export default Writer;

@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { Link, useHistory, useParams } from "react-router-dom";
 
 // elem
@@ -9,7 +10,7 @@ const DocList = ({ docList }) => {
   const { roomId } = useParams();
 
   return (
-    <div>
+    <Container>
       <h4>문서 목록</h4>
       <ul>
         {docList.map((doc) => (
@@ -21,8 +22,13 @@ const DocList = ({ docList }) => {
       <Button _onClick={() => history.push(`/workspace/${roomId}/doc/add`)}>
         페이지 추가
       </Button>
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.aside`
+  width: 200px;
+  font-size: 2rem;
+`;
 
 export default DocList;

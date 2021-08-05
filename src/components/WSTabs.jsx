@@ -6,7 +6,7 @@ const WSTabs = ({ url }) => {
   const history = useHistory();
 
   const toMain = () => {
-    history.push(`${url}/`);
+    history.push(`${url}`);
   };
 
   const toDocs = () => {
@@ -32,18 +32,17 @@ const WSTabs = ({ url }) => {
 };
 
 // 가짜 스타일
-const List = styled.ul`
-  position: relative;
-  z-index: 99;
+const List = styled.div`
   display: flex;
-  padding-top: 50px;
+  align-items: center;
+  width: 100%;
+  padding: 0 80px 0 60px;
 `;
 
-const Item = styled.li`
-  padding: 10px;
+const Item = styled.div`
+  padding: 10px 20px;
   margin-right: 10px;
   font-size: 2rem;
-  border: 2px solid gray;
   cursor: pointer;
 `;
 

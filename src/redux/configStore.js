@@ -7,6 +7,7 @@ import document from "./modules/document";
 import date from "./modules/date";
 import calendar from "./modules/calendar";
 import board from "./modules/board";
+import todos from "./modules/todos";
 
 // middlewares
 import thunk from "redux-thunk";
@@ -17,6 +18,7 @@ import { connectRouter } from "connected-react-router";
 export const history = createBrowserHistory();
 
 const rootReducer = combineReducers({
+  todos,
   board,
   user,
   room,

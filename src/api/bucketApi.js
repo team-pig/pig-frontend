@@ -1,8 +1,24 @@
 import { instance } from "./index";
 
 export const bucketApi = {
-  getBuckets: () => instance.get(),
-  editBucketAll: () => instance.patch(),
-  deleteBucket: () => instance.delete(),
-  createBucket: () => instance.post(),
+  getBuckets: (roomId) => instance.get(`/room/${roomId}/bucket`),
+  editBucketAll: (roomId, bucketId, bucketName, bucketOrder) =>
+    instance.patch(`/room/${roomId}/bucket`, {
+      bucketId,
+      bucketName,
+      bucketOrder,
+    }),
+  editBucketTitle: (roomId, bucketId, bucketName) =>
+    instance.patch(`/room/${roomId}/bucket`, {
+      bucketId,
+      bucketName,
+    }),
+  deleteBucket: (roomId, bucketId) =>
+    instance.delete(`/room/${roomId}/bucket`, {
+      data: {
+        bucketId,
+      },
+    }),
+  createBucket: (roomId, bucketName) =>
+    instance.post(`/room/${roomId}/bucket`, { bucketName }),
 };

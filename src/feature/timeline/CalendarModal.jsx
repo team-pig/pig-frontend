@@ -42,7 +42,7 @@ const CalendarModal = ({ content, setContent, setShowModal }) => {
     dispatch(__editSchedule(roomId, editObj));
   };
 
-  const deleteSchedule = (roomId, cardId) => {
+  const deleteSchedule = (cardId) => {
     dispatch(__deleteSchedule(roomId, cardId));
     setShowModal((pre) => !pre);
   };
@@ -71,7 +71,7 @@ const CalendarModal = ({ content, setContent, setShowModal }) => {
         value={content.desc}
         saveFunc={editFunc}
       />
-      <Todos todos={[]} />
+      {/* <Todos todos={[]} /> */}
     </>
   );
 };

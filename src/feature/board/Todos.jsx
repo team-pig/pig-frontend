@@ -1,38 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Input, Text } from "../../elem";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import Todo from "./Todo";
 
-const Todos = () => {
+// redux & api
+import { useSelector, useDispatch } from "react-redux";
+import { __createTodo } from "../../redux/modules/todos";
+
+// compo & elem
+import { Input } from "../../elem";
+
+const Todos = ({ cardId }) => {
+  const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todos.todos);
+
+  const formik = useFormik({
+    initialValues: {
+      todoTitle: "",
+    },
+
+    validationSchema: Yup.object({
+      todoTitle: Yup.string().required("할일이 빠졌군요!"),
+    }),
+
+    onSubmit: (todo, { resetForm }) => {
+      resetForm();
+      dispatch(__createTodo(cardId, todo.todoTitle));
+    },
+  });
+
   return (
     <Container>
-      {/* {todos.map((todo, idx) => (
-        <Todo>
-          <Input type="checkbox"></Input>
-          <Flex>
-            <Text>{todo.todoTitle}</Text>
-            <Flex>
-              <div onClick={() => {}}>(X)</div>
-              <div onClick={() => {}}>(+)</div>
-            </Flex>
-          </Flex>
-        </Todo>
-      ))} */}
-      <form onSubmit={() => {}}>
-        <Input></Input>
-      </form>
+      {todos.map((todo) => (
+        <Todo key={todo.todoId} todo={todo} />
+      ))}
+      <TodoForm onSubmit={formik.handleSubmit}>
+        <Input
+          type="text"
+          name="todoTitle"
+          value={formik.values.todoTitle}
+          isError={formik.touched.todoTitle && Boolean(formik.errors.todoTitle)}
+          useHelper={formik}
+          _onChange={formik.handleChange}
+          _onClick={() => {
+            formik.setFieldValue("todoTitle", "");
+          }}
+          placeholder="이 카드에서 할 일은?"
+        />
+      </TodoForm>
     </Container>
   );
 };
 
-const Container = styled.div``;
-const Todo = styled.div`
-  display: flex;
-  border: 1px solid var(--grey);
+const Container = styled.div`
+  width: 70%;
+  border: 1px solid red;
+  min-height: 400px;
+  margin: 0 auto;
 `;
 
-const Flex = styled.div`
-  display: flex;
-  justify-content: ${(props) => props.hori};
-  align-items: ${(props) => props.verti};
-`;
+const TodoForm = styled.form``;
 export default Todos;

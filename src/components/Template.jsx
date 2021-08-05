@@ -7,7 +7,7 @@ const Template = ({ children }) => {
 
 const Main = styled.main`
   width: 100%;
-  padding: 88px 0 5vh 0;
+  padding: 72px 0 5vh 0;
   min-height: calc(100vh - 100px);
 `;
 

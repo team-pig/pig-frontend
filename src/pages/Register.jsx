@@ -6,6 +6,7 @@ import * as Yup from "yup";
 
 import Template from "../components/Template";
 import AccountInfo from "../components/AccountInfo";
+import { head_5 } from "../themes/textStyle";
 
 // elem
 import { Button, Input, Text } from "../elem";
@@ -117,22 +118,41 @@ const Register = () => {
 };
 
 const Container = styled.section`
-  width: 380px;
-  margin: 7vh auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 100px;
+
+  ${({ theme }) => theme.device.mobile} {
+    --minPadding: 18px;
+    width: 100%;
+    margin-top: 60px;
+    padding: 0 var(--minPadding);
+  }
 `;
 
 const FormContainer = styled.form`
-  width: 100%;
+  width: 380px;
+
+  ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    max-width: 380px;
+  }
 `;
 
 const Title = styled(Text)`
   margin-bottom: 40px;
   color: var(--main);
   text-align: center;
+
+  ${({ theme }) => theme.device.mobile} {
+    ${head_5};
+  }
 `;
 
 const RegisterBtn = styled(Button)`
-  margin-top: 40px;
+  margin-top: 60px;
 `;
 
 export default Register;

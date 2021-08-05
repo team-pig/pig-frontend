@@ -9,6 +9,7 @@ import { ReactComponent as Star } from "../../assets/icons/star.svg";
 //elements
 import { Button, Text } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
+import MemberImg from "../../elem/MemberImg";
 
 //redux
 import { __deleteRoom, __exitRoom } from "../../redux/modules/room";
@@ -35,7 +36,13 @@ const RoomCard = ({
     setShowModModal(false);
   };
 
-  let createDate = createdAt.slice(0, 10).split("-");
+  const createDate = createdAt.slice(0, 10).split("-");
+
+  if (members.length > 4) {
+    const memberImgList = members.slice(0, 4);
+  } else {
+    const memberImgList = members;
+  }
 
   return (
     <>
@@ -65,10 +72,7 @@ const RoomCard = ({
               </TagBox>
             </TextBox>
           </CardProfile>
-          <SubTitleBox>
-            {subtitle}
-            {/* <Text type="body_3">{subtitle}</Text> */}
-          </SubTitleBox>
+          <SubTitleBox>{subtitle}</SubTitleBox>
         </CardSection>
         <CardFooter>
           <FooterItem>
@@ -77,29 +81,39 @@ const RoomCard = ({
             </Text>
           </FooterItem>
           <FooterItem>
-            <div>멤버사진</div>
+            <MemberImgBox>
+              {members.map((member, idx) => {
+                return (
+                  <MemberImg
+                    style={{ left: (members.length - 1 - idx) * 5 }}
+                    key={idx}
+                    {...member}
+                  />
+                );
+              })}
+            </MemberImgBox>
             <Icon icon="more" size="24px" />
           </FooterItem>
         </CardFooter>
       </Container>
       {/* <div>
-          <Button _onClick={openModModal}>수정하기</Button>
-          <Button
-            _onClick={(e) => {
-              console.log(roomId);
-              dispatch(__deleteRoom(roomId));
-            }}
-          >
-            삭제하기
-          </Button>
-          <Button
-            _onClick={(e) => {
-              dispatch(__exitRoom(roomId));
-            }}
-          >
-            나가기
-          </Button>
-        </div> */}
+        <Button _onClick={openModModal}>수정하기</Button>
+        <Button
+          _onClick={(e) => {
+            console.log(roomId);
+            dispatch(__deleteRoom(roomId));
+          }}
+        >
+          삭제하기
+        </Button>
+        <Button
+          _onClick={(e) => {
+            dispatch(__exitRoom(roomId));
+          }}
+        >
+          나가기
+        </Button>
+      </div> */}
     </>
   );
 };
@@ -217,4 +231,22 @@ const FooterItem = styled.div`
   width: auto;
 `;
 
+const MemberImgBox = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  width: 105px;
+  height: 30px;
+`;
+
+// const MemberImg = styled.div`
+//   position: relative;
+
+//   width: 30px;
+//   height: 30px;
+
+//   background-color: white;
+//   border: 1px solid black;
+//   border-radius: 50%;
+// `;
 export default RoomCard;

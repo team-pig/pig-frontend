@@ -71,7 +71,7 @@ export const body_4 = css`
 `;
 
 export const button = css`
-  font-size: 16px;
+  font-size: 1.6rem;
   line-height: 2.2rem;
   font-weight: 700 !important;
 `;

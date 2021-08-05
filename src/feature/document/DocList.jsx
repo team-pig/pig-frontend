@@ -1,15 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 // elem
 import { Text } from "../../elem";
 import Icon from "../../components/Icon";
 import { scrollbar } from "../../themes/scrollbar";
 
+import { resetDocs, __getDocs } from "../../redux/modules/document";
+
 const DocList = ({ docList }) => {
   const history = useHistory();
   const { roomId } = useParams();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(__getDocs(roomId));
+    return () => dispatch(resetDocs());
+  }, []);
 
   const toDocAdd = () => history.push(`/workspace/${roomId}/doc/add`);
 

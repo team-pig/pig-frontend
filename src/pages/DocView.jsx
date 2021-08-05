@@ -1,24 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-
-// redux
-import { __getDocs } from "../redux/modules/document";
+import { useSelector } from "react-redux";
 
 // component
 import DocList from "../feature/document/DocList";
 import DocViewer from "../feature/document/DocViewer";
 
 const DocView = (props) => {
-  const dispatch = useDispatch();
-  const { roomId } = useParams();
-
   const docList = useSelector((state) => state.document.docList) || [];
-
-  useEffect(() => {
-    dispatch(__getDocs(roomId));
-  }, []);
 
   return (
     <Container>

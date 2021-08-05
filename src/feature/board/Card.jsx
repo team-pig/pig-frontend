@@ -22,7 +22,8 @@ const Card = ({ card, index, deleteCardHandler }) => {
               ref={provided.innerRef}
               isDragging={snapshot.isDragging}
             >
-              {card.cardTitle}
+              <div>{card.cardTitle}</div>
+              {card.cardId}
             </Container>
           </Flex>
         )}

@@ -23,6 +23,7 @@ const RoomList = ({ history }) => {
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
 
+
   useEffect(() => {
     if (roomList.length === 0) {
       dispatch(__getRoomList());
@@ -65,7 +66,7 @@ const RoomList = ({ history }) => {
         <RoomContainer>
           <RoomBox>
             {roomList.map((room, idx) => {
-              return <RoomCard key={idx} {...room} history={history} />;
+              return <RoomCard index={idx} key={idx} {...room} history={history} />;
             })}
           </RoomBox>
         </RoomContainer>
@@ -81,14 +82,14 @@ const RoomContainer = styled.div`
 const RoomBox = styled.div`
   display: grid;
   
-  grid-gap: 2.5rem;
+  grid-gap: 25px;
   grid-template-columns: repeat(4, 1fr);
 
   margin: 0 auto;
 
-  @media (max-width: 900px) {
+  /* @media (max-width: 900px) {
     grid-template-columns: repeat(2, 1fr);
-  }
+  } */
 `;
 
 export default RoomList;

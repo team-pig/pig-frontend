@@ -7,12 +7,14 @@ const GET_DOCS = "document/GET_DOCS";
 const CREATE_DOC = "document/CREATE_DOC";
 const EDIT_DOC = "document/EDIT_DOC";
 const DELETE_DOC = "document/DELETE_DOC";
+const RESET_DOCS = "document/RESET_DOCS";
 
 // action creator
 const getDocs = createAction(GET_DOCS, (docs) => ({ docs }));
 const createDoc = createAction(CREATE_DOC, (doc) => ({ doc }));
 const editDoc = createAction(EDIT_DOC, (doc) => ({ doc }));
 const deleteDoc = createAction(DELETE_DOC, (docId) => ({ docId }));
+export const resetDocs = createAction(RESET_DOCS);
 
 // Thunk
 // document list를 받아오는 thunk 함수. 동기화를 위해 pageId가 바뀔 때마다 가져옴.
@@ -143,6 +145,10 @@ const document = handleActions(
           (doc) => doc.docId === action.payload.docId
         );
         draft.docList.splice(idx, 1);
+      }),
+    [RESET_DOCS]: (state, action) =>
+      produce(state, (draft) => {
+        draft.docList = [];
       }),
   },
   initialState

@@ -1,47 +1,56 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import { useParams } from "react-router";
 
-import { __createCard, __deleteCard } from "../../redux/modules/board";
-import { useDispatch } from "react-redux";
-
-// content
+// compo & elem
 import Card from "./Card";
 import { Text } from "../../elem";
 
-const Bucket = ({ column, index, cards, deleteBucket, editTitleBucket }) => {
+// redux & api
+import { useDispatch } from "react-redux";
+import { __createCard, __deleteCard } from "../../redux/modules/board";
+
+const Bucket = ({
+  bucket,
+  index,
+  bucketCards,
+  deleteBucket,
+  editTitleBucket,
+}) => {
   const dispatch = useDispatch();
   const [cardTitle, setCardTitle] = useState("");
   const [editTitleMone, setEditTitleMone] = useState(false);
   const [newBucketTitle, setNewBucketTitle] = useState("");
+  const { roomId } = useParams();
 
-  // 새로운 card 만들기 (onClick Event Handler)
-  const addTask = (provided) => {
-    // const bucketId = provided.droppableProps["data-rbd-droppable-id"];
-    const bucketId = column.bucketId;
-    const newCardInfo = { bucketId, cardTitle };
-    dispatch(__createCard(newCardInfo));
-  };
-
+  // 버킷이름 수정 handler
   const updateBucketTitle = () => {
     setEditTitleMone(true);
   };
 
+  // 카드생성 handler
+  const addTask = (provided) => {
+    const bucketId = bucket.bucketId;
+    dispatch(__createCard(roomId, bucketId, cardTitle));
+  };
+
+  // 카드삭제 handler
   const deleteCardHandler = (cardId) => {
-    const bucketId = column.bucketId;
-    dispatch(__deleteCard(bucketId, cardId));
+    const bucketId = bucket.bucketId;
+    dispatch(__deleteCard(bucketId, cardId, roomId));
   };
 
   return (
     <>
-      <Draggable draggableId={column.bucketId} index={index}>
+      <Draggable draggableId={bucket.bucketId} index={index}>
         {(provided) => (
           <Container {...provided.draggableProps} ref={provided.innerRef}>
             {editTitleMone ? (
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  editTitleBucket(newBucketTitle, column.bucketId);
+                  editTitleBucket(newBucketTitle, bucket.bucketId);
                   setEditTitleMone(false);
                 }}
               >
@@ -57,29 +66,29 @@ const Bucket = ({ column, index, cards, deleteBucket, editTitleBucket }) => {
               <>
                 <Flex verti="space-between" {...provided.dragHandleProps}>
                   <Text type="head_5" onClick={updateBucketTitle}>
-                    {column.bucketName}
+                    {bucket.bucketName}
                   </Text>
                   <div
                     style={{ padding: "10px", cursor: "pointer" }}
-                    onClick={() => deleteBucket(column)}
+                    onClick={() => deleteBucket(bucket)}
                   >
                     X
                   </div>
                 </Flex>
                 <Text type="head_6" onClick={updateBucketTitle}>
-                  {column.bucketId}
+                  {bucket.bucketId}
                 </Text>
               </>
             )}
 
-            <Droppable droppableId={column.bucketId} type="card">
+            <Droppable droppableId={bucket.bucketId} type="card">
               {(provided, snapshot) => (
                 <TaskList
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                   isDraggingOver={snapshot.isDraggingOver}
                 >
-                  {cards.map((card, index) => (
+                  {bucketCards.map((card, index) => (
                     <Card
                       key={card.cardId}
                       card={card}
@@ -149,14 +158,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-`;
-
-const Title = styled.h3`
-  padding: 10px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const TaskList = styled.div`

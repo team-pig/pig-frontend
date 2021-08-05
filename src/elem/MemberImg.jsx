@@ -19,10 +19,12 @@ const MemberImg = ({ children, ...rest }) => {
 // `;
 
 const ProfileImg = styled.div`
-  position: relative;
+  flex-shrink: 0;
+
   right: 20px;
   width: 30px;
   height: 30px;
+  margin: 0;
 
   background-color: white;
   border: 1px solid black;

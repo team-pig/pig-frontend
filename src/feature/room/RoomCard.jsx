@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ModifyRoomModal from "./ModifyRoomModal";
 import Icon from "../../components/Icon";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
+import Drop from "../../components/Drop";
 //elements
 import { Button, Text } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
@@ -92,7 +93,38 @@ const RoomCard = ({
         </CardFooter>
       </Container>
       <div>
-        <Button _onClick={openModModal}>수정하기</Button>
+        <Drop.Container width="76px" height="126px" shadow>
+          <Drop.Item
+            width="76px"
+            height="42px"
+            color="darkgrey"
+            _onClick={openModModal}
+          >
+            수정하기
+          </Drop.Item>
+          <Drop.Item
+            width="76px"
+            height="42px"
+            color="darkgrey"
+            _onClick={(e) => {
+              dispatch(__exitRoom(roomId));
+            }}
+          >
+            나가기
+          </Drop.Item>
+          <Drop.Item
+            width="76px"
+            height="42px"
+            color="darkgrey"
+            _onClick={(e) => {
+              console.log(roomId);
+              dispatch(__deleteRoom(roomId));
+            }}
+          >
+            삭제하기
+          </Drop.Item>
+        </Drop.Container>
+        {/* <Button _onClick={openModModal}>수정하기</Button>
         <Button
           _onClick={(e) => {
             console.log(roomId);
@@ -107,7 +139,7 @@ const RoomCard = ({
           }}
         >
           나가기
-        </Button>
+        </Button> */}
       </div>
     </>
   );

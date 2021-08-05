@@ -137,8 +137,8 @@ const NameBtn = styled.button`
 const Logout = styled.button`
   ${button}
   position: absolute;
-  bottom: -50px;
-  right: 0;
+  bottom: 15px;
+  right: 250px;
   padding: 8px 16px;
   color: white;
   background-color: var(--notice);

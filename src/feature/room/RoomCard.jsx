@@ -25,10 +25,12 @@ const RoomCard = ({
   createdAt,
   tag,
   history,
+  index,
 }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
   const [showAllMember, setShowAllMember] = useState(false);
+  const [display, setDisplay] = useState("");
 
   useEffect(() => {
     if (members.length > 4) {
@@ -36,7 +38,7 @@ const RoomCard = ({
     } else {
       setShowAllMember(true);
     }
-  });
+  }, []);
 
   const openModModal = () => {
     setShowModModal(true);
@@ -45,6 +47,25 @@ const RoomCard = ({
   const closeModModal = () => {
     setShowModModal(false);
   };
+
+  const handleClick = (e) => {
+    // e.preventDefault();
+    e.stopPropagation();
+    if (display === index) {
+      setDisplay("");
+    } else {
+      setDisplay(index);
+    }
+  };
+
+  const handleOut = (e) => {
+    setDisplay("");
+    console.log("아웃");
+  };
+
+  const handleIn = (e) => {
+    setDisplay(index);
+  }
 
   const createDate = createdAt.slice(0, 10).split("-");
 
@@ -55,6 +76,61 @@ const RoomCard = ({
         showModModal={showModModal}
         closeModModal={closeModModal}
       />
+
+      <Drop.Container
+        display={display === index ? true : false}
+        onMouseOut={handleOut}
+        onMouseOver={handleIn}
+        width="76px"
+        height="126px"
+        shadow
+      >
+        <Drop.Item
+          width="76px"
+          height="42px"
+          color="darkgrey"
+          _onClick={openModModal}
+        >
+          수정하기
+        </Drop.Item>
+        <Drop.Item
+          width="76px"
+          height="42px"
+          color="darkgrey"
+          _onClick={(e) => {
+            dispatch(__exitRoom(roomId));
+          }}
+        >
+          나가기
+        </Drop.Item>
+        <Drop.Item
+          width="76px"
+          height="42px"
+          color="darkgrey"
+          _onClick={(e) => {
+            console.log(roomId);
+            dispatch(__deleteRoom(roomId));
+          }}
+        >
+          삭제하기
+        </Drop.Item>
+      </Drop.Container>
+      {/* <Button _onClick={openModModal}>수정하기</Button>
+        <Button
+          _onClick={(e) => {
+            console.log(roomId);
+            dispatch(__deleteRoom(roomId));
+          }}
+        >
+          삭제하기
+        </Button>
+        <Button
+          _onClick={(e) => {
+            dispatch(__exitRoom(roomId));
+          }}
+        >
+          나가기
+        </Button> */}
 
       <Container
         onClick={() => {
@@ -87,60 +163,13 @@ const RoomCard = ({
           <FooterItem>
             {/* members를 memberImg 배열로 바꾸기 */}
             <MemberImg members={members} />
-
-            <Icon icon="more" size="24px" />
+           
+              <Icon icon="more" size="24px" onClick={handleClick} />
+           
           </FooterItem>
         </CardFooter>
       </Container>
-      <div>
-        <Drop.Container width="76px" height="126px" shadow>
-          <Drop.Item
-            width="76px"
-            height="42px"
-            color="darkgrey"
-            _onClick={openModModal}
-          >
-            수정하기
-          </Drop.Item>
-          <Drop.Item
-            width="76px"
-            height="42px"
-            color="darkgrey"
-            _onClick={(e) => {
-              dispatch(__exitRoom(roomId));
-            }}
-          >
-            나가기
-          </Drop.Item>
-          <Drop.Item
-            width="76px"
-            height="42px"
-            color="darkgrey"
-            _onClick={(e) => {
-              console.log(roomId);
-              dispatch(__deleteRoom(roomId));
-            }}
-          >
-            삭제하기
-          </Drop.Item>
-        </Drop.Container>
-        {/* <Button _onClick={openModModal}>수정하기</Button>
-        <Button
-          _onClick={(e) => {
-            console.log(roomId);
-            dispatch(__deleteRoom(roomId));
-          }}
-        >
-          삭제하기
-        </Button>
-        <Button
-          _onClick={(e) => {
-            dispatch(__exitRoom(roomId));
-          }}
-        >
-          나가기
-        </Button> */}
-      </div>
+  
     </>
   );
 };

@@ -3,6 +3,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Bucket from "./Bucket";
 import { useState } from "react";
 import "@atlaskit/css-reset";
+import { useParams } from "react-router";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -11,13 +12,21 @@ import {
   __createBucket,
   __updateCardLocate,
   __deleteBucket,
+  __loadBucket,
+  __updateBucketTitle,
 } from "../../redux/modules/board";
+import { useEffect } from "react";
 
-let nextId = 3;
 const Chart = () => {
   const dispatch = useDispatch();
   const [bucketName, setBucketName] = useState("");
   const boardData = useSelector((state) => state.board);
+  console.log(boardData);
+  const { roomId } = useParams();
+
+  useEffect(() => {
+    dispatch(__loadBucket(roomId));
+  }, []);
 
   // 아이템을 떨어뜨렸을 때 실행할 작업들
   const onDragEnd = ({ destination, source, draggableId, type }) => {
@@ -38,24 +47,24 @@ const Chart = () => {
     const sourceBucket = boardData.columns[source.droppableId];
     const destinationBucket = boardData.columns[destination.droppableId];
 
-    // 버킷리스트를 옮겼을 때 실행됨
+    // 버킷위치수정
     if (type === "column") {
       const newColumnOrder = Array.from(boardData.columnOrder); // 새로운 컬럼오더 배열을 만들고,
       newColumnOrder.splice(source.index, 1); // dnd된 컬럼을 제외하고,
       newColumnOrder.splice(destination.index, 0, draggableId); // drop된 위치(index)에 다시 넣는다.
 
-      dispatch(__updateBucket(newColumnOrder));
+      dispatch(__updateBucket(roomId, null, null, newColumnOrder));
       return;
     }
 
     // 같은 버킷으로 Todo를 옮겼을 때
     if (sourceBucket === destinationBucket) {
-      const destinationBucketOrder = Array.from(sourceBucket.cardIds);
+      const destinationBucketOrder = Array.from(sourceBucket.cardOrder);
       destinationBucketOrder.splice(source.index, 1);
       destinationBucketOrder.splice(destination.index, 0, draggableId);
 
       const newBucketInfo = {
-        destinationBucketId: destinationBucket.id,
+        destinationBucketId: destinationBucket.bucketId,
         destinationBucketOrder,
       };
 
@@ -65,15 +74,15 @@ const Chart = () => {
 
     // 다른 버킷으로 Todo를 옮겼을 때
     if (sourceBucket !== destinationBucket) {
-      const sourceBucketOrder = Array.from(sourceBucket.cardIds);
+      const sourceBucketOrder = Array.from(sourceBucket.cardOrder);
       sourceBucketOrder.splice(source.index, 1);
 
-      const destinationBucketOrder = Array.from(destinationBucket.cardIds);
+      const destinationBucketOrder = Array.from(destinationBucket.cardOrder);
       destinationBucketOrder.splice(destination.index, 0, draggableId);
 
       const newBucketInfo = {
-        sourceBucketId: sourceBucket.id,
-        destinationBucketId: destinationBucket.id,
+        sourceBucketId: sourceBucket.bucketId,
+        destinationBucketId: destinationBucket.bucketId,
         sourceBucketOrder,
         destinationBucketOrder,
       };
@@ -83,20 +92,39 @@ const Chart = () => {
     }
   };
 
-  // 새로운 버킷리스트 만들기 (변경되는 것 : columns, columnOrder)
-  const addbucketList = () => {
-    const newBucketInfo = {
-      bucketId: `bucket-${nextId}`,
-      bucketName,
-    };
-
-    dispatch(__createBucket(newBucketInfo));
-    nextId++;
+  //버킷이름수정
+  const editTitleBucket = (newBucketTitle, bucketId) => {
+    dispatch(__updateBucketTitle(roomId, bucketId, newBucketTitle));
   };
 
+  // 버킷생성
+  const createBucket = () => {
+    dispatch(__createBucket(roomId, bucketName));
+  };
+
+  // 버킷삭제
   const deleteBucket = (bucket) => {
-    dispatch(__deleteBucket(bucket.id));
+    dispatch(__deleteBucket(roomId, bucket.bucketId));
   };
+
+  if (boardData.columnOrder === null || boardData.columns === null) {
+    return (
+      <>
+        <AddBucketZone>
+          <Input
+            placeholder="버킷 이름을 적어주세요."
+            type="text"
+            value={bucketName}
+            onChange={({ target: { value } }) => {
+              setBucketName(value);
+            }}
+          />
+          <Button onClick={createBucket}>버킷 추가하기</Button>
+        </AddBucketZone>
+        <div></div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -109,7 +137,7 @@ const Chart = () => {
             setBucketName(value);
           }}
         />
-        <Button onClick={addbucketList}>버킷 추가하기</Button>
+        <Button onClick={createBucket}>버킷 추가하기</Button>
       </AddBucketZone>
       {/* Dnd의 컴포넌트의 최상위는 무조건 DragDropContext */}
       <DragDropContext onDragEnd={onDragEnd}>
@@ -122,18 +150,22 @@ const Chart = () => {
             <Container {...provided.droppableProps} ref={provided.innerRef}>
               {boardData.columnOrder.map((columnId, index) => {
                 const column = boardData.columns[columnId];
-                const cards = column.cardIds.map(
-                  (todoId) => boardData.cards[todoId]
-                );
-                return (
-                  <Bucket
-                    deleteBucket={deleteBucket}
-                    column={column}
-                    key={column.id}
-                    index={index}
-                    cards={cards}
-                  />
-                );
+                if (column !== undefined) {
+                  const cards = column.cardOrder.map(
+                    (todoId) => boardData.cards[todoId]
+                  );
+                  return (
+                    <Bucket
+                      editTitleBucket={editTitleBucket}
+                      deleteBucket={deleteBucket}
+                      column={column}
+                      key={column.bucketId}
+                      index={index}
+                      cards={cards}
+                      roomId={roomId}
+                    />
+                  );
+                }
               })}
               {provided.placeholder}
             </Container>

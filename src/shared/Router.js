@@ -17,10 +17,9 @@ const Router = () => {
   return (
     <Switch>
       <Route path="/" component={Auth(Intro, null)} exact />
-      <Route path="/login" component={Auth(Login, false)} exact />
-      <Route path="/register" component={Auth(Register, false)} exact />
+      <Route path="/login" component={Auth(Login, null)} exact />
+      <Route path="/register" component={Auth(Register, null)} exact />
       <Route path="/roomlist" component={Auth(RoomList, true)} exact />
-      <Route path="/hidden_board" component={Auth(Board, true)} exact />
       <Route path="/workspace/:roomId" component={Auth(Workspace, true)} />
       <Route path="/develop" component={Auth(Develop, null)} />
       <Redirect from="*" to="/" />

@@ -26,6 +26,9 @@ const RoomCard = ({
   tag,
   history,
   index,
+  isShow,
+  openDrop,
+  closeDrop,
 }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
@@ -64,26 +67,38 @@ const RoomCard = ({
     e.stopPropagation();
     if (display === index) {
       setDisplay("");
+      closeDrop();
+      console.log(display);
+      console.log('닫다');
+      console.log(isShow);
       
     } else {
+      openDrop();
       setDisplay(index);
-     
+      console.log('열다');
+      console.log(display);
+      console.log(isShow);
     }
   };
 
   const closeDownDrop = () => {
     setDisplay("");
+    closeDrop();
     console.log("드롭닫기");
     console.log(display);
   };
 
   const handleOut = (e) => {
     setDisplay("");
+    closeDrop();
+    console.log("handleOut");
    
   };
 
   const handleIn = (e) => {
+    openDrop();
     setDisplay(index);
+    console.log("handleIn");
   };
 
   const createDate = createdAt.slice(0, 10).split("-");
@@ -101,6 +116,7 @@ const RoomCard = ({
           history.push(`/workspace/${roomId}`);
         }}
       >
+        {/* {display===index && isShow ? ( */}
         <Drop.Container
           display={display === index ? true : false}
           onClick={closeDownDrop}
@@ -114,6 +130,7 @@ const RoomCard = ({
             width="76px"
             height="42px"
             color="darkgrey"
+            
             _onClick={openModModal}
           >
             수정하기
@@ -135,6 +152,8 @@ const RoomCard = ({
             삭제하기
           </Drop.Item>
         </Drop.Container>
+        {/* ) : null} */}
+
         <StarIcon>
           <Star />
         </StarIcon>
@@ -162,7 +181,7 @@ const RoomCard = ({
             {/* members를 memberImg 배열로 바꾸기 */}
             <MemberImg members={members} />
             <div onClick={handleClick}>
-              <Icon icon="more" size="24px" onClick={handleClick} />
+              <Icon icon="more" size="24px"  />
             </div>
           </FooterItem>
         </CardFooter>

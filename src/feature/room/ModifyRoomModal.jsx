@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ImgUploader from "../../components/ImgUploader";
 
 // elements
-import { Button, Input } from "../../elem";
+import { Button, Input } from "../../elem/index";
 
 //redux
 import { __addRoom, __editRoom } from "../../redux/modules/room";
@@ -75,26 +75,36 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
         <ModalContainer>
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
+          <ImageBox>
             <ImgUploader
               setIsImage={setIsImage}
               isImage={isImage}
               name="roomImage"
               fileInput={fileInput}
             />
-
-            <input
+         </ImageBox>
+         <InputBox>
+            <Input
               name="roomName"
+              type="text"
+              value=""
               placeholder="방 이름"
               onChange={changeHandler}
             />
-            <input
+            <Input
               name="subtitle"
+              type="text"
+              value=""
               placeholder="부제목"
               onChange={changeHandler}
             />
-            <input name="tag" placeholder="태그" onChange={changeHandler} />
-
-            <Button _onClick={modifyFile}>수정</Button>
+            <Input name="tag"  type="text"
+              value="" placeholder="태그" onChange={changeHandler} />
+            </InputBox>
+            <BtnBox>
+            <Button shape="green-outline" size="200" _onClick={cancelFile}>취소</Button>
+            <Button size="200" _onClick={modifyFile}>수정</Button>
+            </BtnBox>
           </ModalContent>
         </ModalContainer>
       ) : null}
@@ -128,16 +138,32 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   position: relative;
-
+  display: flex;
+  flex-direction: column;
   width: 400px;
-  height: 400px;
+  height: 500px;
   padding-top: 5px;
-  
   border-radius: 10px;
   background-color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  
   text-align: center;
+`;
+
+const ImageBox = styled.div`
+  margin: 0 auto;
+  padding: 46px 0 46px 0;
+`;
+
+const InputBox = styled.div`
+margin: 0 auto;
+width: 324px;
+`;
+
+const BtnBox = styled.div`
+display: flex;
+width: 300px;
+margin: auto auto 0 auto;
+padding-bottom: 46px;
 `;
 
 export default ModifyRoomModal;

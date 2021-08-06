@@ -40,7 +40,18 @@ const RoomCard = ({
     }
   }, []);
 
-  const openModModal = () => {
+  const exitRoom = (e) => {
+    e.stopPropagation();
+    dispatch(__exitRoom(roomId));
+  }
+
+  const deleteRoom = (e) => {
+    e.stopPropagation();
+    dispatch(__deleteRoom(roomId));
+  }
+
+  const openModModal = (e) => {
+    e.stopPropagation();
     setShowModModal(true);
   };
 
@@ -53,19 +64,27 @@ const RoomCard = ({
     e.stopPropagation();
     if (display === index) {
       setDisplay("");
+      
     } else {
       setDisplay(index);
+     
     }
+  };
+
+  const closeDownDrop = () => {
+    setDisplay("");
+    console.log("드롭닫기");
+    console.log(display);
   };
 
   const handleOut = (e) => {
     setDisplay("");
-    console.log("아웃");
+   
   };
 
   const handleIn = (e) => {
     setDisplay(index);
-  }
+  };
 
   const createDate = createdAt.slice(0, 10).split("-");
 
@@ -77,66 +96,45 @@ const RoomCard = ({
         closeModModal={closeModModal}
       />
 
-      <Drop.Container
-        display={display === index ? true : false}
-        onMouseOut={handleOut}
-        onMouseOver={handleIn}
-        width="76px"
-        height="126px"
-        shadow
-      >
-        <Drop.Item
-          width="76px"
-          height="42px"
-          color="darkgrey"
-          _onClick={openModModal}
-        >
-          수정하기
-        </Drop.Item>
-        <Drop.Item
-          width="76px"
-          height="42px"
-          color="darkgrey"
-          _onClick={(e) => {
-            dispatch(__exitRoom(roomId));
-          }}
-        >
-          나가기
-        </Drop.Item>
-        <Drop.Item
-          width="76px"
-          height="42px"
-          color="darkgrey"
-          _onClick={(e) => {
-            console.log(roomId);
-            dispatch(__deleteRoom(roomId));
-          }}
-        >
-          삭제하기
-        </Drop.Item>
-      </Drop.Container>
-      {/* <Button _onClick={openModModal}>수정하기</Button>
-        <Button
-          _onClick={(e) => {
-            console.log(roomId);
-            dispatch(__deleteRoom(roomId));
-          }}
-        >
-          삭제하기
-        </Button>
-        <Button
-          _onClick={(e) => {
-            dispatch(__exitRoom(roomId));
-          }}
-        >
-          나가기
-        </Button> */}
-
       <Container
         onClick={() => {
           history.push(`/workspace/${roomId}`);
         }}
       >
+        <Drop.Container
+          display={display === index ? true : false}
+          onClick={closeDownDrop}
+          onMouseOut={handleOut}
+          onMouseOver={handleIn}
+          width="76px"
+          height="126px"
+          shadow
+        >
+          <Drop.Item
+            width="76px"
+            height="42px"
+            color="darkgrey"
+            _onClick={openModModal}
+          >
+            수정하기
+          </Drop.Item>
+          <Drop.Item
+            width="76px"
+            height="42px"
+            color="darkgrey"
+            _onClick={exitRoom}
+          >
+            나가기
+          </Drop.Item>
+          <Drop.Item
+            width="76px"
+            height="42px"
+            color="darkgrey"
+            _onClick={deleteRoom}
+          >
+            삭제하기
+          </Drop.Item>
+        </Drop.Container>
         <StarIcon>
           <Star />
         </StarIcon>
@@ -163,13 +161,12 @@ const RoomCard = ({
           <FooterItem>
             {/* members를 memberImg 배열로 바꾸기 */}
             <MemberImg members={members} />
-           
+            <div onClick={handleClick}>
               <Icon icon="more" size="24px" onClick={handleClick} />
-           
+            </div>
           </FooterItem>
         </CardFooter>
       </Container>
-  
     </>
   );
 };

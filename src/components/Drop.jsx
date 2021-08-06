@@ -30,28 +30,37 @@ const Container = ({
   height,
   display,
   direction,
+  closeDownDrop,
   type,
   shadow,
   ...rest
 }) => {
+  const [isShow, setIsShow] = useState()
   return (
+    <ModalOverlay display={display} onClick={closeDownDrop}>
     <Wrapper
-      display={display}
-      width={width}
-      height={height}
-      shadow={shadow}
-      {...rest}
-    >
-      {children}
+        display={display}
+        width={width}
+        height={height}
+        shadow={shadow}
+        {...rest}
+      >
+        {children}
     </Wrapper>
+    </ModalOverlay>
+   
   );
 };
+
+const Overlay = (display, children, ...rest) => {
+  <ModalOverlay>{children}</ModalOverlay>
+}
 
 const Btn = styled.button`
   /* display: flex;
   justify-content: center;
   align-items: center; */
-
+  z-index: var(--indexHeader);
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   color: ${(props) => `var(--${props.color})`};
@@ -62,12 +71,11 @@ const Btn = styled.button`
 
 const Wrapper = styled.div`
   position: relative;
-  top: 260px;
-  left: 290px;
+  z-index: var(--indexHeader);
+  top: 245px;
+  left: 270px;
   display: ${(props) => (props.display ? "flex" : "none")};
   flex-direction: column;
-  z-index: var(--indexHeader);
-
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   background-color: var(--white);
@@ -76,9 +84,18 @@ const Wrapper = styled.div`
     6px 6px 15px rgba(0 0 0 / 0.1);
 `;
 
+const ModalOverlay = styled.div`
+  position: absolute;
+  z-index: var(--indexHeader);
+  display: ${(props) => (props.display ? "flex" : "none")};
+  width: 100%;
+  height: 100%;
+`;
+
 const Drop = {
+  Overlay,
   Container,
-  Item,
+  Item, 
 };
 
 export default Drop;

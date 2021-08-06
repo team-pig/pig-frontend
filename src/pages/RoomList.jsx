@@ -81,11 +81,9 @@ const RoomContainer = styled.div`
 
 const RoomBox = styled.div`
   display: grid;
-  
   grid-gap: 25px;
   grid-template-columns: repeat(4, 1fr);
-
-  margin: 0 auto;
+  margin: 0 auto; 
 
   /* @media (max-width: 900px) {
     grid-template-columns: repeat(2, 1fr);

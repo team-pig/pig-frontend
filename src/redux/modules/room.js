@@ -87,15 +87,13 @@ export const __editRoom =
   (roomId, contents, isEdit) =>
   async (dispatch, getState, { history }) => {
     try {
-      const _image = getState().image.preview;
+      const _image = getState().image.imgUrl;
       const newContent = {
         ...contents,
         roomImage: _image,
         roomId,
       };
 
-      console.log(newContent);
-      console.log(roomId);
       await roomApi.editRoom(newContent);
       dispatch(editRoom(newContent));
       // dispatch(editRoom(roomId, willDispatchContents));
@@ -173,7 +171,7 @@ const room = handleActions(
       produce(state, (draft) => {
         console.log(action.payload.newContent.roomId);
         let idx = draft.room.findIndex(
-          (r) => r._id === action.payload.newContent.roomId
+          (r) => r.roomId === action.payload.newContent.roomId
         );
 
         draft.room[idx] = { ...draft.room[idx], ...action.payload.newContent };

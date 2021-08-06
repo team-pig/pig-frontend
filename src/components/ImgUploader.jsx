@@ -3,16 +3,18 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
+//components
+import Icon from "./Icon";
+
 //element
 import Input from "../elem/Input";
 
 //redux
 import { setPreview } from "../redux/modules/image";
 
-const ImgUploader = ({ fileInput, name, isImage, setIsImage}) => {
-
+const ImgUploader = ({ fileInput, name, isImage, setIsImage }) => {
   const dispatch = useDispatch();
- 
+
   const preview = useSelector((state) => state.image.preview);
 
   const imagePreview = (e) => {
@@ -36,7 +38,7 @@ const ImgUploader = ({ fileInput, name, isImage, setIsImage}) => {
 
   return (
     <>
-      <input
+      <FileInput
         type="file"
         id="upload"
         className="image-upload"
@@ -45,17 +47,51 @@ const ImgUploader = ({ fileInput, name, isImage, setIsImage}) => {
         accept="image/*"
         files
       />
-      <label htmlFor="upload" className="image-upload-wrapper"></label>
-      {isImage && <Image src={preview}/>}
-      {!isImage && <Image src="http://via.placeholder.com/400x300" />}
-      {/* <img src={preview ? preview : "http://via.placeholder.com/400x300"} /> */}
-     
+      <FileLabel htmlFor="upload" className="image-upload-wrapper">
+        {isImage && <Image src={preview} />}
+        {!isImage && (
+          <DefaultImage>
+            <IconBox>
+              <Icon icon="image" size="28px" />
+            </IconBox>
+          </DefaultImage>
+        )}
+      </FileLabel>
     </>
   );
 };
 
+const FileInput = styled.input`
+  position: absolute;
+  z-index: -1;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+`;
+
+const FileLabel = styled.label`
+  position: inherit;
+  width: 100px;
+  height: 100px;
+`;
+
+const DefaultImage = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: var(--line);
+  color: var(--darkgrey);
+`;
+
 const Image = styled.img`
-width: 400px;
-height: 300px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+`;
+
+const IconBox = styled.div`
+  margin: 0 auto;
 `;
 export default ImgUploader;

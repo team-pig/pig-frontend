@@ -8,9 +8,10 @@ import AddRoomModal from "../feature/room/AddRoomModal";
 import JoinRoomModal from "../feature/room/JoinRoomModal";
 import RoomCard from "../feature/room/RoomCard";
 import InfinityScroll from "../components/InfinityScroll";
+import Icon from "../components/Icon";
 
 //elements
-import Button from "../elem/Button";
+import { Button, Input } from "../elem/index";
 
 //redux
 import { __getRoomList } from "../redux/modules/room";
@@ -22,6 +23,7 @@ const RoomList = ({ history }) => {
   const paging = useSelector((state) => state.room.paging);
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
+  const [isShow, setIsShow] = useState(false);
 
   useEffect(() => {
     if (roomList.length === 0) {
@@ -43,11 +45,18 @@ const RoomList = ({ history }) => {
     setShowModal(false);
   };
 
+  const openDrop = () => {
+    setIsShow(true);
+  };
+
+  const closeDrop = () => {
+    setIsShow(false);
+    console.log("룸리스트드롭클로즈");
+    console.log(isShow);
+  };
+
   return (
     <Template>
-     
-      <Button _onClick={openJoinModal}>방 참여</Button>
-      <Button _onClick={openModal}>방 생성하기</Button>
       {!isJoin && (
         <AddRoomModal showModal={showModal} closeModal={closeModal} />
       )}
@@ -62,10 +71,40 @@ const RoomList = ({ history }) => {
         isNext={paging.next ? true : false}
         isLoading={isLoading}
       >
-        <RoomContainer>
+        <Wrapper>
+          <WrapperItem>
+            <InputBox>
+              <Input type="text" value="">
+                <IconBox>
+                  <Icon icon="search" size="24px" />
+                </IconBox>
+              </Input>
+            </InputBox>
+            <BtnBox>
+              <Button size="200" onClick={openJoinModal}>
+                방 참여
+              </Button>
+              <Button size="200" onClick={openModal}>
+                방 생성하기
+              </Button>
+            </BtnBox>
+          </WrapperItem>
+        </Wrapper>
+
+        <RoomContainer onClick={closeDrop}>
           <RoomBox>
             {roomList.map((room, idx) => {
-              return <RoomCard key={idx} {...room} history={history} />;
+              return (
+                <RoomCard
+                  openDrop={openDrop}
+                  closeDrop={closeDrop}
+                  isShow={isShow}
+                  index={idx}
+                  key={idx}
+                  {...room}
+                  history={history}
+                />
+              );
             })}
           </RoomBox>
         </RoomContainer>
@@ -74,19 +113,52 @@ const RoomList = ({ history }) => {
   );
 };
 
+const Wrapper = styled.div`
+  display: flex;
+  /* justify-content: space-between;
+  align-items: center; */
+  height: 155px;
+`;
+
+const WrapperItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 1286px;
+  margin: 5px auto 0 auto;
+`;
+
+const InputBox = styled.div`
+  width: 918px;
+  height: 46px;
+  margin: auto 0;
+`;
+
+const IconBox = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 5px;
+`;
+
+const BtnBox = styled.button`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 330px;
+  height: 50px;
+`;
+
 const RoomContainer = styled.div`
   display: flex;
 `;
 
 const RoomBox = styled.div`
   display: grid;
-  
-  grid-gap: 2.5rem;
+  grid-gap: 25px;
   grid-template-columns: repeat(4, 1fr);
-
   margin: 0 auto;
 
-  @media (max-width: 900px) {
+  @media (max-width: 960px) {
     grid-template-columns: repeat(2, 1fr);
   }
 `;

@@ -53,12 +53,15 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
 
     const { Location } = await upload.promise();
     dispatch(uploadImageToS3(Location));
+    dispatch(__editRoom(roomId, newContent));
   };
 
   const modifyFile = () => {
-    dispatch(__editRoom(roomId, newContent));
+    // dispatch(__editRoom(roomId, newContent));
+    handleFileInput();
     closeModModal();
     setIsImage(false);
+    console.log(roomId);
   };
 
   const cancelFile = () => {

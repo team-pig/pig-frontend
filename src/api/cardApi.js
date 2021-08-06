@@ -19,6 +19,13 @@ export const cardApi = {
       destinationBucketOrder: newBucketInfo.destinationBucketOrder,
     }),
 
+  editCardLocationSameBucket: (roomId, cardId, newBucketInfo) =>
+    instance.patch(`/room/${roomId}/cardLocation`, {
+      cardId,
+      destinationBucket: newBucketInfo.destinationBucketId,
+      destinationBucketOrder: newBucketInfo.destinationBucketOrder,
+    }),
+
   deleteCard: (bucketId, cardId, roomId) =>
     instance.delete(`/room/${roomId}/card`, {
       data: {

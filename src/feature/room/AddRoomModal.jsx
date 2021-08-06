@@ -68,26 +68,35 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
         <ModalContainer>
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
+            <ImageBox>
             <ImgUploader
               setIsImage={setIsImage}
               isImage={isImage}
               name="roomImage"
               fileInput={fileInput}
             />
-
-            <input
+            </ImageBox>
+            <InputBox>
+            <Input
               name="roomName"
+              type="text"
+              value=""
               placeholder="방 이름"
               onChange={changeHandler}
             />
-            <input
+            <Input
               name="subtitle"
+              type="text"
+              value=""
               placeholder="부제목"
               onChange={changeHandler}
             />
-            <input name="tag" placeholder="태그" onChange={changeHandler} />
-
-            <Button _onClick={saveFile}>저장</Button>
+            <Input name="tag" type="text" value="" placeholder="태그" onChange={changeHandler} />
+            </InputBox>
+            <BtnBox>
+            <Button _onClick={cancelFile}>취소</Button>
+            <Button _onClick={saveFile}>만들기</Button>
+            </BtnBox>
           </ModalContent>
         </ModalContainer>
       ) : null}
@@ -121,16 +130,32 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   position: relative;
-
+  display: flex;
+  flex-direction: column;
   width: 400px;
-  height: 400px;
+  height: 500px;
   padding-top: 5px;
 
-  border-radius: 10px;
+  border-radius: 3px;
   background-color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   
   text-align: center;
+`;
+
+const ImageBox = styled.div`
+  margin: 0 auto;
+  padding: 46px 0 46px 0;
+`;
+
+const InputBox = styled.div`
+margin: 0 auto;
+width: 324px;
+`;
+
+const BtnBox = styled.div`
+margin-top: auto;
+padding-bottom: 46px;
 `;
 
 export default AddRoomModal;

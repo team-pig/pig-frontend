@@ -1,19 +1,19 @@
+// dispatch(__checkedTodo(roomId, todo.todoId, target.checked));
+
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Text, Input, Button } from "../../elem";
+import { Input, Button } from "../../elem";
 import {
-  __createTodo,
+  __checkedTodo,
   __deleteTodo,
-  __editToto,
+  __editTotoTitle,
 } from "../../redux/modules/todos";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
-const Todo = ({ todo }) => {
+const Todo = ({ todo, roomId }) => {
   const dispatch = useDispatch();
   const [editMode, setEditMode] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -25,14 +25,14 @@ const Todo = ({ todo }) => {
     }),
 
     onSubmit: (values, { resetForm }) => {
-      dispatch(__editToto(todo.todoId, values.newTodoTitle));
+      dispatch(__editTotoTitle(roomId, todo.todoId, values.newTodoTitle));
       resetForm();
       setEditMode((pre) => !pre);
     },
   });
 
   const deleteTodoHandler = () => {
-    dispatch(__deleteTodo(todo.todoId));
+    dispatch(__deleteTodo(roomId, todo.todoId));
   };
 
   return (
@@ -64,9 +64,11 @@ const Todo = ({ todo }) => {
         <>
           <Input
             type="checkbox"
-            value={isChecked}
+            name="isChecked"
+            id="isChecked"
+            checked={todo.isChecked}
             _onChange={({ target }) => {
-              setIsChecked(target.checked);
+              dispatch(__checkedTodo(roomId, todo.todoId, target.checked));
             }}
           />
           <Flex hori="space-between" width="90%">

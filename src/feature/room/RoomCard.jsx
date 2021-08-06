@@ -25,10 +25,15 @@ const RoomCard = ({
   createdAt,
   tag,
   history,
+  index,
+  isShow,
+  openDrop,
+  closeDrop,
 }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
   const [showAllMember, setShowAllMember] = useState(false);
+  const [display, setDisplay] = useState("");
 
   useEffect(() => {
     if (members.length > 4) {
@@ -36,14 +41,64 @@ const RoomCard = ({
     } else {
       setShowAllMember(true);
     }
-  });
+  }, []);
 
-  const openModModal = () => {
+  const exitRoom = (e) => {
+    e.stopPropagation();
+    dispatch(__exitRoom(roomId));
+  }
+
+  const deleteRoom = (e) => {
+    e.stopPropagation();
+    dispatch(__deleteRoom(roomId));
+  }
+
+  const openModModal = (e) => {
+    e.stopPropagation();
     setShowModModal(true);
   };
 
   const closeModModal = () => {
     setShowModModal(false);
+  };
+
+  const handleClick = (e) => {
+    // e.preventDefault();
+    e.stopPropagation();
+    if (display === index) {
+      setDisplay("");
+      closeDrop();
+      console.log(display);
+      console.log('닫다');
+      console.log(isShow);
+      
+    } else {
+      openDrop();
+      setDisplay(index);
+      console.log('열다');
+      console.log(display);
+      console.log(isShow);
+    }
+  };
+
+  const closeDownDrop = () => {
+    setDisplay("");
+    closeDrop();
+    console.log("드롭닫기");
+    console.log(display);
+  };
+
+  const handleOut = (e) => {
+    setDisplay("");
+    closeDrop();
+    console.log("handleOut");
+   
+  };
+
+  const handleIn = (e) => {
+    openDrop();
+    setDisplay(index);
+    console.log("handleIn");
   };
 
   const createDate = createdAt.slice(0, 10).split("-");
@@ -61,6 +116,44 @@ const RoomCard = ({
           history.push(`/workspace/${roomId}`);
         }}
       >
+        {/* {display===index && isShow ? ( */}
+        <Drop.Container
+          display={display === index ? true : false}
+          onClick={closeDownDrop}
+          onMouseOut={handleOut}
+          onMouseOver={handleIn}
+          width="76px"
+          height="126px"
+          shadow
+        >
+          <Drop.Item
+            width="76px"
+            height="42px"
+            color="darkgrey"
+            
+            _onClick={openModModal}
+          >
+            수정하기
+          </Drop.Item>
+          <Drop.Item
+            width="76px"
+            height="42px"
+            color="darkgrey"
+            _onClick={exitRoom}
+          >
+            나가기
+          </Drop.Item>
+          <Drop.Item
+            width="76px"
+            height="42px"
+            color="darkgrey"
+            _onClick={deleteRoom}
+          >
+            삭제하기
+          </Drop.Item>
+        </Drop.Container>
+        {/* ) : null} */}
+
         <StarIcon>
           <Star />
         </StarIcon>
@@ -87,60 +180,12 @@ const RoomCard = ({
           <FooterItem>
             {/* members를 memberImg 배열로 바꾸기 */}
             <MemberImg members={members} />
-
-            <Icon icon="more" size="24px" />
+            <div onClick={handleClick}>
+              <Icon icon="more" size="24px"  />
+            </div>
           </FooterItem>
         </CardFooter>
       </Container>
-      <div>
-        <Drop.Container width="76px" height="126px" shadow>
-          <Drop.Item
-            width="76px"
-            height="42px"
-            color="darkgrey"
-            _onClick={openModModal}
-          >
-            수정하기
-          </Drop.Item>
-          <Drop.Item
-            width="76px"
-            height="42px"
-            color="darkgrey"
-            _onClick={(e) => {
-              dispatch(__exitRoom(roomId));
-            }}
-          >
-            나가기
-          </Drop.Item>
-          <Drop.Item
-            width="76px"
-            height="42px"
-            color="darkgrey"
-            _onClick={(e) => {
-              console.log(roomId);
-              dispatch(__deleteRoom(roomId));
-            }}
-          >
-            삭제하기
-          </Drop.Item>
-        </Drop.Container>
-        {/* <Button _onClick={openModModal}>수정하기</Button>
-        <Button
-          _onClick={(e) => {
-            console.log(roomId);
-            dispatch(__deleteRoom(roomId));
-          }}
-        >
-          삭제하기
-        </Button>
-        <Button
-          _onClick={(e) => {
-            dispatch(__exitRoom(roomId));
-          }}
-        >
-          나가기
-        </Button> */}
-      </div>
     </>
   );
 };

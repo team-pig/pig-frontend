@@ -8,8 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ImgUploader from "../../components/ImgUploader";
 
 // elements
-import Input from "../../elem/Input";
-import Button from "../../elem/Button";
+import { Button, Input } from "../../elem/index";
 
 //redux
 import { __addRoom, __editRoom } from "../../redux/modules/room";
@@ -94,7 +93,7 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
             <Input name="tag" type="text" value="" placeholder="태그" onChange={changeHandler} />
             </InputBox>
             <BtnBox>
-            <Button size="200" _onClick={cancelFile}>취소</Button>
+            <Button shape="green-outline" size="200" _onClick={cancelFile}>취소</Button>
             <Button size="200" _onClick={saveFile}>만들기</Button>
             </BtnBox>
           </ModalContent>
@@ -135,11 +134,9 @@ const ModalContent = styled.div`
   width: 400px;
   height: 500px;
   padding-top: 5px;
-
   border-radius: 3px;
   background-color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  
   text-align: center;
 `;
 
@@ -154,7 +151,9 @@ width: 324px;
 `;
 
 const BtnBox = styled.div`
-margin-top: auto;
+display: flex;
+width: 300px;
+margin: auto auto 0 auto;
 padding-bottom: 46px;
 `;
 

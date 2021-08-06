@@ -40,7 +40,13 @@ const Input = (props) => {
   }
 
   if (props.type === "checkbox") {
-    return <Checkbox type={props.type} />;
+    return (
+      <Checkbox
+        type={props.type}
+        onChange={props._onChange}
+        checked={props.checked}
+      />
+    );
   }
 
   if (props.type === "date") {

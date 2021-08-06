@@ -23,7 +23,6 @@ const RoomList = ({ history }) => {
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
 
-
   useEffect(() => {
     if (roomList.length === 0) {
       dispatch(__getRoomList());
@@ -46,9 +45,6 @@ const RoomList = ({ history }) => {
 
   return (
     <Template>
-     
-      <Button _onClick={openJoinModal}>방 참여</Button>
-      <Button _onClick={openModal}>방 생성하기</Button>
       {!isJoin && (
         <AddRoomModal showModal={showModal} closeModal={closeModal} />
       )}
@@ -63,10 +59,24 @@ const RoomList = ({ history }) => {
         isNext={paging.next ? true : false}
         isLoading={isLoading}
       >
+        <Wrapper>
+          <WrapperItem>
+            <InputCover>
+              <InputItem />
+            </InputCover>
+            <BtnBox>
+              <Btn onClick={openJoinModal}>방 참여</Btn>
+              <Btn onClick={openModal}>방 생성하기</Btn>
+            </BtnBox>
+          </WrapperItem>
+        </Wrapper>
+
         <RoomContainer>
           <RoomBox>
             {roomList.map((room, idx) => {
-              return <RoomCard index={idx} key={idx} {...room} history={history} />;
+              return (
+                <RoomCard index={idx} key={idx} {...room} history={history} />
+              );
             })}
           </RoomBox>
         </RoomContainer>
@@ -74,6 +84,49 @@ const RoomList = ({ history }) => {
     </Template>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  /* justify-content: space-between;
+  align-items: center; */
+  height: 100px;
+  border: 2px solid pink;
+`;
+
+const WrapperItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 1286px;
+  /* min-width: 630px; */
+  margin: 0 auto;
+  border: 2px solid red;
+`;
+
+const InputCover = styled.div`
+  height: 48px;
+  border: 20px solid var(--dark grey);
+  border-radius: 3px;
+`;
+
+const InputItem = styled.input`
+  height: 48px;
+  border: 3px solid var(--dark grey);
+  border-radius: 3px;
+`;
+const BtnBox = styled.button`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 330px;
+  height: 50px;
+  border: 2px solid black;
+`;
+const Btn = styled.button`
+  width: 150px;
+  height: 50px;
+  border: 2px solid black;
+`;
 
 const RoomContainer = styled.div`
   display: flex;
@@ -83,11 +136,11 @@ const RoomBox = styled.div`
   display: grid;
   grid-gap: 25px;
   grid-template-columns: repeat(4, 1fr);
-  margin: 0 auto; 
+  margin: 0 auto;
 
-  /* @media (max-width: 900px) {
+  @media (max-width: 960px) {
     grid-template-columns: repeat(2, 1fr);
-  } */
+  }
 `;
 
 export default RoomList;

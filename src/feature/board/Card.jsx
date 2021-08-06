@@ -33,7 +33,7 @@ const Card = ({ card, index, deleteCardHandler }) => {
         <Input type="date" />
         <Input type="date" />
         <Textarea />
-        <Todos />
+        <Todos cardId={card.cardId} />
         <Button
           _onClick={() => {
             deleteCardHandler(card.cardId, setShowModal);
@@ -57,7 +57,6 @@ const Container = styled.div`
   cursor: pointer !important;
 `;
 
-const Content = styled.div``;
 const Flex = styled.div`
   display: flex;
 `;

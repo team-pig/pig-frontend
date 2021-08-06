@@ -86,8 +86,7 @@ export const __loadBucket =
   async (dispatch, getState, { history }) => {
     try {
       const { data } = await bucketApi.getBuckets(roomId);
-      const loadedBucketOrder =
-        data.bucketOrder === null ? [] : data.bucketOrder.bucketOrder;
+      const loadedBucketOrder = data.bucketOrder.bucketOrder;
       const buckets = data.buckets;
 
       const loadedBuckets = {};
@@ -204,11 +203,8 @@ export const __updateCardLocate =
   (roomId, cardId, newBucketInfo) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { data } = await cardApi.editCardLocation(
-        roomId,
-        cardId,
-        newBucketInfo
-      );
+      await cardApi.editCardLocationSameBucket(roomId, cardId, newBucketInfo);
+
       dispatch(updateCardLocate(newBucketInfo));
     } catch (e) {
       console.log(`card 옮기기 실패! ${e}`);
@@ -231,7 +227,7 @@ export const __deleteCard =
   (bucketId, cardId, roomId) =>
   async (dispatch, getState, { history }) => {
     try {
-      const data = await cardApi.deleteCard(bucketId, cardId, roomId);
+      await cardApi.deleteCard(bucketId, cardId, roomId);
       // 새로운 cards
       const currentCards = getState().board.cards;
       const newCards = {};

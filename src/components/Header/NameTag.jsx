@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Text } from "../../elem";
+import flex from "../../themes/flex";
 
 const NameTag = ({ img, name }) => {
   return (
@@ -19,9 +20,8 @@ const NameTag = ({ img, name }) => {
 };
 
 const Wrapper = styled.div`
-  display: flex;
+  ${flex("start")}
   gap: 4px;
-  align-items: center;
   color: black;
 `;
 

@@ -7,6 +7,7 @@ import { setCurrent } from "../../redux/modules/date";
 
 // elem
 import { Button } from "../../elem";
+import flex from "../../themes/flex";
 
 const CalendarHeader = () => {
   const dispatch = useDispatch();
@@ -31,9 +32,7 @@ const CalendarHeader = () => {
 
 // 모두 임시스타일입니다.
 const Header = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${flex()};
   width: 100%;
   height: 40px;
   background-color: #f39c12;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,6 +8,8 @@ import DocList from "../feature/document/DocList";
 
 // elem
 import { Button } from "../elem";
+
+import flex from "../themes/flex";
 
 const DocBlank = () => {
   const history = useHistory();
@@ -40,7 +42,7 @@ const Container = styled.section`
   --padding: 40px;
   --minusHeight: calc(var(--header) + var(--padding) + 20px);
 
-  display: flex;
+  ${flex("start", "start")};
   gap: 20px;
   min-height: calc(100vh - var(--minusHeight));
 `;

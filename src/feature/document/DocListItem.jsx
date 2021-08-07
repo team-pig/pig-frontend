@@ -7,6 +7,7 @@ import Icon from "../../components/Icon";
 
 // api
 import { __deleteDoc } from "../../redux/modules/document";
+import flex from "../../themes/flex";
 
 const DocListItem = memo(({ doc }) => {
   const history = useHistory();
@@ -46,9 +47,7 @@ const IconBtn = styled.button`
   display: none;
 
   &:hover {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    ${flex()}
     height: 100%;
     padding: 10px 20px;
     margin-left: 10px;
@@ -60,8 +59,7 @@ const IconBtn = styled.button`
 `;
 
 const Item = styled.li`
-  display: flex;
-  align-items: center;
+  ${flex("start", "center")};
   height: 42px;
   padding: 10px 20px;
   transition: color 100ms ease-in-out;

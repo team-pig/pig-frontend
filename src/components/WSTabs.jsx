@@ -38,7 +38,7 @@ const WSTabs = ({ url }) => {
   };
 
   const toCalendar = () => {
-    history.push(`${url}/calendar`);
+    history.push(`${url}/timeline`);
   };
 
   const checkTab = (keyword) => {

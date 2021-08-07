@@ -15,6 +15,7 @@ import { Viewer } from "@toast-ui/react-editor";
 import { Text } from "../../elem";
 import Icon from "../../components/Icon";
 import { body_4 } from "../../themes/textStyle";
+import flex from "../../themes/flex";
 
 const DocViewer = () => {
   const history = useHistory();
@@ -121,9 +122,7 @@ const ViewerHeader = styled.div`
 `;
 
 const TitleBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  ${flex("between")}
   width: 100%;
   height: 40px;
   margin-bottom: 14px;
@@ -137,8 +136,7 @@ const Title = styled(Text)`
 
 const InfoBox = styled.div`
   ${body_4};
-  display: flex;
-  justify-content: flex-end;
+  ${flex("end")};
   flex-shrink: 0;
   color: var(--grey);
 `;

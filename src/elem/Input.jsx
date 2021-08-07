@@ -50,7 +50,7 @@ const Input = (props) => {
   }
 
   if (props.type === "date") {
-    return <Date type={props.type} />;
+    return <Date type={props.type} {...props} onChange={props._onChange} />;
   }
 };
 

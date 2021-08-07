@@ -9,6 +9,7 @@ import Icon from "../../components/Icon";
 import { scrollbar } from "../../themes/scrollbar";
 
 import { resetDocs, __getDocs } from "../../redux/modules/document";
+import DocListItem from "./DocListItem";
 
 const DocList = ({ docList }) => {
   const history = useHistory();
@@ -23,9 +24,6 @@ const DocList = ({ docList }) => {
 
   const toDocAdd = () => history.push(`/workspace/${roomId}/doc/add`);
 
-  const showDocDetail = (docId) =>
-    history.push(`/workspace/${roomId}/doc/${docId}`);
-
   return (
     <Container>
       <TitleBox>
@@ -37,10 +35,7 @@ const DocList = ({ docList }) => {
       </TitleBox>
       <List>
         {docList.map((doc, idx) => (
-          <Item key={idx} onClick={() => showDocDetail(doc.docId)}>
-            <Icon icon="document" size="20px" />
-            <Name>{doc.title}</Name>
-          </Item>
+          <DocListItem key={idx} doc={doc} />
         ))}
       </List>
     </Container>
@@ -75,27 +70,7 @@ const List = styled.ul`
   ${scrollbar}
   height: calc(100vh - var(--WSHeaderHeight) - var(--listTitleHeight));
   margin-bottom: -5vh;
-  padding: 0 var(--smMargin);
   overflow-y: auto;
-`;
-
-const Item = styled.li`
-  display: flex;
-  align-items: center;
-  padding: 10px 0;
-  cursor: pointer;
-`;
-
-const Name = styled.p`
-  width: 100%;
-  margin-left: 10px;
-  color: var(--darkgrey);
-  font-size: 1.6rem;
-  line-height: 2.2rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-decoration: none;
 `;
 
 export default DocList;

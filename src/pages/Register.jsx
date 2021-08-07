@@ -14,6 +14,7 @@ import { Button, Input, Text } from "../elem";
 // redux & api
 import { useDispatch } from "react-redux";
 import { __register } from "../redux/modules/user";
+import flex from "../themes/flex";
 
 const Register = () => {
   const history = useHistory();
@@ -118,9 +119,7 @@ const Register = () => {
 };
 
 const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  ${flex("start", "center", false)}
   width: 100%;
   margin-top: 100px;
 

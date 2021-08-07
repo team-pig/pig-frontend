@@ -1,0 +1,47 @@
+import React from "react";
+import styled from "styled-components";
+
+// component & elem
+import MemberStatus from "./MemberStatus";
+import Icon from "../../components/Icon";
+import flex from "../../themes/flex";
+import { scrollbar } from "../../themes/scrollbar";
+import { Text } from "../../elem";
+
+const Members = ({ members }) => {
+  const colorAry = ["blue", "mint", "yellow", "orange"];
+
+  return (
+    <Container>
+      <MembersHeader>
+        <Text type="body_1">팀원 현황</Text>
+        <IconBtn>
+          <Icon icon="plus-lg" color="#757575" />
+        </IconBtn>
+      </MembersHeader>
+      {members.map((member, idx) => (
+        <MemberStatus key={idx} member={member} color={colorAry[idx % 4]} />
+      ))}
+    </Container>
+  );
+};
+
+const Container = styled.section`
+  --header: 48px;
+  --project: 160px;
+  --minusHeight: calc(var(--header) + var(--project));
+
+  ${scrollbar};
+  height: calc(100vh - var(--minusHeight));
+  padding: 18px 20px;
+  overflow-y: auto;
+`;
+
+const MembersHeader = styled.div`
+  ${flex("between", "center")}
+  margin-bottom: 30px;
+`;
+
+const IconBtn = styled.button``;
+
+export default Members;

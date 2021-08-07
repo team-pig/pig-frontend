@@ -21,6 +21,7 @@ import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import { Button } from "../../elem";
 import { uploadFile } from "../../shared/uploadFile";
 import { head_4 } from "../../themes/textStyle";
+import flex from "../../themes/flex";
 
 const Writer = ({ targetDoc, setShowPrompt }) => {
   const history = useHistory();
@@ -156,9 +157,7 @@ const EditorContainer = styled.div`
 `;
 
 const BtnBox = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  ${flex("end")};
   gap: 20px;
   width: 50%;
   padding: 20px;

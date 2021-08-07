@@ -32,6 +32,11 @@ export const head_6 = css`
   line-height: 2.4rem;
 `;
 
+export const head_7 = css`
+  font-size: 2.4rem;
+  line-height: 2.4rem;
+`;
+
 export const sub_1 = css`
   font-size: 2rem;
   line-height: 2.6rem;

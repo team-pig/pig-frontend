@@ -7,6 +7,7 @@ import Icon from "../../components/Icon";
 import DocListItem from "./DocListItem";
 import { scrollbar } from "../../themes/scrollbar";
 import { Text } from "../../elem";
+import flex from "../../themes/flex";
 
 const DocList = ({ docList }) => {
   const history = useHistory();
@@ -40,9 +41,7 @@ const Container = styled.aside`
 `;
 
 const TitleBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  ${flex("between")}
   width: 100%;
   height: 60px;
   padding: 0 var(--smMargin);

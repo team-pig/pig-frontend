@@ -1,15 +1,22 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import Icon from "../Icon";
 import { __logout } from "../../redux/modules/user";
-import { button } from "../../themes/textStyle";
+
+// component
+import Icon from "../Icon";
 import NameTag from "./NameTag";
+
+// assets
 import TextLogo from "../../assets/logo/textlogo.svg";
 import MobileLogo from "../../assets/logo/logo.svg";
+
+// mixin
 import { mobileHidden, mobileOnly } from "../../themes/responsive";
+import { button } from "../../themes/textStyle";
+import flex from "../../themes/flex";
 
 const Header = () => {
   const history = useHistory();
@@ -88,9 +95,7 @@ const Container = styled.header`
 `;
 
 const InsideBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  ${flex("between")}
   max-width: 1440px;
   height: 100%;
   margin: 0 auto;
@@ -113,17 +118,14 @@ const MobileContainer = styled.div`
 `;
 
 const LogoBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${flex()}
   cursor: pointer;
 `;
 
 const Nav = styled.nav``;
 
 const List = styled.ul`
-  display: flex;
-  align-items: center;
+  ${flex("start")}
 `;
 
 const Item = styled.li`
@@ -135,8 +137,7 @@ const Item = styled.li`
 `;
 
 const Btns = styled.div`
-  display: flex;
-  align-items: center;
+  ${flex("center", "center")}
   margin-right: -24px;
 `;
 

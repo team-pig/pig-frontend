@@ -6,6 +6,7 @@ import Icon from "./Icon";
 
 // elem
 import { Text } from "../elem";
+import flex from "../themes/flex";
 
 const HelpBtns = () => {
   return (
@@ -23,20 +24,16 @@ const HelpBtns = () => {
 };
 
 const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  ${flex("between")}
 `;
 
 const LeftSide = styled.div`
-  display: flex;
-  align-items: center;
+  ${flex("start")}
   gap: 6px;
 `;
 
 const RightSide = styled.div`
-  display: flex;
-  align-items: center;
+  ${flex("start")}
 
   & > div:last-child::before {
     content: "";

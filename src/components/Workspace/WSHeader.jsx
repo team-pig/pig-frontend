@@ -7,6 +7,7 @@ import Icon from "../Icon";
 import WSTabs from "../WSTabs";
 import { Text } from "../../elem";
 import { useSelector } from "react-redux";
+import flex from "../../themes/flex";
 
 const WSHeader = ({ url }) => {
   const history = useHistory();
@@ -39,13 +40,11 @@ const WSHeader = ({ url }) => {
 };
 
 const Container = styled.header`
+  ${flex("between")}
   position: fixed;
   top: 0;
   left: 0;
   z-index: var(--indexHeader);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
   height: 48px;
   padding: 0 40px;
@@ -54,13 +53,11 @@ const Container = styled.header`
 `;
 
 const LeftSide = styled.div`
-  display: flex;
-  align-items: center;
+  ${flex("start", "center")}
 `;
 
 const RightSide = styled.div`
-  display: flex;
-  align-items: center;
+  ${flex("start", "center")}
 `;
 
 const TitleBox = styled.div`

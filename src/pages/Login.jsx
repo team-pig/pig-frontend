@@ -15,6 +15,7 @@ import { Button, Input, Text } from "../elem";
 import { useDispatch } from "react-redux";
 import { __login } from "../redux/modules/user";
 import { head_5 } from "../themes/textStyle";
+import flex from "../themes/flex";
 
 const Login = (props) => {
   const history = useHistory();
@@ -88,9 +89,7 @@ const Login = (props) => {
 };
 
 const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  ${flex("start", "center", false)}
   width: 100%;
   margin-top: 100px;
 

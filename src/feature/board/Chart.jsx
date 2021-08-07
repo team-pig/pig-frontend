@@ -64,7 +64,6 @@ const Chart = () => {
       const destinationBucketOrder = Array.from(sourceBucket.cardOrder);
       destinationBucketOrder.splice(source.index, 1);
       destinationBucketOrder.splice(destination.index, 0, draggableId);
-
       const newBucketInfo = {
         sourceBucketId: destinationBucket.bucketId,
         destinationBucketId: destinationBucket.bucketId,
@@ -80,10 +79,8 @@ const Chart = () => {
     if (sourceBucket !== destinationBucket) {
       const sourceBucketOrder = Array.from(sourceBucket.cardOrder);
       sourceBucketOrder.splice(source.index, 1);
-
       const destinationBucketOrder = Array.from(destinationBucket.cardOrder);
       destinationBucketOrder.splice(destination.index, 0, draggableId);
-
       const newBucketInfo = {
         sourceBucketId: sourceBucket.bucketId,
         destinationBucketId: destinationBucket.bucketId,
@@ -131,7 +128,6 @@ const Chart = () => {
       </>
     );
   }
-
   return (
     <>
       <AddBucketZone>
@@ -159,7 +155,6 @@ const Chart = () => {
                   const bucketCards = column.cardOrder.map(
                     (cardId) => cards[cardId]
                   );
-                  console.log(bucketCards);
                   return (
                     <Bucket
                       editTitleBucket={editTitleBucket}

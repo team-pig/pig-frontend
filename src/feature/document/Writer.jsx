@@ -50,11 +50,6 @@ const Writer = ({ targetDoc }) => {
   };
 
   const getContent = () => {
-    if (title.trim() === "") {
-      // 모달로 대체 필요
-      alert("제목을 입력해주세요.");
-    }
-
     const instance = editorRef.current.getInstance();
     // const content_html = instance.getHTML();
     const content_md = instance.getMarkdown();
@@ -63,11 +58,23 @@ const Writer = ({ targetDoc }) => {
   };
 
   const clickSave = () => {
+    if (!title || title.trim() === "") {
+      // 모달로 대체 필요
+      alert("제목을 입력해주세요.");
+      return;
+    }
+
     const docObj = getContent();
     dispatch(__createDoc(docObj, roomId));
   };
 
   const clickEdit = () => {
+    if (!title || title.trim() === "") {
+      // 모달로 대체 필요
+      alert("제목을 입력해주세요.");
+      return;
+    }
+
     const docObj = { ...getContent(), docId };
     dispatch(__editDoc(docObj, roomId));
   };

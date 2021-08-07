@@ -7,6 +7,7 @@ import {
   head_4,
   head_5,
   head_6,
+  head_7,
   sub_1,
   sub_2,
   body_1,
@@ -36,6 +37,8 @@ const Wrapper = styled.div`
         return `${head_5}`;
       case "head_6":
         return `${head_6}`;
+      case "head_7":
+        return `${head_7}`;
       case "sub_1":
         return `${sub_1}`;
       case "sub_2":
@@ -56,6 +59,7 @@ const Wrapper = styled.div`
         return;
     }
   }};
+  color: ${(props) => (props.color ? `var(--${props.color})` : `var(--black)`)};
 `;
 
 export default Text;

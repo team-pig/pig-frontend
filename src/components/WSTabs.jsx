@@ -22,10 +22,14 @@ const WSTabs = ({ url }) => {
   };
 
   const toDocs = async () => {
-    await dispatch(__getDocs(roomId));
-    if (docs.length > 0)
-      history.push(`${url}/doc/${docs[docs.length - 1].docId}`);
-    else history.push(`${url}/doc/blank`);
+    try {
+      await dispatch(__getDocs(roomId));
+    } catch (e) {
+      console.log(e);
+    } finally {
+      if (docs.length) history.push(`${url}/doc/${docs[0].docId}`);
+      else history.push(`${url}/doc/blank`);
+    }
   };
 
   const toBoard = () => {

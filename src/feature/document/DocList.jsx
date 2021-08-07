@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 // elem
 import Icon from "../../components/Icon";
@@ -9,18 +8,9 @@ import DocListItem from "./DocListItem";
 import { scrollbar } from "../../themes/scrollbar";
 import { Text } from "../../elem";
 
-// redux & api
-import { resetDocs, __getDocs } from "../../redux/modules/document";
-
 const DocList = ({ docList }) => {
   const history = useHistory();
   const { roomId } = useParams();
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(__getDocs(roomId));
-  }, []);
 
   const toDocAdd = () => history.push(`/workspace/${roomId}/doc/add`);
 
@@ -66,7 +56,6 @@ const PlusBtn = styled.button`
 const List = styled.ul`
   --WSHeaderHeight: 48px;
   --listTitleHeight: 60px;
-
   ${scrollbar}
   height: calc(100vh - var(--WSHeaderHeight) - var(--listTitleHeight));
   margin-bottom: -5vh;

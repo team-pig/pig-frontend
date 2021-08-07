@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
@@ -8,7 +8,7 @@ import Icon from "../../components/Icon";
 // api
 import { __deleteDoc } from "../../redux/modules/document";
 
-const DocListItem = ({ doc }) => {
+const DocListItem = memo(({ doc }) => {
   const history = useHistory();
   const { roomId, docId } = useParams();
 
@@ -35,7 +35,7 @@ const DocListItem = ({ doc }) => {
       </Item>
     </>
   );
-};
+});
 
 const RemoveIcon = styled(Icon)`
   color: var(--darkgrey);

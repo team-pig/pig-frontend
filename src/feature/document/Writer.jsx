@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import Prism from "prismjs";
 
@@ -31,6 +31,8 @@ const Writer = ({ targetDoc, setShowPrompt }) => {
   const [title, setTitle] = useState(
     targetDoc && targetDoc.title ? targetDoc.title : ""
   );
+
+  const docs = useSelector((state) => state.document.docList);
 
   // editor 옵션 설정
   const editorOpt = {
@@ -85,7 +87,9 @@ const Writer = ({ targetDoc, setShowPrompt }) => {
   const clickCancle = () => {
     targetDoc
       ? history.push(`/workspace/${roomId}/doc/${docId}`)
-      : history.replace(`/workspace/${roomId}/doc/blank`);
+      : history.replace(
+          `/workspace/${roomId}/doc/${docs ? docs[0].docId : "blank"}`
+        );
   };
 
   return (

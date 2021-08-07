@@ -1,13 +1,10 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 // component
 import DocList from "../feature/document/DocList";
-
-// redux
-import { __getDocs } from "../redux/modules/document";
 
 // elem
 import { Button } from "../elem";
@@ -16,13 +13,7 @@ const DocBlank = () => {
   const history = useHistory();
   const { roomId } = useParams();
 
-  const dispatch = useDispatch();
-
   const docList = useSelector((state) => state.document.docList) || [];
-
-  useEffect(() => {
-    dispatch(__getDocs(roomId));
-  }, []);
 
   if (docList.length > 0) {
     history.replace(

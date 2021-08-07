@@ -14,9 +14,11 @@ const UPDATE_BUCKET_TITLE = "board/UPDATE_BUCKET_TITLE";
 const DELETE_BUCKET = "board/DELETE_BUCKET";
 
 const LOAD_CARD = "board/LOAD_CARD";
+const LOAD_CARD_BY_ID = "board/LOAD_CARD_BY_ID";
 const CREATE_CARD = "board/CREATE_CARD";
 const UPDATE_CARD_LOCATE = "board/UPDATE_CARD_LOCATE";
 const UPDATE_CARD_LOCATE_OTHER_BUCKET = "board/UPDATE_CARD_LOCATE_OTHER_BUCKET";
+const UPDATE_CARD_INFOS = "board/UPDATE_CARD_INFOS";
 const DELETE_CARD = "board/DELETE_CARD";
 
 /**
@@ -47,6 +49,10 @@ const deleteBucket = createAction(DELETE_BUCKET, (bucketId) => ({ bucketId }));
 
 const loadCard = createAction(LOAD_CARD, (cards) => ({ cards }));
 
+export const loadCardById = createAction(LOAD_CARD_BY_ID, (card) => ({
+  card,
+}));
+
 const createCard = createAction(
   CREATE_CARD,
   (newCard, newCardOrder, bucketId) => ({
@@ -55,14 +61,24 @@ const createCard = createAction(
     bucketId,
   })
 );
-const updateCardLocate = createAction(UPDATE_CARD_LOCATE, (newBucketInfo) => ({
-  newBucketInfo,
-}));
+
+const updateCardLocate = createAction(
+  UPDATE_CARD_LOCATE,
+  (cardId, newBucketInfo) => ({
+    cardId,
+    newBucketInfo,
+  })
+);
 
 const updateCardLocateOtherBucket = createAction(
   UPDATE_CARD_LOCATE_OTHER_BUCKET,
   (cardId, newBucketInfo) => ({ cardId, newBucketInfo })
 );
+
+const editCardInfos = createAction(UPDATE_CARD_INFOS, (paramInfos) => ({
+  paramInfos,
+}));
+
 const deleteCard = createAction(
   DELETE_CARD,
   (bucketId, newCardOrder, newCards) => ({
@@ -81,29 +97,26 @@ const deleteCard = createAction(
  */
 
 // 버킷조회
-export const __loadBucket =
-  (roomId) =>
-  async (dispatch, getState, { history }) => {
-    try {
-      const { data } = await bucketApi.getBuckets(roomId);
-      const loadedBucketOrder = data.bucketOrder.bucketOrder;
-      const buckets = data.buckets;
+export const __loadBucket = (roomId) => async (dispatch) => {
+  try {
+    const { data } = await bucketApi.getBuckets(roomId);
+    const loadedBucketOrder = data.bucketOrder.bucketOrder;
+    const buckets = data.buckets;
 
-      const loadedBuckets = {};
-      buckets.forEach((bucket) => {
-        loadedBuckets[bucket.bucketId] = bucket;
-      });
+    const loadedBuckets = {};
+    buckets.forEach((bucket) => {
+      loadedBuckets[bucket.bucketId] = bucket;
+    });
 
-      dispatch(loadBucket(loadedBuckets, loadedBucketOrder));
-    } catch (e) {
-      console.log(`버킷 불러오기 실패 ${e}`);
-    }
-  };
+    dispatch(loadBucket(loadedBuckets, loadedBucketOrder));
+  } catch (e) {
+    console.log(`버킷 불러오기 실패 ${e}`);
+  }
+};
 
 // 버킷생성
 export const __createBucket =
-  (roomId, bucketName) =>
-  async (dispatch, getState, { history }) => {
+  (roomId, bucketName) => async (dispatch, getState) => {
     try {
       const { data } = await bucketApi.createBucket(roomId, bucketName);
 
@@ -122,8 +135,7 @@ export const __createBucket =
 
 // 버킷수정
 export const __updateBucket =
-  (roomId, bucketId, bucketName, bucketOrder) =>
-  async (dispatch, getState, { history }) => {
+  (roomId, bucketId, bucketName, bucketOrder) => async (dispatch) => {
     try {
       await bucketApi.editBucketAll(roomId, bucketId, bucketName, bucketOrder);
       dispatch(updateBucket(bucketOrder));
@@ -134,8 +146,7 @@ export const __updateBucket =
 
 // 버킷이름수정
 export const __updateBucketTitle =
-  (roomId, bucketId, newBucketTitle) =>
-  async (dispatch, getState, { history }) => {
+  (roomId, bucketId, newBucketTitle) => async (dispatch) => {
     try {
       await bucketApi.editBucketTitle(roomId, bucketId, newBucketTitle);
       dispatch(updateBucketTitle(bucketId, newBucketTitle));
@@ -144,8 +155,7 @@ export const __updateBucketTitle =
 
 // 버킷삭제
 export const __deleteBucket =
-  (roomId, bucketId) =>
-  async (dispatch, getState, { history }) => {
+  (roomId, bucketId) => async (dispatch, getState) => {
     try {
       await bucketApi.deleteBucket(roomId, bucketId);
       const currentColumnOrder = getState().board.columnOrder;
@@ -173,14 +183,22 @@ export const __loadCard = (roomId) => async (dispatch) => {
   } catch (e) {}
 };
 
+// 카드상세조회
+export const __loadCardById = (roomId, cardId) => async (dispatch) => {
+  try {
+    const { data } = await cardApi.getCardById(roomId, cardId);
+    dispatch(loadCardById(data));
+  } catch (e) {
+    console.log(`카드 불러오기 실패 ${e}`);
+  }
+};
+
 // 카드생성
 export const __createCard =
   (roomId, bucketId, cardTitle) =>
   async (dispatch, getState, { history }) => {
     try {
       const { data } = await cardApi.createCard(roomId, bucketId, cardTitle);
-      console.log(data);
-
       const newCard = {
         cardId: data.cardId,
         bucketId,
@@ -200,12 +218,22 @@ export const __createCard =
 
 // 같은 버킷에서 카드 위치 수정
 export const __updateCardLocate =
-  (roomId, cardId, newBucketInfo) =>
+  (roomId, cardId, buckets) =>
   async (dispatch, getState, { history }) => {
     try {
-      await cardApi.editCardLocationSameBucket(roomId, cardId, newBucketInfo);
+      const curBuckets = getState().board.columns;
+      const tempBucket = {};
+      for (const bucket in curBuckets) {
+        tempBucket[bucket] = curBuckets[bucket].cardOrder;
+      }
 
-      dispatch(updateCardLocate(newBucketInfo));
+      const paramBuckets = {
+        ...tempBucket,
+        [buckets.destinationBucketId]: buckets.destinationBucketOrder,
+      };
+
+      await cardApi.editCardLocation(roomId, paramBuckets);
+      dispatch(updateCardLocate(cardId, buckets));
     } catch (e) {
       console.log(`card 옮기기 실패! ${e}`);
     }
@@ -213,12 +241,43 @@ export const __updateCardLocate =
 
 // 다른 버킷으로 카드 위치 수정
 export const __updateCardLocateOtherBucket =
-  (roomId, cardId, newBucketInfo) => async (dispatch) => {
+  (roomId, cardId, buckets) => async (dispatch, getState) => {
     try {
-      await cardApi.editCardLocation(roomId, cardId, newBucketInfo);
-      dispatch(updateCardLocateOtherBucket(cardId, newBucketInfo));
+      const curBuckets = getState().board.columns;
+      const tempBucket = {};
+      for (const bucket in curBuckets) {
+        tempBucket[bucket] = curBuckets[bucket].cardOrder;
+      }
+
+      const paramBuckets = {
+        ...tempBucket,
+        [buckets.destinationBucketId]: buckets.destinationBucketOrder,
+        [buckets.sourceBucketId]: buckets.sourceBucketOrder,
+      };
+
+      await cardApi.editCardLocation(roomId, paramBuckets);
+      dispatch(updateCardLocateOtherBucket(cardId, buckets));
     } catch (e) {
       console.log(`card 옮기기 실패! ${e}`);
+    }
+  };
+
+// 카드 정보 수정
+export const __editCardInfos =
+  (roomId, cardId, cardInfos) => async (dispatch) => {
+    try {
+      const paramInfos = { cardId };
+      for (const info in cardInfos) {
+        if (cardInfos[info] !== "") {
+          paramInfos[info] = cardInfos[info];
+        }
+      }
+
+      await cardApi.editCardInfo(roomId, paramInfos);
+      console.log(paramInfos);
+      dispatch(editCardInfos(paramInfos));
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -250,6 +309,8 @@ export const __deleteCard =
  * Initial State
  */
 const initialState = {
+  allMembers: [],
+  card: {},
   cards: null,
   columns: null,
   columnOrder: null,
@@ -300,6 +361,12 @@ export const board = handleActions(
         draft.cards = payload.cards;
       }),
 
+    [LOAD_CARD_BY_ID]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.card = payload.card.result;
+        draft.allMembers = payload.card.allMembers;
+      }),
+
     [CREATE_CARD]: (state, { payload }) =>
       produce(state, (draft) => {
         const { newCard, newCardOrder, bucketId } = payload;
@@ -322,12 +389,16 @@ export const board = handleActions(
           sourceBucketOrder,
           destinationBucketOrder,
         } = payload.newBucketInfo;
-        console.log(sourceBucketOrder);
-        console.log(destinationBucketOrder);
-
         draft.columns[destinationBucketId].cardOrder = destinationBucketOrder;
         draft.columns[sourceBucketId].cardOrder = sourceBucketOrder;
         draft.cards[payload.cardId].bucketId = destinationBucketId;
+      }),
+
+    [UPDATE_CARD_INFOS]: (state, { payload }) =>
+      produce(state, (draft) => {
+        console.log(payload);
+        const newCard = { ...state.card, ...payload.paramInfos };
+        draft.card = newCard;
       }),
 
     [DELETE_CARD]: (state, { payload }) =>

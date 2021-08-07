@@ -8,23 +8,14 @@ export const cardApi = {
 
   getCardById: (roomId, cardId) =>
     instance.get(`/room/${roomId}/card/${cardId}`),
-  // editCardContents: (roomId) => instance.patch(`/room/${roomId}/card`, {}),
 
-  editCardLocation: (roomId, cardId, newBucketInfo) =>
+  editCardLocation: (roomId, newBucketInfo) =>
     instance.patch(`/room/${roomId}/cardLocation`, {
-      cardId,
-      sourceBucket: newBucketInfo.sourceBucketId,
-      sourceBucketOrder: newBucketInfo.sourceBucketOrder,
-      destinationBucket: newBucketInfo.destinationBucketId,
-      destinationBucketOrder: newBucketInfo.destinationBucketOrder,
+      cardOrder: newBucketInfo,
     }),
 
-  editCardLocationSameBucket: (roomId, cardId, newBucketInfo) =>
-    instance.patch(`/room/${roomId}/cardLocation`, {
-      cardId,
-      destinationBucket: newBucketInfo.destinationBucketId,
-      destinationBucketOrder: newBucketInfo.destinationBucketOrder,
-    }),
+  editCardInfo: (roomId, cardInfos) =>
+    instance.patch(`/room/${roomId}/card`, cardInfos),
 
   deleteCard: (bucketId, cardId, roomId) =>
     instance.delete(`/room/${roomId}/card`, {

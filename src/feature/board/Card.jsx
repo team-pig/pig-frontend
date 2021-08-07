@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
-import { Input, Text, Button } from "../../elem";
+
+// elem & compo
+import { Button } from "../../elem";
 import Todos from "./Todos";
 import CardModal from "./CardModal";
-import Textarea from "../../elem/Textarea";
+import ModalForms from "./ModalForms";
 
 const Card = ({ card, index, deleteCardHandler }) => {
   const [showModal, setShowModal] = useState(false);
+
   return (
     <>
       <Draggable draggableId={card.cardId} index={index}>
@@ -28,11 +31,9 @@ const Card = ({ card, index, deleteCardHandler }) => {
           </Flex>
         )}
       </Draggable>
+
       <CardModal showModal={showModal} setShowModal={setShowModal}>
-        <Text>{card.cardTitle}</Text>
-        <Input type="date" />
-        <Input type="date" />
-        <Textarea />
+        <ModalForms cardId={card.cardId} />
         <Todos cardId={card.cardId} />
         <Button
           _onClick={() => {

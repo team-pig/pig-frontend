@@ -1,19 +1,31 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 // elem
 import { Text } from "../elem";
 
+// api
+import { __getDocs } from "../redux/modules/document";
+
 const WSTabs = ({ url }) => {
   const history = useHistory();
+  const { roomId } = useParams();
+
+  const docs = useSelector((state) => state.document.docList);
+
+  const dispatch = useDispatch();
 
   const toMain = () => {
     history.push(`${url}`);
   };
 
-  const toDocs = () => {
-    history.push(`${url}/doc/blank`);
+  const toDocs = async () => {
+    await dispatch(__getDocs(roomId));
+    if (docs.length > 0)
+      history.push(`${url}/doc/${docs[docs.length - 1].docId}`);
+    else history.push(`${url}/doc/blank`);
   };
 
   const toBoard = () => {

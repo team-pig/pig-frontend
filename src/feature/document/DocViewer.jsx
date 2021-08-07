@@ -4,7 +4,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // redux & api
-import { __deleteDoc } from "../../redux/modules/document";
 import { docApi } from "../../api/docApi";
 
 // toast UI viewer
@@ -55,11 +54,6 @@ const DocViewer = () => {
     }
   };
 
-  const clickDelete = () => {
-    // 정말 삭제할거냐는 안내 모달 필요
-    dispatch(__deleteDoc(docId, roomId));
-  };
-
   return (
     <Container>
       <ViewerHeader>
@@ -69,7 +63,6 @@ const DocViewer = () => {
           <IconBtn onClick={() => toDocEdit(docId)}>
             <Icon icon="edit" size="24px" color="#757575" />
           </IconBtn>
-          <button onClick={clickDelete}>삭제아이콘</button>
         </TitleBox>
         <InfoBox>
           마지막 편집

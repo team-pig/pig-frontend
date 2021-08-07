@@ -4,12 +4,13 @@ import { useHistory, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 // elem
-import { Text } from "../../elem";
 import Icon from "../../components/Icon";
-import { scrollbar } from "../../themes/scrollbar";
-
-import { resetDocs, __getDocs } from "../../redux/modules/document";
 import DocListItem from "./DocListItem";
+import { scrollbar } from "../../themes/scrollbar";
+import { Text } from "../../elem";
+
+// redux & api
+import { resetDocs, __getDocs } from "../../redux/modules/document";
 
 const DocList = ({ docList }) => {
   const history = useHistory();

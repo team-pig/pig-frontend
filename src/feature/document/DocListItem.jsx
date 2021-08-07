@@ -1,15 +1,26 @@
 import React from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
 import Icon from "../../components/Icon";
+
+// api
+import { __deleteDoc } from "../../redux/modules/document";
 
 const DocListItem = ({ doc }) => {
   const history = useHistory();
   const { roomId, docId } = useParams();
 
+  const dispatch = useDispatch();
+
   const showDocDetail = (docId) =>
     history.push(`/workspace/${roomId}/doc/${docId}`);
+
+  const clickDelete = () => {
+    // 정말 삭제할거냐는 안내 모달 필요
+    dispatch(__deleteDoc(docId, roomId));
+  };
 
   return (
     <>
@@ -18,7 +29,7 @@ const DocListItem = ({ doc }) => {
           <Icon icon="document" size="20px" />
         </IconBox>
         <Name>{doc.title}</Name>
-        <IconBtn>
+        <IconBtn onClick={clickDelete}>
           <RemoveIcon icon="remove" size="20px" />
         </IconBtn>
       </Item>
@@ -33,14 +44,15 @@ const RemoveIcon = styled(Icon)`
 
 const IconBtn = styled.button`
   display: none;
-  height: 100%;
-  padding: 10px 20px;
-  margin-right: -20px;
 
   &:hover {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
+    padding: 10px 20px;
+    margin-left: 10px;
+
     ${RemoveIcon} {
       color: var(--notice);
     }

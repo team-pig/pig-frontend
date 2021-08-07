@@ -36,9 +36,13 @@ const DocBlank = () => {
 
 // 임시 스타일
 const Container = styled.section`
+  --header: 48px;
+  --padding: 40px;
+  --minusHeight: calc(var(--header) + var(--padding) + 20px);
+
   display: flex;
   gap: 20px;
-  padding-top: 20px;
+  min-height: calc(100vh - var(--minusHeight));
 `;
 
 const Content = styled.section`

@@ -7,6 +7,7 @@ import WSRouter from "../shared/WSRouter";
 
 // api
 import { __getDocs } from "../redux/modules/document";
+import WSTemplate from "../components/Workspace/WSTemplate";
 
 const Workspace = (props) => {
   let { path, url } = useRouteMatch();
@@ -24,14 +25,12 @@ const Workspace = (props) => {
   return (
     <>
       <div>
-        <div>
-          <WSHeader url={url} />
-          <section>
-            <WSRouter path={path} />
-          </section>
-        </div>
-        {/* <RoomSideBar /> */}
+        <WSHeader url={url} />
+        <WSTemplate>
+          <WSRouter path={path} />
+        </WSTemplate>
       </div>
+      {/* <RoomSideBar /> */}
     </>
   );
 };

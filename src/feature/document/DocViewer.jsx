@@ -83,7 +83,7 @@ const DocViewer = () => {
     <Container>
       <ViewerHeader>
         <TitleBox>
-          <Text type="head_4">{current.title}</Text>
+          <Title type="head_4">{current.title}</Title>
           {/* 임시 적용 아이콘 => 변경 예정 */}
           <IconBtn onClick={() => toDocEdit(docId)}>
             <Icon icon="edit" size="24px" color="#757575" />
@@ -105,7 +105,11 @@ const DocViewer = () => {
 
 // 임시 스타일
 const Container = styled.section`
+  --header: 48px;
+  --minusHeight: calc(var(--header));
+
   display: flex;
+  min-height: calc(100vh - var(--minusHeight));
   flex-direction: column;
   width: calc(100% - 260px);
   padding: var(--smMargin);
@@ -125,10 +129,17 @@ const TitleBox = styled.div`
   margin-bottom: 14px;
 `;
 
+const Title = styled(Text)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 const InfoBox = styled.div`
   ${body_4};
   display: flex;
   justify-content: flex-end;
+  flex-shrink: 0;
   color: var(--grey);
 `;
 

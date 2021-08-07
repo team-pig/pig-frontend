@@ -13,7 +13,7 @@ const NameTag = ({ img, name }) => {
         }
       />
       {/* <ImgBox src={img} /> */}
-      <Text type="gnb">{name}</Text>
+      <Nickname type="gnb">{name}</Nickname>
     </Wrapper>
   );
 };
@@ -31,6 +31,12 @@ const ImgBox = styled.div`
   background-image: ${(props) => `url(${props.src})`};
   background-size: cover;
   border-radius: 50%;
+`;
+
+const Nickname = styled(Text)`
+  &::first-letter {
+    text-transform: uppercase;
+  }
 `;
 
 export default NameTag;

@@ -11,6 +11,7 @@ import { __getDocs } from "../redux/modules/document";
 
 const WSTabs = ({ url }) => {
   const history = useHistory();
+
   const { roomId } = useParams();
 
   const docs = useSelector((state) => state.document.docList);
@@ -40,19 +41,38 @@ const WSTabs = ({ url }) => {
     history.push(`${url}/calendar`);
   };
 
+  const checkTab = (keyword) => {
+    if (history.location.pathname.includes(keyword) === true) return true;
+    else return false;
+  };
+
+  const checkMain = () => {
+    if (!checkTab("doc") && !checkTab("board") && !checkTab("timeline"))
+      return true;
+    else return false;
+  };
+
   return (
     <List>
       <Item onClick={toMain}>
-        <Text type="body_1">메인</Text>
+        <MenuText type="body_1" here={checkMain()}>
+          메인
+        </MenuText>
       </Item>
       <Item onClick={toDocs}>
-        <Text type="body_1">문서</Text>
+        <MenuText type="body_1" here={checkTab("doc")}>
+          문서
+        </MenuText>
       </Item>
       <Item onClick={toBoard}>
-        <Text type="body_1">보드</Text>
+        <MenuText type="body_1" here={checkTab("board")}>
+          보드
+        </MenuText>
       </Item>
       <Item onClick={toCalendar}>
-        <Text type="body_1">일정</Text>
+        <MenuText type="body_1" here={checkTab("timeline")}>
+          일정
+        </MenuText>
       </Item>
     </List>
   );
@@ -63,7 +83,7 @@ const List = styled.nav`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 48px;
 `;
 
 const Item = styled.button`
@@ -71,6 +91,36 @@ const Item = styled.button`
   padding: 0 39px;
   color: var(--darkgrey);
   cursor: pointer;
+`;
+
+const MenuText = styled(Text)`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: ${(props) => (props.here ? "var(--main);" : "var(--darkgrey);")};
+
+  &::after {
+    position: absolute;
+    left: 0;
+    bottom: 0.5px;
+    content: "";
+    height: 2px;
+    width: 100%;
+    border-radius: 4px;
+    background-color: ${(props) =>
+      props.here ? "var(--main)" : "transparent"};
+    transition: color 150ms ease-in-out, background-color 150ms ease-in-out;
+  }
+
+  &:hover {
+    color: var(--main);
+
+    &::after {
+      background-color: var(--main);
+    }
+  }
 `;
 
 export default WSTabs;

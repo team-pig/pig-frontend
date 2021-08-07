@@ -67,7 +67,7 @@ const DocViewer = () => {
           <Text type="head_4">{current.title}</Text>
           {/* 임시 적용 아이콘 => 변경 예정 */}
           <IconBtn onClick={() => toDocEdit(docId)}>
-            <Icon icon="setting" size="24px" />
+            <Icon icon="edit" size="24px" color="#757575" />
           </IconBtn>
           <button onClick={clickDelete}>삭제아이콘</button>
         </TitleBox>

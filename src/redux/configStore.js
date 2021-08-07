@@ -1,5 +1,7 @@
 // redux
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+
 import user from "./modules/user";
 import room from "./modules/room";
 import image from "./modules/image";
@@ -36,5 +38,11 @@ if (env === "development") {
   const { logger } = require("redux-logger");
   middlewares.push(logger);
 }
-const store = createStore(rootReducer, applyMiddleware(...middlewares));
+
+const enhancer =
+  env === "development"
+    ? composeWithDevTools(applyMiddleware(...middlewares))
+    : compose(applyMiddleware(...middlewares));
+
+const store = createStore(rootReducer, enhancer);
 export default store;

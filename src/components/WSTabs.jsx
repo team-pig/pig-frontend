@@ -23,7 +23,7 @@ const WSTabs = ({ url }) => {
 
   const toDocs = () => {
     dispatch(__getDocs(roomId));
-    if (docs.length) history.push(`${url}/doc/${docs[docs.length - 1].docId}`);
+    if (docs.length) history.push(`${url}/doc/${docs[0].docId}`);
     else history.push(`${url}/doc/blank`);
   };
 

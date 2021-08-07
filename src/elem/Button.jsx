@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
+// rest 종류 : size(width_숫자만)
 const Button = ({ shape, children, ...rest }) => {
   switch (shape) {
     case "green-fill":
@@ -37,7 +38,18 @@ const Button = ({ shape, children, ...rest }) => {
 };
 
 const BtnDefault = css`
-  width: 100%;
+  ${(props) => {
+    const { size } = props;
+    return css`
+      width: ${size ? `${size}px` : "100%"};
+      height: 50px; // 변경 가능성 있음
+      border: 1px solid ${(props) => `var(--${props.color})`};
+      font-size: 1.6rem;
+      font-weight: bold;
+      line-height: 2.2rem;
+      transition: color 300ms ease-in-out, background-color 300ms ease-in-out;
+    `;
+  }}
   height: 50px; // 변경 가능성 있음
   border: 1px solid ${(props) => `var(--${props.color})`};
   font-size: 1.6rem;

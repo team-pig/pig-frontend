@@ -20,7 +20,6 @@ const DocList = ({ docList }) => {
 
   useEffect(() => {
     dispatch(__getDocs(roomId));
-    return () => dispatch(resetDocs());
   }, []);
 
   const toDocAdd = () => history.push(`/workspace/${roomId}/doc/add`);

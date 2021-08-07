@@ -6,9 +6,12 @@ import NameTag from "../Header/NameTag";
 import Icon from "../Icon";
 import WSTabs from "../WSTabs";
 import { Text } from "../../elem";
+import { useSelector } from "react-redux";
 
 const WSHeader = ({ url }) => {
   const history = useHistory();
+
+  const user = useSelector((state) => state.user.user);
 
   return (
     <Container>
@@ -28,7 +31,7 @@ const WSHeader = ({ url }) => {
           </HeaderBtn>
         </Icons>
         <HeaderBtn>
-          <NameTag name="Anna" />
+          <NameTag name={user.nickname} />
         </HeaderBtn>
       </RightSide>
     </Container>

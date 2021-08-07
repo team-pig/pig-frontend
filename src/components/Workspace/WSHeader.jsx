@@ -36,12 +36,17 @@ const WSHeader = ({ url }) => {
 };
 
 const Container = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--indexHeader);
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: 48px;
   padding: 0 40px;
+  background-color: var(--white);
   border-bottom: 1px solid var(--line);
 `;
 

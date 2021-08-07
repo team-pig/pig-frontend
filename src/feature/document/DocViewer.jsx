@@ -105,7 +105,11 @@ const DocViewer = () => {
 
 // 임시 스타일
 const Container = styled.section`
+  --header: 48px;
+  --minusHeight: calc(var(--header));
+
   display: flex;
+  min-height: calc(100vh - var(--minusHeight));
   flex-direction: column;
   width: calc(100% - 260px);
   padding: var(--smMargin);

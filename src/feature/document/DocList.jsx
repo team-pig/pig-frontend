@@ -35,7 +35,7 @@ const DocList = ({ docList }) => {
 const Container = styled.aside`
   --WSHeaderHeight: 48px;
   width: 260px;
-  max-height: calc(100vh - var(--WSHeaderHeight));
+  max-height: calc(100vh - var(--WSHeaderHeight) + 20px);
   border-right: 1px solid var(--line);
 `;
 
@@ -58,7 +58,6 @@ const List = styled.ul`
   --listTitleHeight: 60px;
   ${scrollbar}
   height: calc(100vh - var(--WSHeaderHeight) - var(--listTitleHeight));
-  margin-bottom: -5vh;
   overflow-y: auto;
 `;
 

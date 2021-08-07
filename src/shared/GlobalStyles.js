@@ -4,7 +4,6 @@ import reset from "styled-reset";
 const GlobalStyles = createGlobalStyle`
 	${reset};
 
-
     :root {
 			/* color */
     --main: #4D6C56;
@@ -20,6 +19,7 @@ const GlobalStyles = createGlobalStyle`
 		--indexHeader : 30;
 
 		/* margin */
+		--xsMargin: 10px;
 		--smMargin: 20px;
 		--mdMargin: 40px;
   };
@@ -32,9 +32,13 @@ const GlobalStyles = createGlobalStyle`
 		margin : 0;
 		padding: 0;
 		font-size:62.5%;
+		box-sizing: border-box;
 	}
 
 	body{
+		position: relative;
+		margin: 0;
+		padding: 0;
 		font-family: 'NanumSquareRound',sans-serif;
 		/* font-family:--apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;  */
 	}

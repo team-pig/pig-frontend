@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 
 // component
 import Writer from "../feature/document/Writer";
+
+// redux
 import { resetDoc, __getDoc } from "../redux/modules/document";
 
 const DocEdit = () => {
@@ -12,7 +14,12 @@ const DocEdit = () => {
 
   const { docId, roomId } = useParams();
 
-  const targetDoc = useSelector((state) => state.document.currentDoc);
+  // 기존 수정 document 정보가 남아있는 경우를 대비하여 docId 비교
+  const targetDoc = useSelector((state) => {
+    const current = state.document.currentDoc;
+    if (docId && current && current.docId === docId) return current;
+    else return null;
+  });
 
   useEffect(() => {
     dispatch(__getDoc(roomId, docId));

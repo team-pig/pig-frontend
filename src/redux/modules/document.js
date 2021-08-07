@@ -160,8 +160,10 @@ const document = handleActions(
       produce(state, (draft) => {
         const { docId, title, content } = action.payload.doc;
         const idx = draft.docList.findIndex((doc) => doc.docId === docId);
-        draft.docList[idx].title = title;
-        draft.docList[idx].content = content;
+        if (idx !== -1) {
+          draft.docList[idx].title = title;
+          draft.docList[idx].content = content;
+        }
       }),
     [DELETE_DOC]: (state, action) =>
       produce(state, (draft) => {

@@ -28,7 +28,9 @@ const Writer = ({ targetDoc }) => {
 
   const dispatch = useDispatch();
   const editorRef = useRef();
-  const [title, setTitle] = useState(targetDoc ? targetDoc.title : "");
+  const [title, setTitle] = useState(
+    targetDoc && targetDoc.title ? targetDoc.title : ""
+  );
 
   // editor 옵션 설정
   const editorOpt = {

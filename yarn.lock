@@ -9429,6 +9429,14 @@ react-beautiful-dnd@^13.1.0:
     redux "^4.0.4"
     use-memo-one "^1.1.1"
 
+react-beforeunload@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/react-beforeunload/-/react-beforeunload-2.5.1.tgz#9e9592bc9a27fa1325b650a1e423be42312e2f30"
+  integrity sha512-X0PROB2sOTfue/8DEMIEIbfVWHlsLYuVOQ1s9StYOkrqocWX7wVJ1SErYXNw0I6zT1vTALm6oxsI7SO2B7AoGw==
+  dependencies:
+    prop-types "^15.7.2"
+    tiny-invariant "^1.1.0"
+
 react-dev-utils@^11.0.3:
   version "11.0.4"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.4.tgz#a7ccb60257a1ca2e0efe7a83e38e6700d17aa37a"
@@ -11042,7 +11050,7 @@ timsort@^0.3.0:
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
-tiny-invariant@^1.0.2, tiny-invariant@^1.0.6:
+tiny-invariant@^1.0.2, tiny-invariant@^1.0.6, tiny-invariant@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.1.0.tgz#634c5f8efdc27714b7f386c35e6760991d230875"
   integrity sha512-ytxQvrb1cPc9WBEI/HSeYYoGD0kWnGEOR8RY6KomWLBVhqz0RgTwVO9dLrGz7dC+nN9llyI7OKAgRq8Vq4ZBSw==

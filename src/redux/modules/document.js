@@ -35,11 +35,13 @@ export const __getDocs =
         return;
       }
 
-      const newDocs = docs.map((doc) => ({
-        title: doc.title,
-        content: doc.content,
-        docId: doc.documentId,
-      }));
+      const newDocs = docs.map((doc) => {
+        const { documentId: docId, ...rest } = doc;
+        return {
+          docId,
+          ...rest,
+        };
+      });
 
       dispatch(getDocs(newDocs));
     } catch (e) {
@@ -54,8 +56,8 @@ export const __getDoc =
       const { data } = await docApi.getDoc(roomId, docId);
 
       if (data.ok) {
-        const { content, documentId: docId, title } = data.result;
-        const docObj = { docId, title, content };
+        const { documentId: docId, ...rest } = data.result;
+        const docObj = { docId, ...rest };
         dispatch(getDoc(docObj));
       }
     } catch (e) {

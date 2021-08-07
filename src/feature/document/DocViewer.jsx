@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
 
 // redux & api
 import { docApi } from "../../api/docApi";
@@ -21,10 +22,13 @@ const DocViewer = () => {
 
   const dispatch = useDispatch();
 
-  const [current, setCurrent] = useState({
+  const initial = {
     title: "",
     content: "",
-  });
+    nickname: "",
+  };
+
+  const [current, setCurrent] = useState(initial);
 
   // 최적화 반드시 필요✨
   const currentDoc = useSelector((state) => {
@@ -33,10 +37,7 @@ const DocViewer = () => {
   });
 
   useEffect(() => {
-    setCurrent({
-      title: currentDoc ? currentDoc.title : "",
-      content: currentDoc ? currentDoc.content : "",
-    });
+    setCurrent(currentDoc ? currentDoc : initial);
   }, [currentDoc, dispatch]);
 
   const viewerOpt = {
@@ -54,6 +55,30 @@ const DocViewer = () => {
     }
   };
 
+  // 현재 시간과 마지막 수정시간(없을 경우 최초 작성시간)과의 차이를 text로 return하는 함수
+  const getModifiedTime = () => {
+    let target;
+    if (docId === current.docId) {
+      if (current.modifiedAt) {
+        target = moment.utc(current.modifiedAt); // 한국시간으로 바꿔줌
+      } else if (current.createAt) {
+        target = moment.utc(current.modifiedAt);
+      }
+      const now = moment();
+      const diff = {
+        day: moment.duration(now.diff(target)).days(),
+        hours: moment.duration(now.diff(target)).hours(),
+        minute: moment.duration(now.diff(target)).minutes(),
+        second: moment.duration(now.diff(target)).seconds(),
+      };
+      const text = `${diff.day !== 0 ? diff.day + "일" : ""} ${
+        diff.hours !== 0 ? diff.hours + "시간" : ""
+      } ${diff.minute !== 0 ? diff.minute + "분" : "0분"} 전`.trim();
+
+      return text;
+    }
+  };
+
   return (
     <Container>
       <ViewerHeader>
@@ -64,11 +89,13 @@ const DocViewer = () => {
             <Icon icon="edit" size="24px" color="#757575" />
           </IconBtn>
         </TitleBox>
-        <InfoBox>
-          마지막 편집
-          <User>{"안나"}</User>
-          <ModifiedTime>10분 전</ModifiedTime>
-        </InfoBox>
+        {current && current.modifiedAt && (
+          <InfoBox>
+            마지막 편집
+            <User>{current.nickname}</User>
+            <ModifiedTime>{getModifiedTime()}</ModifiedTime>
+          </InfoBox>
+        )}
       </ViewerHeader>
       <div></div>
       {current.content && <Viewer {...viewerOpt}></Viewer>}
@@ -86,6 +113,7 @@ const Container = styled.section`
 
 const ViewerHeader = styled.div`
   width: 100%;
+  margin-bottom: 24px;
 `;
 
 const TitleBox = styled.div`

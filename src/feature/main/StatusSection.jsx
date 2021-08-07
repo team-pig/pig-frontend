@@ -1,12 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import Icon from "../../components/Icon";
 
 // component & elem
-import MemberStatus from "./MemberStatus";
 import ProjectStatus from "./ProjectStatus";
-import { Text } from "../../elem";
-import flex from "../../themes/flex";
+import Members from "./Members";
 
 const StatusSection = () => {
   //가짜 데이터
@@ -55,22 +52,10 @@ const StatusSection = () => {
     },
   ];
 
-  const colorAry = ["blue", "mint", "yellow", "orange"];
-
   return (
     <Container>
       <ProjectStatus project={project} />
-      <Members>
-        <MembersHeader>
-          <Text type="body_1">팀원 현황</Text>
-          <IconBtn>
-            <Icon icon="plus-lg" color="#757575" />
-          </IconBtn>
-        </MembersHeader>
-        {members.map((member, idx) => (
-          <MemberStatus key={idx} member={member} color={colorAry[idx % 4]} />
-        ))}
-      </Members>
+      <Members members={members} />
     </Container>
   );
 };
@@ -80,16 +65,5 @@ const Container = styled.div`
   height: 100%;
   border-right: 1px solid var(--line);
 `;
-
-const Members = styled.section`
-  padding: 18px 20px;
-`;
-
-const MembersHeader = styled.div`
-  ${flex("between", "center")}
-  margin-bottom: 30px;
-`;
-
-const IconBtn = styled.button``;
 
 export default StatusSection;

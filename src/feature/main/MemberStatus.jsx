@@ -2,10 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import Icon from "../../components/Icon";
 
-import { Text } from "../../elem";
+// component & elem
 import flex from "../../themes/flex";
 import Graph from "./Graph";
 import Tags from "./Tags";
+import { Text } from "../../elem";
 
 const MemberStatus = ({ member, color }) => {
   const memberPercent = Math.floor(

@@ -21,10 +21,9 @@ const WSTabs = ({ url }) => {
     history.push(`${url}`);
   };
 
-  const toDocs = async () => {
-    await dispatch(__getDocs(roomId));
-    if (docs.length > 0)
-      history.push(`${url}/doc/${docs[docs.length - 1].docId}`);
+  const toDocs = () => {
+    dispatch(__getDocs(roomId));
+    if (docs.length) history.push(`${url}/doc/${docs[docs.length - 1].docId}`);
     else history.push(`${url}/doc/blank`);
   };
 

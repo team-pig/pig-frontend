@@ -10,7 +10,7 @@ import { scrollbar } from "../../themes/scrollbar";
 import { Text } from "../../elem";
 
 // redux & api
-import { resetDocs, __getDocs } from "../../redux/modules/document";
+import { __getDocs } from "../../redux/modules/document";
 
 const DocList = ({ docList }) => {
   const history = useHistory();
@@ -66,7 +66,6 @@ const PlusBtn = styled.button`
 const List = styled.ul`
   --WSHeaderHeight: 48px;
   --listTitleHeight: 60px;
-
   ${scrollbar}
   height: calc(100vh - var(--WSHeaderHeight) - var(--listTitleHeight));
   margin-bottom: -5vh;

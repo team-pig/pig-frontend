@@ -4,10 +4,12 @@ import { useHistory, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 // elem
-import { Text } from "../../elem";
 import Icon from "../../components/Icon";
+import DocListItem from "./DocListItem";
 import { scrollbar } from "../../themes/scrollbar";
+import { Text } from "../../elem";
 
+// redux & api
 import { resetDocs, __getDocs } from "../../redux/modules/document";
 
 const DocList = ({ docList }) => {
@@ -18,13 +20,9 @@ const DocList = ({ docList }) => {
 
   useEffect(() => {
     dispatch(__getDocs(roomId));
-    return () => dispatch(resetDocs());
   }, []);
 
   const toDocAdd = () => history.push(`/workspace/${roomId}/doc/add`);
-
-  const showDocDetail = (docId) =>
-    history.push(`/workspace/${roomId}/doc/${docId}`);
 
   return (
     <Container>
@@ -36,11 +34,8 @@ const DocList = ({ docList }) => {
         </PlusBtn>
       </TitleBox>
       <List>
-        {docList.map((doc) => (
-          <Item onClick={() => showDocDetail(doc.docId)}>
-            <Icon icon="document" size="20px" />
-            <Name>{doc.title}</Name>
-          </Item>
+        {docList.map((doc, idx) => (
+          <DocListItem key={idx} doc={doc} />
         ))}
       </List>
     </Container>
@@ -75,27 +70,7 @@ const List = styled.ul`
   ${scrollbar}
   height: calc(100vh - var(--WSHeaderHeight) - var(--listTitleHeight));
   margin-bottom: -5vh;
-  padding: 0 var(--smMargin);
   overflow-y: auto;
-`;
-
-const Item = styled.li`
-  display: flex;
-  align-items: center;
-  padding: 10px 0;
-  cursor: pointer;
-`;
-
-const Name = styled.p`
-  width: 100%;
-  margin-left: 10px;
-  color: var(--darkgrey);
-  font-size: 1.6rem;
-  line-height: 2.2rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-decoration: none;
 `;
 
 export default DocList;

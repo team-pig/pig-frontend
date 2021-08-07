@@ -8,7 +8,8 @@ import { __logout } from "../../redux/modules/user";
 import { button } from "../../themes/textStyle";
 import NameTag from "./NameTag";
 import TextLogo from "../../assets/logo/textlogo.svg";
-import { mobileHidden } from "../../themes/responsive";
+import MobileLogo from "../../assets/logo/logo.svg";
+import { mobileHidden, mobileOnly } from "../../themes/responsive";
 
 const Header = () => {
   const history = useHistory();
@@ -30,6 +31,11 @@ const Header = () => {
             <img src={TextLogo} alt="협업돼지" />
           </LogoBox>
         </LeftSide>
+        <MobileContainer>
+          <LogoBox>
+            <img src={MobileLogo} alt="협업돼지" />
+          </LogoBox>
+        </MobileContainer>
         <RightSide>
           {!isLogin ? (
             <Nav>
@@ -92,6 +98,7 @@ const InsideBox = styled.div`
 `;
 
 const LeftSide = styled.section`
+  ${mobileHidden};
   flex-shrink: 0;
 `;
 
@@ -100,7 +107,15 @@ const RightSide = styled.section`
   margin-right: -16px;
 `;
 
+const MobileContainer = styled.div`
+  ${mobileOnly};
+  width: 100%;
+`;
+
 const LogoBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
 `;
 

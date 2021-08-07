@@ -22,13 +22,15 @@ import { Button } from "../../elem";
 import { uploadFile } from "../../shared/uploadFile";
 import { head_4 } from "../../themes/textStyle";
 
-const Writer = ({ targetDoc }) => {
+const Writer = ({ targetDoc, setShowPrompt }) => {
   const history = useHistory();
   const { roomId, docId } = useParams();
 
   const dispatch = useDispatch();
   const editorRef = useRef();
-  const [title, setTitle] = useState(targetDoc ? targetDoc.title : "");
+  const [title, setTitle] = useState(
+    targetDoc && targetDoc.title ? targetDoc.title : ""
+  );
 
   // editor 옵션 설정
   const editorOpt = {
@@ -50,11 +52,6 @@ const Writer = ({ targetDoc }) => {
   };
 
   const getContent = () => {
-    if (title.trim() === "") {
-      // 모달로 대체 필요
-      alert("제목을 입력해주세요.");
-    }
-
     const instance = editorRef.current.getInstance();
     // const content_html = instance.getHTML();
     const content_md = instance.getMarkdown();
@@ -63,11 +60,24 @@ const Writer = ({ targetDoc }) => {
   };
 
   const clickSave = () => {
+    if (!title || title.trim() === "") {
+      // 모달로 대체 필요
+      alert("제목을 입력해주세요.");
+      return;
+    }
+
     const docObj = getContent();
     dispatch(__createDoc(docObj, roomId));
   };
 
   const clickEdit = () => {
+    if (!title || title.trim() === "") {
+      // 모달로 대체 필요
+      alert("제목을 입력해주세요.");
+      return;
+    }
+
+    setShowPrompt(false);
     const docObj = { ...getContent(), docId };
     dispatch(__editDoc(docObj, roomId));
   };
@@ -90,9 +100,19 @@ const Writer = ({ targetDoc }) => {
       </TitleBox>
       <Editor {...editorOpt} />
       <div>
-        {targetDoc && <Button _onClick={clickEdit}>수정</Button>}
-        {!targetDoc && <Button _onClick={clickSave}>저장</Button>}
-        <Button _onClick={clickCancle}>취소</Button>
+        {targetDoc && (
+          <Button _onClick={clickEdit} size="150">
+            수정
+          </Button>
+        )}
+        {!targetDoc && (
+          <Button _onClick={clickSave} size="150">
+            저장
+          </Button>
+        )}
+        <Button _onClick={clickCancle} size="150">
+          취소
+        </Button>
       </div>
     </>
   );

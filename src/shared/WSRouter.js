@@ -7,30 +7,16 @@ import DocView from "../pages/DocView";
 import Board from "../pages/Board";
 import Calendar from "../pages/Calendar";
 
-import Auth from "../shared/auth";
-
 const WSRouter = ({ path }) => {
   return (
     <Switch>
       {/* <Route path={path} component={Main} exact /> */}
-      <Route path={`${path}/doc/add`} component={Auth(DocAdd, true)} exact />
-      <Route
-        path={`${path}/doc/blank`}
-        component={Auth(DocBlank, true)}
-        exact
-      />
-      <Route
-        path={`${path}/doc/:docId`}
-        component={Auth(DocView, true)}
-        exact
-      />
-      <Route
-        path={`${path}/doc/:docId/edit`}
-        component={Auth(DocEdit, true)}
-        exact
-      />
-      <Route path={`${path}/board`} component={Auth(Board, true)} exact />
-      <Route path={`${path}/calendar`} component={Auth(Calendar, true)} exact />
+      <Route path={`${path}/doc/add`} component={DocAdd} exact />
+      <Route path={`${path}/doc/blank`} component={DocBlank} exact />
+      <Route path={`${path}/doc/:docId`} component={DocView} exact />
+      <Route path={`${path}/doc/:docId/edit`} component={DocEdit} exact />
+      <Route path={`${path}/board`} component={Board} exact />
+      <Route path={`${path}/calendar`} component={Calendar} exact />
     </Switch>
   );
 };

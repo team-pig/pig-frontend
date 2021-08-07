@@ -82,10 +82,10 @@ const RoomList = ({ history }) => {
             </InputBox>
             <BtnBox>
               <Button size="200" onClick={openJoinModal}>
-                방 참여
+                방 입장
               </Button>
-              <Button size="200" onClick={openModal}>
-                방 생성하기
+              <Button shape="green-outline" size="200" onClick={openModal}>
+                방 만들기
               </Button>
             </BtnBox>
           </WrapperItem>

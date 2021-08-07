@@ -13,4 +13,8 @@ export const docApi = {
         documentId,
       },
     }),
+  checkCanEdit: (roomId, documentId) =>
+    instance.patch(`/room/${roomId}/document`, { documentId }),
+  exitEditPage: (roomId, documentId) =>
+    instance.post(`/room/${roomId}/document/exit`, { documentId }),
 };

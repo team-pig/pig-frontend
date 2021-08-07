@@ -3,8 +3,9 @@ import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-// redux
+// redux & api
 import { __deleteDoc } from "../../redux/modules/document";
+import { docApi } from "../../api/docApi";
 
 // toast UI viewer
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
@@ -43,8 +44,16 @@ const DocViewer = () => {
     initialValue: current.content,
   };
 
-  const toDocEdit = (docId) =>
-    history.push(`/workspace/${roomId}/doc/${docId}/edit`);
+  const toDocEdit = async (docId) => {
+    try {
+      const { data } = await docApi.checkCanEdit(roomId, docId);
+
+      if (data.canEdit) history.push(`/workspace/${roomId}/doc/${docId}/edit`);
+      else alert(`현재${data.nickname}님이 수정중입니다.`);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const clickDelete = () => {
     // 정말 삭제할거냐는 안내 모달 필요

@@ -1,5 +1,3 @@
-// dispatch(__checkedTodo(roomId, todo.todoId, target.checked));
-
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Input, Button } from "../../elem";
@@ -8,12 +6,17 @@ import {
   __deleteTodo,
   __editTotoTitle,
 } from "../../redux/modules/todos";
-import { useDispatch } from "react-redux";
+
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-const Todo = ({ todo, roomId }) => {
+import { useParams } from "react-router-dom";
+
+const Todo = ({ todo }) => {
   const dispatch = useDispatch();
+  const members = useSelector((state) => state.board.allMembers);
   const [editMode, setEditMode] = useState(false);
+  const { roomId } = useParams();
 
   const formik = useFormik({
     initialValues: {
@@ -83,6 +86,11 @@ const Todo = ({ todo, roomId }) => {
 
             <Flex>
               <div style={{ margin: "0 10px" }}>담당지정버튼</div>
+              <select>
+                {members.map((memeber) => (
+                  <option>{memeber}</option>
+                ))}
+              </select>
               <div onClick={deleteTodoHandler}>삭제버튼</div>
             </Flex>
           </Flex>

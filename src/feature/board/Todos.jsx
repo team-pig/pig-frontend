@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import Todo from "./Todo";
 import { useParams } from "react-router";
-import { __loadTodos } from "../../redux/modules/todos";
 
 // redux & api
 import { useSelector, useDispatch } from "react-redux";
-import { __createTodo } from "../../redux/modules/todos";
+import { __createTodo, __loadTodos } from "../../redux/modules/todos";
 
 // compo & elem
+import Todo from "./Todo";
 import { Input } from "../../elem";
 
 const Todos = ({ cardId }) => {

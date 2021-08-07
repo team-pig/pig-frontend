@@ -79,18 +79,18 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
             <Input
               name="roomName"
               type="text"
-              value=""
+              
               placeholder="방 이름"
-              onChange={changeHandler}
+              _onChange={changeHandler}
             />
             <Input
               name="subtitle"
               type="text"
-              value=""
+              
               placeholder="부제목"
-              onChange={changeHandler}
+              _onChange={changeHandler}
             />
-            <Input name="tag" type="text" value="" placeholder="태그" onChange={changeHandler} />
+            <Input name="tag" type="text"  placeholder="태그" _onChange={changeHandler} />
             </InputBox>
             <BtnBox>
             <Button shape="green-outline" size="200" _onClick={cancelFile}>취소</Button>

@@ -11,6 +11,8 @@ const EDIT_ROOM = "room/EDIT_ROOM";
 const DELETE_ROOM = "room/DELETE_ROOM";
 const JOIN_ROOM = "room/JOIN_ROOM";
 const EXIT_ROOM = "room/EXIT_ROOM";
+const ADD_BOOKMARK = "room/ADD_BOOKMARK";
+const DELETE_BOOKMARK = "room/DELETE_BOOKMARK";
 const LOADING = "LOADING";
 
 //initialState
@@ -38,6 +40,22 @@ export const joinRoom = createAction(JOIN_ROOM, (inviteCode) => ({
   inviteCode,
 }));
 export const exitRoom = createAction(EXIT_ROOM, (roomId) => ({ roomId }));
+export const addBookmark = createAction(
+  ADD_BOOKMARK,
+  (room, roomId, isMarked) => ({
+    room,
+    roomId,
+    isMarked,
+  })
+);
+export const deleteBookmark = createAction(
+  DELETE_BOOKMARK,
+  (room, roomId, isMarked) => ({
+    room,
+    roomId,
+    isMarked,
+  })
+);
 export const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 
 //thunk function
@@ -112,7 +130,7 @@ export const __getRoomList =
       if (_page === false && _next === false) return;
 
       const { data } = await roomApi.getRoomList(_page, _size);
-
+      console.log(data);
       const totalPages = data.totalPages;
 
       let paging = {
@@ -144,6 +162,28 @@ export const __deleteRoom =
       console.log(roomId);
       await roomApi.deleteRoom(roomId);
       dispatch(deleteRoom(roomId));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+export const __toggleBookmark =
+  (roomId, isMarked) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      if (isMarked == false) {
+        console.log("즐겨찾기 요청");
+        // const data = await roomApi.addBookmark(roomId);
+        console.log("요청 완료");
+        // dispatch(addBookmark(roomId, isMarked));
+        // console.log(data);
+
+        // dispatch(addBookmark(data));
+      } else if (isMarked === true) {
+        // const data = await roomApi.deleteBookmark(roomId);
+        // console.log(data);
+        // dispatch(deleteBookmark(roomId, isMarked));
+      }
     } catch (e) {
       console.log(e);
     }
@@ -199,6 +239,22 @@ const room = handleActions(
         if (idx !== -1) {
           draft.room.splice(idx, 1);
         }
+      }),
+    [ADD_BOOKMARK]: (state, action) =>
+      produce(state, (draft) => {
+        // let idx = draft.room.findIndex(
+        //   (r) => r.roomId === action.payload.roomId
+        // );
+        // draft.bookmarkedRoom.unshift(action.payload.room[idx]);
+      }),
+    [DELETE_BOOKMARK]: (state, action) =>
+      produce(state, (draft) => {
+        // let idx = draft.bookmarkedRoom.findIndex(
+        //   (r) => r.roomId === action.payload.roomId
+        // );
+        // if (idx !== -1) {
+        //   draft.bookmarkedRoom.splice(idx, 1);
+        // }
       }),
   },
   initialState

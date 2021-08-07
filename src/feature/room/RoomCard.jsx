@@ -11,9 +11,10 @@ import Drop from "../../components/Drop";
 import { Button, Text } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
 import MemberImg from "../../elem/MemberImg";
+import BookMark from "./BookMark";
 
 //redux
-import { __deleteRoom, __exitRoom } from "../../redux/modules/room";
+import { __deleteRoom, __exitRoom, __toggleBookmark } from "../../redux/modules/room";
 
 //roomList map의 list에서 받아오는 값
 const RoomCard = ({
@@ -29,11 +30,13 @@ const RoomCard = ({
   isShow,
   openDrop,
   closeDrop,
+
 }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
   const [showAllMember, setShowAllMember] = useState(false);
   const [display, setDisplay] = useState("");
+  const [isMarked, setIsMarked] = useState(false);
 
   useEffect(() => {
     if (members.length > 4) {
@@ -43,15 +46,32 @@ const RoomCard = ({
     }
   }, []);
 
+  const clickBookmark = (e) => {
+    e.stopPropagation();
+    if(isMarked){
+      e.stopPropagation();
+      setIsMarked(false);
+      dispatch(__toggleBookmark(roomId, isMarked));
+      console.log("즐겨찾기 취소");
+    }else if(!isMarked){
+      e.stopPropagation();
+      setIsMarked(true);
+      dispatch(__toggleBookmark(roomId, isMarked));
+      console.log("즐겨찾기 등록");
+
+    }
+    
+  }
+
   const exitRoom = (e) => {
     e.stopPropagation();
     dispatch(__exitRoom(roomId));
-  }
+  };
 
   const deleteRoom = (e) => {
     e.stopPropagation();
     dispatch(__deleteRoom(roomId));
-  }
+  };
 
   const openModModal = (e) => {
     e.stopPropagation();
@@ -69,13 +89,12 @@ const RoomCard = ({
       setDisplay("");
       closeDrop();
       console.log(display);
-      console.log('닫다');
+      console.log("닫다");
       console.log(isShow);
-      
     } else {
       openDrop();
       setDisplay(index);
-      console.log('열다');
+      console.log("열다");
       console.log(display);
       console.log(isShow);
     }
@@ -92,7 +111,6 @@ const RoomCard = ({
     setDisplay("");
     closeDrop();
     console.log("handleOut");
-   
   };
 
   const handleIn = (e) => {
@@ -130,7 +148,6 @@ const RoomCard = ({
             width="76px"
             height="42px"
             color="darkgrey"
-            
             _onClick={openModModal}
           >
             수정하기
@@ -154,8 +171,9 @@ const RoomCard = ({
         </Drop.Container>
         {/* ) : null} */}
 
-        <StarIcon>
-          <Star />
+        <StarIcon onClick={clickBookmark}>
+          {/* <Star /> */}
+          <BookMark isMarked={isMarked} />
         </StarIcon>
         <CardSection>
           <CardProfile>
@@ -181,7 +199,7 @@ const RoomCard = ({
             {/* members를 memberImg 배열로 바꾸기 */}
             <MemberImg members={members} />
             <div onClick={handleClick}>
-              <Icon icon="more" size="24px"  />
+              <Icon icon="more" size="24px" />
             </div>
           </FooterItem>
         </CardFooter>
@@ -217,6 +235,7 @@ const CardSection = styled.div`
 
 const StarIcon = styled.div`
   position: absolute;
+  z-index: var(--indexHeader);
   top: 10px;
   right: 10px;
 `;

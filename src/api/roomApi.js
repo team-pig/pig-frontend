@@ -28,6 +28,20 @@ export const roomApi = {
     });
   },
   exitRoom: (roomId) => {
-    instance.delete(`/room/member/${roomId}`);
+    instance.delete(`/room/member/${roomId}`, {
+      data: {
+        roomId,
+      },
+    });
+  },
+  addBookmark: (roomId) => {
+    instance.post(`room/${roomId}/bookmark`);
+  },
+  deleteBookmark: (roomId) => {
+    instance.delete(`room/${roomId}/bookmark`, {
+      data: {
+        roomId,
+      },
+    });
   },
 };

@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Prompt, useParams } from "react-router-dom";
+import { useBeforeunload } from "react-beforeunload";
 
 // component
 import Writer from "../feature/document/Writer";
 
-// redux
+// redux & api
 import { resetDoc, __getDoc } from "../redux/modules/document";
+import { docApi } from "../api/docApi";
 
 const DocEdit = () => {
   const dispatch = useDispatch();
@@ -21,12 +23,36 @@ const DocEdit = () => {
     else return null;
   });
 
+  const [showPrompt, setShowPrompt] = useState(true);
+
   useEffect(() => {
     dispatch(__getDoc(roomId, docId));
-    return () => dispatch(resetDoc());
+    return async () => {
+      dispatch(resetDoc());
+      setShowPrompt(false);
+      await docApi.exitEditPage(roomId, docId);
+    };
   }, []);
 
-  return <Container>{targetDoc && <Writer targetDoc={targetDoc} />}</Container>;
+  // 새로고침하거나 창을 종료할 때 안내 메시지
+  useBeforeunload((e) => {
+    e.preventDefault();
+    docApi.exitEditPage(roomId, docId);
+  });
+
+  return (
+    <>
+      <Prompt
+        when={showPrompt}
+        message="문서가 저장되지 않았습니다. 정말로 떠나시겠습니까?"
+      />
+      <Container>
+        {targetDoc && (
+          <Writer targetDoc={targetDoc} setShowPrompt={setShowPrompt} />
+        )}
+      </Container>
+    </>
+  );
 };
 
 const Container = styled.div`

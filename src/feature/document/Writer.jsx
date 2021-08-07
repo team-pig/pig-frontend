@@ -22,7 +22,7 @@ import { Button } from "../../elem";
 import { uploadFile } from "../../shared/uploadFile";
 import { head_4 } from "../../themes/textStyle";
 
-const Writer = ({ targetDoc }) => {
+const Writer = ({ targetDoc, setShowPrompt }) => {
   const history = useHistory();
   const { roomId, docId } = useParams();
 
@@ -77,6 +77,7 @@ const Writer = ({ targetDoc }) => {
       return;
     }
 
+    setShowPrompt(false);
     const docObj = { ...getContent(), docId };
     dispatch(__editDoc(docObj, roomId));
   };
@@ -99,9 +100,19 @@ const Writer = ({ targetDoc }) => {
       </TitleBox>
       <Editor {...editorOpt} />
       <div>
-        {targetDoc && <Button _onClick={clickEdit}>수정</Button>}
-        {!targetDoc && <Button _onClick={clickSave}>저장</Button>}
-        <Button _onClick={clickCancle}>취소</Button>
+        {targetDoc && (
+          <Button _onClick={clickEdit} size="150">
+            수정
+          </Button>
+        )}
+        {!targetDoc && (
+          <Button _onClick={clickSave} size="150">
+            저장
+          </Button>
+        )}
+        <Button _onClick={clickCancle} size="150">
+          취소
+        </Button>
       </div>
     </>
   );

@@ -4,17 +4,21 @@ import { docApi } from "../../api/docApi";
 
 // action
 const GET_DOCS = "document/GET_DOCS";
+const GET_DOC = "document/GET_DOC";
 const CREATE_DOC = "document/CREATE_DOC";
 const EDIT_DOC = "document/EDIT_DOC";
 const DELETE_DOC = "document/DELETE_DOC";
 const RESET_DOCS = "document/RESET_DOCS";
+const RESET_DOC = "document/RESET_DOC";
 
 // action creator
 const getDocs = createAction(GET_DOCS, (docs) => ({ docs }));
+const getDoc = createAction(GET_DOC, (doc) => ({ doc }));
 const createDoc = createAction(CREATE_DOC, (doc) => ({ doc }));
 const editDoc = createAction(EDIT_DOC, (doc) => ({ doc }));
 const deleteDoc = createAction(DELETE_DOC, (docId) => ({ docId }));
 export const resetDocs = createAction(RESET_DOCS);
+export const resetDoc = createAction(RESET_DOC);
 
 // Thunk
 // document list를 받아오는 thunk 함수. 동기화를 위해 pageId가 바뀔 때마다 가져옴.
@@ -40,6 +44,22 @@ export const __getDocs =
       dispatch(getDocs(newDocs));
     } catch (e) {
       console.log("문서 목록을 불러오지 못했습니다.", e);
+    }
+  };
+
+export const __getDoc =
+  (roomId, docId) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      const { data } = await docApi.getDoc(roomId, docId);
+
+      if (data.ok) {
+        const { content, documentId: docId, title } = data.result;
+        const docObj = { docId, title, content };
+        dispatch(getDoc(docObj));
+      }
+    } catch (e) {
+      console.log("문서를 불러오지 못했습니다.", e);
     }
   };
 
@@ -128,6 +148,10 @@ const document = handleActions(
       produce(state, (draft) => {
         draft.docList = action.payload.docs;
       }),
+    [GET_DOC]: (state, action) =>
+      produce(state, (draft) => {
+        draft.currentDoc = action.payload.doc;
+      }),
     [CREATE_DOC]: (state, action) =>
       produce(state, (draft) => {
         draft.docList.unshift(action.payload.doc.newDocObj);
@@ -149,6 +173,10 @@ const document = handleActions(
     [RESET_DOCS]: (state, action) =>
       produce(state, (draft) => {
         draft.docList = [];
+      }),
+    [RESET_DOC]: (state, action) =>
+      produce(state, (draft) => {
+        draft.currentDoc = null;
       }),
   },
   initialState

@@ -1,25 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 // component
 import Writer from "../feature/document/Writer";
-import Template from "../components/Template";
+import { resetDoc, __getDoc } from "../redux/modules/document";
 
 const DocEdit = () => {
-  const { docId } = useParams();
+  const dispatch = useDispatch();
 
-  const targetDoc = useSelector((state) => {
-    const idx = state.document.docList.findIndex((doc) => doc.docId === docId);
-    return state.document.docList[idx];
-  });
+  const { docId, roomId } = useParams();
 
-  return (
-    <Container>
-      <Writer targetDoc={targetDoc} />
-    </Container>
-  );
+  const targetDoc = useSelector((state) => state.document.currentDoc);
+
+  useEffect(() => {
+    dispatch(__getDoc(roomId, docId));
+    return () => dispatch(resetDoc());
+  }, []);
+
+  return <Container>{targetDoc && <Writer targetDoc={targetDoc} />}</Container>;
 };
 
 const Container = styled.div`

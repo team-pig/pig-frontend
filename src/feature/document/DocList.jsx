@@ -36,8 +36,8 @@ const DocList = ({ docList }) => {
         </PlusBtn>
       </TitleBox>
       <List>
-        {docList.map((doc) => (
-          <Item onClick={() => showDocDetail(doc.docId)}>
+        {docList.map((doc, idx) => (
+          <Item key={idx} onClick={() => showDocDetail(doc.docId)}>
             <Icon icon="document" size="20px" />
             <Name>{doc.title}</Name>
           </Item>

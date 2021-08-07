@@ -59,8 +59,8 @@ const DocViewer = () => {
           {/* 임시 적용 아이콘 => 변경 예정 */}
           <IconBtn onClick={() => toDocEdit(docId)}>
             <Icon icon="setting" size="24px" />
-            <button onClick={clickDelete}>삭제아이콘</button>
           </IconBtn>
+          <button onClick={clickDelete}>삭제아이콘</button>
         </TitleBox>
         <InfoBox>
           마지막 편집

@@ -25,6 +25,8 @@ const RoomCard = ({
   members,
   createdAt,
   tag,
+  bookmarkedMembers,
+  userId,
   history,
   index,
   isShow,
@@ -39,12 +41,25 @@ const RoomCard = ({
   const [isMarked, setIsMarked] = useState(false);
 
   useEffect(() => {
+     memberCount();
+     bookmarkMemberCheck();
+  }, []);
+
+  const memberCount = () => {
     if (members.length > 4) {
       setShowAllMember(false);
     } else {
       setShowAllMember(true);
     }
-  }, []);
+  }
+
+  const bookmarkMemberCheck = () => {
+    if(bookmarkedMembers.includes(userId)){
+      setIsMarked(true);
+    } else{
+      setIsMarked(false);
+    }
+  }
 
   const clickBookmark = (e) => {
     e.stopPropagation();

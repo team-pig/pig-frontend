@@ -10,6 +10,7 @@ const Template = styled.main`
   --header: 48px;
 
   ${flex("between", "start")};
+  position: relative;
   padding: 0;
   padding-top: var(--header);
   box-sizing: border-box; ;

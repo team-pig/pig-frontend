@@ -29,7 +29,7 @@ const Workspace = (props) => {
         <WSHeader url={url} />
         <WSTemplate>
           <WSRouter path={path} />
-          <WSSidebar />
+          {/* <WSSidebar /> */}
         </WSTemplate>
       </div>
     </>

@@ -16,6 +16,7 @@ import { Text } from "../../elem";
 import Icon from "../../components/Icon";
 import { body_4 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
+import MarkDownViewer from "../../components/MarkDownViewer";
 
 const DocViewer = () => {
   const history = useHistory();
@@ -99,7 +100,7 @@ const DocViewer = () => {
         )}
       </ViewerHeader>
       <div></div>
-      {current.content && <Viewer {...viewerOpt}></Viewer>}
+      {current.content && <MarkDownViewer option={viewerOpt} />}
     </Container>
   );
 };

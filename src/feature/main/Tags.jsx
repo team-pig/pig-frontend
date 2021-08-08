@@ -4,12 +4,12 @@ import styled from "styled-components";
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
 
-const Tags = ({ tags }) => {
+const Tags = ({ tags, gap, textType }) => {
   return (
-    <TagBox>
+    <TagBox gap={gap}>
       {tags.map((tag, idx) => (
-        <Tag>
-          <Text type="body_4" color="darkgrey">
+        <Tag key={idx}>
+          <Text type={textType ? textType : "body_4"} color="darkgrey">
             {tag}
           </Text>
         </Tag>
@@ -20,11 +20,12 @@ const Tags = ({ tags }) => {
 
 const TagBox = styled.div`
   ${flex("start")};
-  gap: 5px;
+  gap: ${(props) => (props.gap ? `${props.gap}px;` : "5px;")};
 `;
 
 const Tag = styled.div`
-  padding: 5px 10px;
+  ${flex()}
+  padding: 4px 10px 3px 10px;
   border: 1px solid var(--grey);
   border-radius: 4px;
 `;

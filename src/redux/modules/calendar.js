@@ -4,6 +4,7 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import moment from "moment";
+import { cardApi } from "../../api/cardApi";
 
 // action
 const SET_CURRENT_ID = "calendar/SET_CURRENT_ID";
@@ -47,10 +48,13 @@ const initialSchedule = {
 // 모든 일정을 받아오는 thunk 함수 (월 이동 시 불러옴, lodash-debounce 사용)
 export const __loadSchedules =
   (roomId, date) =>
-  (dispatch, getState, { history }) => {
-    // 모든 일정 받아와서 action creator로 전달
-    // let schedules; // 임시
-    // dispatch(loadSchedules(schedules));
+  async (dispatch, getState, { history }) => {
+    try {
+      const { data } = await cardApi.getCards(roomId);
+      dispatch(loadSchedules(data.cards));
+    } catch (e) {
+      console.log("카드를 불러오지 뭇했습니다.", e);
+    }
   };
 
 // schedule 새로 생성 thunk 함수
@@ -92,32 +96,7 @@ export const __deleteSchedule =
 
 // initialState
 const initialState = {
-  scheduleList: [
-    {
-      cardId: 1,
-      cardTitle: "과제 제출하기",
-      startDate: "2021-08-03",
-      endDate: "2021-08-05",
-      desc: "hahaha",
-      taskMembers: [],
-    },
-    {
-      cardId: 2,
-      cardTitle: "휴식 취하기",
-      startDate: "2021-08-08",
-      endDate: "2021-08-14",
-      desc: "아무것도 안하고 쉬기",
-      taskMembers: [],
-    },
-    {
-      cardId: 3,
-      cardTitle: "프로젝트 하기",
-      startDate: "2021-08-01",
-      endDate: "2021-08-16",
-      desc: "프로젝트...",
-      taskMembers: [],
-    },
-  ],
+  scheduleList: [],
   currentList: [],
   currentScheduleId: null,
 };
@@ -131,6 +110,7 @@ const calendar = handleActions(
       }),
     [LOAD_SCHEDULES]: (state, action) =>
       produce(state, (draft) => {
+        console.log(action.payload.schedules);
         draft.scheduleList = action.payload.schedules;
       }),
     [LOAD_DAY_SCHEDULES]: (state, action) =>

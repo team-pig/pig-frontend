@@ -7,7 +7,7 @@ import MarkDownViewer from "../../components/MarkDownViewer";
 import Tags from "./Tags";
 
 // elem
-import { Text, Textarea } from "../../elem";
+import { Text, Textarea, IconBtn } from "../../elem";
 import { head_2 } from "../../themes/textStyle";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
@@ -111,7 +111,7 @@ const Information = () => {
         <Text type="head_2" color="black">
           {info.title}
         </Text>
-        <IconBtn onClick={toggleEditMode}>
+        <IconBtn _onClick={toggleEditMode}>
           <Icon icon="edit" color="#757575" size="24px" />
         </IconBtn>
       </TitleBox>
@@ -149,10 +149,6 @@ const TitleInput = styled.input`
   width: 100%;
   height: 52px;
   color: var(--black);
-`;
-
-const IconBtn = styled.button`
-  flex-shrink: 0;
 `;
 
 const TextBtn = styled.button`

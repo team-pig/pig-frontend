@@ -4,6 +4,7 @@ import { useParams, useRouteMatch } from "react-router-dom";
 
 import WSHeader from "../components/Workspace/WSHeader";
 import WSRouter from "../shared/WSRouter";
+import WSSidebar from "../components/WSSidebar.jsx/WSSidebar";
 
 // api
 import { __getDocs } from "../redux/modules/document";
@@ -28,9 +29,9 @@ const Workspace = (props) => {
         <WSHeader url={url} />
         <WSTemplate>
           <WSRouter path={path} />
+          <WSSidebar />
         </WSTemplate>
       </div>
-      {/* <RoomSideBar /> */}
     </>
   );
 };

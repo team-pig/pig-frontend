@@ -31,6 +31,7 @@ const DocView = (props) => {
 // 임시 스타일
 const Container = styled.section`
   display: flex;
+  width: 100%;
 `;
 
 export default DocView;

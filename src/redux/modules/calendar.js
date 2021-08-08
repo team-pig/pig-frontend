@@ -74,7 +74,7 @@ export const __editSchedule =
   (roomId, editObj) =>
   async (dispatch, getState, { history }) => {
     try {
-      // const {data} = await api.editCard(roomId, editObj)
+      const { data } = await cardApi.editCardInfo(roomId, editObj);
       dispatch(editSchedule(editObj));
     } catch (e) {
       console.log("수정에 실패했습니다.", e);

@@ -2,26 +2,17 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import Prism from "prismjs";
 
 // redux
 import { __createDoc, __editDoc } from "../../redux/modules/document";
 
-// toast UI editor
-import "@toast-ui/editor/dist/toastui-editor.css";
-import { Editor } from "@toast-ui/react-editor";
-import "tui-color-picker/dist/tui-color-picker.css";
-import "@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css";
-import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-import "prismjs/themes/prism.css";
-import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
+// component
+import MarkDownEditor from "../../components/MarkDownEditor";
 
 // elem
-import { Button } from "../../elem";
-import { uploadFile } from "../../shared/uploadFile";
 import { head_4 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
+import { Button } from "../../elem";
 
 const Writer = ({ targetDoc, setShowPrompt }) => {
   const history = useHistory();
@@ -36,22 +27,9 @@ const Writer = ({ targetDoc, setShowPrompt }) => {
   const docs = useSelector((state) => state.document.docList);
 
   // editor 옵션 설정
-  const editorOpt = {
-    previewStyle: "vertical",
-    height: "100%",
-    initialEditType: "markdown",
-    useCommandShortcut: true,
-    previewHighlight: false,
+  const documentOpt = {
     ref: editorRef,
     initialValue: targetDoc ? targetDoc.content : "",
-    // colorSyntax: 글자 색 바꾸는 기능 / condeSyntaxHighlight : 언어에 따른 코드 색 변경
-    plugins: [colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]],
-    hooks: {
-      addImageBlobHook: async (blob, callback) => {
-        const imgUrl = await uploadFile(blob);
-        callback(imgUrl, "alt text");
-      },
-    },
   };
 
   const getContent = () => {
@@ -106,7 +84,7 @@ const Writer = ({ targetDoc, setShowPrompt }) => {
         />
       </TitleBox>
       <EditorContainer>
-        <Editor {...editorOpt} />
+        <MarkDownEditor option={documentOpt} />
       </EditorContainer>
 
       <BtnBox>

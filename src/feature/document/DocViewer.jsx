@@ -7,15 +7,12 @@ import moment from "moment";
 // redux & api
 import { docApi } from "../../api/docApi";
 
-// toast UI viewer
-import "@toast-ui/editor/dist/toastui-editor-viewer.css";
-import { Viewer } from "@toast-ui/react-editor";
-
 // elem
-import { Text } from "../../elem";
+import { Text, IconBtn } from "../../elem";
 import Icon from "../../components/Icon";
 import { body_4 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
+import MarkDownViewer from "../../components/MarkDownViewer";
 
 const DocViewer = () => {
   const history = useHistory();
@@ -86,7 +83,7 @@ const DocViewer = () => {
         <TitleBox>
           <Title type="head_4">{current.title}</Title>
           {/* 임시 적용 아이콘 => 변경 예정 */}
-          <IconBtn onClick={() => toDocEdit(docId)}>
+          <IconBtn _onClick={() => toDocEdit(docId)}>
             <Icon icon="edit" size="24px" color="#757575" />
           </IconBtn>
         </TitleBox>
@@ -99,7 +96,7 @@ const DocViewer = () => {
         )}
       </ViewerHeader>
       <div></div>
-      {current.content && <Viewer {...viewerOpt}></Viewer>}
+      {current.content && <MarkDownViewer option={viewerOpt} />}
     </Container>
   );
 };
@@ -140,8 +137,6 @@ const InfoBox = styled.div`
   flex-shrink: 0;
   color: var(--grey);
 `;
-
-const IconBtn = styled.button``;
 
 const User = styled.span`
   margin-left: 14px;

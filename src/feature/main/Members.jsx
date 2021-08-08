@@ -6,7 +6,7 @@ import MemberStatus from "./MemberStatus";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
 import { scrollbar } from "../../themes/scrollbar";
-import { Text } from "../../elem";
+import { Text, IconBtn } from "../../elem";
 
 const Members = ({ members }) => {
   const colorAry = ["blue", "mint", "yellow", "orange"];
@@ -15,7 +15,7 @@ const Members = ({ members }) => {
     <Container>
       <MembersHeader>
         <Text type="body_1">팀원 현황</Text>
-        <IconBtn>
+        <IconBtn _onClick={() => {}}>
           <Icon icon="plus-lg" color="#757575" />
         </IconBtn>
       </MembersHeader>
@@ -41,7 +41,5 @@ const MembersHeader = styled.div`
   ${flex("between", "center")}
   margin-bottom: 30px;
 `;
-
-const IconBtn = styled.button``;
 
 export default Members;

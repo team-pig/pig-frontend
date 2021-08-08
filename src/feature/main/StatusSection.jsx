@@ -61,8 +61,11 @@ const StatusSection = () => {
 };
 
 const Container = styled.div`
+  --header: 48px;
+  --minusHeight: calc(var(--header));
+
   width: 425px;
-  height: 100%;
+  height: calc(100vh - var(--minusHeight));
   border-right: 1px solid var(--line);
 `;
 

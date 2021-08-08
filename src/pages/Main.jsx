@@ -25,6 +25,7 @@ const Container = styled.div`
   --minusHeight: calc(var(--header));
 
   ${flex("start", "start")};
+  width: 100%;
   height: calc(100vh - var(--minusHeight));
 `;
 

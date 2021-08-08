@@ -7,10 +7,6 @@ import moment from "moment";
 // redux & api
 import { docApi } from "../../api/docApi";
 
-// toast UI viewer
-import "@toast-ui/editor/dist/toastui-editor-viewer.css";
-import { Viewer } from "@toast-ui/react-editor";
-
 // elem
 import { Text } from "../../elem";
 import Icon from "../../components/Icon";

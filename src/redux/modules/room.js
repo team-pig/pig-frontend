@@ -21,14 +21,19 @@ const initialState = {
   room: [],
   isLoading: false,
   paging: { page: 1, next: null, size: 12 },
+  userId: "",
 };
 
 //action creator
 export const addRoom = createAction(ADD_ROOM, (room) => ({ room }));
-export const getRoomList = createAction(GET_ROOM_LIST, (roomList, paging) => ({
-  roomList,
-  paging,
-}));
+export const getRoomList = createAction(
+  GET_ROOM_LIST,
+  (roomList, paging, userId) => ({
+    roomList,
+    paging,
+    userId,
+  })
+);
 export const getOneRoom = createAction(GET_ONE_ROOM, (roomId) => ({
   roomId,
 }));
@@ -91,11 +96,9 @@ export const __addRoom =
         ...contents,
         roomImage: _image,
       };
-      console.log(willDispatchContents);
       //api post
       const { data } = await roomApi.addRoom(willDispatchContents);
       dispatch(addRoom(data));
-      // dispatch(addRoom(willDispatchContents));
     } catch (e) {
       console.log(e);
     }
@@ -130,15 +133,16 @@ export const __getRoomList =
       if (_page === false && _next === false) return;
 
       const { data } = await roomApi.getRoomList(_page, _size);
-      console.log(data);
+
       const totalPages = data.totalPages;
+      const userId = data.userId;
 
       let paging = {
         page: data.room.length < _size ? false : _page + 1,
         next: _page === totalPages ? false : true,
         size: _size,
       };
-      dispatch(getRoomList(data.room, paging));
+      dispatch(getRoomList(data.room, paging, userId));
     } catch (e) {
       console.log(e);
     }
@@ -171,18 +175,17 @@ export const __toggleBookmark =
   (roomId, isMarked) =>
   async (dispatch, getState, { history }) => {
     try {
-      if (isMarked == false) {
-        console.log("즐겨찾기 요청");
-        // const data = await roomApi.addBookmark(roomId);
-        console.log("요청 완료");
-        // dispatch(addBookmark(roomId, isMarked));
-        // console.log(data);
+      if (isMarked === false) {
+        const data = await roomApi.addBookmark(roomId);
+        const room = data.data;
+        dispatch(addBookmark(room, roomId, isMarked));
+        console.log(data);
 
         // dispatch(addBookmark(data));
       } else if (isMarked === true) {
-        // const data = await roomApi.deleteBookmark(roomId);
-        // console.log(data);
-        // dispatch(deleteBookmark(roomId, isMarked));
+        await roomApi.deleteBookmark(roomId);
+
+        dispatch(deleteBookmark(roomId, isMarked));
       }
     } catch (e) {
       console.log(e);
@@ -202,8 +205,10 @@ const room = handleActions(
       }),
     [GET_ROOM_LIST]: (state, action) =>
       produce(state, (draft) => {
-        // draft.room = action.payload.room;
         draft.room.push(...action.payload.roomList);
+
+        draft.userId = action.payload.userId;
+
         draft.paging = action.payload.paging;
         draft.isLoading = false;
       }),
@@ -215,10 +220,6 @@ const room = handleActions(
         );
 
         draft.room[idx] = { ...draft.room[idx], ...action.payload.newContent };
-        // {
-        //   ...draft.roomList[idx],
-        //   ...action.payload.room,
-        // };
       }),
     [DELETE_ROOM]: (state, action) =>
       produce(state, (draft) => {
@@ -242,20 +243,11 @@ const room = handleActions(
       }),
     [ADD_BOOKMARK]: (state, action) =>
       produce(state, (draft) => {
-        // let idx = draft.room.findIndex(
-        //   (r) => r.roomId === action.payload.roomId
-        // );
-        // draft.bookmarkedRoom.unshift(action.payload.room[idx]);
+        let idx = draft.room.findIndex(
+          (r) => r.roomId === action.payload.roomId
+        );
       }),
-    [DELETE_BOOKMARK]: (state, action) =>
-      produce(state, (draft) => {
-        // let idx = draft.bookmarkedRoom.findIndex(
-        //   (r) => r.roomId === action.payload.roomId
-        // );
-        // if (idx !== -1) {
-        //   draft.bookmarkedRoom.splice(idx, 1);
-        // }
-      }),
+    [DELETE_BOOKMARK]: (state, action) => produce(state, (draft) => {}),
   },
   initialState
 );

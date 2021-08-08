@@ -13,14 +13,12 @@ export const roomApi = {
   getOneRoom: (roomId) => instance.get(`/rooms/${roomId}/main`, roomId),
   addRoom: (room) => instance.post("/room", room),
   editRoom: (room) => {
-    console.log(room);
     instance.put("/room", room);
   },
 
   joinRoom: (inviteCode) => instance.post("/room/member", inviteCode),
 
   deleteRoom: (roomId) => {
-    console.log(`roomId`, roomId);
     instance.delete("/room", {
       data: {
         roomId,
@@ -35,7 +33,7 @@ export const roomApi = {
     });
   },
   addBookmark: (roomId) => {
-    instance.post(`room/${roomId}/bookmark`);
+    return instance.post(`/room/${roomId}/bookmark`);
   },
   deleteBookmark: (roomId) => {
     instance.delete(`room/${roomId}/bookmark`, {

@@ -21,6 +21,7 @@ const RoomList = ({ history }) => {
   const roomList = useSelector((state) => state.room.room) || [];
   const isLoading = useSelector((state) => state.room.isLoading);
   const paging = useSelector((state) => state.room.paging);
+  const userId = useSelector((state) => state.room.userId);
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
   const [isShow, setIsShow] = useState(false);
@@ -51,8 +52,6 @@ const RoomList = ({ history }) => {
 
   const closeDrop = () => {
     setIsShow(false);
-    console.log("룸리스트드롭클로즈");
-    console.log(isShow);
   };
 
   return (
@@ -81,10 +80,10 @@ const RoomList = ({ history }) => {
               </Input>
             </InputBox>
             <BtnBox>
-              <Button size="200" onClick={openJoinModal}>
+              <Button size="150" onClick={openJoinModal}>
                 방 입장
               </Button>
-              <Button shape="green-outline" size="200" onClick={openModal}>
+              <Button shape="green-outline" size="150" onClick={openModal}>
                 방 만들기
               </Button>
             </BtnBox>
@@ -96,6 +95,7 @@ const RoomList = ({ history }) => {
             {roomList.map((room, idx) => {
               return (
                 <RoomCard
+                  userId={userId}
                   openDrop={openDrop}
                   closeDrop={closeDrop}
                   isShow={isShow}

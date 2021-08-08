@@ -107,6 +107,7 @@ const Container = styled.section`
   --minusHeight: calc(var(--header));
 
   display: flex;
+  width: 100%;
   min-height: calc(100vh - var(--minusHeight));
   flex-direction: column;
   width: calc(100% - 260px);

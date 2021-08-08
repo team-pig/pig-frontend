@@ -22,7 +22,7 @@ const Header = () => {
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.user.isLogin);
+  const { isLogin, user } = useSelector((state) => state.user);
 
   return (
     <Container>
@@ -59,7 +59,7 @@ const Header = () => {
                   <Icon icon="notice-focus" size="28px" />
                 </IconBtn>
                 <NameBtn>
-                  <NameTag name={"Anna"} />
+                  <NameTag name={user.nickname} />
                 </NameBtn>
               </Btns>
               <Logout

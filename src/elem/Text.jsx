@@ -15,6 +15,7 @@ import {
   body_3,
   body_4,
   gnb,
+  button,
   caption,
 } from "../themes/textStyle";
 
@@ -53,6 +54,8 @@ const Wrapper = styled.div`
         return `${body_4}`;
       case "gnb":
         return `${gnb}`;
+      case "button":
+        return `${button}`;
       case "caption":
         return `${caption}`;
       default:

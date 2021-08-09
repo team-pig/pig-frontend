@@ -21,7 +21,7 @@ const CalendarHeader = () => {
   const current = useSelector((state) => state.date.current);
   const currentContent = useSelector((state) =>
     state.calendar.scheduleList.find(
-      (item) => item.cardId === state.calendar.currentScheduleId
+      (item) => item.cardId === state.calendar.modalId
     )
   );
 

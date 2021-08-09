@@ -9,6 +9,7 @@ import { todoApi } from "../../api/todoApi";
 
 // action
 const SET_CURRENT_ID = "calendar/SET_CURRENT_ID";
+const SET_MODAL_ID = "calendar/SET_MODAL_ID";
 const LOAD_SCHEDULES = "calendar/LOAD_SCHEDULES";
 const LOAD_DETAIL = "calendar/LOAD_DETAIL";
 const LOAD_DAY_SCHEDULES = "calendar/LOAD_DAY_SCHEDULES";
@@ -20,6 +21,7 @@ const GET_TODO_BY_SCHEDULE = "calendar/GET_TODO_BY_SCHEDULE";
 // action creator
 
 export const setCurrentId = createAction(SET_CURRENT_ID, (id) => ({ id }));
+export const setModalId = createAction(SET_MODAL_ID, (id) => ({ id }));
 const loadSchedules = createAction(LOAD_SCHEDULES, (schedules) => ({
   schedules,
 }));
@@ -39,8 +41,8 @@ const getTodoBySchedule = createAction(GET_TODO_BY_SCHEDULE, (todos) => ({
   todos,
 }));
 
-// initialSchedule
-const initialSchedule = {
+// defaultSchedule(스케줄 기본값)
+const defaultSchedule = {
   cardTitle: "",
   startDate: moment().clone().format("YYYY-MM-DD"),
   endDate: moment().clone().format("YYYY-MM-DD"),
@@ -69,7 +71,7 @@ export const __addSchedule =
     // 모두 빈 값으로 저장
     // response로 오는 id를 currentId에 저장
     let cardId = Date.now();
-    let scheduleObj = { ...initialSchedule, cardId };
+    let scheduleObj = { ...defaultSchedule, cardId };
     dispatch(addSchedule(scheduleObj));
   };
 
@@ -79,7 +81,7 @@ export const __editSchedule =
   (roomId, editObj) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { data } = await cardApi.editCardInfo(roomId, editObj);
+      // const { data } = await cardApi.editCardInfo(roomId, editObj);  // 현재 카드 생성이 불가능해서 주석처리해야 리덕스라도 작동
       dispatch(editSchedule(editObj));
     } catch (e) {
       console.log("수정에 실패했습니다.", e);
@@ -116,6 +118,7 @@ const initialState = {
   currentList: [],
   currentScheduleId: null,
   currentTodos: [],
+  modalId: null,
 };
 
 // reducer
@@ -124,6 +127,10 @@ const calendar = handleActions(
     [SET_CURRENT_ID]: (state, action) =>
       produce(state, (draft) => {
         draft.currentScheduleId = action.payload.id;
+      }),
+    [SET_MODAL_ID]: (state, action) =>
+      produce(state, (draft) => {
+        draft.modalId = action.payload.id;
       }),
     [LOAD_SCHEDULES]: (state, action) =>
       produce(state, (draft) => {
@@ -140,7 +147,7 @@ const calendar = handleActions(
     [ADD_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
         const { schedule } = action.payload;
-        draft.currentScheduleId = schedule.cardId;
+        draft.modalId = schedule.cardId;
         draft.scheduleList.push(action.payload.schedule);
       }),
     [EDIT_SCHEDULE]: (state, action) =>

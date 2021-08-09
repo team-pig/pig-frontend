@@ -42,6 +42,7 @@ const CalendarInfo = () => {
     }
     if (currentSchedules.length !== 0) {
       dispatch(__getTodoBySchedule(roomId, currentId));
+      console.log(currentSchedules.find((item) => item.cardId === currentId));
       setTitle(
         currentSchedules.find((item) => item.cardId === currentId).cardTitle
       );
@@ -107,7 +108,7 @@ const CalendarInfo = () => {
         {todos.length === 0 && (
           <Info>
             <Text type="sub_2" color="grey">
-              일정이 없습니다.
+              이 카드에 할 일이 없습니다.
             </Text>
           </Info>
         )}

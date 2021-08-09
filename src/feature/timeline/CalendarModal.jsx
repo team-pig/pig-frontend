@@ -4,13 +4,12 @@ import { useParams } from "react-router-dom";
 
 // redux
 import {
-  setCurrentId,
+  setModalId,
   __deleteSchedule,
   __editSchedule,
 } from "../../redux/modules/calendar";
 
 // component
-import Todos from "../../feature/board/Todos";
 import InputToggle from "../../components/InputToggle";
 
 // elem
@@ -22,7 +21,7 @@ const CalendarModal = ({ content, setContent, setShowModal }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    return () => dispatch(setCurrentId(null));
+    return () => dispatch(setModalId(null));
   }, []);
 
   const returnEditObj = (key, value) => {

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 // redux
 import { selectDate } from "../../redux/modules/date";
-import { loadDaySchedules } from "../../redux/modules/calendar";
+import { setCurrentId, loadDaySchedules } from "../../redux/modules/calendar";
 
 // component
 import Date from "./Date";
@@ -27,6 +27,7 @@ const Dates = () => {
     const idAry = targetList.map((item) => item.cardId);
     const date = target.format("M월 D일");
     loadSchedules(date, idAry);
+    dispatch(setCurrentId(idAry[0]));
   };
 
   // 처음 타임라인으로 들어왔을 때 당일의 일정들을 보여줌

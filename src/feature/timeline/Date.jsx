@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-
-import CardModal from "../board/CardModal";
-import CalendarModal from "./CalendarModal";
+import { useDispatch } from "react-redux";
 
 // redux
 import { setCurrentId } from "../../redux/modules/calendar";
@@ -14,19 +11,8 @@ import flex from "../../themes/flex";
 const Date = ({ idx, list, today, thisMonth, children, _onClick }) => {
   const dispatch = useDispatch();
 
-  const currentContent = useSelector((state) =>
-    state.calendar.scheduleList.find(
-      (item) => item.cardId === state.calendar.currentScheduleId
-    )
-  );
-
-  const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
-
-  useEffect(() => setModalContent(currentContent), [currentContent]);
-
   const clickSchedule = (cardId) => {
-    setShowModal((pre) => !pre);
+    _onClick();
     dispatch(setCurrentId(cardId));
   };
 
@@ -60,15 +46,6 @@ const Date = ({ idx, list, today, thisMonth, children, _onClick }) => {
           );
         })}
       </DateContainer>
-      {showModal && modalContent && (
-        <CardModal showModal={showModal} setShowModal={setShowModal}>
-          <CalendarModal
-            content={modalContent}
-            setContent={setModalContent}
-            setShowModal={setShowModal}
-          />
-        </CardModal>
-      )}
     </>
   );
 };
@@ -77,6 +54,7 @@ const DateContainer = styled.div`
   ${flex("start", "center", false)};
   border-right: ${(props) => props.idx % 7 !== 6 && `1px solid var(--line);`};
   border-bottom: ${(props) => props.idx < 35 && `1px solid var(--line)`};
+  cursor: pointer;
 `;
 
 const DateBox = styled.div`
@@ -116,6 +94,7 @@ const ScheduleBtn = styled.div`
   opacity: ${(props) => !props.thisMonth && "20%;"};
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
 `;
 
 const ScheduleText = styled(Text)`

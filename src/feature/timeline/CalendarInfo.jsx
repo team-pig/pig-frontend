@@ -16,24 +16,29 @@ const CalendarInfo = () => {
   const { current } = useSelector((state) => state.date);
   const today = current && current.clone().format("M월 D일");
 
-  const { currentList: currentSchedules, currentTodos } = useSelector(
-    (state) => state.calendar
-  );
+  const {
+    currentList: currentSchedules,
+    currentTodos,
+    currentScheduleId: currentId,
+  } = useSelector((state) => state.calendar);
   const { selectedDate } = useSelector((state) => state.date) || {
     selectedDate: today,
   };
 
   const [title, setTitle] = useState("");
 
+  // currentId(상세 내용 보여줄 대상)가 바뀔 때마다 title바꿔주고 todo 불러옴
   useEffect(() => {
     if (currentSchedules.length === 0) {
       setTitle("");
     }
     if (currentSchedules.length !== 0) {
-      dispatch(__getTodoBySchedule(roomId, currentSchedules[0].cardId));
-      setTitle(currentSchedules[0].cardTitle);
+      dispatch(__getTodoBySchedule(roomId, currentId));
+      setTitle(
+        currentSchedules.find((item) => item.cardId === currentId).cardTitle
+      );
     }
-  }, [roomId, currentSchedules]);
+  }, [roomId, currentId]);
 
   const clickSchedule = (cardId, title) => {
     setTitle(title);

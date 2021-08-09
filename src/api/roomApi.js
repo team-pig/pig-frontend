@@ -36,9 +36,16 @@ export const roomApi = {
     return instance.post(`/room/${roomId}/bookmark`);
   },
   deleteBookmark: (roomId) => {
-    instance.delete(`room/${roomId}/bookmark`, {
+    instance.delete(`/room/${roomId}/bookmark`, {
       data: {
         roomId,
+      },
+    });
+  },
+  searchRoom: (searchContent) => {
+    return instance.get("/rooms/search", {
+      params: {
+        roomName: searchContent,
       },
     });
   },

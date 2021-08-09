@@ -25,8 +25,18 @@ const Dates = () => {
               targetFormat &&
             parseInt(schedule["endDate"].split("-").join("")) >= targetFormat
         );
+
+        const checkThisMonth =
+          String(targetFormat).substr(0, 6) === String(nowFormat).substr(0, 6);
+
         return (
-          <Date key={idx} idx={idx} list={targetList} today={today}>
+          <Date
+            key={idx}
+            idx={idx}
+            list={targetList}
+            today={today}
+            thisMonth={checkThisMonth}
+          >
             {target.format("D")}
           </Date>
         );

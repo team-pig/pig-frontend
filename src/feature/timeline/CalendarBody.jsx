@@ -51,7 +51,7 @@ const CalendarDate = styled.div`
 
 const Day = styled.div`
   ${flex("end", "center")};
-  padding: 0 7px;
+  padding: 0 8px;
 `;
 
 export default CalendarBody;

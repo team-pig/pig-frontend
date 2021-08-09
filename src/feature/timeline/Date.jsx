@@ -11,7 +11,7 @@ import { loadDaySchedules, setCurrentId } from "../../redux/modules/calendar";
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
 
-const Date = ({ idx, list, today, children }) => {
+const Date = ({ idx, list, today, thisMonth, children }) => {
   const dispatch = useDispatch();
 
   const currentContent = useSelector((state) =>
@@ -38,6 +38,7 @@ const Date = ({ idx, list, today, children }) => {
     <>
       <DateContainer
         idx={idx}
+        thisMonth={thisMonth}
         onClick={(e) => {
           e.stopPropagation();
           const idAry = list.map((item) => item.cardId);
@@ -85,6 +86,7 @@ const DateContainer = styled.div`
   ${flex("start", "center", false)};
   border-right: ${(props) => props.idx % 7 !== 6 && `1px solid var(--line);`};
   border-bottom: ${(props) => props.idx < 35 && `1px solid var(--line)`};
+  opacity: ${(props) => !props.thisMonth && "50%;"};
 `;
 
 const DateBox = styled.div`
@@ -98,7 +100,8 @@ const DateNum = styled(Text)`
   ${flex()};
   width: 24px;
   height: 24px;
-  color: var(--darkgrey);
+  color: ${(props) =>
+    props.idx % 7 === 0 ? "var(--notice);" : "var(--darkgrey);"};
   ${(props) => {
     if (props.today)
       return css`

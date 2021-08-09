@@ -44,7 +44,7 @@ const CalendarDays = styled.div`
 
 const CalendarDate = styled.div`
   ${CalendarGrid};
-  grid-template-rows: repeat(6, minmax(70px, 150px));
+  grid-template-rows: repeat(6, 100px);
   border-top: 1px solid var(--grey);
   border-bottom: 1px solid var(--grey);
 `;

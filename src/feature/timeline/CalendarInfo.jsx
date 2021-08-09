@@ -23,23 +23,20 @@ const CalendarInfo = () => {
     selectedDate: today,
   };
 
-  const [schedule, setSchedule] = useState({
-    title: "",
-    todos: currentTodos,
-  });
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
+    if (currentSchedules.length === 0) {
+      setTitle("");
+    }
     if (currentSchedules.length !== 0) {
       dispatch(__getTodoBySchedule(roomId, currentSchedules[0].cardId));
-      setSchedule({
-        ...schedule,
-        title: currentSchedules[0].cardTitle,
-      });
+      setTitle(currentSchedules[0].cardTitle);
     }
   }, [roomId, currentSchedules]);
 
   const clickSchedule = (cardId, title) => {
-    setSchedule({ ...schedule, title });
+    setTitle(title);
     dispatch(__getTodoBySchedule(roomId, cardId));
   };
 
@@ -64,7 +61,7 @@ const CalendarInfo = () => {
       </Left>
       <Right>
         <TitleBox>
-          <Text type="body_1">{schedule.title}</Text>
+          <Text type="body_1">{title}</Text>
         </TitleBox>
         {currentTodos.length !== 0 &&
           currentTodos.map((todo) => (

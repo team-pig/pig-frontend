@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -24,7 +24,22 @@ const CalendarInfo = () => {
     selectedDate: today,
   };
 
-  const clickSchedule = (cardId) => {
+  const [schedule, setSchedule] = useState({
+    title: "",
+    todos: [],
+  });
+
+  useEffect(() => {
+    if (currentSchedules.length !== 0) {
+      setSchedule({
+        ...schedule,
+        title: currentSchedules[0].cardTitle || "",
+      });
+    }
+  }, [currentSchedules]);
+
+  const clickSchedule = (cardId, title) => {
+    setSchedule({ ...schedule, title });
     dispatch(__getTodoBySchedule(roomId, cardId));
   };
 
@@ -41,7 +56,7 @@ const CalendarInfo = () => {
             <CurrentSchedule
               key={idx}
               color={item.color}
-              onClick={() => clickSchedule(item.cardId)}
+              onClick={() => clickSchedule(item.cardId, item.cardTitle)}
             >
               <ScheduleText type="sub_2">{item.cardTitle}</ScheduleText>
             </CurrentSchedule>
@@ -49,7 +64,7 @@ const CalendarInfo = () => {
       </Left>
       <Right>
         <TitleBox>
-          <Text type="body_1">디자인 완성하기</Text>
+          <Text type="body_1">{schedule.title}</Text>
         </TitleBox>
         {currentTodos.length !== 0 &&
           currentTodos.map((todo) => (

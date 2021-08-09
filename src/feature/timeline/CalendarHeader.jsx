@@ -1,17 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
 // redux
 import { setCurrent } from "../../redux/modules/date";
 
+import CardModal from "../board/CardModal";
+import CalendarModal from "./CalendarModal";
+
+// redux
+import { __addSchedule } from "../../redux/modules/calendar";
+
 // elem
-import { Button } from "../../elem";
+import { IconBtn, Text } from "../../elem";
 import flex from "../../themes/flex";
+import Icon from "../../components/Icon";
 
 const CalendarHeader = () => {
   const dispatch = useDispatch();
   const current = useSelector((state) => state.date.current);
+  const currentContent = useSelector((state) =>
+    state.calendar.scheduleList.find(
+      (item) => item.cardId === state.calendar.modalId
+    )
+  );
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+
+  useEffect(() => setModalContent(currentContent), [currentContent]);
 
   const showLastMonth = () => {
     dispatch(setCurrent(current.clone().subtract(1, "month")));
@@ -21,25 +38,74 @@ const CalendarHeader = () => {
     dispatch(setCurrent(current.clone().add(1, "month")));
   };
 
+  const clickCreateBtn = () => {
+    setShowModal((pre) => !pre);
+    dispatch(__addSchedule());
+  };
+
   return (
-    <Header>
-      <Button _onClick={showLastMonth}>지난 달로 가기</Button>
-      <CurrentMonth>{current.format("YYYY년 MM월")}</CurrentMonth>
-      <Button _onClick={showNextMonth}>다음 달로 가기</Button>
-    </Header>
+    <>
+      <Header>
+        <Nav>
+          <CurrentMonth>
+            <Text type="sub_1">{current.format("YYYY년 MM월")}</Text>
+          </CurrentMonth>
+          <NavIcons>
+            <IconBtn _onClick={showLastMonth} padding="5px">
+              <Icon icon="arrow-left" size="14px" color="var(--darkgrey)" />
+            </IconBtn>
+            <IconBtn _onClick={showNextMonth} padding="5px">
+              <Icon icon="arrow-right" size="14px" color="var(--darkgrey)" />
+            </IconBtn>
+          </NavIcons>
+        </Nav>
+        <BtnBox>
+          <IconBtn _onClick={() => {}} padding="5px">
+            <Icon icon="search" size="24px" color="var(--darkgrey)" />
+          </IconBtn>
+          <IconBtn _onClick={clickCreateBtn} padding="5px">
+            <Icon icon="plus-lg" size="24px" color="var(--darkgrey)" />
+          </IconBtn>
+        </BtnBox>
+      </Header>
+      {showModal && modalContent && (
+        <CardModal showModal={showModal} setShowModal={setShowModal}>
+          <CalendarModal
+            content={modalContent}
+            setContent={setModalContent}
+            setShowModal={setShowModal}
+          />
+        </CardModal>
+      )}
+    </>
   );
 };
 
 // 모두 임시스타일입니다.
 const Header = styled.div`
-  ${flex()};
+  ${flex("between")};
   width: 100%;
-  height: 40px;
-  background-color: #f39c12;
+  height: 60px;
+  padding: 0 20px;
 `;
 
 const CurrentMonth = styled.h2`
-  font-size: 24px;
+  margin-right: 12px;
+`;
+
+const Nav = styled.nav`
+  ${flex()};
+`;
+
+const NavIcons = styled.div`
+  ${flex()};
+  gap: 8px;
+`;
+
+const BtnBox = styled.div`
+  ${flex()};
+  gap: 5px;
+  margin-right: -10px;
 `;
 
 export default CalendarHeader;

@@ -86,7 +86,7 @@ export const gnb = css`
   font-size: 1.8rem;
   line-height: 2.4rem;
   letter-spacing: -0.04rem;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
 `;
 
 export const caption = css`

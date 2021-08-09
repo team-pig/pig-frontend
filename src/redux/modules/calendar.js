@@ -4,19 +4,24 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import moment from "moment";
+import { cardApi } from "../../api/cardApi";
+import { todoApi } from "../../api/todoApi";
 
 // action
 const SET_CURRENT_ID = "calendar/SET_CURRENT_ID";
+const SET_MODAL_ID = "calendar/SET_MODAL_ID";
 const LOAD_SCHEDULES = "calendar/LOAD_SCHEDULES";
 const LOAD_DETAIL = "calendar/LOAD_DETAIL";
 const LOAD_DAY_SCHEDULES = "calendar/LOAD_DAY_SCHEDULES";
 const ADD_SCHEDULE = "calendar/ADD_SCHEDULE";
 const EDIT_SCHEDULE = "calendar/EDIT_SCHEDULE";
 const DELETE_SCHEDULE = "calendar/DELETE_SCHEDULE";
+const GET_TODO_BY_SCHEDULE = "calendar/GET_TODO_BY_SCHEDULE";
 
 // action creator
 
 export const setCurrentId = createAction(SET_CURRENT_ID, (id) => ({ id }));
+export const setModalId = createAction(SET_MODAL_ID, (id) => ({ id }));
 const loadSchedules = createAction(LOAD_SCHEDULES, (schedules) => ({
   schedules,
 }));
@@ -32,9 +37,12 @@ const editSchedule = createAction(EDIT_SCHEDULE, (scheduleObj) => ({
 const deleteSchedule = createAction(DELETE_SCHEDULE, (scheduleId) => ({
   scheduleId,
 }));
+const getTodoBySchedule = createAction(GET_TODO_BY_SCHEDULE, (todos) => ({
+  todos,
+}));
 
-// initialSchedule
-const initialSchedule = {
+// defaultSchedule(스케줄 기본값)
+const defaultSchedule = {
   cardTitle: "",
   startDate: moment().clone().format("YYYY-MM-DD"),
   endDate: moment().clone().format("YYYY-MM-DD"),
@@ -47,10 +55,13 @@ const initialSchedule = {
 // 모든 일정을 받아오는 thunk 함수 (월 이동 시 불러옴, lodash-debounce 사용)
 export const __loadSchedules =
   (roomId, date) =>
-  (dispatch, getState, { history }) => {
-    // 모든 일정 받아와서 action creator로 전달
-    // let schedules; // 임시
-    // dispatch(loadSchedules(schedules));
+  async (dispatch, getState, { history }) => {
+    try {
+      const { data } = await cardApi.getCards(roomId);
+      dispatch(loadSchedules(data.cards));
+    } catch (e) {
+      console.log("카드를 불러오지 뭇했습니다.", e);
+    }
   };
 
 // schedule 새로 생성 thunk 함수
@@ -60,7 +71,7 @@ export const __addSchedule =
     // 모두 빈 값으로 저장
     // response로 오는 id를 currentId에 저장
     let cardId = Date.now();
-    let scheduleObj = { ...initialSchedule, cardId };
+    let scheduleObj = { ...defaultSchedule, cardId };
     dispatch(addSchedule(scheduleObj));
   };
 
@@ -70,7 +81,7 @@ export const __editSchedule =
   (roomId, editObj) =>
   async (dispatch, getState, { history }) => {
     try {
-      // const {data} = await api.editCard(roomId, editObj)
+      // const { data } = await cardApi.editCardInfo(roomId, editObj);  // 현재 카드 생성이 불가능해서 주석처리해야 리덕스라도 작동
       dispatch(editSchedule(editObj));
     } catch (e) {
       console.log("수정에 실패했습니다.", e);
@@ -83,43 +94,31 @@ export const __deleteSchedule =
   (roomId, cardId) =>
   async (dispatch, getState, { history }) => {
     try {
-      // const {data} = await api.deleteCard(roomId, cardId)
+      await cardApi.deleteCard(cardId, roomId);
       dispatch(deleteSchedule(cardId));
     } catch (e) {
       console.log("삭제에 실패했습니다.", e);
     }
   };
 
+export const __getTodoBySchedule =
+  (roomId, cardId) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      const { data } = await todoApi.getTodo(roomId, cardId);
+      dispatch(getTodoBySchedule(data.todos));
+    } catch (e) {
+      console.log("해당 일정의 투두리스트를 불러오지 못했습니다.", e);
+    }
+  };
+
 // initialState
 const initialState = {
-  scheduleList: [
-    {
-      cardId: 1,
-      cardTitle: "과제 제출하기",
-      startDate: "2021-08-03",
-      endDate: "2021-08-05",
-      desc: "hahaha",
-      taskMembers: [],
-    },
-    {
-      cardId: 2,
-      cardTitle: "휴식 취하기",
-      startDate: "2021-08-08",
-      endDate: "2021-08-14",
-      desc: "아무것도 안하고 쉬기",
-      taskMembers: [],
-    },
-    {
-      cardId: 3,
-      cardTitle: "프로젝트 하기",
-      startDate: "2021-08-01",
-      endDate: "2021-08-16",
-      desc: "프로젝트...",
-      taskMembers: [],
-    },
-  ],
+  scheduleList: [],
   currentList: [],
   currentScheduleId: null,
+  currentTodos: [],
+  modalId: null,
 };
 
 // reducer
@@ -128,6 +127,10 @@ const calendar = handleActions(
     [SET_CURRENT_ID]: (state, action) =>
       produce(state, (draft) => {
         draft.currentScheduleId = action.payload.id;
+      }),
+    [SET_MODAL_ID]: (state, action) =>
+      produce(state, (draft) => {
+        draft.modalId = action.payload.id;
       }),
     [LOAD_SCHEDULES]: (state, action) =>
       produce(state, (draft) => {
@@ -144,7 +147,7 @@ const calendar = handleActions(
     [ADD_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
         const { schedule } = action.payload;
-        draft.currentScheduleId = schedule.cardId;
+        draft.modalId = schedule.cardId;
         draft.scheduleList.push(action.payload.schedule);
       }),
     [EDIT_SCHEDULE]: (state, action) =>
@@ -164,6 +167,10 @@ const calendar = handleActions(
           (schedule) => schedule.cardId === scheduleId
         );
         draft.scheduleList.splice(idx, 1);
+      }),
+    [GET_TODO_BY_SCHEDULE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.currentTodos = action.payload.todos;
       }),
   },
   initialState

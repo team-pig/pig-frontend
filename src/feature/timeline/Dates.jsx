@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // redux
@@ -28,6 +28,17 @@ const Dates = () => {
     const date = target.format("M월 D일");
     loadSchedules(date, idAry);
   };
+
+  // 처음 타임라인으로 들어왔을 때 당일의 일정들을 보여줌
+  useEffect(() => {
+    let targetFormat = now.clone().format("YYYYMMDD");
+    let targetList = scheduleList.filter(
+      (schedule, idx) =>
+        parseInt(schedule["startDate"].split("-").join("")) <= targetFormat &&
+        parseInt(schedule["endDate"].split("-").join("")) >= targetFormat
+    );
+    clickDate(now, targetList);
+  }, [now, scheduleList]);
 
   return (
     <>

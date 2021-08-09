@@ -14,29 +14,29 @@ const CalendarInfo = () => {
   const dispatch = useDispatch();
 
   const { current } = useSelector((state) => state.date);
+  const today = current && current.clone().format("M월 D일");
+
   const { currentList: currentSchedules, currentTodos } = useSelector(
     (state) => state.calendar
   );
-
-  const today = current && current.clone().format("M월 D일");
-
   const { selectedDate } = useSelector((state) => state.date) || {
     selectedDate: today,
   };
 
   const [schedule, setSchedule] = useState({
     title: "",
-    todos: [],
+    todos: currentTodos,
   });
 
   useEffect(() => {
     if (currentSchedules.length !== 0) {
+      dispatch(__getTodoBySchedule(roomId, currentSchedules[0].cardId));
       setSchedule({
         ...schedule,
-        title: currentSchedules[0].cardTitle || "",
+        title: currentSchedules[0].cardTitle,
       });
     }
-  }, [currentSchedules]);
+  }, [roomId, currentSchedules]);
 
   const clickSchedule = (cardId, title) => {
     setSchedule({ ...schedule, title });

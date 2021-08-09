@@ -71,7 +71,7 @@ const WSTabs = ({ url }) => {
       </Item>
       <Item onClick={toCalendar}>
         <MenuText type="body_1" here={checkTab("timeline")}>
-          일정
+          타임라인
         </MenuText>
       </Item>
     </List>
@@ -98,6 +98,7 @@ const MenuText = styled(Text)`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
   height: 100%;
   color: ${(props) => (props.here ? "var(--main);" : "var(--darkgrey);")};
 

@@ -34,9 +34,7 @@ const Calendar = (props) => {
 };
 
 const CalendarBox = styled.section`
-  // 임시 스타일
-  position: relative;
-  z-index: 99;
+  width: 100%;
 `;
 
 export default Calendar;

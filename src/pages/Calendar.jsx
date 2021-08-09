@@ -1,34 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 // redux
-import { __addSchedule, __loadSchedules } from "../redux/modules/calendar";
+import { __loadSchedules } from "../redux/modules/calendar";
 
 // component
 import CalendarHeader from "../feature/timeline/CalendarHeader";
 import CalendarBody from "../feature/timeline/CalendarBody";
 import CalendarInfo from "../feature/timeline/CalendarInfo";
-import CardModal from "../feature/board/CardModal";
-import CalendarModal from "../feature/timeline/CalendarModal";
-
-// elem
-import { Button } from "../elem";
 
 const Calendar = (props) => {
   const { roomId } = useParams();
 
   const dispatch = useDispatch();
   const current = useSelector((state) => state.date.current);
-  const currentContent = useSelector((state) =>
-    state.calendar.scheduleList.find(
-      (item) => item.cardId === state.calendar.currentScheduleId
-    )
-  );
-
-  const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
 
   // 월이 바뀔 때마다 모든 일정을 가져오도록 설정
   useEffect(() => {
@@ -37,28 +24,11 @@ const Calendar = (props) => {
     }
   }, [current, roomId]);
 
-  useEffect(() => setModalContent(currentContent), [currentContent]);
-
-  const clickCreateBtn = () => {
-    setShowModal((pre) => !pre);
-    dispatch(__addSchedule());
-  };
-
   return (
     <CalendarBox>
-      <Button _onClick={clickCreateBtn}>일정 추가</Button>
       <CalendarHeader />
       <CalendarBody />
       <CalendarInfo />
-      {showModal && modalContent && (
-        <CardModal showModal={showModal} setShowModal={setShowModal}>
-          <CalendarModal
-            content={modalContent}
-            setContent={setModalContent}
-            setShowModal={setShowModal}
-          />
-        </CardModal>
-      )}
     </CalendarBox>
   );
 };

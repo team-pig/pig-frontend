@@ -3,10 +3,16 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { Text } from "../../elem";
+import Icon from "../../components/Icon";
+import Filled from "../../assets/icons/checkbox-filled.svg";
+import { IconBtn, Text } from "../../elem";
 import flex from "../../themes/flex";
 
-import { __getTodoBySchedule } from "../../redux/modules/calendar.js";
+// redux
+import {
+  setCurrentId,
+  __getTodoBySchedule,
+} from "../../redux/modules/calendar.js";
 
 const CalendarInfo = () => {
   const { roomId } = useParams();
@@ -26,11 +32,13 @@ const CalendarInfo = () => {
   };
 
   const [title, setTitle] = useState("");
+  const [todos, setTodos] = useState(currentTodos);
 
   // currentId(상세 내용 보여줄 대상)가 바뀔 때마다 title바꿔주고 todo 불러옴
   useEffect(() => {
     if (currentSchedules.length === 0) {
       setTitle("");
+      setTodos([]);
     }
     if (currentSchedules.length !== 0) {
       dispatch(__getTodoBySchedule(roomId, currentId));
@@ -42,35 +50,95 @@ const CalendarInfo = () => {
 
   const clickSchedule = (cardId, title) => {
     setTitle(title);
+    dispatch(setCurrentId(cardId));
     dispatch(__getTodoBySchedule(roomId, cardId));
   };
 
+  useEffect(() => {
+    setTodos(currentTodos);
+  }, [roomId, currentTodos]);
+
+  const toggleTodo = (todoId) => {
+    const idx = todos.findIndex((todo) => todo.todoId === todoId);
+    const newAry = todos.slice();
+    newAry[idx] = { ...newAry[idx], isChecked: !newAry[idx].isChecked };
+    setTodos(newAry);
+  };
+
+  const deleteTodo = (todoId) => {
+    const newAry = todos.slice().filter((todo) => todo.todoId !== todoId);
+    setTodos(newAry);
+  };
+
+  // cardIsZero : 현재 스케줄(카드)이 없으면 true
+  const cardIsZero = currentSchedules.length === 0;
+
   return (
     <Container>
-      <Left>
+      <Left cardIsZero={cardIsZero}>
         <TitleBox>
           <Text type="body_1" color="black">
             {selectedDate}
           </Text>
         </TitleBox>
+        {cardIsZero && (
+          <Info>
+            <Text type="sub_2" color="grey">
+              일정이 없습니다.
+            </Text>
+          </Info>
+        )}
         {currentSchedules &&
           currentSchedules.map((item, idx) => (
             <CurrentSchedule
               key={idx}
               color={item.color}
+              focus={item.cardId === currentId}
               onClick={() => clickSchedule(item.cardId, item.cardTitle)}
             >
               <ScheduleText type="sub_2">{item.cardTitle}</ScheduleText>
             </CurrentSchedule>
           ))}
       </Left>
-      <Right>
+      <Right cardIsZero={cardIsZero}>
         <TitleBox>
           <Text type="body_1">{title}</Text>
         </TitleBox>
-        {currentTodos.length !== 0 &&
-          currentTodos.map((todo) => (
-            <div key={todo.todoId}>{todo.todoTitle}</div>
+        {todos.length === 0 && (
+          <Info>
+            <Text type="sub_2" color="grey">
+              일정이 없습니다.
+            </Text>
+          </Info>
+        )}
+
+        {todos.length !== 0 &&
+          todos.map((todo) => (
+            <Item key={todo.todoId}>
+              <Grid>
+                <IconBtn _onClick={() => toggleTodo(todo.todoId)}>
+                  {!todo.isChecked ? (
+                    <Icon icon="checkbox" size="20px" />
+                  ) : (
+                    <img src={Filled} alt="체크됨" />
+                  )}
+                </IconBtn>
+                <Text type="sub_2">{todo.todoTitle}</Text>
+              </Grid>
+              <BtnBox>
+                <IconBtn _onClick={() => {}} padding="5px">
+                  <Icon icon="member-plus" size="20px" color="var(--grey)" />
+                </IconBtn>
+                <RemoveGrid>
+                  <IconBtn
+                    _onClick={() => deleteTodo(todo.todoId)}
+                    padding="5px"
+                  >
+                    <RemoveIcon icon="remove" size="20px" />
+                  </IconBtn>
+                </RemoveGrid>
+              </BtnBox>
+            </Item>
           ))}
       </Right>
     </Container>
@@ -84,12 +152,13 @@ const Container = styled.section`
 `;
 
 const Left = styled.div`
-  width: calc(100% * (1 / 2.7));
+  width: ${(props) => (props.cardIsZero ? "100%" : `calc(100% * (1 / 2.7));`)};
   flex-shrink: 0;
   height: 100%;
 `;
 
 const Right = styled.div`
+  display: ${(props) => props.cardIsZero && "none;"};
   width: calc(100% * (1.7 / 2.7));
   flex-shrink: 0;
   height: 100%;
@@ -102,9 +171,18 @@ const TitleBox = styled.div`
   padding-left: 20px;
 `;
 
+const Info = styled.div`
+  ${flex()};
+  width: 100%;
+  height: 100%;
+  margin-top: -60px;
+`;
+
 const CurrentSchedule = styled.div`
   ${flex("start")};
   height: 42px;
+  background-color: ${(props) =>
+    props.focus ? `var(--line);` : "var(--white);"};
   padding: 0 20px;
   cursor: pointer;
 
@@ -116,16 +194,46 @@ const CurrentSchedule = styled.div`
     background-color: ${(props) => props.theme.colors[props.color]};
     border-radius: 5px;
   }
-
-  &:hover {
-    background-color: var(--line);
-  }
 `;
 
 const ScheduleText = styled(Text)`
   white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
+`;
+
+const Grid = styled.div`
+  ${flex("start", "center")};
+  gap: 18px;
+`;
+
+const RemoveIcon = styled(Icon)`
+  color: var(--grey);
+  transition: color 100ms ease-in-out;
+`;
+
+const BtnBox = styled.div`
+  ${flex()};
+  gap: 5px;
+  visibility: hidden;
+`;
+
+const RemoveGrid = styled(Grid)``;
+
+const Item = styled.li`
+  ${flex("between", "center")};
+  width: 100%;
+  min-height: 40px;
+  padding: 0 20px;
+  margin: 0;
+
+  &:hover {
+    background-color: var(--line);
+
+    ${BtnBox} {
+      visibility: initial;
+    }
+  }
 `;
 
 export default CalendarInfo;

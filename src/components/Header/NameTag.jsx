@@ -5,6 +5,15 @@ import { Text } from "../../elem";
 import flex from "../../themes/flex";
 
 const NameTag = ({ img, name }) => {
+  // 한글 포함인지 확인
+  const checkKorean = (str) => {
+    const regExp = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    if (regExp.test(str)) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <Wrapper>
       <ImgBox
@@ -14,7 +23,7 @@ const NameTag = ({ img, name }) => {
         }
       />
       {/* <ImgBox src={img} /> */}
-      <Nickname type="gnb">{name}</Nickname>
+      <Nickname type={checkKorean(name) ? "button" : "gnb"}>{name}</Nickname>
     </Wrapper>
   );
 };

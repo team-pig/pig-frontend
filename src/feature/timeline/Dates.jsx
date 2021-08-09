@@ -55,7 +55,8 @@ const Dates = () => {
         );
 
         const checkThisMonth =
-          String(targetFormat).substr(0, 6) === String(nowFormat).substr(0, 6);
+          String(targetFormat).substr(0, 6) ===
+          current.clone().format("YYYYMMDD").substr(0, 6);
 
         return (
           <Date

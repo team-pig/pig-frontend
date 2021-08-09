@@ -32,8 +32,8 @@ const Date = ({ idx, list, today, thisMonth, children, _onClick }) => {
 
   return (
     <>
-      <DateContainer idx={idx} thisMonth={thisMonth} onClick={_onClick}>
-        <DateBox>
+      <DateContainer idx={idx} onClick={_onClick}>
+        <DateBox thisMonth={thisMonth}>
           <DateNum type="body_2" today={today} idx={idx}>
             {children}
           </DateNum>
@@ -51,6 +51,7 @@ const Date = ({ idx, list, today, thisMonth, children, _onClick }) => {
                 clickSchedule(cardId);
               }}
               color={color}
+              thisMonth={thisMonth}
             >
               <ScheduleText type="body_3" color="white">
                 {cardTitle}
@@ -76,7 +77,6 @@ const DateContainer = styled.div`
   ${flex("start", "center", false)};
   border-right: ${(props) => props.idx % 7 !== 6 && `1px solid var(--line);`};
   border-bottom: ${(props) => props.idx < 35 && `1px solid var(--line)`};
-  opacity: ${(props) => !props.thisMonth && "50%;"};
 `;
 
 const DateBox = styled.div`
@@ -84,6 +84,7 @@ const DateBox = styled.div`
   width: 100%;
   height: 32px;
   padding: 0 4px;
+  opacity: ${(props) => !props.thisMonth && "50%;"};
 `;
 
 const DateNum = styled(Text)`
@@ -109,9 +110,10 @@ const ScheduleBtn = styled.div`
   width: calc(100% - (var(--margin) * 2));
   height: 24px;
   padding: 0 10px;
+  margin-bottom: 6px;
   background-color: ${(props) => `${props.theme.colors[props.color]}`};
   border-radius: 4px;
-  margin-bottom: 6px;
+  opacity: ${(props) => !props.thisMonth && "20%;"};
   overflow: hidden;
   text-overflow: ellipsis;
 `;

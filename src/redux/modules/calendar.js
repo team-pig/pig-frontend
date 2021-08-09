@@ -5,6 +5,7 @@ import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import moment from "moment";
 import { cardApi } from "../../api/cardApi";
+import { todoApi } from "../../api/todoApi";
 
 // action
 const SET_CURRENT_ID = "calendar/SET_CURRENT_ID";
@@ -14,6 +15,7 @@ const LOAD_DAY_SCHEDULES = "calendar/LOAD_DAY_SCHEDULES";
 const ADD_SCHEDULE = "calendar/ADD_SCHEDULE";
 const EDIT_SCHEDULE = "calendar/EDIT_SCHEDULE";
 const DELETE_SCHEDULE = "calendar/DELETE_SCHEDULE";
+const GET_TODO_BY_SCHEDULE = "calendar/GET_TODO_BY_SCHEDULE";
 
 // action creator
 
@@ -32,6 +34,9 @@ const editSchedule = createAction(EDIT_SCHEDULE, (scheduleObj) => ({
 }));
 const deleteSchedule = createAction(DELETE_SCHEDULE, (scheduleId) => ({
   scheduleId,
+}));
+const getTodoBySchedule = createAction(GET_TODO_BY_SCHEDULE, (todos) => ({
+  todos,
 }));
 
 // initialSchedule
@@ -94,11 +99,23 @@ export const __deleteSchedule =
     }
   };
 
+export const __getTodoBySchedule =
+  (roomId, cardId) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      const { data } = await todoApi.getTodo(roomId, cardId);
+      dispatch(getTodoBySchedule(data.todos));
+    } catch (e) {
+      console.log("해당 일정의 투두리스트를 불러오지 못했습니다.", e);
+    }
+  };
+
 // initialState
 const initialState = {
   scheduleList: [],
   currentList: [],
   currentScheduleId: null,
+  currentTodos: [],
 };
 
 // reducer
@@ -143,6 +160,10 @@ const calendar = handleActions(
           (schedule) => schedule.cardId === scheduleId
         );
         draft.scheduleList.splice(idx, 1);
+      }),
+    [GET_TODO_BY_SCHEDULE]: (state, action) =>
+      produce(state, (draft) => {
+        draft.currentTodos = action.payload.todos;
       }),
   },
   initialState

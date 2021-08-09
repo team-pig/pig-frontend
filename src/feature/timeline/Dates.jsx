@@ -1,5 +1,9 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
+// redux
+import { selectDate } from "../../redux/modules/date";
+import { loadDaySchedules } from "../../redux/modules/calendar";
 
 // component
 import Date from "./Date";
@@ -8,9 +12,22 @@ const Dates = () => {
   const { now, current } = useSelector((state) => state.date);
   const { scheduleList } = useSelector((state) => state.calendar);
 
+  const dispatch = useDispatch();
+
   const firstDay = current.clone().startOf("month");
   const startDate = firstDay.clone().subtract("day", firstDay.day());
   const nowFormat = parseInt(now.clone().format("YYYYMMDD")); // 오늘 확인용으로 사용 코드
+
+  const loadSchedules = async (date, idAry) => {
+    dispatch(selectDate(date));
+    dispatch(loadDaySchedules(idAry));
+  };
+
+  const clickDate = (target, targetList) => {
+    const idAry = targetList.map((item) => item.cardId);
+    const date = target.format("M월 D일");
+    loadSchedules(date, idAry);
+  };
 
   return (
     <>
@@ -36,6 +53,7 @@ const Dates = () => {
             list={targetList}
             today={today}
             thisMonth={checkThisMonth}
+            _onClick={() => clickDate(target, targetList)}
           >
             {target.format("D")}
           </Date>

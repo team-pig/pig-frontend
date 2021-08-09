@@ -37,18 +37,17 @@ const RoomList = ({ history }) => {
 
   const changeSearchContent = (e) => {
     const keyword = e.target.value;
-    setSearchContent(keyword);  
+    setSearchContent(keyword);
     dispatch(__searchRoom(searchContent));
   };
 
   const _onKeyPress = (e) => {
-    if(e.key === "Enter")
-    {dispatch(__searchRoom(searchContent));
+    if (e.key === "Enter") {
+      dispatch(__searchRoom(searchContent));
     }
-  }
+  };
 
   const searchKeyword = _.debounce(changeSearchContent, 150);
-
 
   const openJoinModal = () => {
     setShowModal(true);
@@ -73,44 +72,49 @@ const RoomList = ({ history }) => {
   };
 
   //enter
-   const searchItem = searchedRoom.filter((item)=>{
-    if(item.roomName.includes(searchContent)){
-      return item
-    }
-  }).map((room, idx) => {
-    return (
-      <RoomCard
-        userId={userId}
-        openDrop={openDrop}
-        closeDrop={closeDrop}
-        isShow={isShow}
-        index={idx}
-        key={idx}
-        {...room}
-        history={history}
-      />
-    );
-  })
+  const searchItem = searchedRoom
+    .filter((item) => {
+      if (item.roomName.includes(searchContent)) {
+        return item;
+      }
+    })
+    .map((room, idx) => {
+      return (
+        <RoomCard
+          userId={userId}
+          openDrop={openDrop}
+          closeDrop={closeDrop}
+          isShow={isShow}
+          index={idx}
+          key={idx}
+          {...room}
+          history={history}
+        />
+      );
+    });
 
-  const notSearchItem = roomList.filter((item) => {
-    if(searchContent === null){
-      return item}
-    // else if(item.roomName.toLowerCase().includes(searchContent.toLowerCase())){
-    //   return item}
-  }).map((room, idx) => {
-    return (
-      <RoomCard
-        userId={userId}
-        openDrop={openDrop}
-        closeDrop={closeDrop}
-        isShow={isShow}
-        index={idx}
-        key={idx}
-        {...room}
-        history={history}
-      />
-    );
-  })
+  const notSearchItem = roomList
+    .filter((item) => {
+      if (searchContent === null) {
+        return item;
+      }
+      // else if(item.roomName.toLowerCase().includes(searchContent.toLowerCase())){
+      //   return item}
+    })
+    .map((room, idx) => {
+      return (
+        <RoomCard
+          userId={userId}
+          openDrop={openDrop}
+          closeDrop={closeDrop}
+          isShow={isShow}
+          index={idx}
+          key={idx}
+          {...room}
+          history={history}
+        />
+      );
+    });
 
   return (
     <Template>
@@ -131,8 +135,14 @@ const RoomList = ({ history }) => {
         <Wrapper>
           <WrapperItem>
             <InputBox>
-              <input onKeyUp={searchKeyword} onKeyPress={_onKeyPress} type="text" name="keyword" placeholder="방 이름을 검색하세요"/>
-                {/* <IconBox>
+              <input
+                onKeyUp={searchKeyword}
+                onKeyPress={_onKeyPress}
+                type="text"
+                name="keyword"
+                placeholder="방 이름을 검색하세요"
+              />
+              {/* <IconBox>
                   <Icon icon="search" size="24px" />
                 </IconBox>
               </Input> */}
@@ -151,7 +161,7 @@ const RoomList = ({ history }) => {
         <RoomContainer onClick={closeDrop}>
           <RoomBox>
             {searchContent === null ? notSearchItem : searchItem}
-            
+
             {/* {searchItem} */}
           </RoomBox>
         </RoomContainer>

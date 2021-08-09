@@ -110,7 +110,6 @@ const calendar = handleActions(
       }),
     [LOAD_SCHEDULES]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.schedules);
         draft.scheduleList = action.payload.schedules;
       }),
     [LOAD_DAY_SCHEDULES]: (state, action) =>

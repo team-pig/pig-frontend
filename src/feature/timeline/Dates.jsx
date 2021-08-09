@@ -10,14 +10,14 @@ const Dates = () => {
 
   const firstDay = current.clone().startOf("month");
   const startDate = firstDay.clone().subtract("day", firstDay.day());
-  // const nowFormat = parseInt(now.clone().format("YYYYMMDD")); // 오늘 확인용으로 사용 코드
+  const nowFormat = parseInt(now.clone().format("YYYYMMDD")); // 오늘 확인용으로 사용 코드
 
   return (
     <>
       {[...Array(42)].map((n, idx) => {
         let target = startDate.clone().add(idx, "d");
         let targetFormat = parseInt(target.format("YYYYMMDD"));
-        // let today = parseInt(target.clone().format("YYYYMMDD")) === nowFormat; // 오늘 확인용
+        let today = parseInt(target.clone().format("YYYYMMDD")) === nowFormat; // 오늘 확인용
 
         let targetList = scheduleList.filter(
           (schedule, idx) =>
@@ -26,7 +26,7 @@ const Dates = () => {
             parseInt(schedule["endDate"].split("-").join("")) >= targetFormat
         );
         return (
-          <Date key={idx} list={targetList}>
+          <Date key={idx} idx={idx} list={targetList} today={today}>
             {target.format("D")}
           </Date>
         );

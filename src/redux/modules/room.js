@@ -5,6 +5,7 @@ import { setPreview, uploadImageToS3 } from "./image";
 
 //action
 const ADD_ROOM = "room/ADD_ROOM";
+const SEARCH_ROOM = "room/SEARCH_ROOM";
 const GET_ROOM_LIST = "room/GET_ROOM_LIST";
 const GET_ONE_ROOM = "room/GET_ONE_ROOM";
 const EDIT_ROOM = "room/EDIT_ROOM";
@@ -17,7 +18,8 @@ const LOADING = "LOADING";
 
 //initialState
 const initialState = {
-  roomList: [],
+  // roomList: [],
+  searchedRoom: [],
   room: [],
   isLoading: false,
   paging: { page: 1, next: null, size: 12 },
@@ -26,6 +28,9 @@ const initialState = {
 
 //action creator
 export const addRoom = createAction(ADD_ROOM, (room) => ({ room }));
+export const searchRoom = createAction(SEARCH_ROOM, (searchedRoom) => ({
+  searchedRoom,
+}));
 export const getRoomList = createAction(
   GET_ROOM_LIST,
   (roomList, paging, userId) => ({
@@ -81,6 +86,23 @@ export const __exitRoom =
     try {
       await roomApi.exitRoom(roomId);
       dispatch(exitRoom(roomId));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+export const __searchRoom =
+  (searchContent) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      if (searchContent === "" || searchContent === null) {
+        const { data } = await roomApi.searchRoom(null);
+        const _room = getState().room.room;
+        dispatch(searchRoom(_room));
+      } else {
+        const { data } = await roomApi.searchRoom(searchContent);
+        dispatch(searchRoom(data));
+      }
     } catch (e) {
       console.log(e);
     }
@@ -198,6 +220,10 @@ const room = handleActions(
     [ADD_ROOM]: (state, action) =>
       produce(state, (draft) => {
         draft.room.unshift(action.payload.room.room);
+      }),
+    [SEARCH_ROOM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.searchedRoom = action.payload.searchedRoom;
       }),
     [JOIN_ROOM]: (state, action) =>
       produce(state, (draft) => {

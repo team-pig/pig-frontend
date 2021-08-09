@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import _ from "lodash";
 
 //components
 import Template from "../components/Template";
@@ -14,23 +15,39 @@ import Icon from "../components/Icon";
 import { Button, Input } from "../elem/index";
 
 //redux
-import { __getRoomList } from "../redux/modules/room";
+import { __getRoomList, __searchRoom } from "../redux/modules/room";
 
 const RoomList = ({ history }) => {
   const dispatch = useDispatch();
   const roomList = useSelector((state) => state.room.room) || [];
   const isLoading = useSelector((state) => state.room.isLoading);
   const paging = useSelector((state) => state.room.paging);
+  const searchedRoom = useSelector((state) => state.room.searchedRoom);
   const userId = useSelector((state) => state.room.userId);
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
   const [isShow, setIsShow] = useState(false);
+  const [searchContent, setSearchContent] = useState(null);
 
   useEffect(() => {
     if (roomList.length === 0) {
       dispatch(__getRoomList());
     }
   }, []);
+
+  const changeSearchContent = (e) => {
+    const keyword = e.target.value;
+    setSearchContent(keyword);
+    dispatch(__searchRoom(searchContent));
+  };
+
+  const _onKeyPress = (e) => {
+    if (e.key === "Enter") {
+      dispatch(__searchRoom(searchContent));
+    }
+  };
+
+  const searchKeyword = _.debounce(changeSearchContent, 150);
 
   const openJoinModal = () => {
     setShowModal(true);
@@ -54,6 +71,51 @@ const RoomList = ({ history }) => {
     setIsShow(false);
   };
 
+  //enter
+  const searchItem = searchedRoom
+    .filter((item) => {
+      if (item.roomName.includes(searchContent)) {
+        return item;
+      }
+    })
+    .map((room, idx) => {
+      return (
+        <RoomCard
+          userId={userId}
+          openDrop={openDrop}
+          closeDrop={closeDrop}
+          isShow={isShow}
+          index={idx}
+          key={idx}
+          {...room}
+          history={history}
+        />
+      );
+    });
+
+  const notSearchItem = roomList
+    .filter((item) => {
+      if (searchContent === null) {
+        return item;
+      }
+      // else if(item.roomName.toLowerCase().includes(searchContent.toLowerCase())){
+      //   return item}
+    })
+    .map((room, idx) => {
+      return (
+        <RoomCard
+          userId={userId}
+          openDrop={openDrop}
+          closeDrop={closeDrop}
+          isShow={isShow}
+          index={idx}
+          key={idx}
+          {...room}
+          history={history}
+        />
+      );
+    });
+
   return (
     <Template>
       {!isJoin && (
@@ -73,11 +135,17 @@ const RoomList = ({ history }) => {
         <Wrapper>
           <WrapperItem>
             <InputBox>
-              <Input type="text" value="">
-                <IconBox>
+              <input
+                onKeyUp={searchKeyword}
+                onKeyPress={_onKeyPress}
+                type="text"
+                name="keyword"
+                placeholder="방 이름을 검색하세요"
+              />
+              {/* <IconBox>
                   <Icon icon="search" size="24px" />
                 </IconBox>
-              </Input>
+              </Input> */}
             </InputBox>
             <BtnBox>
               <Button size="150" onClick={openJoinModal}>
@@ -92,20 +160,9 @@ const RoomList = ({ history }) => {
 
         <RoomContainer onClick={closeDrop}>
           <RoomBox>
-            {roomList.map((room, idx) => {
-              return (
-                <RoomCard
-                  userId={userId}
-                  openDrop={openDrop}
-                  closeDrop={closeDrop}
-                  isShow={isShow}
-                  index={idx}
-                  key={idx}
-                  {...room}
-                  history={history}
-                />
-              );
-            })}
+            {searchContent === null ? notSearchItem : searchItem}
+
+            {/* {searchItem} */}
           </RoomBox>
         </RoomContainer>
       </InfinityScroll>

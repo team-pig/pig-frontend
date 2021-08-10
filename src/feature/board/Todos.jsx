@@ -58,7 +58,7 @@ const Todos = ({ cardId }) => {
           _onClick={() => {
             formik.setFieldValue("todoTitle", "");
           }}
-          placeholder="이 카드에서 할 일은?"
+          placeholder="새로운 할 일을 추가 해주세요 :)"
         />
       </TodoForm>
     </Container>

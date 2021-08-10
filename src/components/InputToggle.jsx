@@ -4,7 +4,14 @@ import styled from "styled-components";
 // elem
 import { Text } from "../elem";
 
-const InputToggle = ({ name, shape, value = "", saveFunc }) => {
+const InputToggle = ({
+  name,
+  shape,
+  value = "",
+  saveFunc,
+  placeholder,
+  resize,
+}) => {
   const [editMode, setEditMode] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const myRef = useRef();
@@ -36,6 +43,21 @@ const InputToggle = ({ name, shape, value = "", saveFunc }) => {
       return (
         <EditTextarea
           ref={myRef}
+          rows="10"
+          name={name}
+          placeholder={placeholder}
+          value={currentValue}
+          onChange={(e) => setCurrentValue(e.target.value)}
+          onKeyPress={handleEnterEvent}
+        />
+      );
+    }
+
+    if (shape === "date") {
+      return (
+        <EditInput
+          type="date"
+          ref={myRef}
           name={name}
           value={currentValue}
           onChange={(e) => setCurrentValue(e.target.value)}
@@ -58,33 +80,41 @@ const InputToggle = ({ name, shape, value = "", saveFunc }) => {
 
   return (
     <Container onClick={!editMode ? () => setEditMode((pre) => !pre) : null}>
-      {editMode ? returnShape() : <Text>{currentValue}</Text>}
+      {editMode ? (
+        returnShape()
+      ) : (
+        <TextAreaResult>{currentValue}</TextAreaResult>
+      )}
     </Container>
   );
 };
 
-// 임시 스타일
 const Container = styled.div`
   width: 100%;
-  height: 60px;
-  background-color: lightgray;
+  height: 100%;
 `;
 
 const EditInput = styled.input`
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
   cursor: text !important;
   border: none;
-  font-size: 24px;
-  border-radius: 10px;
+  font-size: inherit;
   outline: none;
-  height: 60px;
-  width: 90%;
   text-align: center;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
 `;
 
 const EditTextarea = styled.textarea`
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
+  resize: none;
+`;
+
+const TextAreaResult = styled(Text)`
+  word-break: break-all;
+  /* overflow-y: auto; */
 `;
 
 export default InputToggle;

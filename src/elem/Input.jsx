@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import Icon from "../components/Icon";
 import { Text } from "../elem";
@@ -16,6 +16,7 @@ const Input = (props) => {
           name={props.name}
           placeholder={props.placeholder}
           isError={props.isError}
+          id={props.id}
         />
         {props.value !== "" ? (
           <IconX onClick={props._onClick}>
@@ -45,6 +46,8 @@ const Input = (props) => {
         type={props.type}
         onChange={props._onChange}
         checked={props.checked}
+        id={props.id}
+        {...props}
       />
     );
   }
@@ -103,7 +106,13 @@ const Helper = styled.div`
   transform: translateY(100%);
 `;
 
-const Checkbox = styled.input``;
+const Checkbox = styled.input`
+  ${(props) =>
+    props.none &&
+    css`
+      display: none;
+    `}
+`;
 
 const Date = styled.input``;
 

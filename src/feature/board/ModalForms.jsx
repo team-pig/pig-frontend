@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Text } from "../../elem";
@@ -6,11 +6,15 @@ import { __editCardInfos, resetCard } from "../../redux/modules/board";
 
 import styled, { css } from "styled-components";
 import InputToggle from "../../components/InputToggle";
-
-// import "react-datepicker/dist/react-datepicker.css";
+import DatePickerExample from "./DatePicker";
+import BoardDrop from "./BoardDrop";
+import moment from "moment";
 
 const ModalForms = ({ content, setContent }) => {
   const dispatch = useDispatch();
+
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   // 전역변수
   const { roomId } = useParams();
@@ -23,14 +27,53 @@ const ModalForms = ({ content, setContent }) => {
 
   const editFunc = (key, value) => {
     const editObj = { cardId: content.cardId, [key]: value };
-    dispatch(__editCardInfos(roomId, content.cardId, editObj));
+    dispatch(__editCardInfos(roomId, editObj));
   };
 
   return (
     <Container>
       <StyleDiv wh={["480px", "26px"]} mg="0 0 20px 0">
         <StyleDiv flex={["flex-start", "center", "10"]}>
-          <Dot bg="red" />
+          <BoardDrop.Container
+            componentType="colorPicker"
+            bgColor={content.color}
+          >
+            <BoardDrop.Item
+              componentType="colorPicker"
+              color="blue"
+              _onClick={() => {
+                editFunc("color", "blue");
+              }}
+            ></BoardDrop.Item>
+            <BoardDrop.Item
+              componentType="colorPicker"
+              color="violet"
+              _onClick={() => {
+                editFunc("color", "violet");
+              }}
+            ></BoardDrop.Item>
+            <BoardDrop.Item
+              componentType="colorPicker"
+              color="yellow"
+              _onClick={() => {
+                editFunc("color", "yellow");
+              }}
+            ></BoardDrop.Item>
+            <BoardDrop.Item
+              componentType="colorPicker"
+              color="orange"
+              _onClick={() => {
+                editFunc("color", "orange");
+              }}
+            ></BoardDrop.Item>
+            <BoardDrop.Item
+              componentType="colorPicker"
+              color="mint"
+              _onClick={() => {
+                editFunc("color", "mint");
+              }}
+            ></BoardDrop.Item>
+          </BoardDrop.Container>
           <Text type="sub_1">
             <InputToggle
               name="cardTitle"
@@ -42,33 +85,21 @@ const ModalForms = ({ content, setContent }) => {
       </StyleDiv>
 
       <StyleDiv mg="0 0 6px auto" flex={["flex-end", "center"]}>
-        <StyleDiv wh={["170px", "50px"]} pd="10px" flex={["center", "center"]}>
-          <StText type="body_2">
-            <InputToggle
-              shape="date"
-              name="startDate"
-              saveFunc={editFunc}
-              value={content.startDate}
-            />
-          </StText>
-        </StyleDiv>
-
-        <StyleDiv wh={["170px", "50px"]} pd="10px" flex={["center", "center"]}>
-          <StText type="body_2">
-            <InputToggle
-              shape="date"
-              name="endDate"
-              saveFunc={editFunc}
-              value={content.endDate}
-            />
-          </StText>
-        </StyleDiv>
-
+        <DatePickerExample
+          cardId={content.cardId}
+          roomId={roomId}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          content={content}
+        />
         <StyleDiv flex={["center", "center"]}>
-          <Text type="body_2">D-3</Text>
+          <Text type="body_2">
+            D-{moment(moment(content.endDate) - Date.now()).format("DD")}
+          </Text>
         </StyleDiv>
       </StyleDiv>
-
       <StyleDiv
         wh={["480px", "180px"]}
         pd="10px"
@@ -85,14 +116,6 @@ const ModalForms = ({ content, setContent }) => {
           />
         </StText>
       </StyleDiv>
-
-      {/* <div>
-        <select name="color" onChange={editContentHandler}>
-          <option>red</option>
-          <option>blue</option>
-          <option>green</option>
-        </select>
-      </div> */}
     </Container>
   );
 };

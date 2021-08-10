@@ -20,6 +20,7 @@ const UPDATE_CARD_LOCATE = "board/UPDATE_CARD_LOCATE";
 const UPDATE_CARD_LOCATE_OTHER_BUCKET = "board/UPDATE_CARD_LOCATE_OTHER_BUCKET";
 const UPDATE_CARD_INFOS = "board/UPDATE_CARD_INFOS";
 const DELETE_CARD = "board/DELETE_CARD";
+const RESET_CARD = "board/RESET_CARD";
 
 /**
  * action creatore
@@ -88,6 +89,8 @@ const deleteCard = createAction(
   })
 );
 
+export const resetCard = createAction(RESET_CARD);
+
 /**
  * Thunk function
  */
@@ -100,6 +103,7 @@ const deleteCard = createAction(
 export const __loadBucket = (roomId) => async (dispatch) => {
   try {
     const { data } = await bucketApi.getBuckets(roomId);
+    console.log(data);
     const loadedBucketOrder = data.bucketOrder.bucketOrder;
     const buckets = data.buckets;
 
@@ -126,7 +130,7 @@ export const __createBucket =
         cardOrder: [],
       };
 
-      const newBucketOrder = getState().board.columnOrder.concat(data.bucketId);
+      const newBucketOrder = getState().board.columnOrder;
       dispatch(createBucket(newBucket, newBucketOrder));
     } catch (e) {
       console.log(`버킷 생성 실패! ${e}`);
@@ -266,16 +270,9 @@ export const __updateCardLocateOtherBucket =
 export const __editCardInfos =
   (roomId, cardId, cardInfos) => async (dispatch) => {
     try {
-      const paramInfos = { cardId };
-      for (const info in cardInfos) {
-        if (cardInfos[info] !== "") {
-          paramInfos[info] = cardInfos[info];
-        }
-      }
-
-      await cardApi.editCardInfo(roomId, paramInfos);
-      console.log(paramInfos);
-      dispatch(editCardInfos(paramInfos));
+      const { data } = await cardApi.editCardInfo(roomId, cardInfos);
+      console.log(`결과 : ${data.message}`);
+      dispatch(editCardInfos(cardInfos));
     } catch (e) {
       console.log(e);
     }
@@ -332,9 +329,9 @@ export const board = handleActions(
 
     [CREATE_BUCKET]: (state, { payload }) =>
       produce(state, (draft) => {
-        const { newBucket, newBucketOrder } = payload;
+        const { newBucket } = payload;
         draft.columns[newBucket.bucketId] = newBucket;
-        draft.columnOrder = newBucketOrder;
+        draft.columnOrder.unshift(newBucket.bucketId);
       }),
 
     [UPDATE_BUCKET]: (state, { payload }) =>
@@ -363,6 +360,7 @@ export const board = handleActions(
 
     [LOAD_CARD_BY_ID]: (state, { payload }) =>
       produce(state, (draft) => {
+        console.log(payload);
         draft.card = payload.card.result;
         draft.allMembers = payload.card.allMembers;
       }),
@@ -396,7 +394,6 @@ export const board = handleActions(
 
     [UPDATE_CARD_INFOS]: (state, { payload }) =>
       produce(state, (draft) => {
-        console.log(payload);
         const newCard = { ...state.card, ...payload.paramInfos };
         draft.card = newCard;
       }),
@@ -406,6 +403,10 @@ export const board = handleActions(
         const { bucketId, newCardOrder, newCards } = payload;
         draft.columns[bucketId].cardOrder = newCardOrder;
         draft.cards = newCards;
+      }),
+    [RESET_CARD]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.card = {};
       }),
   },
   initialState

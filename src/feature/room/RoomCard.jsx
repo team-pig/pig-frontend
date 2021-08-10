@@ -8,7 +8,7 @@ import Icon from "../../components/Icon";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import Drop from "../../components/Drop";
 //elements
-import { Button, Text } from "../../elem/index";
+import { Text } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
 import MemberImg from "../../elem/MemberImg";
 import BookMark from "./BookMark";
@@ -38,7 +38,7 @@ const RoomCard = ({
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
   const [showAllMember, setShowAllMember] = useState(false);
-  const [display, setDisplay] = useState("");
+  const [isDisplay, setIsDisplay] = useState(false);
   // const [isMarked, setIsMarked] = useState(false);
 
   useEffect(() => {
@@ -108,37 +108,37 @@ const RoomCard = ({
   const handleClick = (e) => {
     // e.preventDefault();
     e.stopPropagation();
-    if (display === index) {
-      setDisplay("");
+    if (isDisplay === index) {
+      setIsDisplay(false);
       closeDrop();
-      console.log(display);
+      console.log(isDisplay);
       console.log("닫다");
       console.log(isShow);
     } else {
       openDrop();
-      setDisplay(index);
+      setIsDisplay(index);
       console.log("열다");
-      console.log(display);
+      console.log(isDisplay);
       console.log(isShow);
     }
   };
 
   const closeDownDrop = () => {
-    setDisplay("");
+    setIsDisplay(false);
     closeDrop();
     console.log("드롭닫기");
-    console.log(display);
+    console.log(isDisplay);
   };
 
   const handleOut = (e) => {
-    setDisplay("");
+    setIsDisplay(false);
     closeDrop();
     console.log("handleOut");
   };
 
   const handleIn = (e) => {
     openDrop();
-    setDisplay(index);
+    setIsDisplay(index);
     console.log("handleIn");
   };
 
@@ -159,7 +159,7 @@ const RoomCard = ({
       >
         {/* {display===index && isShow ? ( */}
         <Drop.Container
-          display={display === index ? true : false}
+          display={isDisplay === index ? "true" : undefined}
           onClick={closeDownDrop}
           onMouseOut={handleOut}
           onMouseOver={handleIn}

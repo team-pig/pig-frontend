@@ -1,8 +1,5 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Button } from "../../elem";
-import { useDispatch, useSelector } from "react-redux";
-
 const CardModal = ({ showModal, children, setShowModal }) => {
   return (
     <>
@@ -10,7 +7,7 @@ const CardModal = ({ showModal, children, setShowModal }) => {
         <ModalContainer>
           <ModalOverlay
             onClick={() => {
-              setShowModal((pre) => !pre);
+              setShowModal(false);
             }}
           />
           <ModalContent>{children}</ModalContent>
@@ -42,8 +39,8 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   position: relative;
-  width: 750px;
-  height: 80%;
+  width: 560px;
+  height: 739px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);

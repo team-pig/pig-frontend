@@ -11,6 +11,7 @@ import { __createTodo, __loadTodos } from "../../redux/modules/todos";
 // compo & elem
 import Todo from "./Todo";
 import { Input } from "../../elem";
+import Icon from "../../components/Icon";
 
 const Todos = ({ cardId }) => {
   const dispatch = useDispatch();
@@ -38,10 +39,15 @@ const Todos = ({ cardId }) => {
 
   return (
     <Container>
-      {todos.map((todo) => (
-        <Todo key={todo.todoId} todo={todo} roomId={roomId} />
-      ))}
+      {todos.length !== 0 ? (
+        todos.map((todo) => (
+          <Todo key={todo.todoId} todo={todo} roomId={roomId} />
+        ))
+      ) : (
+        <div>할일이 없어요! </div>
+      )}
       <TodoForm onSubmit={formik.handleSubmit}>
+        <StIcon icon="plus-lg" size="24px" color="#b7b7b7" />
         <Input
           type="text"
           name="todoTitle"
@@ -60,11 +66,24 @@ const Todos = ({ cardId }) => {
 };
 
 const Container = styled.div`
-  width: 70%;
-  border: 1px solid red;
-  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  width: 480px;
+  /* max-width: */
   margin: 0 auto;
 `;
 
-const TodoForm = styled.form``;
+const TodoForm = styled.form`
+  width: 446px;
+  position: relative;
+`;
+
+const StIcon = styled(Icon)`
+  position: absolute;
+  left: -40px;
+  top: 12px;
+`;
+
 export default Todos;

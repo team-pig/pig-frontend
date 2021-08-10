@@ -11,9 +11,7 @@ import {
   __updateCardLocateOtherBucket,
   __createBucket,
   __updateCardLocate,
-  __deleteBucket,
   __loadBucket,
-  __updateBucketTitle,
   __loadCard,
 } from "../../redux/modules/board";
 import { useEffect } from "react";
@@ -95,39 +93,15 @@ const Chart = () => {
     }
   };
 
-  //버킷이름수정
-  const editTitleBucket = (newBucketTitle, bucketId) => {
-    dispatch(__updateBucketTitle(roomId, bucketId, newBucketTitle));
-  };
-
   // 버킷생성
   const createBucket = () => {
     dispatch(__createBucket(roomId, bucketName));
   };
 
-  // 버킷삭제
-  const deleteBucket = (bucket) => {
-    dispatch(__deleteBucket(roomId, bucket.bucketId));
-  };
-
   if (columnOrder === null || columns === null) {
-    return (
-      <>
-        <AddBucketZone>
-          <Input
-            placeholder="버킷 이름을 적어주세요."
-            type="text"
-            value={bucketName}
-            onChange={({ target: { value } }) => {
-              setBucketName(value);
-            }}
-          />
-          <Button onClick={createBucket}>버킷 추가하기</Button>
-        </AddBucketZone>
-        <div></div>
-      </>
-    );
+    return <></>;
   }
+
   return (
     <>
       <AddBucketZone>
@@ -157,13 +131,11 @@ const Chart = () => {
                   );
                   return (
                     <Bucket
-                      editTitleBucket={editTitleBucket}
-                      deleteBucket={deleteBucket}
-                      bucketCards={bucketCards}
-                      bucket={column}
-                      key={column.bucketId}
-                      index={index}
-                      roomId={roomId}
+                      bucketCards={bucketCards} //required
+                      bucket={column} // required
+                      key={column.bucketId} // required
+                      index={index} // required
+                      roomId={roomId} // required
                     />
                   );
                 })}
@@ -178,12 +150,13 @@ const Chart = () => {
 
 const Container = styled.div`
   display: flex;
-  padding: 100px;
+  gap: 34px;
+  padding: 0 40px;
 `;
 
 const AddBucketZone = styled.div`
-  padding: 100px 0 0 100px;
-  display: flex;
+  /* padding: 100px 0 0 100px;
+  display: flex; */
 `;
 
 const Input = styled.input`

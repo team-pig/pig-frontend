@@ -1,115 +1,159 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Input, Button } from "../../elem";
+import React from "react";
+import styled, { css } from "styled-components";
+import { Input, Text } from "../../elem";
+import Filled from "../../assets/icons/checkbox-filled.svg";
+
 import {
+  __addMember,
+  __removeMember,
   __checkedTodo,
   __deleteTodo,
   __editTotoTitle,
 } from "../../redux/modules/todos";
 
-import { useDispatch, useSelector } from "react-redux";
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import Icon from "../../components/Icon";
+import InputToggle from "../../components/InputToggle";
 
 const Todo = ({ todo }) => {
   const dispatch = useDispatch();
-  const members = useSelector((state) => state.board.allMembers);
-  const [editMode, setEditMode] = useState(false);
+
+  // global
   const { roomId } = useParams();
 
-  const formik = useFormik({
-    initialValues: {
-      newTodoTitle: "",
-    },
-
-    validationSchema: Yup.object({
-      newTodoTitle: Yup.string().required("수정할 내용을 반드시 입력해주세요!"),
-    }),
-
-    onSubmit: (values, { resetForm }) => {
-      dispatch(__editTotoTitle(roomId, todo.todoId, values.newTodoTitle));
-      resetForm();
-      setEditMode((pre) => !pre);
-    },
-  });
-
-  const deleteTodoHandler = () => {
+  const deleteTodoHandler = (e) => {
+    e.stopPropagation();
     dispatch(__deleteTodo(roomId, todo.todoId));
   };
 
-  return (
-    <Container>
-      {editMode ? (
-        <>
-          <form onSubmit={formik.handleSubmit}>
-            <Input
-              type="text"
-              name="newTodoTitle"
-              value={formik.values.newTodoTitle}
-              isError={
-                formik.touched.newTodoTitle &&
-                Boolean(formik.errors.newTodoTitle)
-              }
-              useHelper={formik}
-              _onChange={formik.handleChange}
-            />
-          </form>
-          <Button
-            _onClick={() => {
-              setEditMode((pre) => !pre);
-            }}
-          >
-            취소
-          </Button>
-        </>
-      ) : (
-        <>
-          <Input
-            type="checkbox"
-            name="isChecked"
-            id="isChecked"
-            checked={todo.isChecked}
-            _onChange={({ target }) => {
-              dispatch(__checkedTodo(roomId, todo.todoId, target.checked));
-            }}
-          />
-          <Flex hori="space-between" width="90%">
-            <div
-              onClick={() => {
-                setEditMode((pre) => !pre);
-                formik.setFieldValue("newTodoTitle", "");
-              }}
-            >
-              {todo.todoTitle}
-            </div>
+  const editFunc = (key, value) => {
+    if (value === "") {
+      dispatch(__editTotoTitle(roomId, todo.todoId, todo.todoTitle));
+    } else {
+      dispatch(__editTotoTitle(roomId, todo.todoId, value));
+    }
+  };
 
-            <Flex>
-              <div style={{ margin: "0 10px" }}>담당지정버튼</div>
-              <select>
-                {members.map((memeber) => (
-                  <option>{memeber}</option>
-                ))}
-              </select>
-              <div onClick={deleteTodoHandler}>삭제버튼</div>
-            </Flex>
-          </Flex>
-        </>
-      )}
-    </Container>
+  return (
+    <StyleDiv wh={["480px"]} flex={["space-between", "center"]}>
+      <StyleDiv>
+        <Input
+          none
+          type="checkbox"
+          name="isChecked"
+          id={todo.todoId}
+          checked={todo.isChecked}
+          _onChange={({ target }) => {
+            dispatch(__checkedTodo(roomId, todo.todoId, target.checked));
+          }}
+        />
+        <label htmlFor={todo.todoId}>
+          {todo.isChecked ? (
+            <CheckedIcon src={Filled} alt="체크됨" />
+          ) : (
+            <NotCheckboxIcon icon="checkbox" size="20px" />
+          )}
+        </label>
+      </StyleDiv>
+
+      <TodoItem>
+        <TodoTitle type="body_3">
+          <InputToggle
+            shape="text"
+            name="todoTitle"
+            saveFunc={editFunc}
+            value={todo.todoTitle}
+          />
+        </TodoTitle>
+        <div onClick={deleteTodoHandler}>
+          <RemoveIcon icon="remove" size="14px" color="var(--grey)" />
+        </div>
+
+        {/* <Flex>
+                <select
+                  onChange={(e) => {
+                    if (e.target.value !== "멤버선택")
+                      dispatch(
+                        __addMember(roomId, todo.todoId, e.target.value)
+                      );
+                  }}
+                >
+                  <option>멤버선택</option>
+                  {members.map((memeber, idx) => (
+                    <option key={idx}>{memeber}</option>
+                  ))}
+                </select>                
+              </Flex> */}
+      </TodoItem>
+    </StyleDiv>
   );
 };
 
-const Container = styled.div`
+const TodoItem = styled.div`
+  border: 1px solid var(--line);
+  padding: 0 14px;
+  width: 446px;
   display: flex;
-  height: 40px;
-  border: 1px solid var(--grey);
+  height: 46px;
+  justify-content: space-between;
+  align-items: center;
+  &:hover {
+    border: 1px solid var(--main);
+  }
 `;
 
-const Flex = styled.div`
-  display: flex;
-  width: ${(props) => props.width};
-  justify-content: ${(props) => props.hori};
-  align-items: ${(props) => props.verti};
+const StyleDiv = styled.div`
+  ${(props) =>
+    props.tb &&
+    css`
+      border: 1px solid red;
+    `}
+  ${(props) =>
+    props.wh &&
+    css`
+      width: ${props.wh[0]};
+      height: ${props.wh[1]};
+    `}
+    
+  ${(props) =>
+    props.flex &&
+    css`
+      display: flex;
+      justify-content: ${props.flex[0]};
+      align-items: ${props.flex[1]};
+      gap: ${props.flex[2]}px;
+    `}
+  padding: ${(props) => props.pd};
+  margin: ${(props) => props.mg};
+  border: ${(props) => props.border};
+`;
+
+const TodoTitle = styled(Text)`
+  width: 100%;
+`;
+
+const NotCheckboxIcon = styled(Icon)`
+  cursor: pointer;
+  transition: transform 200ms ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const CheckedIcon = styled.img`
+  cursor: pointer;
+  transition: transform 200ms ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const RemoveIcon = styled(Icon)`
+  cursor: pointer;
+  transition: transform 200ms ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 export default Todo;

@@ -15,7 +15,12 @@ import Icon from "../components/Icon";
 import { Button, Input } from "../elem/index";
 
 //redux
-import { __getRoomList, __searchRoom } from "../redux/modules/room";
+import {
+  __getRoomList,
+  __searchRoom,
+  __getMarkedList,
+  __getUnMarkedList,
+} from "../redux/modules/room";
 
 const RoomList = ({ history }) => {
   const dispatch = useDispatch();
@@ -30,9 +35,14 @@ const RoomList = ({ history }) => {
   const [searchContent, setSearchContent] = useState(null);
 
   useEffect(() => {
-    if (roomList.length === 0) {
-      dispatch(__getRoomList());
-    }
+    // if (roomList.length === 0) {
+    //   dispatch(__getRoomList());
+    //   dispatch(__getMarkedList());
+    //   dispatch(__getUnmarkedList());
+    // }
+    dispatch(__getRoomList());
+    dispatch(__getMarkedList());
+    dispatch(__getUnMarkedList());
   }, []);
 
   const changeSearchContent = (e) => {
@@ -79,6 +89,7 @@ const RoomList = ({ history }) => {
       }
     })
     .map((room, idx) => {
+      
       return (
         <RoomCard
           userId={userId}
@@ -102,8 +113,13 @@ const RoomList = ({ history }) => {
       //   return item}
     })
     .map((room, idx) => {
+      // const markIdx = roomList.findIndex((item) => 
+      // item.bookmarkedMembers.includes(userId));
+      
+      const isCheck = room.bookmarkedMembers.includes(userId);
       return (
         <RoomCard
+          isMarked={isCheck ? true : false}
           userId={userId}
           openDrop={openDrop}
           closeDrop={closeDrop}

@@ -42,7 +42,6 @@ const Card = ({ card, index, bucketId }) => {
             isDragging={snapshot.isDragging}
           >
             <Flex jc="flex-start" mg="0 0 10px 0">
-              <Dot bg="red" />
               <Text type="body_2">{card.cardTitle}</Text>
               <Icon
                 icon="remove"
@@ -97,14 +96,6 @@ const Flex = styled.div`
 const TodosHeader = styled(Text)`
   padding: 0 40px;
   margin-bottom: 21px;
-`;
-
-const Dot = styled.div`
-  background-color: red;
-  margin-right: 10px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
 `;
 
 export default Card;

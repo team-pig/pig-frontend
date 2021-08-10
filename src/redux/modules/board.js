@@ -267,16 +267,14 @@ export const __updateCardLocateOtherBucket =
   };
 
 // 카드 정보 수정
-export const __editCardInfos =
-  (roomId, cardId, cardInfos) => async (dispatch) => {
-    try {
-      const { data } = await cardApi.editCardInfo(roomId, cardInfos);
-      console.log(`결과 : ${data.message}`);
-      dispatch(editCardInfos(cardInfos));
-    } catch (e) {
-      console.log(e);
-    }
-  };
+export const __editCardInfos = (roomId, cardInfos) => async (dispatch) => {
+  try {
+    await cardApi.editCardInfo(roomId, cardInfos);
+    dispatch(editCardInfos(cardInfos));
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 // 카드삭제
 export const __deleteCard =

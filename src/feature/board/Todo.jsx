@@ -2,10 +2,11 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { Input, Text } from "../../elem";
 import Filled from "../../assets/icons/checkbox-filled.svg";
+import { useSelector } from "react-redux";
+import BoardDrop from "./BoardDrop";
 
 import {
-  __addMember,
-  __removeMember,
+  __memberHandler,
   __checkedTodo,
   __deleteTodo,
   __editTotoTitle,
@@ -18,6 +19,7 @@ import InputToggle from "../../components/InputToggle";
 
 const Todo = ({ todo }) => {
   const dispatch = useDispatch();
+  const allMembers = useSelector((state) => state.member.allMembers);
 
   // global
   const { roomId } = useParams();
@@ -66,25 +68,34 @@ const Todo = ({ todo }) => {
             value={todo.todoTitle}
           />
         </TodoTitle>
+
+        <StyleDiv flex={["", "center"]} wh={["50px"]} mg="0 10px">
+          <BoardDrop.Container direction="right" type="default" shadow>
+            {allMembers &&
+              allMembers.map((memeber, idx) => (
+                <BoardDrop.Item
+                  key={idx}
+                  _onClick={(e) => {
+                    dispatch(
+                      __memberHandler(roomId, todo.todoId, e.target.innerText)
+                    );
+                  }}
+                >
+                  {memeber.memberName}
+                </BoardDrop.Item>
+              ))}
+          </BoardDrop.Container>
+          <StyleDiv
+            wh={["17px", "22px"]}
+            flex={["center", "center"]}
+            mg="0 0 0 4px"
+          >
+            <Text type="body_3">{todo.members.length}</Text>
+          </StyleDiv>
+        </StyleDiv>
         <div onClick={deleteTodoHandler}>
           <RemoveIcon icon="remove" size="14px" color="var(--grey)" />
         </div>
-
-        {/* <Flex>
-                <select
-                  onChange={(e) => {
-                    if (e.target.value !== "멤버선택")
-                      dispatch(
-                        __addMember(roomId, todo.todoId, e.target.value)
-                      );
-                  }}
-                >
-                  <option>멤버선택</option>
-                  {members.map((memeber, idx) => (
-                    <option key={idx}>{memeber}</option>
-                  ))}
-                </select>                
-              </Flex> */}
       </TodoItem>
     </StyleDiv>
   );

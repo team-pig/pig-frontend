@@ -85,7 +85,7 @@ const InputText = styled.input`
   border: ${(props) =>
     props.isError
       ? "1px solid var(--notice) !important"
-      : "1px solid var(--darkgrey)"};
+      : "1px solid var(--line)"};
   outline: none;
   transition: border-color 150ms ease-in-out;
 

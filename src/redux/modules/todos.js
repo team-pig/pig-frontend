@@ -86,19 +86,30 @@ export const __checkedTodo =
     }
   };
 
-export const __addMember = (roomId, todoId, members) => async (dispatch) => {
-  try {
-    await todoApi.addMember(roomId, todoId, members);
-    dispatch(addMember(todoId, { memberId: members }));
-  } catch (e) {
-    console.log(e);
-  }
-};
+export const __memberHandler =
+  (roomId, todoId, memberName) => async (dispatch, getState) => {
+    const memberList = getState().member.allMembers;
+    const currentTodo = getState().todos.todos;
 
-export const __removeMember =
-  (roomId, todoId, memberId) => async (dispatch) => {
-    await todoApi.removeMember(roomId, todoId, memberId);
-    dispatch(removeMember(todoId, memberId));
+    const targetIdx = memberList.findIndex(
+      (item) => item.memberName === memberName
+    );
+    const targetMemberInfo = memberList[targetIdx];
+    const targetMemberId = memberList[targetIdx].memberId;
+
+    const targetTodo = currentTodo.findIndex((todo) => todo.todoId === todoId);
+
+    const isMemberFromTodo = currentTodo[targetTodo].members.findIndex(
+      (member) => member.memberName === memberName
+    );
+
+    if (isMemberFromTodo === -1) {
+      await todoApi.addMember(roomId, todoId, targetMemberId);
+      dispatch(addMember(todoId, targetMemberInfo));
+    } else {
+      await todoApi.removeMember(roomId, todoId, targetMemberId);
+      dispatch(removeMember(todoId, targetMemberId));
+    }
   };
 
 export const __deleteTodo = (roomId, todoId) => async (dispatch) => {
@@ -116,15 +127,6 @@ const initialState = {
 
 export const todos = handleActions(
   {
-    [ADD_MEMBER]: (state, { payload }) =>
-      produce(state, (draft) => {
-        const { todoId, member } = payload;
-        const targetIdx = state.todos.findIndex(
-          (todo) => todo.todoId === todoId
-        );
-        draft.todos[targetIdx].members.push(member);
-      }),
-
     [LOAD_TODOS]: (state, { payload }) =>
       produce(state, (draft) => {
         draft.todos = payload.todos;
@@ -173,6 +175,15 @@ export const todos = handleActions(
           (member) => member.memberId === memberId
         );
         draft.todos[targetIdx].members.splice(targetMember, 1);
+      }),
+
+    [ADD_MEMBER]: (state, { payload }) =>
+      produce(state, (draft) => {
+        const { todoId, member } = payload;
+        const targetIdx = state.todos.findIndex(
+          (todo) => todo.todoId === todoId
+        );
+        draft.todos[targetIdx].members.push(member);
       }),
   },
 

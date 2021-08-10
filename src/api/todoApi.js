@@ -17,13 +17,13 @@ export const todoApi = {
   addMember: (roomId, todoId, addMember) =>
     instance.patch(`room/${roomId}/todo`, {
       todoId,
-      addMember: { memberId: addMember },
+      addMember,
     }),
 
   removeMember: (roomId, todoId, removeMember) =>
     instance.patch(`room/${roomId}/todo`, {
       todoId,
-      removeMember: { memberId: removeMember },
+      removeMember,
     }),
 
   deleteTodo: (roomId, todoId) =>

@@ -14,6 +14,18 @@ export const todoApi = {
   checkedTodo: (roomId, todoId, isChecked) =>
     instance.patch(`room/${roomId}/todo`, { todoId, isChecked }),
 
+  addMember: (roomId, todoId, addMember) =>
+    instance.patch(`room/${roomId}/todo`, {
+      todoId,
+      addMember: { memberId: addMember },
+    }),
+
+  removeMember: (roomId, todoId, removeMember) =>
+    instance.patch(`room/${roomId}/todo`, {
+      todoId,
+      removeMember: { memberId: removeMember },
+    }),
+
   deleteTodo: (roomId, todoId) =>
     instance.delete(`room/${roomId}/todo`, { data: { todoId } }),
 };

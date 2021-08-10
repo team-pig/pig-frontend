@@ -10,6 +10,7 @@ import date from "./modules/date";
 import calendar from "./modules/calendar";
 import board from "./modules/board";
 import todos from "./modules/todos";
+import member from "./modules/member";
 
 // middlewares
 import thunk from "redux-thunk";
@@ -20,6 +21,7 @@ import { connectRouter } from "connected-react-router";
 export const history = createBrowserHistory();
 
 const rootReducer = combineReducers({
+  member,
   todos,
   board,
   user,

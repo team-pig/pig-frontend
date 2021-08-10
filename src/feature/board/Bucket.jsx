@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router";
 
@@ -9,124 +9,147 @@ import { Text } from "../../elem";
 
 // redux & api
 import { useDispatch } from "react-redux";
-import { __createCard, __deleteCard } from "../../redux/modules/board";
+import {
+  __createCard,
+  __updateBucketTitle,
+  __deleteBucket,
+} from "../../redux/modules/board";
 
-const Bucket = ({
-  bucket,
-  index,
-  bucketCards,
-  deleteBucket,
-  editTitleBucket,
-}) => {
+const Bucket = ({ bucket, index, bucketCards }) => {
   const dispatch = useDispatch();
   const [cardTitle, setCardTitle] = useState("");
-  const [editTitleMone, setEditTitleMone] = useState(false);
-  const [newBucketTitle, setNewBucketTitle] = useState("");
-  const { roomId } = useParams();
+  const [editTitleMode, setEditTitleMode] = useState(false);
+  const [newBucketName, setNewBucketName] = useState("");
 
-  // 버킷이름 수정 handler
-  const updateBucketTitle = () => {
-    setEditTitleMone(true);
+  // 전역변수
+  const { roomId } = useParams();
+  const bucketId = bucket.bucketId;
+
+  // 버켓이름수정 handler
+  const updateBucketTitleHandler = () => {
+    dispatch(__updateBucketTitle(roomId, bucketId, newBucketName));
   };
 
   // 카드생성 handler
-  const addTask = (provided) => {
-    const bucketId = bucket.bucketId;
+  const addTask = () => {
     dispatch(__createCard(roomId, bucketId, cardTitle));
   };
 
-  // 카드삭제 handler
-  const deleteCardHandler = (cardId) => {
-    const bucketId = bucket.bucketId;
-    dispatch(__deleteCard(bucketId, cardId, roomId));
-  };
-
   return (
-    <>
-      <Draggable draggableId={bucket.bucketId} index={index}>
-        {(provided) => (
-          <Container {...provided.draggableProps} ref={provided.innerRef}>
-            {editTitleMone ? (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  editTitleBucket(newBucketTitle, bucket.bucketId);
-                  setEditTitleMone(false);
-                }}
-              >
-                <EditInput
-                  type="text"
-                  {...provided.dragHandleProps}
-                  onChange={(e) => {
-                    setNewBucketTitle(e.target.value);
+    <div>
+      <Draggable draggableId={bucketId} index={index}>
+        {(provided, snap) => {
+          return (
+            <Container
+              {...provided.draggableProps}
+              ref={provided.innerRef}
+              isDragging={snap.isDragging}
+            >
+              {editTitleMode ? (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    updateBucketTitleHandler(newBucketName);
+                    setEditTitleMode(false);
                   }}
-                />
-              </form>
-            ) : (
-              <>
-                <Flex verti="space-between" {...provided.dragHandleProps}>
-                  <Text type="head_5" onClick={updateBucketTitle}>
-                    {bucket.bucketName}
-                  </Text>
-                  <div
-                    style={{ padding: "10px", cursor: "pointer" }}
-                    onClick={() => deleteBucket(bucket)}
-                  >
-                    X
-                  </div>
-                </Flex>
-                <Text type="head_6" onClick={updateBucketTitle}>
-                  {bucket.bucketId}
-                </Text>
-              </>
-            )}
-
-            <Droppable droppableId={bucket.bucketId} type="card">
-              {(provided, snapshot) => (
-                <TaskList
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  isDraggingOver={snapshot.isDraggingOver}
                 >
-                  {bucketCards.map((card, index) => (
-                    <Card
-                      key={card.cardId}
-                      card={card}
-                      index={index}
-                      deleteCardHandler={deleteCardHandler}
-                    />
-                  ))}
-                  {provided.placeholder}
-                  <AddTodoBtn>
-                    <Input
-                      value={cardTitle}
-                      onChange={({ target: { value } }) => {
-                        setCardTitle(value);
-                      }}
-                    />
-                    <Button
+                  <EditInput
+                    type="text"
+                    {...provided.dragHandleProps}
+                    onChange={(e) => {
+                      setNewBucketName(e.target.value);
+                    }}
+                  />
+                </form>
+              ) : (
+                <>
+                  <Flex
+                    jc="space-between"
+                    pd="18px 20px"
+                    {...provided.dragHandleProps}
+                  >
+                    <Text
+                      type="body_1"
                       onClick={() => {
-                        addTask(provided);
+                        setEditTitleMode(true);
                       }}
                     >
-                      카드 추가
-                    </Button>
-                  </AddTodoBtn>
-                </TaskList>
+                      {bucket.bucketName}
+                    </Text>
+                    <Wrap
+                      onClick={() => {
+                        dispatch(__deleteBucket(roomId, bucketId));
+                      }}
+                    >
+                      X
+                    </Wrap>
+                  </Flex>
+                </>
               )}
-            </Droppable>
-          </Container>
-        )}
+
+              <Droppable droppableId={bucketId} type="card">
+                {(provided, snapshot) => {
+                  return (
+                    <>
+                      <AddCardForm
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          addTask();
+                        }}
+                      >
+                        <AddCardInput
+                          value={cardTitle}
+                          onChange={({ target: { value } }) => {
+                            setCardTitle(value);
+                          }}
+                        />
+                      </AddCardForm>
+                      <BucketList
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        isDraggingOver={snapshot.isDraggingOver}
+                      >
+                        {bucketCards.map(
+                          (card, index) =>
+                            card && (
+                              <Card
+                                bucketId={bucketId}
+                                key={card.cardId}
+                                card={card}
+                                index={index}
+                              />
+                            )
+                        )}
+                        {provided.placeholder}
+                      </BucketList>
+                    </>
+                  );
+                }}
+              </Droppable>
+            </Container>
+          );
+        }}
       </Draggable>
-    </>
+    </div>
   );
 };
 
-const AddTodoBtn = styled.div`
-  position: absolute;
+const Container = styled.div`
+  gap: 20px;
+  background-color: #f5f5f5;
+  height: 900px;
+  width: 300px;
   display: flex;
-  bottom: -50px;
+  flex-direction: column;
+  border-radius: 4px;
+  border: ${(props) => props.isDragging && "1px solid #7BA7FD"};
 `;
+
+const AddCardForm = styled.form`
+  display: flex;
+  justify-content: center;
+`;
+
 const EditInput = styled.input`
   margin: 0 auto;
   cursor: text !important;
@@ -138,44 +161,43 @@ const EditInput = styled.input`
   width: 90%;
   text-align: center;
 `;
-const Input = styled.input`
+
+const AddCardInput = styled.input`
   border: 1px solid #eee;
   outline: none;
   height: 40px;
-  width: 250px;
-`;
-const Button = styled.button`
-  border: 1px solid #eee;
+  width: 280px;
 `;
 
-const Container = styled.div`
-  margin: 8px;
-  border: 1px solid red;
-  background-color: white;
-  border-radius: 2px;
-  min-height: 500px;
-  width: 350px;
+const BucketList = styled.div`
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
-`;
-
-const TaskList = styled.div`
+  align-items: center;
+  gap: 20px;
   outline: none;
-  position: relative;
-  padding: 8px;
-  border: ${(props) => props.isDraggingOver && "3px solid #ff6b81"};
-  transition: background-color 0.2s ease;
-  border-radius: 10px;
-  background-color: ${(props) =>
-    props.isDraggingOver ? "#fbfbfb" : "inherit"};
+  /* position: relative; */
+  /* border: ${(props) => props.isDraggingOver && "1px solid #ff6b81"}; */
+  /* transition: background-color 0.2s ease; */
+  /* background-color: ${(props) => props.isDraggingOver && "#fbfbfb"}; */
   flex-grow: 1;
-  min-height: 100px;
 `;
 
 const Flex = styled.div`
   display: flex;
-  justify-content: ${(props) => props.verti};
+  justify-content: ${(props) => (props.jc ? props.jc : "center")};
+  align-items: ${(props) => (props.ai ? props.ai : "center")};
+  ${(props) =>
+    props.border &&
+    css`
+      border: 1px solid red;
+    `}
+  padding: ${(props) => props.pd};
+  margin: ${(props) => props.mg};
+`;
+
+const Wrap = styled.div`
+  padding: ${(props) => props.pd};
+  margin: ${(props) => props.mg};
 `;
 
 export default Bucket;

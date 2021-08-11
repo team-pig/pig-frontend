@@ -263,7 +263,7 @@ const RemoveGrid = styled(Grid)``;
 const Item = styled.li`
   ${flex("between", "center")};
   width: 100%;
-  min-height: 40px;
+  height: 42px;
   padding: 0 20px;
   margin: 0;
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -17,6 +17,17 @@ const Calendar = (props) => {
   const dispatch = useDispatch();
   const current = useSelector((state) => state.date.current);
 
+  const currentContent = useSelector((state) =>
+    state.calendar.scheduleList.find(
+      (item) => item.cardId === state.calendar.modalId
+    )
+  );
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+
+  useEffect(() => setModalContent(currentContent), [currentContent]);
+
   // 월이 바뀔 때마다 모든 일정을 가져오도록 설정
   useEffect(() => {
     if (current) {
@@ -24,11 +35,18 @@ const Calendar = (props) => {
     }
   }, [current, roomId]);
 
+  const modalObj = {
+    modalContent,
+    setModalContent,
+    showModal,
+    setShowModal,
+  };
+
   return (
     <CalendarBox>
-      <CalendarHeader />
+      <CalendarHeader {...modalObj} />
       <CalendarBody />
-      <CalendarInfo />
+      <CalendarInfo {...modalObj} />
     </CalendarBox>
   );
 };

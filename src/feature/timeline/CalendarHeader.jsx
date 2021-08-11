@@ -16,19 +16,14 @@ import { IconBtn, Text } from "../../elem";
 import flex from "../../themes/flex";
 import Icon from "../../components/Icon";
 
-const CalendarHeader = () => {
+const CalendarHeader = ({
+  modalContent,
+  setModalContent,
+  showModal,
+  setShowModal,
+}) => {
   const dispatch = useDispatch();
   const current = useSelector((state) => state.date.current);
-  const currentContent = useSelector((state) =>
-    state.calendar.scheduleList.find(
-      (item) => item.cardId === state.calendar.modalId
-    )
-  );
-
-  const [showModal, setShowModal] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
-
-  useEffect(() => setModalContent(currentContent), [currentContent]);
 
   const showLastMonth = () => {
     dispatch(setCurrent(current.clone().subtract(1, "month")));

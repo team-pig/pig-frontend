@@ -3,18 +3,26 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
+import CardModal from "../board/CardModal";
+import CalendarModal from "./CalendarModal";
 import Icon from "../../components/Icon";
-import Filled from "../../assets/icons/checkbox-filled.svg";
+
 import { IconBtn, Text } from "../../elem";
 import flex from "../../themes/flex";
 
 // redux
 import {
   setCurrentId,
+  setModalId,
   __getTodoBySchedule,
 } from "../../redux/modules/calendar.js";
 
-const CalendarInfo = () => {
+const CalendarInfo = ({
+  modalContent,
+  setModalContent,
+  showModal,
+  setShowModal,
+}) => {
   const { roomId } = useParams();
 
   const dispatch = useDispatch();
@@ -49,10 +57,19 @@ const CalendarInfo = () => {
     }
   }, [roomId, currentId]);
 
+  useEffect(() => {
+    setTodos(currentTodos);
+  }, [roomId, currentTodos]);
+
   const clickSchedule = (cardId, title) => {
     setTitle(title);
     dispatch(setCurrentId(cardId));
     dispatch(__getTodoBySchedule(roomId, cardId));
+  };
+
+  const clickDetailBtn = (cardId) => {
+    setShowModal((pre) => !pre);
+    dispatch(setModalId(currentId));
   };
 
   useEffect(() => {
@@ -75,74 +92,94 @@ const CalendarInfo = () => {
   const cardIsZero = currentSchedules.length === 0;
 
   return (
-    <Container>
-      <Left cardIsZero={cardIsZero}>
-        <TitleBox>
-          <Text type="body_1" color="black">
-            {selectedDate}
-          </Text>
-        </TitleBox>
-        {cardIsZero && (
-          <Info>
-            <Text type="sub_2" color="grey">
-              일정이 없습니다.
+    <>
+      <Container>
+        <Left cardIsZero={cardIsZero}>
+          <TitleBox>
+            <Text type="body_1" color="black">
+              {selectedDate}
             </Text>
-          </Info>
-        )}
-        {currentSchedules &&
-          currentSchedules.map((item, idx) => (
-            <CurrentSchedule
-              key={idx}
-              color={item.color}
-              focus={item.cardId === currentId}
-              onClick={() => clickSchedule(item.cardId, item.cardTitle)}
-            >
-              <ScheduleText type="sub_2">{item.cardTitle}</ScheduleText>
-            </CurrentSchedule>
-          ))}
-      </Left>
-      <Right cardIsZero={cardIsZero}>
-        <TitleBox>
-          <Text type="body_1">{title}</Text>
-        </TitleBox>
-        {todos.length === 0 && (
-          <Info>
-            <Text type="sub_2" color="grey">
-              이 카드에 할 일이 없습니다.
-            </Text>
-          </Info>
-        )}
+            <TextBtn>
+              <Text type="body_4" onClick={clickDetailBtn}>
+                상세정보
+              </Text>
+            </TextBtn>
+          </TitleBox>
+          {cardIsZero && (
+            <Info>
+              <Text type="sub_2" color="grey">
+                일정이 없습니다.
+              </Text>
+            </Info>
+          )}
+          {currentSchedules &&
+            currentSchedules.map((item, idx) => (
+              <CurrentSchedule
+                key={idx}
+                color={item.color}
+                focus={item.cardId === currentId}
+                onClick={() => clickSchedule(item.cardId, item.cardTitle)}
+              >
+                <ScheduleText type="sub_2">{item.cardTitle}</ScheduleText>
+              </CurrentSchedule>
+            ))}
+        </Left>
+        <Right cardIsZero={cardIsZero}>
+          <TitleBox>
+            <Text type="body_1">{title}</Text>
+          </TitleBox>
+          {todos.length === 0 && (
+            <Info>
+              <Text type="sub_2" color="grey">
+                이 카드에 할 일이 없습니다.
+              </Text>
+            </Info>
+          )}
 
-        {todos.length !== 0 &&
-          todos.map((todo) => (
-            <Item key={todo.todoId}>
-              <Grid>
-                <IconBtn _onClick={() => toggleTodo(todo.todoId)}>
-                  {!todo.isChecked ? (
-                    <Icon icon="checkbox" size="20px" />
-                  ) : (
-                    <img src={Filled} alt="체크됨" />
-                  )}
-                </IconBtn>
-                <Text type="sub_2">{todo.todoTitle}</Text>
-              </Grid>
-              <BtnBox>
-                <IconBtn _onClick={() => {}} padding="5px">
-                  <Icon icon="member-plus" size="20px" color="var(--grey)" />
-                </IconBtn>
-                <RemoveGrid>
-                  <IconBtn
-                    _onClick={() => deleteTodo(todo.todoId)}
-                    padding="5px"
-                  >
-                    <RemoveIcon icon="remove" size="20px" />
+          {todos.length !== 0 &&
+            todos.map((todo) => (
+              <Item key={todo.todoId}>
+                <Grid>
+                  <IconBtn _onClick={() => toggleTodo(todo.todoId)}>
+                    {!todo.isChecked ? (
+                      <Icon icon="checkbox" size="20px" />
+                    ) : (
+                      <CheckBtn
+                        icon="checkbox-filled"
+                        size="20px"
+                        color="var(--main)"
+                      />
+                    )}
                   </IconBtn>
-                </RemoveGrid>
-              </BtnBox>
-            </Item>
-          ))}
-      </Right>
-    </Container>
+                  <Text type="sub_2">{todo.todoTitle}</Text>
+                </Grid>
+                <BtnBox>
+                  <IconBtn _onClick={() => {}} padding="5px">
+                    <Icon icon="member-plus" size="20px" color="var(--grey)" />
+                  </IconBtn>
+                  <RemoveGrid>
+                    <IconBtn
+                      _onClick={() => deleteTodo(todo.todoId)}
+                      padding="5px"
+                    >
+                      <RemoveIcon icon="remove" size="20px" />
+                    </IconBtn>
+                  </RemoveGrid>
+                </BtnBox>
+              </Item>
+            ))}
+        </Right>
+      </Container>
+      {showModal && modalContent && (
+        <CardModal showModal={showModal} setShowModal={setShowModal}>
+          <CalendarModal
+            content={modalContent}
+            setContent={setModalContent}
+            setShowModal={setShowModal}
+          />
+        </CardModal>
+      )}
+    </>
   );
 };
 
@@ -167,9 +204,9 @@ const Right = styled.div`
 `;
 
 const TitleBox = styled.div`
-  ${flex("start")}
+  ${flex("between")};
   height: 65px;
-  padding-left: 20px;
+  padding: 0 20px;
 `;
 
 const Info = styled.div`
@@ -235,6 +272,15 @@ const Item = styled.li`
       visibility: initial;
     }
   }
+`;
+
+const TextBtn = styled.button`
+  padding: 5px;
+  margin-right: -10px;
+`;
+
+const CheckBtn = styled(Icon)`
+  color: var(--main);
 `;
 
 export default CalendarInfo;

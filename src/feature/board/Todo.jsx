@@ -102,11 +102,11 @@ const Todo = ({ todo }) => {
 };
 
 const TodoItem = styled.div`
-  border: 1px solid var(--line);
-  padding: 0 14px;
-  width: 446px;
   display: flex;
-  height: 46px;
+  border: 1px solid var(--line);
+  padding: 7px 14px;
+  width: 446px;
+  min-height: 46px;
   justify-content: space-between;
   align-items: center;
   &:hover {

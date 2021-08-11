@@ -103,7 +103,6 @@ export const resetCard = createAction(RESET_CARD);
 export const __loadBucket = (roomId) => async (dispatch) => {
   try {
     const { data } = await bucketApi.getBuckets(roomId);
-    console.log(data);
     const loadedBucketOrder = data.bucketOrder.bucketOrder;
     const buckets = data.buckets;
 
@@ -149,13 +148,12 @@ export const __updateBucket =
   };
 
 // 버킷이름수정
-export const __updateBucketTitle =
-  (roomId, bucketId, newBucketTitle) => async (dispatch) => {
-    try {
-      await bucketApi.editBucketTitle(roomId, bucketId, newBucketTitle);
-      dispatch(updateBucketTitle(bucketId, newBucketTitle));
-    } catch (e) {}
-  };
+export const __updateBucketTitle = (roomId, bucketInfo) => async (dispatch) => {
+  try {
+    await bucketApi.editBucketTitle(roomId, bucketInfo);
+    dispatch(updateBucketTitle(bucketInfo.bucketId, bucketInfo.bucketName));
+  } catch (e) {}
+};
 
 // 버킷삭제
 export const __deleteBucket =
@@ -199,15 +197,23 @@ export const __loadCardById = (roomId, cardId) => async (dispatch) => {
 
 // 카드생성
 export const __createCard =
-  (roomId, bucketId, cardTitle) =>
+  (roomId, bucketId, cardTitle, initDate, initColor) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { data } = await cardApi.createCard(roomId, bucketId, cardTitle);
+      const { data } = await cardApi.createCard(
+        roomId,
+        bucketId,
+        cardTitle,
+        initDate,
+        initColor
+      );
+
       const newCard = {
         cardId: data.cardId,
         bucketId,
         roomId,
         cardTitle,
+        color: initColor,
       };
 
       const newCardOrder = getState().board.columns[bucketId].cardOrder.concat(
@@ -392,8 +398,11 @@ export const board = handleActions(
 
     [UPDATE_CARD_INFOS]: (state, { payload }) =>
       produce(state, (draft) => {
+        const { cardId } = payload.paramInfos;
+        const newInfoKey = Object.keys(payload.paramInfos)[1];
         const newCard = { ...state.card, ...payload.paramInfos };
         draft.card = newCard;
+        draft.cards[cardId][newInfoKey] = payload.paramInfos[newInfoKey];
       }),
 
     [DELETE_CARD]: (state, { payload }) =>

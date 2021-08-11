@@ -11,7 +11,7 @@ import flex from "../../themes/flex";
 
 const DocList = ({ docList }) => {
   const history = useHistory();
-  const { roomId } = useParams();
+  const { roomId, docId } = useParams();
 
   const toDocAdd = () => history.push(`/workspace/${roomId}/doc/add`);
 
@@ -26,7 +26,11 @@ const DocList = ({ docList }) => {
       </TitleBox>
       <List>
         {docList.map((doc, idx) => (
-          <DocListItem key={idx} doc={doc} />
+          <DocListItem
+            key={idx}
+            doc={doc}
+            isCurrentDoc={docId === doc.docId ? true : false}
+          />
         ))}
       </List>
     </Container>

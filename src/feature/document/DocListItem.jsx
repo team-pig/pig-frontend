@@ -9,7 +9,7 @@ import Icon from "../../components/Icon";
 import { __deleteDoc } from "../../redux/modules/document";
 import flex from "../../themes/flex";
 
-const DocListItem = memo(({ doc }) => {
+const DocListItem = memo(({ doc, isCurrentDoc }) => {
   const history = useHistory();
   const { roomId, docId } = useParams();
 
@@ -25,38 +25,24 @@ const DocListItem = memo(({ doc }) => {
 
   return (
     <>
-      <Item onClick={() => showDocDetail(doc.docId)}>
-        <IconBox>
-          <Icon icon="document" size="20px" />
-        </IconBox>
-        <Name>{doc.title}</Name>
-        <IconBtn onClick={clickDelete}>
-          <RemoveIcon icon="remove" size="20px" />
-        </IconBtn>
+      <Item
+        onClick={() => showDocDetail(doc.docId)}
+        isCurrentDoc={isCurrentDoc}
+      >
+        {isCurrentDoc ? (
+          <IconBox onClick={clickDelete}>
+            <Icon icon="remove" size="14px" color="var(--darkgrey)" />
+          </IconBox>
+        ) : (
+          <IconBox>
+            <Icon icon="document" size="20px" />
+          </IconBox>
+        )}
+        <Name isCurrentDoc={isCurrentDoc}>{doc.title}</Name>
       </Item>
     </>
   );
 });
-
-const RemoveIcon = styled(Icon)`
-  color: var(--darkgrey);
-  transition: color 230ms ease-in-out;
-`;
-
-const IconBtn = styled.button`
-  display: none;
-
-  &:hover {
-    ${flex()}
-    height: 100%;
-    padding: 10px 20px;
-    margin-left: 10px;
-
-    ${RemoveIcon} {
-      color: var(--notice);
-    }
-  }
-`;
 
 const Item = styled.li`
   ${flex("start", "center")};
@@ -64,19 +50,19 @@ const Item = styled.li`
   padding: 10px 20px;
   transition: color 100ms ease-in-out;
   cursor: pointer;
-
-  &:hover {
-    color: var(--black);
-    background-color: var(--line);
+  ${(props) =>
+    props.isCurrentDoc &&
+    `background-color: var(--line);
     font-weight: 600;
-
-    ${IconBtn} {
-      display: contents;
+    
+    ${Name} {
+      color: var(--black);
     }
-  }
+    `}
 `;
 
 const IconBox = styled.div`
+  ${flex()};
   flex-shrink: 0;
   width: 20px;
   height: 20px;
@@ -88,10 +74,10 @@ const Name = styled.p`
   color: var(--darkgrey);
   font-size: 1.6rem;
   line-height: 2.2rem;
-  white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
   text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 export default DocListItem;

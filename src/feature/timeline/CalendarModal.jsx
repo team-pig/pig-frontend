@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -49,11 +50,13 @@ const CalendarModal = ({ content, setContent, setShowModal }) => {
   return (
     <>
       <Button _onClick={() => deleteSchedule(content.cardId)}>삭제</Button>
-      <InputToggle
-        name="cardTitle"
-        value={content.cardTitle}
-        saveFunc={editFunc}
-      />
+      <TitleContainer>
+        <InputToggle
+          name="cardTitle"
+          value={content.cardTitle}
+          saveFunc={editFunc}
+        />
+      </TitleContainer>
       <Input
         type="date"
         _onChange={(e) => handleChange("startDate", e.target.value)}
@@ -74,5 +77,10 @@ const CalendarModal = ({ content, setContent, setShowModal }) => {
     </>
   );
 };
+
+const TitleContainer = styled.div`
+  width: 100%;
+  height: 100px;
+`;
 
 export default CalendarModal;

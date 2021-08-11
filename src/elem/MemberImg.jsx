@@ -7,7 +7,7 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
   const [showAllMember, setShowAllMember] = useState(false);
 
   useEffect(() => {
-    console.log(memberStatus[0].nickname.charAt(0).toUpperCase());
+    
     if (members.length > 4) {
       setShowAllMember(false);
     } else {

@@ -48,7 +48,7 @@ const ImgUploader = ({ fileInput, name, isImage, setIsImage }) => {
         files
       />
       <FileLabel htmlFor="upload" className="image-upload-wrapper">
-        {isImage && <Image src={preview} />}
+        {isImage && <Image url={preview} />}
         {!isImage && (
           <DefaultImage>
             <IconBox>
@@ -85,10 +85,12 @@ const DefaultImage = styled.div`
   color: var(--darkgrey);
 `;
 
-const Image = styled.img`
+const Image = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  background-image: url("${(props) => props.url}");
+  background-size: cover;
 `;
 
 const IconBox = styled.div`

@@ -12,6 +12,7 @@ import { Text } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
 import MemberImg from "../../elem/MemberImg";
 import BookMark from "./BookMark";
+import RoomTags from "./RoomTags";
 
 //redux
 import { __deleteRoom, __exitRoom, __toggleBookmark, __getMarkedList, __getUnMarkedList, __getMergedList } from "../../redux/modules/room";
@@ -201,13 +202,13 @@ const RoomCard = ({
         </StarIcon>
         <CardSection>
           <CardProfile>
-            <RoundImg src={roomImage} />
+            <RoundImg url={roomImage} />
             <TextBox>
               <RoomNameBox>
                 <Text type="sub_1">{roomName}</Text>
               </RoomNameBox>
               <TagBox>
-                <Text type="body_2">{tag}</Text>
+                <RoomTags tag={tag} />
               </TagBox>
             </TextBox>
           </CardProfile>
@@ -234,51 +235,44 @@ const RoomCard = ({
 
 const Container = styled.div`
   position: relative;
-
   display: flex;
   flex-direction: column;
-
   width: 302px;
   height: 274px;
-
   border: 1.2px solid var(--grey);
   border-radius: 5px;
 `;
 
 const CardSection = styled.div`
   position: relative;
-
   display: flex;
   flex-direction: column;
-
   width: 302px;
   height: 202px;
-
   padding: 20px 20px 15px 20px;
 `;
 
 const StarIcon = styled.div`
   position: absolute;
-  z-index: var(--indexHeader);
+  z-index: 28;
   top: 10px;
   right: 10px;
 `;
 
 const CardProfile = styled.div`
   position: relative;
-
   display: flex;
   justify-content: flex-start;
   align-items: center;
 `;
 
-const RoundImg = styled.img`
+const RoundImg = styled.div`
   width: 100px;
   height: 100px;
-
   margin-right: 15px;
-
   border-radius: 50%;
+  background-image: url("${(props) => props.url}");
+  background-size: cover;
 `;
 
 const TextBox = styled.div`
@@ -286,38 +280,30 @@ const TextBox = styled.div`
   top: 40px;
   left: 110px;
   overflow: hidden;
-
   width: 138px;
   height: 100px;
 `;
 const RoomNameBox = styled.div`
   overflow: hidden;
-
   width: 138px;
   max-height: 52px;
-
   line-height: normal;
 `;
 const TagBox = styled.div`
   overflow: hidden;
-
   width: 138px;
   max-height: 44px;
   margin-top: 3px;
   margin-bottom: 20px;
-
   color: var(--darkgrey);
-
   line-height: normal;
 `;
 
 const SubTitleBox = styled.div`
   overflow: hidden;
-
   width: 262px;
   max-height: 44px;
   margin-top: auto;
-
   color: var(--darkgrey);
 
   ${body_3};
@@ -330,10 +316,8 @@ const CardFooter = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   margin-top: auto;
   padding: 20px;
-
   color: var(--grey);
   border-top: 1px solid var(--line);
 `;
@@ -342,7 +326,6 @@ const FooterItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   width: auto;
 `;
 

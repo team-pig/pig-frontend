@@ -56,8 +56,8 @@ export const getRoomList = createAction(
 export const getOneRoom = createAction(GET_ONE_ROOM, (roomId) => ({
   roomId,
 }));
-export const editRoom = createAction(EDIT_ROOM, (newContent) => ({
-  newContent,
+export const editRoom = createAction(EDIT_ROOM, (room) => ({
+  room,
 }));
 export const deleteRoom = createAction(DELETE_ROOM, (roomId) => ({ roomId }));
 export const joinRoom = createAction(JOIN_ROOM, (inviteCode, markedList) => ({
@@ -187,8 +187,9 @@ export const __editRoom =
         roomId,
       };
 
-      await roomApi.editRoom(newContent);
-      dispatch(editRoom(newContent));
+      const { data } = await roomApi.editRoom(newContent);
+      console.log(data);
+      dispatch(editRoom(data));
       // dispatch(editRoom(roomId, willDispatchContents));
     } catch (e) {
       console.log(e);
@@ -359,12 +360,11 @@ const room = handleActions(
       }),
     [EDIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.newContent.roomId);
         let idx = draft.room.findIndex(
-          (r) => r.roomId === action.payload.newContent.roomId
+          (r) => r.roomId === action.payload.room.room.roomId
         );
 
-        draft.room[idx] = { ...draft.room[idx], ...action.payload.newContent };
+        draft.room[idx] = { ...draft.room[idx], ...action.payload.room.room };
       }),
     [DELETE_ROOM]: (state, action) =>
       produce(state, (draft) => {

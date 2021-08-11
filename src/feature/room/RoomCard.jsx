@@ -12,6 +12,7 @@ import { Text } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
 import MemberImg from "../../elem/MemberImg";
 import BookMark from "./BookMark";
+import RoomTags from "./RoomTags";
 
 //redux
 import { __deleteRoom, __exitRoom, __toggleBookmark, __getMarkedList, __getUnMarkedList, __getMergedList } from "../../redux/modules/room";
@@ -207,7 +208,7 @@ const RoomCard = ({
                 <Text type="sub_1">{roomName}</Text>
               </RoomNameBox>
               <TagBox>
-                <Text type="body_2">{tag}</Text>
+                <RoomTags tag={tag} />
               </TagBox>
             </TextBox>
           </CardProfile>

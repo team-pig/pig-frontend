@@ -89,7 +89,6 @@ const RoomList = ({ history }) => {
       }
     })
     .map((room, idx) => {
-      
       return (
         <RoomCard
           userId={userId}
@@ -113,9 +112,9 @@ const RoomList = ({ history }) => {
       //   return item}
     })
     .map((room, idx) => {
-      // const markIdx = roomList.findIndex((item) => 
+      // const markIdx = roomList.findIndex((item) =>
       // item.bookmarkedMembers.includes(userId));
-      
+
       const isCheck = room.bookmarkedMembers.includes(userId);
       return (
         <RoomCard
@@ -151,26 +150,44 @@ const RoomList = ({ history }) => {
         <Wrapper>
           <WrapperItem>
             <InputBox>
+              <SearchIconBox>
+                <Icon icon="search" size="24px" />
+              </SearchIconBox>
+              <Input
+                type="text"
+                placeholder="방 이름을 검색하세요"
+                _onChange={searchKeyword}
+              />
               <input
                 onKeyUp={searchKeyword}
                 onKeyPress={_onKeyPress}
                 type="text"
                 name="keyword"
-                placeholder="방 이름을 검색하세요"
+                placeholder="  방 이름을 검색하세요"
               />
               {/* <IconBox>
                   <Icon icon="search" size="24px" />
                 </IconBox>
               </Input> */}
             </InputBox>
-            <BtnBox>
+            <BtnContainer>
               <Button size="150" onClick={openJoinModal}>
-                방 입장
+                <Btn>
+                  <BtnContent>
+                    <Icon icon="enter" size="24px" /> <Span>방 입장</Span>
+                  </BtnContent>
+                </Btn>
               </Button>
-              <Button shape="green-outline" size="150" onClick={openModal}>
-                방 만들기
-              </Button>
-            </BtnBox>
+              <BtnBox>
+                <Button shape="green-outline" size="150" onClick={openModal}>
+                  <Btn>
+                    <BtnContent>
+                      <Icon icon="plus-lg" size="24px" /> <Span>방 만들기</Span>
+                    </BtnContent>
+                  </Btn>
+                </Button>
+              </BtnBox>
+            </BtnContainer>
           </WrapperItem>
         </Wrapper>
 
@@ -202,18 +219,44 @@ const WrapperItem = styled.div`
 `;
 
 const InputBox = styled.div`
-  width: 918px;
+  position: relative;
+  max-width: 918px;
+  width: 100%;
   height: 46px;
   margin: auto 0;
+  padding: 0 20px 0 20px;
 `;
 
-const IconBox = styled.div`
+const SearchIconBox = styled.div`
   position: absolute;
-  top: 50%;
-  left: 5px;
+  z-index: 28;
+  top: 25%;
+  left: 30px;
+  color: var(--darkgrey);
 `;
 
-const BtnBox = styled.button`
+const Btn = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Span = styled.span`
+  margin: 0 0 0 7px;
+`;
+
+const BtnContent = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+`;
+
+const BtnBox = styled.div`
+  position: relative;
+  height: 50px;
+  margin-left: -1px;
+`;
+
+const BtnContainer = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;

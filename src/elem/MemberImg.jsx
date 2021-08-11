@@ -3,16 +3,17 @@ import styled from "styled-components";
 
 import { Text } from "./index";
 
-const MemberImg = ({ members, children, ...rest }) => {
+const MemberImg = ({ memberStatus, members, children, ...rest }) => {
   const [showAllMember, setShowAllMember] = useState(false);
 
   useEffect(() => {
+    console.log(memberStatus[0].nickname.charAt(0).toUpperCase());
     if (members.length > 4) {
       setShowAllMember(false);
     } else {
       setShowAllMember(true);
     }
-  });
+  }, []);
   return (
     <>
       {/* <ProfileImg src={memberImg} />
@@ -21,7 +22,7 @@ const MemberImg = ({ members, children, ...rest }) => {
       <MemberImgBox>
         {/* members배열 나중에 membersImg로 바꿔주기 */}
         {showAllMember
-          ? members.map((member, idx) => {
+          ? memberStatus.map((member, idx) => {
               return (
                 <ProfileImg
                   style={{
@@ -30,10 +31,10 @@ const MemberImg = ({ members, children, ...rest }) => {
                   }}
                   key={idx}
                   {...member}
-                />
+                ><Nickname>{member.nickname.charAt(0).toUpperCase()}</Nickname></ProfileImg>
               );
             })
-          : members.slice(0, 3).map((member, idx) => {
+          : memberStatus.slice(0, 3).map((member, idx) => {
               return (
                 <ProfileImg
                   style={{
@@ -42,12 +43,12 @@ const MemberImg = ({ members, children, ...rest }) => {
                   }}
                   key={idx}
                   {...member}
-                />
+                  />
               );
             })}
         {!showAllMember && (
           <MemberCount>
-            <Text type="body_3">+{members.length - 3}</Text>
+            <Text type="body_3">+{memberStatus.length - 3}</Text>
           </MemberCount>
         )}
       </MemberImgBox>
@@ -57,6 +58,7 @@ const MemberImg = ({ members, children, ...rest }) => {
 
 const ProfileImg = styled.div`
   position: relative;
+  display: flex;
   flex-shrink: 0;
 
   right: 20px;
@@ -68,6 +70,15 @@ const ProfileImg = styled.div`
   background-color: white;
   border: 1px solid black;
   border-radius: 50%;
+`;
+
+const Nickname = styled.span`
+margin: 0 auto;
+color: var(--black);
+font-size: 18px;
+font-weight: 700;
+line-height: 30px;
+vertical-align: middle;
 `;
 
 const MemberImgBox = styled.div`

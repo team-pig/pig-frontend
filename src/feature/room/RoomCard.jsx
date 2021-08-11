@@ -23,6 +23,7 @@ const RoomCard = ({
   roomName,
   subtitle,
   members,
+  memberStatus,
   createdAt,
   tag,
   bookmarkedMembers,
@@ -220,7 +221,7 @@ const RoomCard = ({
           </FooterItem>
           <FooterItem>
             {/* members를 memberImg 배열로 바꾸기 */}
-            <MemberImg members={members} />
+            <MemberImg members={members} memberStatus={memberStatus}/>
             <div onClick={handleClick}>
               <Icon icon="more" size="24px" />
             </div>

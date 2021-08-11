@@ -1,8 +1,14 @@
 import { instance } from "./index";
 
 export const cardApi = {
-  createCard: (roomId, bucketId, cardTitle) =>
-    instance.post(`/room/${roomId}/card`, { bucketId, cardTitle }),
+  createCard: (roomId, bucketId, cardTitle, initDate, color) =>
+    instance.post(`/room/${roomId}/card`, {
+      bucketId,
+      cardTitle,
+      startDate: initDate,
+      endDate: initDate,
+      color,
+    }),
 
   getCards: (roomId) => instance.get(`/room/${roomId}`),
 

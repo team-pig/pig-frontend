@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Bucket from "./Bucket";
-import { useState } from "react";
 import "@atlaskit/css-reset";
 import { useParams } from "react-router";
 
@@ -9,18 +9,15 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   __updateBucket,
   __updateCardLocateOtherBucket,
-  __createBucket,
   __updateCardLocate,
   __loadBucket,
   __loadCard,
 } from "../../redux/modules/board";
-import { useEffect } from "react";
 
 const Chart = () => {
-  const { roomId } = useParams();
   const dispatch = useDispatch();
-  const [bucketName, setBucketName] = useState("");
   const { cards, columnOrder, columns } = useSelector((state) => state.board);
+  const { roomId } = useParams();
 
   useEffect(() => {
     dispatch(__loadBucket(roomId));
@@ -93,28 +90,12 @@ const Chart = () => {
     }
   };
 
-  // 버킷생성
-  const createBucket = () => {
-    dispatch(__createBucket(roomId, bucketName));
-  };
-
   if (columnOrder === null || columns === null) {
     return <></>;
   }
 
   return (
     <>
-      <AddBucketZone>
-        <Input
-          placeholder="버킷 이름을 적어주세요."
-          type="text"
-          value={bucketName}
-          onChange={({ target: { value } }) => {
-            setBucketName(value);
-          }}
-        />
-        <Button onClick={createBucket}>버킷 추가하기</Button>
-      </AddBucketZone>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="all-columns"
@@ -125,6 +106,7 @@ const Chart = () => {
             <Container {...provided.droppableProps} ref={provided.innerRef}>
               {cards &&
                 columnOrder.map((bucketId, index) => {
+                  const BucketCnt = columnOrder.length; // 현재 버킷의 개수
                   const column = columns[bucketId];
                   const bucketCards = column.cardOrder.map(
                     (cardId) => cards[cardId]
@@ -135,7 +117,8 @@ const Chart = () => {
                       bucket={column} // required
                       key={column.bucketId} // required
                       index={index} // required
-                      roomId={roomId} // required
+                      roomId={roomId}
+                      BucketCnt={BucketCnt}
                     />
                   );
                 })}
@@ -152,21 +135,6 @@ const Container = styled.div`
   display: flex;
   gap: 34px;
   padding: 0 40px;
-`;
-
-const AddBucketZone = styled.div`
-  /* padding: 100px 0 0 100px;
-  display: flex; */
-`;
-
-const Input = styled.input`
-  border: 1px solid #eee;
-  outline: none;
-  height: 40px;
-  width: 250px;
-`;
-const Button = styled.button`
-  border: 1px solid #eee;
 `;
 
 export default Chart;

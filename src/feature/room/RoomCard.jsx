@@ -8,13 +8,13 @@ import Icon from "../../components/Icon";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import Drop from "../../components/Drop";
 //elements
-import { Button, Text } from "../../elem/index";
+import { Text } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
 import MemberImg from "../../elem/MemberImg";
 import BookMark from "./BookMark";
 
 //redux
-import { __deleteRoom, __exitRoom, __toggleBookmark } from "../../redux/modules/room";
+import { __deleteRoom, __exitRoom, __toggleBookmark, __getMarkedList, __getUnMarkedList, __getMergedList } from "../../redux/modules/room";
 
 //roomList map의 list에서 받아오는 값
 const RoomCard = ({
@@ -30,6 +30,7 @@ const RoomCard = ({
   history,
   index,
   isShow,
+  isMarked,
   openDrop,
   closeDrop,
 
@@ -37,12 +38,12 @@ const RoomCard = ({
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
   const [showAllMember, setShowAllMember] = useState(false);
-  const [display, setDisplay] = useState("");
-  const [isMarked, setIsMarked] = useState(false);
+  const [isDisplay, setIsDisplay] = useState(false);
+  // const [isMarked, setIsMarked] = useState(false);
 
   useEffect(() => {
      memberCount();
-     bookmarkMemberCheck();
+    //  bookmarkMemberCheck();
   }, []);
 
   const memberCount = () => {
@@ -53,25 +54,32 @@ const RoomCard = ({
     }
   }
 
-  const bookmarkMemberCheck = () => {
-    if(bookmarkedMembers.includes(userId)){
-      setIsMarked(true);
-    } else{
-      setIsMarked(false);
-    }
-  }
+  // const bookmarkMemberCheck = () => {
+  //   if(bookmarkedMembers.includes(userId)){
+  //     setIsMarked(true);
+  //   } else{
+  //     setIsMarked(false);
+  //   }
+  // }
 
-  const clickBookmark = (e) => {
+  const clickBookmark = 
+  async (e) => {
     e.stopPropagation();
     if(isMarked){
       e.stopPropagation();
-      setIsMarked(false);
-      dispatch(__toggleBookmark(roomId, isMarked));
+      // setIsMarked(false);
+      await dispatch(__toggleBookmark(roomId, isMarked));
+      await dispatch(__getMarkedList());
+      await dispatch(__getUnMarkedList());
+      dispatch(__getMergedList());
       console.log("즐겨찾기 취소");
     }else if(!isMarked){
       e.stopPropagation();
-      setIsMarked(true);
-      dispatch(__toggleBookmark(roomId, isMarked));
+      // setIsMarked(true);
+      await dispatch(__toggleBookmark(roomId, isMarked));
+      await dispatch(__getMarkedList());
+      await dispatch(__getUnMarkedList());
+      dispatch(__getMergedList());
       console.log("즐겨찾기 등록");
 
     }
@@ -100,37 +108,37 @@ const RoomCard = ({
   const handleClick = (e) => {
     // e.preventDefault();
     e.stopPropagation();
-    if (display === index) {
-      setDisplay("");
+    if (isDisplay === index) {
+      setIsDisplay(false);
       closeDrop();
-      console.log(display);
+      console.log(isDisplay);
       console.log("닫다");
       console.log(isShow);
     } else {
       openDrop();
-      setDisplay(index);
+      setIsDisplay(index);
       console.log("열다");
-      console.log(display);
+      console.log(isDisplay);
       console.log(isShow);
     }
   };
 
   const closeDownDrop = () => {
-    setDisplay("");
+    setIsDisplay(false);
     closeDrop();
     console.log("드롭닫기");
-    console.log(display);
+    console.log(isDisplay);
   };
 
   const handleOut = (e) => {
-    setDisplay("");
+    setIsDisplay(false);
     closeDrop();
     console.log("handleOut");
   };
 
   const handleIn = (e) => {
     openDrop();
-    setDisplay(index);
+    setIsDisplay(index);
     console.log("handleIn");
   };
 
@@ -151,7 +159,7 @@ const RoomCard = ({
       >
         {/* {display===index && isShow ? ( */}
         <Drop.Container
-          display={display === index ? true : false}
+          display={isDisplay === index ? "true" : undefined}
           onClick={closeDownDrop}
           onMouseOut={handleOut}
           onMouseOver={handleIn}

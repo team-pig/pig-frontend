@@ -32,6 +32,12 @@ export const roomApi = {
       },
     });
   },
+  getMarkedList: () => {
+    return instance.get("/rooms/markedlist");
+  },
+  getUnMarkedList: () => {
+    return instance.get("rooms/unmarkedlist");
+  },
   addBookmark: (roomId) => {
     return instance.post(`/room/${roomId}/bookmark`);
   },

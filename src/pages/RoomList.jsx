@@ -256,7 +256,7 @@ const BtnBox = styled.div`
   margin-left: -1px;
 `;
 
-const BtnContainer = styled.button`
+const BtnContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;

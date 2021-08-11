@@ -100,9 +100,11 @@ const CalendarInfo = ({
               {selectedDate}
             </Text>
             <TextBtn>
-              <Text type="body_4" onClick={clickDetailBtn}>
-                상세정보
-              </Text>
+              {!cardIsZero && (
+                <Text type="body_4" onClick={clickDetailBtn}>
+                  상세정보
+                </Text>
+              )}
             </TextBtn>
           </TitleBox>
           {cardIsZero && (

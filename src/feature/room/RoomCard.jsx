@@ -260,7 +260,7 @@ const CardSection = styled.div`
 
 const StarIcon = styled.div`
   position: absolute;
-  z-index: var(--indexHeader);
+  z-index: 28;
   top: 10px;
   right: 10px;
 `;

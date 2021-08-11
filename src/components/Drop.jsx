@@ -86,7 +86,7 @@ const Wrapper = styled.div`
 
 const ModalOverlay = styled.div`
   position: absolute;
-  z-index: var(--indexHeader);
+  z-index: 29;
   display: ${(props) => (props.display ? "flex" : "none")};
   width: 100%;
   height: 100%;

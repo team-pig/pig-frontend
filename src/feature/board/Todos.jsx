@@ -10,7 +10,7 @@ import { __createTodo, __loadTodos } from "../../redux/modules/todos";
 
 // compo & elem
 import Todo from "./Todo";
-import { Input } from "../../elem";
+import { Input, Text } from "../../elem";
 import Icon from "../../components/Icon";
 
 const Todos = ({ cardId }) => {
@@ -39,13 +39,17 @@ const Todos = ({ cardId }) => {
 
   return (
     <Container>
-      {todos.length !== 0 ? (
-        todos.map((todo) => (
-          <Todo key={todo.todoId} todo={todo} roomId={roomId} />
-        ))
-      ) : (
-        <div>할일이 없어요! </div>
-      )}
+      <TodoList>
+        {todos.length !== 0 ? (
+          todos.map((todo) => (
+            <Todo key={todo.todoId} todo={todo} roomId={roomId} />
+          ))
+        ) : (
+          <Text type="body_4" color="grey">
+            할일이 없어요!
+          </Text>
+        )}
+      </TodoList>
       <TodoForm onSubmit={formik.handleSubmit}>
         <StIcon icon="plus-lg" size="24px" color="#b7b7b7" />
         <Input
@@ -71,7 +75,6 @@ const Container = styled.div`
   align-items: flex-end;
   gap: 12px;
   width: 480px;
-  /* max-width: */
   margin: 0 auto;
 `;
 
@@ -84,6 +87,20 @@ const StIcon = styled(Icon)`
   position: absolute;
   left: -40px;
   top: 12px;
+`;
+
+const TodoList = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  scrollbar-width: none; //firefox
+  ::-webkit-scrollbar {
+    // chrome, safari, opera
+    display: none;
+  }
 `;
 
 export default Todos;

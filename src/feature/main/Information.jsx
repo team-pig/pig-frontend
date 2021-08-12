@@ -8,7 +8,7 @@ import Tags from "./Tags";
 
 // elem
 import { Text, Textarea, IconBtn } from "../../elem";
-import { head_2 } from "../../themes/textStyle";
+import { head_2, sub_2 } from "../../themes/textStyle";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
 
@@ -25,10 +25,8 @@ const Information = () => {
   });
 
   const [editedInfo, setEditedInfo] = useState({
-    title: "협업돼지꿀꿀",
-    tags: ["태그1", "태그2", "태그3", "태그4"],
-    desc: "안녕하세요 협업돼지입니다.",
-    content: "### 개요를 입력해주세요.",
+    ...info,
+    tags: info.tags.join(", "),
   });
 
   const mainEditorOpt = {
@@ -64,7 +62,11 @@ const Information = () => {
     }
 
     const currentContent = getContent();
-    const newInfo = { ...editedInfo, content: currentContent };
+    const newInfo = {
+      ...editedInfo,
+      content: currentContent,
+      tags: editedInfo.tags.split(",").map((info) => info.trim()),
+    };
 
     setInfo(newInfo);
     toggleEditMode();
@@ -91,7 +93,13 @@ const Information = () => {
           </TextBtn>
         </TitleBox>
         <TagContainer>
-          <Tags tags={info.tags} gap="14" textType="sub_2" color="dargrey" />
+          {/* 태그 ','으로 구분하여 입력하도록 설정 */}
+          <TagsInput
+            type="text"
+            placeholder="태그는 ','으로 구분하여 입력해주세요."
+            value={editedInfo.tags}
+            onChange={(e) => handleChange("tags", e.target.value)}
+          />
         </TagContainer>
         <Textarea
           value={editedInfo.desc}
@@ -157,7 +165,14 @@ const TextBtn = styled.button`
 `;
 
 const TagContainer = styled.div`
+  height: 30px;
   margin-bottom: 25px;
+`;
+
+const TagsInput = styled.input`
+  ${sub_2};
+  width: 100%;
+  height: 100%;
 `;
 
 const Desc = styled(Text)`

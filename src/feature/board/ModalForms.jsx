@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Text } from "../../elem";
 import { __editCardInfos, resetCard } from "../../redux/modules/board";
+import { resetTodos } from "../../redux/modules/todos";
 
 import styled, { css } from "styled-components";
 import InputToggle from "../../components/InputToggle";
@@ -21,6 +22,7 @@ const ModalForms = ({ content }) => {
   useEffect(() => {
     return () => {
       dispatch(resetCard());
+      dispatch(resetTodos());
     };
   }, []);
 

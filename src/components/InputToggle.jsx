@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 // elem
 import { Text } from "../elem";
+import { body_3 } from "../themes/textStyle";
 
 const InputToggle = ({
   name,
@@ -10,7 +11,7 @@ const InputToggle = ({
   value = "",
   saveFunc,
   placeholder,
-  resize,
+  padding,
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
@@ -33,7 +34,6 @@ const InputToggle = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [myRef]);
 
-  // 엔터 눌렀을 때 저장
   const handleEnterEvent = (e) => {
     if (e.target.value !== "" && e.key === "Enter") handleSave(currentValue); // value === "" 일 때 저장 방지
   };
@@ -42,6 +42,7 @@ const InputToggle = ({
     if (shape === "textarea") {
       return (
         <EditTextarea
+          autoComplete="off"
           ref={myRef}
           rows="10"
           name={name}
@@ -61,18 +62,21 @@ const InputToggle = ({
           value={currentValue}
           onChange={(e) => setCurrentValue(e.target.value)}
           onKeyPress={handleEnterEvent}
+          padding={padding}
         />
       );
     }
 
     return (
       <EditInput
+        autoComplete="off"
         type="text"
         ref={myRef}
         name={name}
         value={currentValue}
         onChange={(e) => setCurrentValue(e.target.value)}
         onKeyPress={handleEnterEvent}
+        padding={padding}
       />
     );
   };
@@ -91,6 +95,11 @@ const InputToggle = ({
 const Container = styled.div`
   width: 100%;
   height: 100%;
+  ${(props) =>
+    props.border &&
+    css`
+      border: 1px solid var(--line);
+    `}
 `;
 
 const EditInput = styled.input`
@@ -107,8 +116,8 @@ const EditInput = styled.input`
 `;
 
 const EditTextarea = styled.textarea`
+  ${body_3}
   width: 100%;
-
   resize: none;
 `;
 

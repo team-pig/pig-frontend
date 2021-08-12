@@ -10,8 +10,9 @@ import { __createTodo, __loadTodos } from "../../redux/modules/todos";
 
 // compo & elem
 import Todo from "./Todo";
-import { Input } from "../../elem";
 import Icon from "../../components/Icon";
+import { body_3, body_4 } from "../../themes/textStyle";
+import flex from "../../themes/flex";
 
 const Todos = ({ cardId }) => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const Todos = ({ cardId }) => {
 
     onSubmit: (todo, { resetForm }) => {
       resetForm();
-      dispatch(__createTodo(roomId, cardId, todo.todoTitle));
+      dispatch(__createTodo(roomId, { cardId, todoTitle: todo.todoTitle }));
     },
   });
 
@@ -45,20 +46,24 @@ const Todos = ({ cardId }) => {
         ))}
       </TodoList>
       <TodoForm onSubmit={formik.handleSubmit}>
-        <StIcon icon="plus-lg" size="24px" />
-        <Input
+        <Icon icon="plus-lg" size="20px" />
+        <TodoInput
+          autoComplete="off"
           type="text"
           name="todoTitle"
           value={formik.values.todoTitle}
-          isError={formik.touched.todoTitle && Boolean(formik.errors.todoTitle)}
-          useHelper={formik}
-          _onChange={formik.handleChange}
-          _onClick={() => {
+          onChange={formik.handleChange}
+          onClick={() => {
             formik.setFieldValue("todoTitle", "");
           }}
-          placeholder="새로운 할 일을 추가 해주세요 :)"
+          placeholder="새로운 할 일을 추가하고 Enter ✨"
         />
       </TodoForm>
+      <TodoHelpMsg color="point">
+        {formik.touched.todoTitle && formik.errors.todoTitle
+          ? formik.errors.todoTitle
+          : null}
+      </TodoHelpMsg>
     </Container>
   );
 };
@@ -66,21 +71,36 @@ const Todos = ({ cardId }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   gap: 12px;
-  width: 480px;
   margin: 0 auto;
 `;
 
-const TodoForm = styled.form`
+const TodoInput = styled.input`
+  ${body_3}
   width: 446px;
-  position: relative;
+  height: 46px;
+  padding: 12px 14px;
+  color: var(--black);
+  border: ${(props) =>
+    props.isError
+      ? "1px solid var(--notice) !important"
+      : "1px solid var(--line)"};
+  outline: none;
+  transition: border-color 150ms ease-in-out;
+
+  ::placeholder {
+    color: var(--grey);
+  }
+
+  &:focus {
+    border: 1px solid var(--main);
+  }
 `;
 
-const StIcon = styled(Icon)`
-  position: absolute;
-  left: -40px;
-  top: 12px;
+const TodoForm = styled.form`
+  ${flex("between", "center")}
+  width: 478px;
+  margin: 0 auto;
 `;
 
 const TodoList = styled.div`
@@ -88,13 +108,20 @@ const TodoList = styled.div`
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
-  height: 200px;
+  height: 250px;
   overflow-y: auto;
   scrollbar-width: none; //firefox
   ::-webkit-scrollbar {
     // chrome, safari, opera
     display: none;
   }
+`;
+
+const TodoHelpMsg = styled.div`
+  ${body_4}
+  color : var(--notice);
+  text-align: right;
+  padding-right: 40px;
 `;
 
 export default Todos;

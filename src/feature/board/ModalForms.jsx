@@ -28,7 +28,6 @@ const ModalForms = ({ content }) => {
 
   const editFunc = (key, value) => {
     const editObj = { cardId: content.cardId, [key]: value };
-    if (value === "") window.alert("내용이 없어요");
     dispatch(__editCardInfos(roomId, editObj));
   };
 

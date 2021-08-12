@@ -10,6 +10,7 @@ const Input = (props) => {
     return (
       <Wrapper isError={props.isError}>
         <InputText
+          autoComplete="off"
           onChange={props._onChange}
           type={props.type}
           value={props.value}

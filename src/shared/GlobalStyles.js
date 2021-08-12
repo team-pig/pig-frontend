@@ -17,6 +17,7 @@ const GlobalStyles = createGlobalStyle`
 
 		/* z-index */
 		--indexHeader : 30;
+		--indexDrop : 30;
 
 		/* margin */
 		--xsMargin: 10px;

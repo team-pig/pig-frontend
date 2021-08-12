@@ -3,6 +3,7 @@ import produce from "immer";
 import { todoApi } from "../../api/todoApi";
 
 const LOAD_TODOS = "todos/LOAD_TODOS";
+const LOAD_MY_TODOS = "todos/LOAD_MY_TODOS";
 const CREATE_TODO = "todos/CREATE_TODO";
 const DELETE_TODO = "todos/DELETE_TODO";
 const EDIT_TODO_TITLE = "todos/EDIT_TODO_TITLE";
@@ -15,6 +16,7 @@ const RESET_TODOS = "todos/RESET_TODOS";
  * Action creator
  */
 const laodTodos = createAction(LOAD_TODOS, (todos) => ({ todos }));
+const loadMyTodos = createAction(LOAD_MY_TODOS, (todos) => ({ todos }));
 
 const createTodo = createAction(CREATE_TODO, (newTodo) => ({
   newTodo,
@@ -54,12 +56,25 @@ export const __loadTodos = (roodId, cardId) => async (dispatch) => {
   }
 };
 
-export const __createTodo = (roomId, cardId, todoTitle) => async (dispatch) => {
+export const __loadMyTodos = (roomId) => async (dispatch) => {
   try {
-    const { data } = await todoApi.createTodo(roomId, cardId, todoTitle);
+    const { data } = await todoApi.loadMyTodo(roomId);
+    const {
+      result: { checked, notChecked },
+    } = data;
+
+    dispatch(loadMyTodos(checked, notChecked));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const __createTodo = (roomId, todoInfo) => async (dispatch) => {
+  try {
+    const { data } = await todoApi.createTodo(roomId, todoInfo);
     const newTodo = {
       todoId: data.todoId,
-      todoTitle,
+      todoTitle: todoInfo.todoTitle,
       isChecked: false,
       members: [],
     };
@@ -126,6 +141,7 @@ export const __deleteTodo = (roomId, todoId) => async (dispatch) => {
 
 const initialState = {
   todos: [],
+  myTodos: [],
 };
 
 export const todos = handleActions(
@@ -133,6 +149,10 @@ export const todos = handleActions(
     [LOAD_TODOS]: (state, { payload }) =>
       produce(state, (draft) => {
         draft.todos = payload.todos;
+      }),
+    [LOAD_MY_TODOS]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.myTodos = payload.myTodos;
       }),
 
     [CREATE_TODO]: (state, { payload }) =>
@@ -174,6 +194,8 @@ export const todos = handleActions(
         const targetIdx = state.todos.findIndex(
           (todo) => todo.todoId === todoId
         );
+        console.log(targetIdx);
+
         const targetMember = state.todos[targetIdx].members.findIndex(
           (member) => member.memberId === memberId
         );

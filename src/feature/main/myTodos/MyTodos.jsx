@@ -1,53 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { __loadMyTodos } from "../../../redux/modules/todos";
+import Icon from "../../../components/Icon";
 
-import Icon from "../../components/Icon";
-
-import { IconBtn, Text } from "../../elem";
-import flex from "../../themes/flex";
+import { IconBtn, Text } from "../../../elem";
+import flex from "../../../themes/flex";
 
 const MyTodos = () => {
-  // 더미데이터
-  const todos = [
-    {
-      todoId: "324sdf234",
-      todoTitle: "프로젝트 하기",
-      isChecked: true,
-    },
-    {
-      todoId: "dsflkj23",
-      todoTitle: "밥 먹기",
-      isChecked: true,
-    },
-    { todoId: "dslk2sdfa", todoTitle: "CSS 끝내기", isChecked: false },
-    {
-      todoId: "sdf2dsfg",
-      todoTitle: "리덕스 툴킷 공부하기",
-      isChecked: false,
-    },
-    {
-      todoId: "2kddf1dsa",
-      todoTitle:
-        "오늘 하루가 끝나기전에 반드시 꼭 무조건 벨로그에 Weekly I Learned를 쓰기 스스로 약속하기 꼭 쓴다",
-      isChecked: false,
-    },
-  ];
+  const dispatch = useDispatch();
+  const { roomId } = useParams();
+  const loadedMyTodos = useSelector((state) => state.todos.myTodos);
+  console.log(loadedMyTodos);
 
-  const [myTodos, setMyTodos] = useState(todos);
+  useEffect(() => {
+    dispatch(__loadMyTodos(roomId));
+  }, []);
+
+  // 더미데이터
 
   const toggleTodo = (todoId) => {
-    const idx = myTodos.findIndex((todo) => todo.todoId === todoId);
-    const newAry = myTodos.slice();
-    newAry[idx] = { ...newAry[idx], isChecked: !newAry[idx].isChecked };
-    console.log(newAry);
-    setMyTodos(newAry);
+    // const idx = myTodos.findIndex((todo) => todo.todoId === todoId);
+    // const newAry = myTodos.slice();
+    // newAry[idx] = { ...newAry[idx], isChecked: !newAry[idx].isChecked };
+    // console.log(newAry);
+    // setMyTodos(newAry);
   };
 
   const deleteTodo = (todoId) => {
-    const newAry = myTodos.slice().filter((todo) => todo.todoId !== todoId);
-    setMyTodos(newAry);
+    // const newAry = myTodos.slice().filter((todo) => todo.todoId !== todoId);
+    // setMyTodos(newAry);
   };
 
+  if (!loadedMyTodos) return <></>;
   return (
     <Container>
       <TitleBox>
@@ -56,7 +42,7 @@ const MyTodos = () => {
         </Text>
       </TitleBox>
       <List>
-        {myTodos.map((item) => (
+        {loadedMyTodos.map((item) => (
           <Item key={item.todoId}>
             <Grid>
               <IconBtn _onClick={() => toggleTodo(item.todoId)}>

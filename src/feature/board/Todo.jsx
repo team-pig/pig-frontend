@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { Input, Text } from "../../elem";
 import Filled from "../../assets/icons/checkbox-filled.svg";
@@ -16,14 +16,29 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import Icon from "../../components/Icon";
 import InputToggle from "../../components/InputToggle";
+import flex from "../../themes/flex";
+import { body_3, body_4, button } from "../../themes/textStyle";
 
 const Todo = ({ todo }) => {
   const dispatch = useDispatch();
   const allMembers = useSelector((state) => state.member.allMembers);
-
-  // global
+  const [itemClicked, setItemClicked] = useState(false);
   const { roomId } = useParams();
+  const ItemEl = useRef();
 
+  const handleClickOutside = (e) => {
+    e.stopPropagation();
+    if (ItemEl.current && !ItemEl.current.contains(e.target)) {
+      setItemClicked(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [ItemEl]);
+
+  // handler
   const deleteTodoHandler = (e) => {
     e.stopPropagation();
     dispatch(__deleteTodo(roomId, todo.todoId));
@@ -38,8 +53,8 @@ const Todo = ({ todo }) => {
   };
 
   return (
-    <StyleDiv wh={["480px"]} flex={["space-between", "center"]}>
-      <StyleDiv>
+    <Container>
+      <>
         <Input
           none
           type="checkbox"
@@ -57,114 +72,131 @@ const Todo = ({ todo }) => {
             <NotCheckboxIcon icon="checkbox" size="20px" />
           )}
         </label>
-      </StyleDiv>
+      </>
 
-      <TodoItem>
-        <TodoTitle type="body_3">
+      <TodoItem
+        itemClicked={itemClicked}
+        ref={ItemEl}
+        onClick={() => {
+          setItemClicked((pre) => !pre);
+        }}
+      >
+        <TodoInputToggle>
           <InputToggle
             shape="text"
             name="todoTitle"
             saveFunc={editFunc}
             value={todo.todoTitle}
+            padding
           />
-        </TodoTitle>
-
-        <StyleDiv flex={["", "center"]} wh={["50px"]} mg="0 10px">
+        </TodoInputToggle>
+        <TodoMembers>
           <BoardDrop.Container direction="right" type="default" shadow>
             {allMembers &&
-              allMembers.map((memeber, idx) => (
+              allMembers.map((member, idx) => (
                 <BoardDrop.Item
                   key={idx}
-                  _onClick={(e) => {
+                  _onClick={() => {
                     dispatch(
-                      __memberHandler(roomId, todo.todoId, e.target.innerText)
+                      __memberHandler(roomId, todo.todoId, member.memberName)
                     );
                   }}
                 >
-                  {memeber.memberName}
+                  <Member>
+                    <Avatar />
+                    {member.memberName}
+                  </Member>
                 </BoardDrop.Item>
               ))}
           </BoardDrop.Container>
-          <StyleDiv
-            wh={["17px", "22px"]}
-            flex={["center", "center"]}
-            mg="0 0 0 4px"
-          >
-            <Text type="body_3">{todo.members.length}</Text>
-          </StyleDiv>
-        </StyleDiv>
-        <div onClick={deleteTodoHandler}>
-          <RemoveIcon icon="remove" size="14px" color="var(--grey)" />
-        </div>
+          <TodoMembersCnt> + {todo.members.length}</TodoMembersCnt>
+        </TodoMembers>
+        <RemoveTodoIcon>
+          {itemClicked ? (
+            <Icon
+              icon="remove"
+              size="14px"
+              color="var(--grey)"
+              onClick={deleteTodoHandler}
+            />
+          ) : (
+            ""
+          )}
+        </RemoveTodoIcon>
       </TodoItem>
-    </StyleDiv>
+    </Container>
   );
 };
 
+const Container = styled.div`
+  ${flex("between", "center")}
+  width: 478px;
+  margin: 0 auto;
+`;
+
 const TodoItem = styled.div`
-  display: flex;
-  border: 1px solid var(--line);
-  padding: 7px 14px;
+  ${flex("between", "center")};
   width: 446px;
   min-height: 46px;
-  justify-content: space-between;
-  align-items: center;
-  &:hover {
-    border: 1px solid var(--main);
-  }
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+
+  ${(props) =>
+    props.itemClicked
+      ? css`
+          border: 1px solid var(--main);
+        `
+      : ""}
 `;
 
-const StyleDiv = styled.div`
-  ${(props) =>
-    props.tb &&
-    css`
-      border: 1px solid red;
-    `}
-  ${(props) =>
-    props.wh &&
-    css`
-      width: ${props.wh[0]};
-      height: ${props.wh[1]};
-    `}
-    
-  ${(props) =>
-    props.flex &&
-    css`
-      display: flex;
-      justify-content: ${props.flex[0]};
-      align-items: ${props.flex[1]};
-      gap: ${props.flex[2]}px;
-    `}
-  padding: ${(props) => props.pd};
-  margin: ${(props) => props.mg};
-  border: ${(props) => props.border};
+const TodoMembers = styled.div`
+  ${flex("between", "center")}
+  width: 60px;
+  gap: 5px;
 `;
 
-const TodoTitle = styled(Text)`
-  width: 100%;
+const TodoMembersCnt = styled.div`
+  ${body_4}
+  color: var(--grey);
+  width: 20px;
+`;
+
+const TodoInputToggle = styled.div`
+  ${body_3}
+  width: 300px;
 `;
 
 const NotCheckboxIcon = styled(Icon)`
   cursor: pointer;
-  transition: transform 200ms ease-in-out;
-  &:hover {
-    transform: scale(1.1);
-  }
+  width: 20px;
+  height: 20px;
+`;
+
+const RemoveTodoIcon = styled.div`
+  ${flex("center", "cetner")}
+  width: 20px;
+  height: 20px;
 `;
 
 const CheckedIcon = styled.img`
   cursor: pointer;
-  transition: transform 200ms ease-in-out;
-  &:hover {
-    transform: scale(1.1);
-  }
+  width: 20px;
+  height: 20px;
+`;
+const Member = styled.div`
+  width: 100px;
+  ${flex("start", "cetner")}
+  ${button}
+  color: var(--darkgrey)
 `;
 
-const RemoveIcon = styled(Icon)`
-  cursor: pointer;
-  transition: transform 200ms ease-in-out;
-  &:hover {
-    transform: scale(1.1);
-  }
+const Avatar = styled.div`
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 50% !important;
+  margin-right: 10px;
 `;
+
 export default Todo;

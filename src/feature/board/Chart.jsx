@@ -45,9 +45,9 @@ const Chart = () => {
 
     // 버킷위치수정
     if (type === "column") {
-      const newColumnOrder = Array.from(columnOrder); // 새로운 컬럼오더 배열을 만들고,
-      newColumnOrder.splice(source.index, 1); // dnd된 컬럼을 제외하고,
-      newColumnOrder.splice(destination.index, 0, draggableId); // drop된 위치(index)에 다시 넣는다.
+      const newColumnOrder = Array.from(columnOrder);
+      newColumnOrder.splice(source.index, 1);
+      newColumnOrder.splice(destination.index, 0, draggableId);
 
       dispatch(__updateBucket(roomId, null, null, newColumnOrder));
       return;
@@ -90,7 +90,7 @@ const Chart = () => {
     }
   };
 
-  if (columnOrder === null || columns === null) {
+  if (columnOrder.length === 0 || columns === null) {
     return <></>;
   }
 
@@ -102,29 +102,31 @@ const Chart = () => {
           direction="horizontal"
           type="column"
         >
-          {(provided) => (
-            <Container {...provided.droppableProps} ref={provided.innerRef}>
-              {cards &&
-                columnOrder.map((bucketId, index) => {
-                  const BucketCnt = columnOrder.length; // 현재 버킷의 개수
-                  const column = columns[bucketId];
-                  const bucketCards = column.cardOrder.map(
-                    (cardId) => cards[cardId]
-                  );
-                  return (
-                    <Bucket
-                      bucketCards={bucketCards} //required
-                      bucket={column} // required
-                      key={column.bucketId} // required
-                      index={index} // required
-                      roomId={roomId}
-                      BucketCnt={BucketCnt}
-                    />
-                  );
-                })}
-              {provided.placeholder}
-            </Container>
-          )}
+          {(provided) => {
+            return (
+              <Container {...provided.droppableProps} ref={provided.innerRef}>
+                {cards &&
+                  columnOrder.map((bucketId, index) => {
+                    const BucketCnt = columnOrder.length;
+                    const column = columns[bucketId];
+                    const bucketCards = column.cardOrder.map(
+                      (cardId) => cards[cardId]
+                    );
+                    return (
+                      <Bucket
+                        bucketCards={bucketCards} //required
+                        bucket={column} // required
+                        key={column.bucketId} // required
+                        index={index} // required
+                        roomId={roomId}
+                        BucketCnt={BucketCnt}
+                      />
+                    );
+                  })}
+                {provided.placeholder}
+              </Container>
+            );
+          }}
         </Droppable>
       </DragDropContext>
     </>

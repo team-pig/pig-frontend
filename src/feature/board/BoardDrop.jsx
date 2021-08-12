@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
 import { Text } from "../../elem";
+import flex from "../../themes/flex";
 
 const Item = ({ children, _onClick, componentType, color }) => {
   if (componentType === "colorPicker")
@@ -35,13 +36,14 @@ const Container = ({
   size,
   direction,
   type,
-  shadow,
   history,
   componentType,
   bgColor,
 }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const modalEl = useRef();
+
+  // ---- 다른 영역 클릭 시, 드랍다운 off ---- //
 
   const handleClickOutside = (e) => {
     e.stopPropagation();
@@ -54,6 +56,8 @@ const Container = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [modalEl]);
+
+  // ---- 다른 영역 클릭 시, 드랍다운 off ---- //
 
   if (componentType === "colorPicker") {
     return (
@@ -72,25 +76,25 @@ const Container = ({
     );
   }
 
+  // ---- Dropdown default ---- //
   return (
-    <Wrapper
-      shadow={shadow}
+    <DropdownBtn
       size={size}
-      onClick={() => {
-        setIsMenuVisible(!isMenuVisible);
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsMenuVisible((pre) => !pre);
       }}
     >
-      {type === "default" ? <></> : type === "add" ? <div>hello</div> : ""}
-
       {isMenuVisible && (
         <ItemWrapper history={history} direction={direction} ref={modalEl}>
           {children}
         </ItemWrapper>
       )}
-    </Wrapper>
+    </DropdownBtn>
   );
 };
 
+// ---- color picker ---- //
 const ColorPicker = styled.div`
   width: 20px;
   height: 20px;
@@ -101,65 +105,53 @@ const ColorPicker = styled.div`
 `;
 
 const ColorItem = styled.div`
+  ${flex("center", "center")}
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
   bottom: -70px;
+  transform: translateX(-50%);
   border: 1px solid var(--line);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   gap: 10px;
   width: 180px;
   height: 60px;
   border-radius: 10px;
   background-color: var(--white);
-
-  /* width: 200px; */
 `;
 
-const Wrapper = styled.div`
+// ---- default drop down ---- //
+const DropdownBtn = styled.div`
+  ${flex("center", "center")}
   position: relative;
-  background-color: #fff;
   cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  transition: transform ease-in-out 200ms;
-  ${(props) => props.shadow && `box-shadow: 0px 0px 12px rgb(0 0 0 / 10%);`}
-  &:hover {
-    background-color: var(--primary-lightgray);
-  }
-  &:active {
-    transform: scale(0.95);
-  }
+  border: 1px solid var(--line);
+  background-color: var(--white);
 `;
 
 const ItemWrapper = styled.div`
-  z-index: 999;
-  border-radius: 4px;
+  position: absolute;
+  left: 0;
+  top: 20px;
   box-shadow: 0px 0px 12px rgb(0 0 0 / 10%);
   background-color: #fff;
-  position: absolute;
-  ${(props) =>
-    props.direction === "right" &&
-    css`
-      left: 150%;
-      top: 0;
-    `}
+  z-index: var(--indexDrop);
+  border-radius: 4px;
+  div:nth-child(1) {
+    border-radius: 4px 4px 0 0;
+  }
+  div:last-child {
+    border-radius: 0 0 4px 4px;
+  }
 `;
 
 const Link = styled.div`
-  z-index: 999;
+  ${flex("center", "center")}
   width: 132px;
   height: 44px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
+  background-color: var(--white);
   &:hover {
     background-color: var(--line);
   }

@@ -62,7 +62,11 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
                       shape="text"
                       name="bucketName"
                       saveFunc={editFunc}
-                      value={bucket.bucketName}
+                      value={
+                        bucket.bucketName === null
+                          ? "제목없는 버킷"
+                          : bucket.bucketName
+                      }
                     />
                   </Text>
                 </BucketTitle>
@@ -75,12 +79,12 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
                         dispatch(__deleteBucket(roomId, bucketId));
                       }}
                     >
-                      <Icon icon="minus" size="24px" />
+                      <Icon icon="minus" size="24px" color="var(--darkgrey)" />
                     </IconButton>
                   )}
 
                   <IconButton onClick={addBucket}>
-                    <Icon icon="plus-lg" size="24px" />
+                    <Icon icon="plus-lg" size="24px" color="var(--darkgrey)" />
                   </IconButton>
                 </BucketHeadBtns>
               </BucketHeader>
@@ -91,7 +95,11 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
                   return (
                     <>
                       <AddCardBtn>
-                        <Icon icon="plus-lg" size="20px" onClick={addCard} />
+                        <Icon
+                          icon="plus-circle"
+                          size="20px"
+                          onClick={addCard}
+                        />
                       </AddCardBtn>
                       <BucketList
                         ref={provided.innerRef}

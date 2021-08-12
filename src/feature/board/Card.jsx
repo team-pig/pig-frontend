@@ -44,6 +44,7 @@ const Card = ({ card, index, bucketId }) => {
               {...provided.dragHandleProps}
               ref={provided.innerRef}
               isDragging={snapshot.isDragging}
+              bgColor={card.color}
             >
               <CardHeader>
                 <CardTitle>
@@ -114,7 +115,12 @@ const Container = styled.div`
   width: 280px;
   font-size: 1.8rem;
   cursor: pointer !important;
-  /* border: ${(props) => props.isDragging && `1px solid ${props.bgColor}`}; */
+  border-radius: 4px;
+  border: ${(props) => props.isDragging && `1px solid ${props.bgColor}`};
+  &:hover {
+    border-radius: 4px;
+    border: ${(props) => `1px solid ${props.bgColor}`};
+  }
 `;
 
 const TodosHeader = styled(Text)`
@@ -148,7 +154,6 @@ const CardDeleteBtn = styled.div`
 `;
 const CardBody = styled.div`
   width: 252px;
-  /* height: 24px; */
   margin-bottom: 20px;
 `;
 const CardFooter = styled.div`

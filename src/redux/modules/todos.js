@@ -9,6 +9,7 @@ const EDIT_TODO_TITLE = "todos/EDIT_TODO_TITLE";
 const IS_CHECKED_TODO = "todos/IS_CHECKED_TODO";
 const ADD_MEMBER = "todos/ADD_MEMBER";
 const REMOVE_MEMBER = "todos/REMOVE_MEMBER";
+const RESET_TODOS = "todos/RESET_TODOS";
 
 /**
  * Action creator
@@ -38,6 +39,8 @@ const isCheckedTodo = createAction(IS_CHECKED_TODO, (todoId, isChecked) => ({
   todoId,
   isChecked,
 }));
+
+export const resetTodos = createAction(RESET_TODOS, () => ({}));
 
 /**
  * Thunk
@@ -184,6 +187,11 @@ export const todos = handleActions(
           (todo) => todo.todoId === todoId
         );
         draft.todos[targetIdx].members.push(member);
+      }),
+
+    [RESET_TODOS]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.todos = [];
       }),
   },
 

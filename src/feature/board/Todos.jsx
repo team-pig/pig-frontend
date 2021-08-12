@@ -10,7 +10,7 @@ import { __createTodo, __loadTodos } from "../../redux/modules/todos";
 
 // compo & elem
 import Todo from "./Todo";
-import { Input, Text } from "../../elem";
+import { Input } from "../../elem";
 import Icon from "../../components/Icon";
 
 const Todos = ({ cardId }) => {
@@ -40,18 +40,12 @@ const Todos = ({ cardId }) => {
   return (
     <Container>
       <TodoList>
-        {todos.length !== 0 ? (
-          todos.map((todo) => (
-            <Todo key={todo.todoId} todo={todo} roomId={roomId} />
-          ))
-        ) : (
-          <Text type="body_4" color="grey">
-            할일이 없어요!
-          </Text>
-        )}
+        {todos.map((todo) => (
+          <Todo key={todo.todoId} todo={todo} roomId={roomId} />
+        ))}
       </TodoList>
       <TodoForm onSubmit={formik.handleSubmit}>
-        <StIcon icon="plus-lg" size="24px" color="#b7b7b7" />
+        <StIcon icon="plus-lg" size="24px" />
         <Input
           type="text"
           name="todoTitle"
@@ -94,7 +88,7 @@ const TodoList = styled.div`
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
-  max-height: 200px;
+  height: 200px;
   overflow-y: auto;
   scrollbar-width: none; //firefox
   ::-webkit-scrollbar {

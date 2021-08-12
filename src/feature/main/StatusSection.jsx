@@ -7,11 +7,6 @@ import Members from "./Members";
 
 const StatusSection = () => {
   //가짜 데이터
-  const user = {
-    userId: "dsfk231",
-    nickname: "유리",
-  };
-
   const project = {
     totalTodos: 120,
     completedTodos: 99,

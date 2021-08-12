@@ -137,6 +137,7 @@ const Container = styled.div`
   display: flex;
   gap: 34px;
   padding: 0 40px;
+  margin-top: 40px;
 `;
 
 export default Chart;

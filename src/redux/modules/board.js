@@ -98,7 +98,6 @@ export const resetCard = createAction(RESET_CARD);
 /**
  * bucket
  */
-
 // 버킷조회
 export const __loadBucket = (roomId) => async (dispatch) => {
   try {
@@ -110,7 +109,6 @@ export const __loadBucket = (roomId) => async (dispatch) => {
     buckets.forEach((bucket) => {
       loadedBuckets[bucket.bucketId] = bucket;
     });
-
     dispatch(loadBucket(loadedBuckets, loadedBucketOrder));
   } catch (e) {
     console.log(`버킷 불러오기 실패 ${e}`);
@@ -140,8 +138,8 @@ export const __createBucket =
 export const __updateBucket =
   (roomId, bucketId, bucketName, bucketOrder) => async (dispatch) => {
     try {
-      await bucketApi.editBucketAll(roomId, bucketId, bucketName, bucketOrder);
       dispatch(updateBucket(bucketOrder));
+      await bucketApi.editBucketAll(roomId, bucketId, bucketName, bucketOrder);
     } catch (e) {
       console.log(`버킷 옮기기 실패! ${e}`);
     }
@@ -150,8 +148,8 @@ export const __updateBucket =
 // 버킷이름수정
 export const __updateBucketTitle = (roomId, bucketInfo) => async (dispatch) => {
   try {
-    await bucketApi.editBucketTitle(roomId, bucketInfo);
     dispatch(updateBucketTitle(bucketInfo.bucketId, bucketInfo.bucketName));
+    await bucketApi.editBucketTitle(roomId, bucketInfo);
   } catch (e) {}
 };
 
@@ -242,8 +240,8 @@ export const __updateCardLocate =
         [buckets.destinationBucketId]: buckets.destinationBucketOrder,
       };
 
-      await cardApi.editCardLocation(roomId, paramBuckets);
       dispatch(updateCardLocate(cardId, buckets));
+      await cardApi.editCardLocation(roomId, paramBuckets);
     } catch (e) {
       console.log(`card 옮기기 실패! ${e}`);
     }
@@ -265,8 +263,8 @@ export const __updateCardLocateOtherBucket =
         [buckets.sourceBucketId]: buckets.sourceBucketOrder,
       };
 
-      await cardApi.editCardLocation(roomId, paramBuckets);
       dispatch(updateCardLocateOtherBucket(cardId, buckets));
+      await cardApi.editCardLocation(roomId, paramBuckets);
     } catch (e) {
       console.log(`card 옮기기 실패! ${e}`);
     }
@@ -313,8 +311,8 @@ const initialState = {
   allMembers: [],
   card: {},
   cards: null,
-  columns: null,
-  columnOrder: null,
+  columns: {},
+  columnOrder: [],
 };
 
 /**
@@ -391,6 +389,7 @@ export const board = handleActions(
           sourceBucketOrder,
           destinationBucketOrder,
         } = payload.newBucketInfo;
+
         draft.columns[destinationBucketId].cardOrder = destinationBucketOrder;
         draft.columns[sourceBucketId].cardOrder = sourceBucketOrder;
         draft.cards[payload.cardId].bucketId = destinationBucketId;
@@ -411,6 +410,7 @@ export const board = handleActions(
         draft.columns[bucketId].cardOrder = newCardOrder;
         draft.cards = newCards;
       }),
+
     [RESET_CARD]: (state, { payload }) =>
       produce(state, (draft) => {
         draft.card = {};

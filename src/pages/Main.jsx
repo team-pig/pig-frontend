@@ -4,7 +4,7 @@ import flex from "../themes/flex";
 
 import StatusSection from "../feature/main/StatusSection";
 import Information from "../feature/main/Information";
-import MyTodos from "../feature/main/MyTodos";
+import MyTodos from "../feature/main/myTodos/MyTodos";
 
 const Main = () => {
   return (

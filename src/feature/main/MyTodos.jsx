@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import Icon from "../../components/Icon";
 
-import Filled from "../../assets/icons/checkbox-filled.svg";
 import { IconBtn, Text } from "../../elem";
 import flex from "../../themes/flex";
 
@@ -64,7 +63,7 @@ const MyTodos = () => {
                 {!item.isChecked ? (
                   <Icon icon="checkbox" size="20px" />
                 ) : (
-                  <img src={Filled} alt="체크됨" />
+                  <Icon icon="checkbox-filled" size="20px" />
                 )}
               </IconBtn>
               <Text type="sub_2">{item.todoTitle}</Text>

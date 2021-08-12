@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Text } from "../../elem";
 import { __editCardInfos, resetCard } from "../../redux/modules/board";
+import { resetTodos } from "../../redux/modules/todos";
 
 import styled, { css } from "styled-components";
 import InputToggle from "../../components/InputToggle";
@@ -10,9 +11,8 @@ import DatePickerExample from "./DatePicker";
 import BoardDrop from "./BoardDrop";
 import moment from "moment";
 
-const ModalForms = ({ content, setContent }) => {
+const ModalForms = ({ content }) => {
   const dispatch = useDispatch();
-
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
 
@@ -22,13 +22,17 @@ const ModalForms = ({ content, setContent }) => {
   useEffect(() => {
     return () => {
       dispatch(resetCard());
+      dispatch(resetTodos());
     };
   }, []);
 
   const editFunc = (key, value) => {
     const editObj = { cardId: content.cardId, [key]: value };
+    if (value === "") window.alert("내용이 없어요");
     dispatch(__editCardInfos(roomId, editObj));
   };
+
+  const kindOfColor = ["blue", "violet", "yellow", "orange", "mint"];
 
   return (
     <Container>
@@ -38,49 +42,24 @@ const ModalForms = ({ content, setContent }) => {
             componentType="colorPicker"
             bgColor={content.color}
           >
-            <BoardDrop.Item
-              componentType="colorPicker"
-              color="blue"
-              _onClick={() => {
-                editFunc("color", "blue");
-              }}
-            ></BoardDrop.Item>
-            <BoardDrop.Item
-              componentType="colorPicker"
-              color="violet"
-              _onClick={() => {
-                editFunc("color", "violet");
-              }}
-            ></BoardDrop.Item>
-            <BoardDrop.Item
-              componentType="colorPicker"
-              color="yellow"
-              _onClick={() => {
-                editFunc("color", "yellow");
-              }}
-            ></BoardDrop.Item>
-            <BoardDrop.Item
-              componentType="colorPicker"
-              color="orange"
-              _onClick={() => {
-                editFunc("color", "orange");
-              }}
-            ></BoardDrop.Item>
-            <BoardDrop.Item
-              componentType="colorPicker"
-              color="mint"
-              _onClick={() => {
-                editFunc("color", "mint");
-              }}
-            ></BoardDrop.Item>
+            {kindOfColor.map((color, idx) => (
+              <BoardDrop.Item
+                key={idx}
+                componentType="colorPicker"
+                color={color}
+                _onClick={() => {
+                  editFunc("color", color);
+                }}
+              ></BoardDrop.Item>
+            ))}
           </BoardDrop.Container>
-          <Text type="sub_1">
+          <StText type="sub_1">
             <InputToggle
               name="cardTitle"
               value={content.cardTitle}
               saveFunc={editFunc}
             />
-          </Text>
+          </StText>
         </StyleDiv>
       </StyleDiv>
 
@@ -95,7 +74,7 @@ const ModalForms = ({ content, setContent }) => {
           content={content}
         />
         <StyleDiv flex={["center", "center"]}>
-          <Text type="body_2">
+          <Text type="body_2" color="notice">
             D-{moment(moment(content.endDate) - Date.now()).format("DD")}
           </Text>
         </StyleDiv>
@@ -148,13 +127,6 @@ const StyleDiv = styled.div`
   padding: ${(props) => props.pd};
   margin: ${(props) => props.mg};
   border: ${(props) => props.border};
-`;
-
-const Dot = styled.div`
-  background-color: ${(props) => props.bg};
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
 `;
 
 const StText = styled(Text)`

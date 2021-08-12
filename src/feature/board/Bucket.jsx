@@ -1,11 +1,14 @@
-import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import React from "react";
+import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router";
+import moment from "moment";
 
 // compo & elem
 import Card from "./Card";
 import { Text } from "../../elem";
+import flex from "../../themes/flex";
+import InputToggle from "../../components/InputToggle";
 
 // redux & api
 import { useDispatch } from "react-redux";
@@ -13,30 +16,37 @@ import {
   __createCard,
   __updateBucketTitle,
   __deleteBucket,
+  __createBucket,
 } from "../../redux/modules/board";
+import Icon from "../../components/Icon";
 
-const Bucket = ({ bucket, index, bucketCards }) => {
+const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
   const dispatch = useDispatch();
-  const [cardTitle, setCardTitle] = useState("");
-  const [editTitleMode, setEditTitleMode] = useState(false);
-  const [newBucketName, setNewBucketName] = useState("");
+  const bucketName = "제목없는 버킷";
+  const cardTitle = "눌러서 제목 수정";
+  const initDate = moment(Date.now()).format("YYYY-MM-DD");
+  const initColor = "blue";
 
   // 전역변수
   const { roomId } = useParams();
   const bucketId = bucket.bucketId;
 
-  // 버켓이름수정 handler
-  const updateBucketTitleHandler = () => {
-    dispatch(__updateBucketTitle(roomId, bucketId, newBucketName));
+  // 카드생성 handler
+  const addCard = () => {
+    dispatch(__createCard(roomId, bucketId, cardTitle, initDate, initColor));
   };
 
-  // 카드생성 handler
-  const addTask = () => {
-    dispatch(__createCard(roomId, bucketId, cardTitle));
+  // 버킷생성
+  const addBucket = () => {
+    dispatch(__createBucket(roomId, bucketName));
+  };
+
+  const editFunc = (key, value) => {
+    dispatch(__updateBucketTitle(roomId, { bucketId, [key]: value }));
   };
 
   return (
-    <div>
+    <>
       <Draggable draggableId={bucketId} index={index}>
         {(provided, snap) => {
           return (
@@ -45,65 +55,44 @@ const Bucket = ({ bucket, index, bucketCards }) => {
               ref={provided.innerRef}
               isDragging={snap.isDragging}
             >
-              {editTitleMode ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    updateBucketTitleHandler(newBucketName);
-                    setEditTitleMode(false);
-                  }}
-                >
-                  <EditInput
-                    type="text"
-                    {...provided.dragHandleProps}
-                    onChange={(e) => {
-                      setNewBucketName(e.target.value);
-                    }}
-                  />
-                </form>
-              ) : (
-                <>
-                  <Flex
-                    jc="space-between"
-                    pd="18px 20px"
-                    {...provided.dragHandleProps}
-                  >
-                    <Text
-                      type="body_1"
-                      onClick={() => {
-                        setEditTitleMode(true);
-                      }}
-                    >
-                      {bucket.bucketName}
-                    </Text>
-                    <Wrap
+              <BucketHeader {...provided.dragHandleProps}>
+                <BucketTitle>
+                  <Text type="body_1">
+                    <InputToggle
+                      shape="text"
+                      name="bucketName"
+                      saveFunc={editFunc}
+                      value={bucket.bucketName}
+                    />
+                  </Text>
+                </BucketTitle>
+                <BucketHeadBtns>
+                  {BucketCnt === 1 ? (
+                    ""
+                  ) : (
+                    <IconButton
                       onClick={() => {
                         dispatch(__deleteBucket(roomId, bucketId));
                       }}
                     >
-                      X
-                    </Wrap>
-                  </Flex>
-                </>
-              )}
+                      <Icon icon="minus" size="24px" />
+                    </IconButton>
+                  )}
+
+                  <IconButton onClick={addBucket}>
+                    <Icon icon="plus-lg" size="24px" />
+                  </IconButton>
+                </BucketHeadBtns>
+              </BucketHeader>
+              <BucketHeaderBar />
 
               <Droppable droppableId={bucketId} type="card">
                 {(provided, snapshot) => {
                   return (
                     <>
-                      <AddCardForm
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          addTask();
-                        }}
-                      >
-                        <AddCardInput
-                          value={cardTitle}
-                          onChange={({ target: { value } }) => {
-                            setCardTitle(value);
-                          }}
-                        />
-                      </AddCardForm>
+                      <AddCardBtn>
+                        <Icon icon="plus-lg" size="20px" onClick={addCard} />
+                      </AddCardBtn>
                       <BucketList
                         ref={provided.innerRef}
                         {...provided.droppableProps}
@@ -130,43 +119,17 @@ const Bucket = ({ bucket, index, bucketCards }) => {
           );
         }}
       </Draggable>
-    </div>
+    </>
   );
 };
 
 const Container = styled.div`
-  gap: 20px;
   background-color: #f5f5f5;
-  height: 900px;
+  min-height: 900px;
   width: 300px;
-  display: flex;
-  flex-direction: column;
   border-radius: 4px;
+  border: 1px solid var(--line);
   border: ${(props) => props.isDragging && "1px solid #7BA7FD"};
-`;
-
-const AddCardForm = styled.form`
-  display: flex;
-  justify-content: center;
-`;
-
-const EditInput = styled.input`
-  margin: 0 auto;
-  cursor: text !important;
-  border: none;
-  font-size: 24px;
-  border-radius: 10px;
-  outline: none;
-  height: 60px;
-  width: 90%;
-  text-align: center;
-`;
-
-const AddCardInput = styled.input`
-  border: 1px solid #eee;
-  outline: none;
-  height: 40px;
-  width: 280px;
 `;
 
 const BucketList = styled.div`
@@ -175,29 +138,58 @@ const BucketList = styled.div`
   align-items: center;
   gap: 20px;
   outline: none;
+  min-height: 900px;
   /* position: relative; */
   /* border: ${(props) => props.isDraggingOver && "1px solid #ff6b81"}; */
   /* transition: background-color 0.2s ease; */
   /* background-color: ${(props) => props.isDraggingOver && "#fbfbfb"}; */
   flex-grow: 1;
 `;
-
-const Flex = styled.div`
-  display: flex;
-  justify-content: ${(props) => (props.jc ? props.jc : "center")};
-  align-items: ${(props) => (props.ai ? props.ai : "center")};
-  ${(props) =>
-    props.border &&
-    css`
-      border: 1px solid red;
-    `}
-  padding: ${(props) => props.pd};
-  margin: ${(props) => props.mg};
+const IconButton = styled.div`
+  text-align: center;
+  svg {
+    cursor: pointer;
+    transition: 200ms transform ease-in-out;
+    &:hover {
+      transform: scale(1.3);
+    }
+  }
 `;
 
-const Wrap = styled.div`
-  padding: ${(props) => props.pd};
-  margin: ${(props) => props.mg};
+const AddCardBtn = styled.div`
+  /* ${IconButton}; */
+  text-align: center;
+  height: 20px;
+  svg {
+    cursor: pointer;
+    transition: 200ms transform ease-in-out;
+    &:hover {
+      transform: scale(1.3);
+    }
+  }
+  margin-bottom: 24px;
+`;
+
+const BucketHeader = styled.div`
+  ${flex("between", "center")};
+  padding: 18px 20px 0 20px;
+  margin-bottom: 18px;
+`;
+
+const BucketHeaderBar = styled.div`
+  width: 260px;
+  height: 4px;
+  background-color: ${(props) => props.theme.colors["mint"]};
+  margin: 0 auto;
+  border-radius: 0px 4px 4px 0px;
+  margin-bottom: 14px;
+`;
+
+const BucketTitle = styled.div``;
+
+const BucketHeadBtns = styled.div`
+  ${flex("center", "center")};
+  gap: 10px;
 `;
 
 export default Bucket;

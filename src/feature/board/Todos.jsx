@@ -39,15 +39,13 @@ const Todos = ({ cardId }) => {
 
   return (
     <Container>
-      {todos.length !== 0 ? (
-        todos.map((todo) => (
+      <TodoList>
+        {todos.map((todo) => (
           <Todo key={todo.todoId} todo={todo} roomId={roomId} />
-        ))
-      ) : (
-        <div>할일이 없어요! </div>
-      )}
+        ))}
+      </TodoList>
       <TodoForm onSubmit={formik.handleSubmit}>
-        <StIcon icon="plus-lg" size="24px" color="#b7b7b7" />
+        <StIcon icon="plus-lg" size="24px" />
         <Input
           type="text"
           name="todoTitle"
@@ -71,7 +69,6 @@ const Container = styled.div`
   align-items: flex-end;
   gap: 12px;
   width: 480px;
-  /* max-width: */
   margin: 0 auto;
 `;
 
@@ -84,6 +81,20 @@ const StIcon = styled(Icon)`
   position: absolute;
   left: -40px;
   top: 12px;
+`;
+
+const TodoList = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  height: 200px;
+  overflow-y: auto;
+  scrollbar-width: none; //firefox
+  ::-webkit-scrollbar {
+    // chrome, safari, opera
+    display: none;
+  }
 `;
 
 export default Todos;

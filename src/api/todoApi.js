@@ -2,11 +2,8 @@ import { instance } from "./index";
 
 export const todoApi = {
   getTodo: (roomId, cardId) => instance.get(`/room/${roomId}/todo/${cardId}`),
-  createTodo: (roomId, cardId, todoTitle) =>
-    instance.post(`room/${roomId}/todo`, {
-      cardId,
-      todoTitle,
-    }),
+  createTodo: (roomId, todoInfo) =>
+    instance.post(`room/${roomId}/todo`, todoInfo),
 
   editTodoTtitle: (roomId, todoId, todoTitle) =>
     instance.patch(`room/${roomId}/todo`, { todoId, todoTitle }),
@@ -28,4 +25,6 @@ export const todoApi = {
 
   deleteTodo: (roomId, todoId) =>
     instance.delete(`room/${roomId}/todo`, { data: { todoId } }),
+
+  loadMyTodo: (roomid) => instance.get(`/room/${roomid}/main/todos`),
 };

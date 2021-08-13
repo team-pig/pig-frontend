@@ -30,11 +30,13 @@ const NameTag = ({ img, name }) => {
 
 const Wrapper = styled.div`
   ${flex("start")}
+  flex-shrink: 0;
   gap: 4px;
   color: black;
 `;
 
 const ImgBox = styled.div`
+  flex-shrink: 0;
   width: 24px;
   height: 24px;
   background-image: ${(props) => `url(${props.src})`};
@@ -43,6 +45,7 @@ const ImgBox = styled.div`
 `;
 
 const Nickname = styled(Text)`
+  flex-shrink: 0;
   &::first-letter {
     text-transform: uppercase;
   }

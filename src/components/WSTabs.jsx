@@ -87,6 +87,7 @@ const List = styled.nav`
 `;
 
 const Item = styled.button`
+  flex-shrink: 0;
   height: 100%;
   padding: 0 39px;
   color: var(--darkgrey);

@@ -6,6 +6,7 @@ import { setPreview, uploadImageToS3 } from "./image";
 //action
 const ADD_ROOM = "room/ADD_ROOM";
 const SEARCH_ROOM = "room/SEARCH_ROOM";
+const GET_ONE_ROOM = "room/GET_ONE_ROOM";
 const GET_ROOM_LIST = "room/GET_ROOM_LIST";
 const GET_INVITE_CODE_ROOM = "room/GET_INVITE_CODE_ROOM";
 const EDIT_ROOM = "room/EDIT_ROOM";
@@ -33,6 +34,7 @@ const initialState = {
   mergedList: [],
   // isMarked: false,
   inviteCodeRoom: [],
+  currentRoom: {},
 };
 
 //action creator
@@ -54,6 +56,9 @@ export const getRoomList = createAction(
     userId,
   })
 );
+export const getOneRoom = createAction(GET_ONE_ROOM, (room) => ({
+  room,
+}));
 export const getInviteCodeRoom = createAction(GET_INVITE_CODE_ROOM, (room) => ({
   room,
 }));
@@ -269,6 +274,20 @@ export const __getInviteCodeRoom =
     }
   };
 
+export const __getOneRoom =
+  (roomId) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      const {
+        data: { result },
+      } = await roomApi.getOneRoom(roomId);
+      dispatch(getOneRoom(result));
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
 export const __deleteRoom =
   (roomId) =>
   async (dispatch, getState, { history }) => {
@@ -330,7 +349,10 @@ const room = handleActions(
       produce(state, (draft) => {
         draft.inviteCodeRoom = action.payload.room;
       }),
-
+    [GET_ONE_ROOM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.currentRoom = action.payload.room;
+      }),
     [GET_ROOM_LIST]: (state, action) =>
       produce(state, (draft) => {
         draft.room.push(...action.payload.roomList);

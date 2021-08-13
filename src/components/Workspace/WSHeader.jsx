@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import NameTag from "../Header/NameTag";
 import Icon from "../Icon";
 import WSTabs from "../WSTabs";
 import { Text } from "../../elem";
-import { useDispatch, useSelector } from "react-redux";
 import flex from "../../themes/flex";
 import { __logout } from "../../redux/modules/user";
 
@@ -16,12 +16,14 @@ const WSHeader = ({ url }) => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.user);
+  const room = useSelector((state) => state.room.currentRoom);
+  console.log(room);
 
   return (
     <Container>
       <LeftSide>
         <TitleBox>
-          <Text type="sub_1">사이드 프로젝트</Text>
+          <Text type="sub_1">{room && room.roomName}</Text>
         </TitleBox>
         <WSTabs url={url} />
       </LeftSide>
@@ -30,9 +32,9 @@ const WSHeader = ({ url }) => {
           <HeaderBtn onClick={() => history.push("/roomlist")}>
             <Icon icon="home" size="28px" />
           </HeaderBtn>
-          <HeaderBtn>
+          {/* <HeaderBtn>
             <Icon icon="notice-focus" size="28px" />
-          </HeaderBtn>
+          </HeaderBtn> */}
         </Icons>
         <NameBtn>
           <NameTag name={user.nickname} />
@@ -66,6 +68,7 @@ const LeftSide = styled.div`
 
 const RightSide = styled.div`
   ${flex("start", "center")}
+  height: 100%;
 `;
 
 const TitleBox = styled.div`
@@ -75,10 +78,14 @@ const TitleBox = styled.div`
 
 const Icons = styled.div`
   display: flex;
+  height: 100%;
 `;
 
 const HeaderBtn = styled.button`
-  padding: 14px;
+  ${flex()};
+  flex-shrink: 0;
+  height: 100%;
+  padding: 0 14px;
   cursor: pointer;
 `;
 

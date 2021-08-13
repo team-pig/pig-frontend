@@ -7,8 +7,9 @@ import WSRouter from "../shared/WSRouter";
 import WSSidebar from "../components/WSSidebar.jsx/WSSidebar";
 
 // api
-import { __getDocs } from "../redux/modules/document";
 import WSTemplate from "../components/Workspace/WSTemplate";
+import { __getDocs } from "../redux/modules/document";
+import { __getOneRoom } from "../redux/modules/room";
 
 const Workspace = (props) => {
   let { path, url } = useRouteMatch();
@@ -21,6 +22,7 @@ const Workspace = (props) => {
   useEffect(() => {
     (docs.length === 0 || (docs.length !== 0 && docs[0].roomId !== roomId)) &&
       dispatch(__getDocs(roomId));
+    dispatch(__getOneRoom(roomId));
   }, []);
 
   return (

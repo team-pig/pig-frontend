@@ -59,7 +59,7 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
   const cancelFile = () => {
     closeModal();
     setIsImage(false);
-  }
+  };
 
   return (
     <>
@@ -68,33 +68,42 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
             <ImageBox>
-            <ImgUploader
-              setIsImage={setIsImage}
-              isImage={isImage}
-              name="roomImage"
-              fileInput={fileInput}
-            />
+              <ImgUploader
+                setIsImage={setIsImage}
+                isImage={isImage}
+                name="roomImage"
+                fileInput={fileInput}
+              />
             </ImageBox>
             <InputBox>
-            <Input
-              name="roomName"
-              type="text"
-              
-              placeholder="방 이름"
-              _onChange={changeHandler}
-            />
-            <Input
-              name="subtitle"
-              type="text"
-              
-              placeholder="부제목"
-              _onChange={changeHandler}
-            />
-            <Input name="tag" type="text"  placeholder="태그" _onChange={changeHandler} />
+              <Input
+                name="roomName"
+                type="text"
+                placeholder="방 이름"
+                _onChange={changeHandler}
+              />
+              <Input
+                name="subtitle"
+                type="text"
+                placeholder="부제목"
+                _onChange={changeHandler}
+              />
+              <Input
+                name="tag"
+                type="text"
+                placeholder="태그"
+                _onChange={changeHandler}
+              />
             </InputBox>
             <BtnBox>
-            <Button shape="green-outline" size="200" _onClick={cancelFile}>취소</Button>
-            <Button size="200" _onClick={saveFile}>만들기</Button>
+              <Button shape="green-outline" size="150" _onClick={cancelFile}>
+                취소
+              </Button>
+              <Btn>
+                <Button size="150" _onClick={saveFile}>
+                  만들기
+                </Button>
+              </Btn>
             </BtnBox>
           </ModalContent>
         </ModalContainer>
@@ -107,7 +116,7 @@ const ModalContainer = styled.div`
   top: 0;
   left: 0;
   z-index: 99;
-  
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -123,7 +132,7 @@ const ModalOverlay = styled.div`
 
   width: 100%;
   height: 100%;
-  
+
   background-color: rgba(0, 0, 0, 0.6);
 `;
 
@@ -146,15 +155,19 @@ const ImageBox = styled.div`
 `;
 
 const InputBox = styled.div`
-margin: 0 auto;
-width: 324px;
+  margin: 0 auto;
+  width: 324px;
 `;
 
 const BtnBox = styled.div`
-display: flex;
-width: 300px;
-margin: auto auto 0 auto;
-padding-bottom: 46px;
+  display: flex;
+  width: 300px;
+  margin: auto auto 0 auto;
+  padding-bottom: 46px;
+`;
+
+const Btn = styled.div`
+  margin-left: -1px;
 `;
 
 export default AddRoomModal;

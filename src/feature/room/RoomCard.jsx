@@ -13,6 +13,7 @@ import { body_3 } from "../../themes/textStyle";
 import MemberImg from "../../elem/MemberImg";
 import BookMark from "./BookMark";
 import RoomTags from "./RoomTags";
+import LinkIcon from "./LinkIcon";
 
 //redux
 import { __deleteRoom, __exitRoom, __toggleBookmark, __getMarkedList, __getUnMarkedList, __getMergedList } from "../../redux/modules/room";
@@ -29,6 +30,7 @@ const RoomCard = ({
   tag,
   bookmarkedMembers,
   userId,
+  inviteCode,
   history,
   index,
   isShow,
@@ -196,10 +198,11 @@ const RoomCard = ({
         </Drop.Container>
         {/* ) : null} */}
 
-        <StarIcon onClick={clickBookmark}>
+        <IconBox >
           {/* <Star /> */}
-          <BookMark isMarked={isMarked} />
-        </StarIcon>
+          <LinkIcon inviteCode={inviteCode}/>
+          <BookMark isMarked={isMarked} clickBookmark={clickBookmark}/>
+        </IconBox>
         <CardSection>
           <CardProfile>
             <RoundImg url={roomImage} />
@@ -252,12 +255,17 @@ const CardSection = styled.div`
   padding: 20px 20px 15px 20px;
 `;
 
-const StarIcon = styled.div`
+const IconBox = styled.div`
   position: absolute;
-  z-index: 28;
+
   top: 10px;
   right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 60px;
 `;
+
 
 const CardProfile = styled.div`
   position: relative;

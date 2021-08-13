@@ -33,6 +33,7 @@ const RoomList = ({ history }) => {
   const [isJoin, setIsJoin] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [searchContent, setSearchContent] = useState(null);
+  const [timer, setTimer] = useState(0); //디바운싱 타이머
 
   useEffect(() => {
     // if (roomList.length === 0) {
@@ -41,15 +42,50 @@ const RoomList = ({ history }) => {
     //   dispatch(__getUnmarkedList());
     // }
     dispatch(__getRoomList());
-    dispatch(__getMarkedList());
-    dispatch(__getUnMarkedList());
+    // dispatch(__getMarkedList());
+    // dispatch(__getUnMarkedList());
   }, []);
 
-  const changeSearchContent = (e) => {
-    const keyword = e.target.value;
-    setSearchContent(keyword);
-    dispatch(__searchRoom(searchContent));
-  };
+  // const changeSearchContent = 
+  // async (e) => {
+  //   // const keyword = e.target.value;
+  //   // await setSearchContent(keyword);
+  //   // await console.log(keyword);
+  //   // const keyword = e.target.value;
+  //   // await setSearchContent(keyword);
+  //   // console.log(keyword);
+
+  //   // await debounceDelay(e.target);
+
+  //   const keyword = e.target.value;
+  //   setSearchContent(keyword);
+  //   console.log(keyword);
+  //   delay(searchContent);
+  //   // dispatch(__searchRoom(searchContent));
+  //   console.log("된건가");
+  // };
+
+  // const debounceDelay = _.debounce((target) => {
+  //   if(timer){
+  //     console.log("clear timer");
+  //     clearTimeout(timer);
+  //   }
+  //   const newTimer = setTimeout(async() => {
+  //     try{
+  //       await setSearchContent(target.value);
+  //     }catch(e){
+  //       console.log(e);
+  //     }
+  //   })
+    
+  // }, 500);
+
+const changeSearchContent = (keyword) => {
+  dispatch(__searchRoom(keyword));
+  setSearchContent(keyword);
+}
+
+const delay = _.debounce(changeSearchContent, 500);
 
   const _onKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -57,7 +93,10 @@ const RoomList = ({ history }) => {
     }
   };
 
-  const searchKeyword = _.debounce(changeSearchContent, 150);
+  // const delayedCall = useRef(_.debounce((q) => dispatch(__searchRoom(q), 500))).current
+
+  // const searchKeyword = _.debounce(setSearchContent, 1200);
+  // const searchKeyword = _.debounce(changeSearchContent, 1200);
 
   const openJoinModal = () => {
     setShowModal(true);
@@ -85,6 +124,7 @@ const RoomList = ({ history }) => {
   const searchItem = searchedRoom
     .filter((item) => {
       if (item.roomName.includes(searchContent)) {
+        console.log("서버에서 받아온 배열");
         return item;
       }
     })
@@ -103,9 +143,11 @@ const RoomList = ({ history }) => {
       );
     });
 
+  // const notSearchItem = roomList
   const notSearchItem = roomList
     .filter((item) => {
-      if (searchContent === null) {
+      if (searchContent === null || searchContent === "") {
+        console.log("roomlist");
         return item;
       }
       // else if(item.roomName.toLowerCase().includes(searchContent.toLowerCase())){
@@ -153,13 +195,16 @@ const RoomList = ({ history }) => {
               <SearchIconBox>
                 <Icon icon="search" size="24px" />
               </SearchIconBox>
-              <Input
+              {/* <Input
                 type="text"
                 placeholder="방 이름을 검색하세요"
-                _onChange={searchKeyword}
-              />
-              <input
-                onKeyUp={searchKeyword}
+                // _onChange={searchKeyword}
+              /> */}
+              <SearchInput
+                // ref={inputRef}
+                // onKeyUp={changeSearchContent}
+                onKeyUp={(e) => {delay(e.target.value)}}
+                // onChange={changeSearchContent}
                 onKeyPress={_onKeyPress}
                 type="text"
                 name="keyword"
@@ -193,7 +238,7 @@ const RoomList = ({ history }) => {
 
         <RoomContainer onClick={closeDrop}>
           <RoomBox>
-            {searchContent === null ? notSearchItem : searchItem}
+            {searchContent === null || "" ? notSearchItem : searchItem}
 
             {/* {searchItem} */}
           </RoomBox>
@@ -224,14 +269,21 @@ const InputBox = styled.div`
   width: 100%;
   height: 46px;
   margin: auto 0;
-  padding: 0 20px 0 20px;
+  /* padding: 0 20px 0 20px; */
+`;
+
+const SearchInput = styled.input`
+width: 100%;
+  height: 46px;
+  padding-left: 45px;
+  border: 1px solid var(--line);
 `;
 
 const SearchIconBox = styled.div`
   position: absolute;
   z-index: 28;
   top: 25%;
-  left: 30px;
+  left: 18px;
   color: var(--darkgrey);
 `;
 

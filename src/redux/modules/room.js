@@ -7,7 +7,7 @@ import { setPreview, uploadImageToS3 } from "./image";
 const ADD_ROOM = "room/ADD_ROOM";
 const SEARCH_ROOM = "room/SEARCH_ROOM";
 const GET_ROOM_LIST = "room/GET_ROOM_LIST";
-const GET_ONE_ROOM = "room/GET_ONE_ROOM";
+const GET_INVITE_CODE_ROOM = "room/GET_INVITE_CODE_ROOM";
 const EDIT_ROOM = "room/EDIT_ROOM";
 const DELETE_ROOM = "room/DELETE_ROOM";
 const JOIN_ROOM = "room/JOIN_ROOM";
@@ -32,6 +32,7 @@ const initialState = {
   unMarkedList: [],
   mergedList: [],
   // isMarked: false,
+  inviteCodeRoom: [],
 };
 
 //action creator
@@ -53,8 +54,8 @@ export const getRoomList = createAction(
     userId,
   })
 );
-export const getOneRoom = createAction(GET_ONE_ROOM, (roomId) => ({
-  roomId,
+export const getInviteCodeRoom = createAction(GET_INVITE_CODE_ROOM, (room) => ({
+  room,
 }));
 export const editRoom = createAction(EDIT_ROOM, (room) => ({
   room,
@@ -143,6 +144,7 @@ export const __searchRoom =
   (searchContent) =>
   async (dispatch, getState, { history }) => {
     try {
+      console.log(searchContent);
       if (searchContent === "" || searchContent === null) {
         const { data } = await roomApi.searchRoom(null);
         const _room = getState().room.room;
@@ -256,12 +258,12 @@ export const __getRoomList =
     }
   };
 
-export const __getOneRoom =
-  (roomId) =>
+export const __getInviteCodeRoom =
+  (inviteCode) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { data } = await roomApi.getOneRoom(roomId);
-      dispatch(getOneRoom(data));
+      const { data } = await roomApi.getInviteCodeRoom(inviteCode);
+      dispatch(getInviteCodeRoom(data));
     } catch (e) {
       console.log(e);
     }
@@ -323,6 +325,12 @@ const room = handleActions(
           action.payload.inviteCode.room
         );
       }),
+
+    [GET_INVITE_CODE_ROOM]: (state, action) =>
+      produce(state, (draft) => {
+        draft.inviteCodeRoom = action.payload.room;
+      }),
+
     [GET_ROOM_LIST]: (state, action) =>
       produce(state, (draft) => {
         draft.room.push(...action.payload.roomList);

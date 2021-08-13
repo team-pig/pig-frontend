@@ -47,6 +47,7 @@ const Writer = ({ targetDoc, setShowPrompt }) => {
       return;
     }
 
+    setShowPrompt(false);
     const docObj = getContent();
     dispatch(__createDoc(docObj, roomId));
   };

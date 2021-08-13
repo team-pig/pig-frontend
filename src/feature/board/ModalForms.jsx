@@ -12,6 +12,7 @@ import BoardDrop from "./BoardDrop";
 import InputToggle from "../../components/InputToggle";
 import { scrollbar } from "../../themes/scrollbar";
 import { Text } from "../../elem";
+import flex from "../../themes/flex";
 
 const ModalForms = ({ content }) => {
   const dispatch = useDispatch();
@@ -75,9 +76,9 @@ const ModalForms = ({ content }) => {
           content={content}
         />
         <StyleDiv flex={["center", "center"]}>
-          <Text type="body_2" color="notice">
-            D-{moment(moment(content.endDate) - Date.now()).format("DD")}
-          </Text>
+          <DateText type="body_2" color="notice">
+            D-{moment(moment(content.endDate) - Date.now()).format("D")}
+          </DateText>
         </StyleDiv>
       </StyleDiv>
       <StyleDiv
@@ -134,6 +135,11 @@ const StText = styled(Text)`
   width: 100%;
   height: 100%;
   overflow-y: auto;
+`;
+
+const DateText = styled(Text)`
+  ${flex("end", "center")};
+  width: 44px;
 `;
 
 export default ModalForms;

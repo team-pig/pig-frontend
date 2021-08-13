@@ -19,11 +19,11 @@ const Item = ({ children, _onClick, componentType, color }) => {
 };
 
 const Color = styled.div`
-  background-color: ${(props) => props.theme.colors[props.color]};
   display: flex;
   width: 20px;
   height: 20px;
   border-radius: 50%;
+  background-color: ${(props) => props.theme.colors[props.color]};
   cursor: pointer;
   transition: transform 200ms ease-in-out;
   &:hover {
@@ -102,6 +102,7 @@ const ColorPicker = styled.div`
   border-radius: 50%;
   position: relative;
   cursor: pointer;
+  z-index: var(--indexColorPicker);
 `;
 
 const ColorItem = styled.div`

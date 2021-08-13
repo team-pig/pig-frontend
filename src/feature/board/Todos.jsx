@@ -13,6 +13,7 @@ import Todo from "./Todo";
 import Icon from "../../components/Icon";
 import { body_3, body_4 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
+import CountText from "../../components/CountText";
 
 const Todos = ({ cardId }) => {
   const dispatch = useDispatch();
@@ -47,23 +48,27 @@ const Todos = ({ cardId }) => {
       </TodoList>
       <TodoForm onSubmit={formik.handleSubmit}>
         <Icon icon="plus-lg" size="20px" />
-        <TodoInput
-          autoComplete="off"
-          type="text"
-          name="todoTitle"
-          value={formik.values.todoTitle}
-          onChange={formik.handleChange}
-          onClick={() => {
-            formik.setFieldValue("todoTitle", "");
-          }}
-          placeholder="새로운 할 일을 추가하고 Enter ✨"
-        />
+        <TodoBox>
+          <TodoInput
+            autoComplete="off"
+            type="text"
+            name="todoTitle"
+            value={formik.values.todoTitle}
+            onChange={formik.handleChange}
+            onClick={() => {
+              formik.setFieldValue("todoTitle", "");
+            }}
+            placeholder="새로운 할 일을 추가하고 Enter ✨"
+            maxLength={20}
+          />
+          {CountText(20, formik.values.todoTitle.length)}
+        </TodoBox>
       </TodoForm>
-      <TodoHelpMsg color="point">
+      {/* <TodoHelpMsg color="point">
         {formik.touched.todoTitle && formik.errors.todoTitle
           ? formik.errors.todoTitle
           : null}
-      </TodoHelpMsg>
+      </TodoHelpMsg> */}
     </Container>
   );
 };
@@ -115,6 +120,10 @@ const TodoList = styled.div`
     // chrome, safari, opera
     display: none;
   }
+`;
+
+const TodoBox = styled.div`
+  position: relative;
 `;
 
 const TodoHelpMsg = styled.div`

@@ -17,7 +17,6 @@ const WSHeader = ({ url }) => {
 
   const user = useSelector((state) => state.user.user);
   const room = useSelector((state) => state.room.currentRoom);
-  console.log(room);
 
   return (
     <Container>

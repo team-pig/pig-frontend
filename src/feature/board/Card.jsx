@@ -31,7 +31,15 @@ const Card = ({ card, index, bucketId }) => {
   }, [currentContent]);
 
   const dDay =
-    parseInt(moment(moment(card.endDate) - Date.now()).format("D")) - 1;
+    parseInt(
+      moment(moment(card.endDate).diff(moment().format("YYYY-MM-DD"))).format(
+        "D"
+      )
+    ) - 1;
+
+  const limitText = (text, limit) => {
+    return text.length <= limit ? text : text.substr(0, limit);
+  };
 
   return (
     <>
@@ -68,7 +76,7 @@ const Card = ({ card, index, bucketId }) => {
                 </CardDeleteBtn>
               </CardHeader>
               <CardBody>
-                <Text type="body_3">{card.desc}</Text>
+                <Text type="body_3">{limitText(card.desc, 80)}</Text>
               </CardBody>
               <CardFooter>
                 <EndDate>

@@ -64,9 +64,10 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
                       saveFunc={editFunc}
                       value={
                         bucket.bucketName === null
-                          ? "제목없는 버킷"
+                          ? "제목 없음"
                           : bucket.bucketName
                       }
+                      maxLength={10}
                     />
                   </Text>
                 </BucketTitle>
@@ -185,6 +186,7 @@ const BucketHeader = styled.div`
 `;
 
 const BucketHeaderBar = styled.div`
+  flex-grow: 1;
   width: 260px;
   height: 4px;
   background-color: ${(props) => props.theme.colors["mint"]};

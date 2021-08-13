@@ -38,7 +38,11 @@ const ModalForms = ({ content }) => {
   const kindOfColor = ["blue", "violet", "yellow", "orange", "mint"];
 
   const dDay =
-    parseInt(moment(moment(content.endDate) - Date.now()).format("D")) - 1;
+    parseInt(
+      moment(
+        moment(content.endDate).diff(moment().format("YYYY-MM-DD"))
+      ).format("D")
+    ) - 1;
 
   return (
     <Container>
@@ -66,6 +70,7 @@ const ModalForms = ({ content }) => {
               name="cardTitle"
               value={content.cardTitle}
               saveFunc={editFunc}
+              limit={15}
             />
           </StText>
         </StyleDiv>
@@ -100,6 +105,7 @@ const ModalForms = ({ content }) => {
             value={content.desc}
             shape="textarea"
             saveFunc={editFunc}
+            limit={"제한없음"}
           />
         </StText>
       </StyleDiv>
@@ -112,6 +118,8 @@ const Container = styled.div`
 `;
 
 const StyleDiv = styled.div`
+  position: relative;
+
   ${(props) =>
     props.tb &&
     css`

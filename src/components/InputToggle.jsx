@@ -5,6 +5,7 @@ import styled, { css } from "styled-components";
 import { Text } from "../elem";
 import { scrollbar } from "../themes/scrollbar";
 import { body_3 } from "../themes/textStyle";
+import CountText from "./CountText";
 
 const InputToggle = ({
   name,
@@ -13,6 +14,8 @@ const InputToggle = ({
   saveFunc,
   placeholder,
   padding,
+  limit,
+  maxLength,
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
@@ -42,15 +45,18 @@ const InputToggle = ({
   const returnShape = () => {
     if (shape === "textarea") {
       return (
-        <EditTextarea
-          autoComplete="off"
-          ref={myRef}
-          rows="10"
-          name={name}
-          placeholder={placeholder}
-          value={currentValue}
-          onChange={(e) => setCurrentValue(e.target.value)}
-        />
+        <>
+          <EditTextarea
+            autoComplete="off"
+            ref={myRef}
+            rows="10"
+            name={name}
+            placeholder={placeholder}
+            value={currentValue}
+            onChange={(e) => setCurrentValue(e.target.value)}
+          />
+          {limit && CountText(limit, currentValue.length)}
+        </>
       );
     }
 
@@ -69,16 +75,21 @@ const InputToggle = ({
     }
 
     return (
-      <EditInput
-        autoComplete="off"
-        type="text"
-        ref={myRef}
-        name={name}
-        value={currentValue}
-        onChange={(e) => setCurrentValue(e.target.value)}
-        onKeyPress={handleEnterEvent}
-        padding={padding}
-      />
+      <InputBox>
+        <EditInput
+          autoComplete="off"
+          type="text"
+          ref={myRef}
+          name={name}
+          value={currentValue}
+          onChange={(e) => setCurrentValue(e.target.value)}
+          onKeyPress={handleEnterEvent}
+          padding={padding}
+          maxLength={maxLength ? maxLength : limit}
+        />
+
+        {limit && CountText(limit, currentValue.length)}
+      </InputBox>
     );
   };
 
@@ -131,6 +142,10 @@ const TextAreaResult = styled(Text)`
   word-break: break-all;
   white-space: pre-wrap;
   overflow-y: auto;
+`;
+
+const InputBox = styled.div`
+  position: relative;
 `;
 
 export default InputToggle;

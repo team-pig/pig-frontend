@@ -38,7 +38,10 @@ const Card = ({ card, index, bucketId }) => {
     ) - 1;
 
   const limitText = (text, limit) => {
-    return text.length <= limit ? text : text.substr(0, limit);
+    if (text) {
+      return text.length <= limit ? text : text.substr(0, limit);
+    }
+    return;
   };
 
   return (

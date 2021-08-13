@@ -37,6 +37,9 @@ const ModalForms = ({ content }) => {
 
   const kindOfColor = ["blue", "violet", "yellow", "orange", "mint"];
 
+  const dDay =
+    parseInt(moment(moment(content.endDate) - Date.now()).format("D")) - 1;
+
   return (
     <Container>
       <StyleDiv wh={["480px", "26px"]} mg="0 0 20px 0">
@@ -80,7 +83,7 @@ const ModalForms = ({ content }) => {
         />
         <StyleDiv flex={["center", "center"]}>
           <DateText type="body_2" color="notice">
-            D-{moment(moment(content.endDate) - Date.now()).format("D")}
+            {dDay !== 0 ? `D-${dDay}` : "D-DAY"}
           </DateText>
         </StyleDiv>
       </StyleDiv>

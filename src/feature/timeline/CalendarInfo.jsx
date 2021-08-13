@@ -11,7 +11,11 @@ import { IconBtn, Text, Input } from "../../elem";
 import flex from "../../themes/flex";
 
 // redux
-import { setCurrentId, setModalId } from "../../redux/modules/calendar.js";
+import {
+  setCurrentId,
+  setModalId,
+  __deleteSchedule,
+} from "../../redux/modules/calendar.js";
 import { __checkedTodo, __loadTodos } from "../../redux/modules/todos";
 
 const CalendarInfo = ({
@@ -59,6 +63,10 @@ const CalendarInfo = ({
     dispatch(setModalId(currentId));
   };
 
+  const deleteSchedule = (cardId) => {
+    dispatch(__deleteSchedule(roomId, cardId));
+  };
+
   // const deleteTodo = (todoId) => {
   //   const newAry = todos.slice().filter((todo) => todo.todoId !== todoId);
   //   setTodos(newAry);
@@ -99,6 +107,9 @@ const CalendarInfo = ({
                 onClick={() => clickSchedule(item.cardId, item.cardTitle)}
               >
                 <ScheduleText type="sub_2">{item.cardTitle}</ScheduleText>
+                <RemoveBtn _onClick={() => deleteSchedule(item.cardId)}>
+                  <Icon icon="remove" size="20px" color="var(--grey)" />
+                </RemoveBtn>
               </CurrentSchedule>
             ))}
         </Left>
@@ -196,8 +207,16 @@ const Info = styled.div`
   margin-top: -60px;
 `;
 
+const RemoveBtn = styled(IconBtn)`
+  position: absolute;
+  top: 1px;
+  right: 10px;
+  visibility: hidden;
+`;
+
 const CurrentSchedule = styled.div`
   ${flex("start")};
+  position: relative;
   height: 42px;
   background-color: ${(props) =>
     props.focus ? `var(--line);` : "var(--white);"};
@@ -211,6 +230,12 @@ const CurrentSchedule = styled.div`
     margin-right: 20px;
     background-color: ${(props) => props.theme.colors[props.color]};
     border-radius: 5px;
+  }
+
+  &:hover {
+    ${RemoveBtn} {
+      visibility: visible;
+    }
   }
 `;
 

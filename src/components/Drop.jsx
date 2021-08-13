@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+
 import { Text } from "../elem/index";
+import Icon from "./Icon";
+import { button } from "../themes/textStyle";
 
 const Item = ({
   children,
@@ -15,11 +18,11 @@ const Item = ({
     <Btn
       width={width}
       height={height}
-      color={color}
+      // color={color}
       onClick={_onClick}
       {...rest}
     >
-      <Text>{children}</Text>
+      {children}
     </Btn>
   );
 };
@@ -28,53 +31,105 @@ const Container = ({
   children,
   width,
   height,
-  display,
+  // display,
   direction,
   closeDownDrop,
   type,
   shadow,
   ...rest
 }) => {
-  const [isShow, setIsShow] = useState()
+  const [isShow, setIsShow] = useState();
+  const dropModal = useRef();
+
+  const handleClickOutside = (e) => {
+    e.stopPropagation();
+    if (dropModal.current && !dropModal.current.contains(e.target)) {
+      setIsShow(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [dropModal]);
+
   return (
-    <ModalOverlay display={display} onClick={closeDownDrop}>
-    <Wrapper
-        display={display}
-        width={width}
-        height={height}
-        shadow={shadow}
-        {...rest}
+    <>
+      <IconBtn
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsShow((pre) => !pre);
+        }}
       >
-        {children}
-    </Wrapper>
-    </ModalOverlay>
-   
+        <Icon icon="more" size="24px" />
+        {
+          isShow && (
+            // <ModalOverlay
+            // // display={display}
+            // onClick={closeDownDrop} ref={dropModal}>
+            <Wrapper
+              ref={dropModal}
+              // display={display}
+              width={width}
+              height={height}
+              shadow={shadow}
+              {...rest}
+            >
+              {children}
+            </Wrapper>
+          )
+
+          // </ModalOverlay>
+        }
+      </IconBtn>
+    </>
   );
+
+  // return (
+  //   <ModalOverlay display={display} onClick={closeDownDrop}>
+  //   <Wrapper
+  //       display={display}
+  //       width={width}
+  //       height={height}
+  //       shadow={shadow}
+  //       {...rest}
+  //     >
+  //       {children}
+  //   </Wrapper>
+  //   </ModalOverlay>
+
+  // );
 };
 
-const Overlay = (display, children, ...rest) => {
-  <ModalOverlay>{children}</ModalOverlay>
-}
-
-const Btn = styled.button`
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
+const Btn = styled.div`
+  ${button}
+  display: flex;
+  flex-direction: flex-start;
+  /* justify-content: center; */
+  align-items: center;
   z-index: var(--indexHeader);
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  color: ${(props) => `var(--${props.color})`};
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 22px;
+  padding-left: 20px;
+  /* color: ${(props) => `var(--${props.color})`}; */
+  color: var(--darkgrey);
+
+  &:hover {
+    color: var(--main);
+  }
 `;
 
 const Wrapper = styled.div`
-  position: relative;
-  z-index: var(--indexHeader);
-  top: 245px;
-  left: 270px;
-  display: ${(props) => (props.display ? "flex" : "none")};
+  position: absolute;
+  z-index: 29;
+  left: 15px;
+  top: 21px;
+  /* position: relative; */
+
+  /* top: 245px;
+  left: 270px; */
+  /* display: ${(props) => (props.display ? "flex" : "none")}; */
+  display: flex;
   flex-direction: column;
   width: ${(props) => props.width};
   height: ${(props) => props.height};
@@ -84,18 +139,17 @@ const Wrapper = styled.div`
     6px 6px 15px rgba(0 0 0 / 0.1);
 `;
 
-const ModalOverlay = styled.div`
-  position: absolute;
-  z-index: 29;
-  display: ${(props) => (props.display ? "flex" : "none")};
-  width: 100%;
-  height: 100%;
+const IconBtn = styled.div`
+  position: relative;
+  width: 24px;
+  height: 24px;
+
+  cursor: pointer;
 `;
 
 const Drop = {
-  Overlay,
   Container,
-  Item, 
+  Item,
 };
 
 export default Drop;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
 
 //components
 import ModifyRoomModal from "./ModifyRoomModal";
@@ -8,7 +9,7 @@ import Icon from "../../components/Icon";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import Drop from "../../components/Drop";
 //elements
-import { Text } from "../../elem/index";
+import { Text, IconBtn } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
 import MemberImg from "../../elem/MemberImg";
 import BookMark from "./BookMark";
@@ -16,7 +17,14 @@ import RoomTags from "./RoomTags";
 import LinkIcon from "./LinkIcon";
 
 //redux
-import { __deleteRoom, __exitRoom, __toggleBookmark, __getMarkedList, __getUnMarkedList, __getMergedList } from "../../redux/modules/room";
+import {
+  __deleteRoom,
+  __exitRoom,
+  __toggleBookmark,
+  __getMarkedList,
+  __getUnMarkedList,
+  __getMergedList,
+} from "../../redux/modules/room";
 
 //roomList map의 list에서 받아오는 값
 const RoomCard = ({
@@ -33,21 +41,19 @@ const RoomCard = ({
   inviteCode,
   history,
   index,
-  isShow,
+
   isMarked,
   openDrop,
   closeDrop,
-
 }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
   const [showAllMember, setShowAllMember] = useState(false);
-  const [isDisplay, setIsDisplay] = useState(false);
-  // const [isMarked, setIsMarked] = useState(false);
+ 
 
   useEffect(() => {
-     memberCount();
-    //  bookmarkMemberCheck();
+    memberCount();
+
   }, []);
 
   const memberCount = () => {
@@ -56,96 +62,54 @@ const RoomCard = ({
     } else {
       setShowAllMember(true);
     }
-  }
+  };
 
-  // const bookmarkMemberCheck = () => {
-  //   if(bookmarkedMembers.includes(userId)){
-  //     setIsMarked(true);
-  //   } else{
-  //     setIsMarked(false);
-  //   }
-  // }
 
-  const clickBookmark = 
-  async (e) => {
+
+
+  const clickBookmark = async (e) => {
     e.stopPropagation();
-    if(isMarked){
-      e.stopPropagation();
-      // setIsMarked(false);
-      await dispatch(__toggleBookmark(roomId, isMarked));
-      await dispatch(__getMarkedList());
-      await dispatch(__getUnMarkedList());
-      dispatch(__getMergedList());
-      console.log("즐겨찾기 취소");
-    }else if(!isMarked){
-      e.stopPropagation();
-      // setIsMarked(true);
-      await dispatch(__toggleBookmark(roomId, isMarked));
-      await dispatch(__getMarkedList());
-      await dispatch(__getUnMarkedList());
-      dispatch(__getMergedList());
-      console.log("즐겨찾기 등록");
+    e.preventDefault();
 
-    }
-    
-  }
+
+     dispatch(__toggleBookmark(roomId, isMarked));
+     dispatch(__getMarkedList());
+     dispatch(__getUnMarkedList());
+     dispatch(__getMergedList());
+    console.log(isMarked);
+    console.log("즐겨찾기 취소");
+  
+  };
+
+  
 
   const exitRoom = (e) => {
     e.stopPropagation();
     dispatch(__exitRoom(roomId));
+
+
   };
 
   const deleteRoom = (e) => {
     e.stopPropagation();
     dispatch(__deleteRoom(roomId));
+
+    // closeDrop();
   };
 
   const openModModal = (e) => {
     e.stopPropagation();
     setShowModModal(true);
+    roomId = { roomId };
+
+    // closeDrop();
   };
 
   const closeModModal = () => {
     setShowModModal(false);
   };
 
-  const handleClick = (e) => {
-    // e.preventDefault();
-    e.stopPropagation();
-    if (isDisplay === index) {
-      setIsDisplay(false);
-      closeDrop();
-      console.log(isDisplay);
-      console.log("닫다");
-      console.log(isShow);
-    } else {
-      openDrop();
-      setIsDisplay(index);
-      console.log("열다");
-      console.log(isDisplay);
-      console.log(isShow);
-    }
-  };
-
-  const closeDownDrop = () => {
-    setIsDisplay(false);
-    closeDrop();
-    console.log("드롭닫기");
-    console.log(isDisplay);
-  };
-
-  const handleOut = (e) => {
-    setIsDisplay(false);
-    closeDrop();
-    console.log("handleOut");
-  };
-
-  const handleIn = (e) => {
-    openDrop();
-    setIsDisplay(index);
-    console.log("handleIn");
-  };
-
+  
   const createDate = createdAt.slice(0, 10).split("-");
 
   return (
@@ -161,47 +125,11 @@ const RoomCard = ({
           history.push(`/workspace/${roomId}`);
         }}
       >
-        {/* {display===index && isShow ? ( */}
-        <Drop.Container
-          display={isDisplay === index ? "true" : undefined}
-          onClick={closeDownDrop}
-          onMouseOut={handleOut}
-          onMouseOver={handleIn}
-          width="76px"
-          height="126px"
-          shadow
-        >
-          <Drop.Item
-            width="76px"
-            height="42px"
-            color="darkgrey"
-            _onClick={openModModal}
-          >
-            수정하기
-          </Drop.Item>
-          <Drop.Item
-            width="76px"
-            height="42px"
-            color="darkgrey"
-            _onClick={exitRoom}
-          >
-            나가기
-          </Drop.Item>
-          <Drop.Item
-            width="76px"
-            height="42px"
-            color="darkgrey"
-            _onClick={deleteRoom}
-          >
-            삭제하기
-          </Drop.Item>
-        </Drop.Container>
-        {/* ) : null} */}
-
-        <IconBox >
+       
+        <IconBox>
           {/* <Star /> */}
-          <LinkIcon inviteCode={inviteCode}/>
-          <BookMark isMarked={isMarked} clickBookmark={clickBookmark}/>
+          <LinkIcon inviteCode={inviteCode} />
+          <BookMark isMarked={isMarked} clickBookmark={clickBookmark} />
         </IconBox>
         <CardSection>
           <CardProfile>
@@ -225,10 +153,26 @@ const RoomCard = ({
           </FooterItem>
           <FooterItem>
             {/* members를 memberImg 배열로 바꾸기 */}
-            <MemberImg members={members} memberStatus={memberStatus}/>
-            <div onClick={handleClick}>
+            <MemberImg members={members} memberStatus={memberStatus} />
+            {/* <IconBtn padding="0" _onClick={handleClick} >
               <Icon icon="more" size="24px" />
-            </div>
+            </IconBtn> */}
+            <Drop.Container
+             
+              width="84px"
+              height="126px"
+              shadow
+            >
+              <Drop.Item height="42px" color="darkgrey" _onClick={openModModal}>
+                수정
+              </Drop.Item>
+              <Drop.Item height="42px" color="darkgrey" _onClick={exitRoom}>
+                나가기
+              </Drop.Item>
+              <Drop.Item height="42px" color="darkgrey" _onClick={deleteRoom}>
+                삭제
+              </Drop.Item>
+            </Drop.Container>
           </FooterItem>
         </CardFooter>
       </Container>
@@ -244,6 +188,7 @@ const Container = styled.div`
   height: 274px;
   border: 1.2px solid var(--grey);
   border-radius: 5px;
+  cursor: pointer;
 `;
 
 const CardSection = styled.div`
@@ -265,7 +210,6 @@ const IconBox = styled.div`
   align-items: center;
   width: 60px;
 `;
-
 
 const CardProfile = styled.div`
   position: relative;
@@ -292,12 +236,18 @@ const TextBox = styled.div`
   height: 100px;
 `;
 const RoomNameBox = styled.div`
+  display: -webkit-box;
   overflow: hidden;
   width: 138px;
   max-height: 52px;
   line-height: normal;
+
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 `;
 const TagBox = styled.div`
+  display: -webkit-box;
   overflow: hidden;
   width: 138px;
   max-height: 44px;
@@ -305,6 +255,9 @@ const TagBox = styled.div`
   margin-bottom: 20px;
   color: var(--darkgrey);
   line-height: normal;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
 `;
 
 const SubTitleBox = styled.div`

@@ -14,6 +14,7 @@ import Icon from "../../components/Icon";
 import { body_3, body_4 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
 import CountText from "../../components/CountText";
+import { Text } from "../../elem";
 
 const Todos = ({ cardId }) => {
   const dispatch = useDispatch();
@@ -42,6 +43,13 @@ const Todos = ({ cardId }) => {
   return (
     <Container>
       <TodoList>
+        {todos.length === 0 && (
+          <TextBox>
+            <Text type="body_3" color="grey">
+              이 카드에서 추가된 할 일이 없습니다.
+            </Text>
+          </TextBox>
+        )}
         {todos.map((todo) => (
           <Todo key={todo.todoId} todo={todo} roomId={roomId} />
         ))}
@@ -120,6 +128,12 @@ const TodoList = styled.div`
     // chrome, safari, opera
     display: none;
   }
+`;
+
+const TextBox = styled.div`
+  ${flex()};
+  width: 100%;
+  height: 100%;
 `;
 
 const TodoBox = styled.div`

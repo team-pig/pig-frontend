@@ -7,79 +7,66 @@ import { Text } from "../../elem";
 import { __updateCardLocateOtherBucket } from "../../redux/modules/board";
 import flex from "../../themes/flex";
 import { button } from "../../themes/textStyle";
+import { __loadBucket } from "../../redux/modules/board";
+import { __editScheduleBucket } from "../../redux/modules/calendar";
 
 const BucketSelect = ({ bucketId, cardId }) => {
   const { roomId } = useParams();
 
   const dispatch = useDispatch();
 
-  const { buckets, bucketOrders } = useSelector((state) => state.calendar);
+  const buckets = useSelector((state) => state.board.columns);
+  const bucketValues = Object.values(buckets);
 
   const [currentId, setCurrentId] = useState(bucketId);
   const [isShow, setIsShow] = useState(false);
-
-  const target =
-    buckets.filter((bucket) => bucket.bucketId === currentId)[0] || buckets[0];
-  const [targetName, setTargetName] = useState(target.bucketName);
+  const [target, setTarget] = useState(
+    bucketValues.filter((bucket) => bucket.bucketId === currentId)[0] ||
+      bucketValues[0]
+  );
+  useEffect(() => {
+    dispatch(__loadBucket(roomId));
+  }, [dispatch, roomId]);
 
   useEffect(() => {
-    setTargetName(
-      buckets.filter((bucket) => bucket.bucketId === currentId)[0].bucketName ||
-        buckets[0].bucketName
+    setTarget(
+      bucketValues.filter((bucket) => bucket.bucketId === currentId)[0] ||
+        bucketValues[0]
     );
-  }, [currentId, buckets]);
+  }, [currentId, bucketValues]);
 
-  const clickOption = (id, value) => {
-    const beforeValues = Object.values(buckets);
-    const sourceBucketOrder = beforeValues.splice(
-      beforeValues.findIndex((bucket) => bucket.bucketId === currentId),
-      1
-    );
-    const sourceInfo = {
-      sourceBucketId: currentId,
-      sourceBucketOrder,
-    };
-    setCurrentId(bucketId);
-
-    const afterValues = Object.values(buckets);
-    const destinationBucketOrder = afterValues.splice(
-      afterValues.findIndex((bucket) => bucket.bucketId === currentId),
-      1
-    );
-    const destinationInfo = {
-      destinationId: currentId,
-      destinationBucketOrder,
-    };
-
+  const clickOption = (id) => {
+    const sourceBucketId = currentId;
+    const destinationBucketId = id;
+    setCurrentId(id);
     dispatch(
-      __updateCardLocateOtherBucket(roomId, cardId, {
-        ...sourceInfo,
-        ...destinationInfo,
-      })
+      __editScheduleBucket(roomId, cardId, sourceBucketId, destinationBucketId)
     );
   };
-
   return (
-    <Select onClick={() => setIsShow((pre) => !pre)}>
-      <Text type="button" color="black">
-        {targetName}
-      </Text>
-      <Icon icon="arrow-down" size="20px" />
-      {isShow && (
-        <Options>
-          {buckets.length !== 0 &&
-            buckets.map((bucket, idx) => (
-              <Option
-                key={bucket.bucketId}
-                onClick={() => clickOption(bucket.bucketId, currentId)}
-                target={bucket.bucketId === currentId ? "true" : "false"}
-              >
-                {bucket.bucketName}
-              </Option>
-            ))}
-        </Options>
+    <>
+      {bucketValues.length !== 0 && target && (
+        <Select onClick={() => setIsShow((pre) => !pre)}>
+          <Text type="button" color="black">
+            {target.bucketName}
+          </Text>
+          <Icon icon="arrow-down" size="20px" />
+          {isShow && (
+            <Options>
+              {bucketValues.length !== 0 &&
+                bucketValues.map((bucket, idx) => (
+                  <Option
+                    key={bucket.bucketId}
+                    onClick={() => clickOption(bucket.bucketId)}
+                  >
+                    {bucket.bucketName}
+                  </Option>
+                ))}
+            </Options>
+          )}
+        </Select>
       )}
-    </Select>
+    </>
   );
 };
 
@@ -108,17 +95,11 @@ const Options = styled.ul`
 const Option = styled.li`
   ${flex("start", "center")};
   ${button};
-  /* position: absolute; */
-  width: 100%;
-  top: 0;
   height: 36px;
   margin: 0;
   padding: 0 40px;
   border-bottom: 1px solid var(--line);
-  background-color: ${(props) =>
-    props.target === "true" ? `var(--main);` : `var(--white);`};
-  color: ${(props) =>
-    props.target === "true" ? `var(--white);` : `var(--black);`};
+  background-color: var(--white);
   z-index: 100;
 `;
 

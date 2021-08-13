@@ -9,13 +9,14 @@ import AccountInfo from "../components/AccountInfo";
 import HelpBtns from "../components/HelpBtns";
 
 // elem
+import SEO from "../components/SEO";
 import { Button, Input, Text } from "../elem";
+import { head_5 } from "../themes/textStyle";
+import flex from "../themes/flex";
 
 //redux
 import { useDispatch } from "react-redux";
 import { __login } from "../redux/modules/user";
-import { head_5 } from "../themes/textStyle";
-import flex from "../themes/flex";
 
 const Login = (props) => {
   const history = useHistory();
@@ -45,46 +46,51 @@ const Login = (props) => {
   });
 
   return (
-    <Template>
-      <Container>
-        <Title type="head_3">좋은 하루 되세요!</Title>
-        <FormContainer onSubmit={formik.handleSubmit}>
-          <Input
-            isError={formik.touched.email && Boolean(formik.errors.email)} // formik에서 validation error가 있는 경우 Input 으로 error 결과를 boolean으로 보냄
-            useHelper={formik}
-            _onClick={() => {
-              formik.setFieldValue("email", "");
-            }}
-            _onChange={formik.handleChange}
-            name="email"
-            type="text"
-            value={formik.values.email}
-            placeholder="이메일"
+    <>
+      <SEO title="로그인" />
+      <Template>
+        <Container>
+          <Title type="head_3">좋은 하루 되세요!</Title>
+          <FormContainer onSubmit={formik.handleSubmit}>
+            <Input
+              isError={formik.touched.email && Boolean(formik.errors.email)} // formik에서 validation error가 있는 경우 Input 으로 error 결과를 boolean으로 보냄
+              useHelper={formik}
+              _onClick={() => {
+                formik.setFieldValue("email", "");
+              }}
+              _onChange={formik.handleChange}
+              name="email"
+              type="text"
+              value={formik.values.email}
+              placeholder="이메일"
+            />
+            <Input
+              isError={
+                formik.touched.password && Boolean(formik.errors.password)
+              }
+              useHelper={formik}
+              _onClick={() => {
+                formik.setFieldValue("password", "");
+              }}
+              _onChange={formik.handleChange}
+              name="password"
+              type="password"
+              value={formik.values.password}
+              placeholder="비밀번호"
+            />
+            {/* <HelpBtns /> */}
+            <LoginBtn shape="green-fill" type="submit">
+              로그인
+            </LoginBtn>
+          </FormContainer>
+          <AccountInfo
+            text="계정이 없으신가요?"
+            btnText="회원가입"
+            _onClick={() => history.push("/register")}
           />
-          <Input
-            isError={formik.touched.password && Boolean(formik.errors.password)}
-            useHelper={formik}
-            _onClick={() => {
-              formik.setFieldValue("password", "");
-            }}
-            _onChange={formik.handleChange}
-            name="password"
-            type="password"
-            value={formik.values.password}
-            placeholder="비밀번호"
-          />
-          {/* <HelpBtns /> */}
-          <LoginBtn shape="green-fill" type="submit">
-            로그인
-          </LoginBtn>
-        </FormContainer>
-        <AccountInfo
-          text="계정이 없으신가요?"
-          btnText="회원가입"
-          _onClick={() => history.push("/register")}
-        />
-      </Container>
-    </Template>
+        </Container>
+      </Template>
+    </>
   );
 };
 

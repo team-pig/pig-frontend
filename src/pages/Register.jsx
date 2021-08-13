@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+import SEO from "../components/SEO";
 import Template from "../components/Template";
 import AccountInfo from "../components/AccountInfo";
 import { head_5 } from "../themes/textStyle";
@@ -52,69 +53,74 @@ const Register = () => {
   });
 
   return (
-    <Template>
-      <Container>
-        <Title type="head_3">반가워요!</Title>
-        <FormContainer onSubmit={formik.handleSubmit}>
-          <Input
-            isError={formik.touched.email && Boolean(formik.errors.email)}
-            useHelper={formik}
-            _onClick={() => {
-              formik.setFieldValue("email", "");
-            }}
-            _onChange={formik.handleChange}
-            name="email"
-            type="text"
-            value={formik.values.email}
-            placeholder="이메일"
+    <>
+      <SEO title="회원가입" />
+      <Template>
+        <Container>
+          <Title type="head_3">반가워요!</Title>
+          <FormContainer onSubmit={formik.handleSubmit}>
+            <Input
+              isError={formik.touched.email && Boolean(formik.errors.email)}
+              useHelper={formik}
+              _onClick={() => {
+                formik.setFieldValue("email", "");
+              }}
+              _onChange={formik.handleChange}
+              name="email"
+              type="text"
+              value={formik.values.email}
+              placeholder="이메일"
+            />
+            <Input
+              isError={formik.touched.nickname && formik.errors.nickname}
+              useHelper={formik}
+              _onClick={() => {
+                formik.setFieldValue("nickname", "");
+              }}
+              _onChange={formik.handleChange}
+              name="nickname"
+              type="text"
+              value={formik.values.nickname}
+              placeholder="닉네임"
+            />
+            <Input
+              isError={
+                formik.touched.password && Boolean(formik.errors.password)
+              }
+              useHelper={formik}
+              _onClick={() => {
+                formik.setFieldValue("password", "");
+              }}
+              _onChange={formik.handleChange}
+              name="password"
+              type="password"
+              value={formik.values.password}
+              placeholder="비밀번호 (영문+숫자 조합 최소 6글자 이상)"
+            />
+            <Input
+              isError={
+                formik.touched.confirmPassword && formik.errors.confirmPassword
+              }
+              useHelper={formik}
+              _onClick={() => {
+                formik.setFieldValue("confirmPassword", "");
+              }}
+              _onChange={formik.handleChange}
+              name="confirmPassword"
+              type="password"
+              value={formik.values.confirmPassword}
+              placeholder="비밀번호 확인"
+            />
+            <RegisterBtn type="submit">회원가입</RegisterBtn>
+          </FormContainer>
+          <AccountInfo
+            text="이미 계정이 있으신가요?"
+            btnText="로그인"
+            _onClick={() => history.push("/login")}
           />
-          <Input
-            isError={formik.touched.nickname && formik.errors.nickname}
-            useHelper={formik}
-            _onClick={() => {
-              formik.setFieldValue("nickname", "");
-            }}
-            _onChange={formik.handleChange}
-            name="nickname"
-            type="text"
-            value={formik.values.nickname}
-            placeholder="닉네임"
-          />
-          <Input
-            isError={formik.touched.password && Boolean(formik.errors.password)}
-            useHelper={formik}
-            _onClick={() => {
-              formik.setFieldValue("password", "");
-            }}
-            _onChange={formik.handleChange}
-            name="password"
-            type="password"
-            value={formik.values.password}
-            placeholder="비밀번호 (영문+숫자 조합 최소 6글자 이상)"
-          />
-          <Input
-            isError={
-              formik.touched.confirmPassword && formik.errors.confirmPassword
-            }
-            useHelper={formik}
-            _onClick={() => {
-              formik.setFieldValue("confirmPassword", "");
-            }}
-            _onChange={formik.handleChange}
-            name="confirmPassword"
-            type="password"
-            value={formik.values.confirmPassword}
-            placeholder="비밀번호 확인"
-          />
-          <RegisterBtn type="submit">회원가입</RegisterBtn>
-        </FormContainer>
-        <AccountInfo
-          text="이미 계정이 있으신가요?"
-          btnText="로그인"
-          _onClick={() => history.push("/login")}
-        />
-      </Container>
-    </Template>
+        </Container>
+      </Template>
+    </>
   );
 };
 

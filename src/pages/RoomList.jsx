@@ -21,6 +21,7 @@ import {
   __getMarkedList,
   __getUnMarkedList,
 } from "../redux/modules/room";
+import SEO from "../components/SEO";
 
 const RoomList = ({ history }) => {
   const dispatch = useDispatch();
@@ -176,79 +177,83 @@ const RoomList = ({ history }) => {
     });
 
   return (
-    <Template>
-      {!isJoin && (
-        <AddRoomModal showModal={showModal} closeModal={closeModal} />
-      )}
-      {isJoin && (
-        <JoinRoomModal showModal={showModal} closeModal={closeModal} />
-      )}
-      <InfinityScroll
-        callNext={() => {
-          console.log("next");
-          dispatch(__getRoomList(paging.next));
-        }}
-        isNext={paging.next ? true : false}
-        isLoading={isLoading}
-      >
-        <Wrapper>
-          <WrapperItem>
-            <InputBox>
-              <SearchIconBox>
-                <Icon icon="search" size="24px" />
-              </SearchIconBox>
-              {/* <Input
+    <>
+      <SEO title="협업 방 목록" />
+      <Template>
+        {!isJoin && (
+          <AddRoomModal showModal={showModal} closeModal={closeModal} />
+        )}
+        {isJoin && (
+          <JoinRoomModal showModal={showModal} closeModal={closeModal} />
+        )}
+        <InfinityScroll
+          callNext={() => {
+            console.log("next");
+            dispatch(__getRoomList(paging.next));
+          }}
+          isNext={paging.next ? true : false}
+          isLoading={isLoading}
+        >
+          <Wrapper>
+            <WrapperItem>
+              <InputBox>
+                <SearchIconBox>
+                  <Icon icon="search" size="24px" />
+                </SearchIconBox>
+                {/* <Input
                 type="text"
                 placeholder="방 이름을 검색하세요"
                 // _onChange={searchKeyword}
               /> */}
-              <SearchInput
-                // ref={inputRef}
-                // onKeyUp={changeSearchContent}
-                onKeyUp={(e) => {
-                  delay(e.target.value);
-                }}
-                // onChange={changeSearchContent}
-                onKeyPress={_onKeyPress}
-                type="text"
-                name="keyword"
-                placeholder="  방 이름을 검색하세요"
-              />
-              {/* <IconBox>
+                <SearchInput
+                  // ref={inputRef}
+                  // onKeyUp={changeSearchContent}
+                  onKeyUp={(e) => {
+                    delay(e.target.value);
+                  }}
+                  // onChange={changeSearchContent}
+                  onKeyPress={_onKeyPress}
+                  type="text"
+                  name="keyword"
+                  placeholder="  방 이름을 검색하세요"
+                />
+                {/* <IconBox>
                   <Icon icon="search" size="24px" />
                 </IconBox>
               </Input> */}
-            </InputBox>
-            <BtnContainer>
-              <Button size="150" onClick={openJoinModal}>
-                <Btn>
-                  <BtnContent>
-                    <Icon icon="enter" size="24px" /> <Span>방 입장</Span>
-                  </BtnContent>
-                </Btn>
-              </Button>
-              <BtnBox>
-                <Button shape="green-outline" size="150" onClick={openModal}>
+              </InputBox>
+              <BtnContainer>
+                <Button size="150" onClick={openJoinModal}>
                   <Btn>
                     <BtnContent>
-                      <Icon icon="plus-lg" size="24px" /> <Span>방 만들기</Span>
+                      <Icon icon="enter" size="24px" /> <Span>방 입장</Span>
                     </BtnContent>
                   </Btn>
                 </Button>
-              </BtnBox>
-            </BtnContainer>
-          </WrapperItem>
-        </Wrapper>
+                <BtnBox>
+                  <Button shape="green-outline" size="150" onClick={openModal}>
+                    <Btn>
+                      <BtnContent>
+                        <Icon icon="plus-lg" size="24px" />{" "}
+                        <Span>방 만들기</Span>
+                      </BtnContent>
+                    </Btn>
+                  </Button>
+                </BtnBox>
+              </BtnContainer>
+            </WrapperItem>
+          </Wrapper>
 
-        <RoomContainer onClick={closeDrop}>
-          <RoomBox>
-            {searchContent === null || "" ? notSearchItem : searchItem}
+          <RoomContainer onClick={closeDrop}>
+            <RoomBox>
+              {searchContent === null || "" ? notSearchItem : searchItem}
 
-            {/* {searchItem} */}
-          </RoomBox>
-        </RoomContainer>
-      </InfinityScroll>
-    </Template>
+              {/* {searchItem} */}
+            </RoomBox>
+          </RoomContainer>
+        </InfinityScroll>
+      </Template>
+    </>
   );
 };
 

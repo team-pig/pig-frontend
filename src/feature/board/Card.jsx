@@ -84,7 +84,7 @@ const Card = ({ card, index, bucketId }) => {
               <CardFooter>
                 <EndDate>
                   <Text type="body_4" color="grey">
-                    10
+                    {card.endDate}
                   </Text>
                   <Text type="body_4" color="notice">
                     {dDay !== 0 ? `D-${dDay}` : "D-DAY"}

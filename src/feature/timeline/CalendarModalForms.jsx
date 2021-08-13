@@ -6,8 +6,11 @@ import DatePickerExample from "../board/DatePicker";
 import moment from "moment";
 
 // redux
-import { resetTodos } from "../../redux/modules/todos";
-import { setModalId, __editSchedule } from "../../redux/modules/calendar";
+import {
+  setModalId,
+  __editSchedule,
+  __loadBuckets,
+} from "../../redux/modules/calendar";
 
 import BoardDrop from "../board/BoardDrop";
 import BucketSelect from "./BucketSelect";
@@ -25,10 +28,11 @@ const CalendarModalForms = ({ content, setModalContent, setShowModal }) => {
   const { roomId } = useParams();
 
   useEffect(() => {
+    dispatch(__loadBuckets(roomId));
     return () => {
       dispatch(setModalId(null));
     };
-  }, [dispatch]);
+  }, [dispatch, roomId]);
 
   const editFunc = (key, value) => {
     const editObj = { cardId: content.cardId, [key]: value };

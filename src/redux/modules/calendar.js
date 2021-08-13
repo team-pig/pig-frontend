@@ -106,7 +106,7 @@ export const __editSchedule =
   (roomId, editObj) =>
   async (dispatch, getState, { history }) => {
     try {
-      // const { data } = await cardApi.editCardInfo(roomId, editObj);  // 현재 카드 생성이 불가능해서 주석처리해야 리덕스라도 작동
+      const { data } = await cardApi.editCardInfo(roomId, editObj);
       dispatch(editSchedule(editObj));
     } catch (e) {
       console.log("수정에 실패했습니다.", e);

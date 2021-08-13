@@ -13,6 +13,7 @@ import InputToggle from "../../components/InputToggle";
 import { scrollbar } from "../../themes/scrollbar";
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
+import Icon from "../../components/Icon";
 
 const ModalForms = ({ content }) => {
   const dispatch = useDispatch();
@@ -52,7 +53,9 @@ const ModalForms = ({ content }) => {
                 _onClick={() => {
                   editFunc("color", color);
                 }}
-              ></BoardDrop.Item>
+              >
+                {content.color === color && <Icon icon="check" size="20px" />}
+              </BoardDrop.Item>
             ))}
           </BoardDrop.Container>
           <StText type="sub_1">

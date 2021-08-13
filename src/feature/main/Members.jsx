@@ -8,19 +8,23 @@ import flex from "../../themes/flex";
 import { scrollbar } from "../../themes/scrollbar";
 import { Text, IconBtn } from "../../elem";
 
-const Members = ({ members }) => {
+const Members = ({ memberStatus }) => {
   const colorAry = ["blue", "mint", "yellow", "orange"];
 
   return (
     <Container>
       <MembersHeader>
         <Text type="body_1">팀원 현황</Text>
-        <IconBtn _onClick={() => {}}>
+        {/* <IconBtn _onClick={() => {}}>
           <Icon icon="plus-lg" color="#757575" />
-        </IconBtn>
+        </IconBtn> */}
       </MembersHeader>
-      {members.map((member, idx) => (
-        <MemberStatus key={idx} member={member} color={colorAry[idx % 4]} />
+      {memberStatus.map((member, idx) => (
+        <MemberStatus
+          key={member.userId}
+          member={member}
+          color={colorAry[idx % 4]}
+        />
       ))}
     </Container>
   );

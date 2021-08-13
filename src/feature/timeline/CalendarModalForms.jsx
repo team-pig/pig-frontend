@@ -2,20 +2,24 @@ import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import DatePickerExample from "./DatePicker";
+import DatePickerExample from "../board/DatePicker";
 import moment from "moment";
 
-import { resetTodos } from "../../redux/modules/todos";
-import { __editCardInfos, resetCard } from "../../redux/modules/board";
+// redux
+import {
+  setModalId,
+  __editSchedule,
+  __loadBuckets,
+} from "../../redux/modules/calendar";
 
-import BoardDrop from "./BoardDrop";
-import InputToggle from "../../components/InputToggle";
-import { scrollbar } from "../../themes/scrollbar";
-import { Text } from "../../elem";
-import flex from "../../themes/flex";
+import BoardDrop from "../board/BoardDrop";
+import BucketSelect from "./BucketSelect";
 import Icon from "../../components/Icon";
+import InputToggle from "../../components/InputToggle";
+import flex from "../../themes/flex";
+import { Text } from "../../elem";
 
-const ModalForms = ({ content }) => {
+const CalendarModalForms = ({ content, setModalContent, setShowModal }) => {
   const dispatch = useDispatch();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -24,15 +28,15 @@ const ModalForms = ({ content }) => {
   const { roomId } = useParams();
 
   useEffect(() => {
+    dispatch(__loadBuckets(roomId));
     return () => {
-      dispatch(resetCard());
-      dispatch(resetTodos());
+      dispatch(setModalId(null));
     };
-  }, [dispatch]);
+  }, [dispatch, roomId]);
 
   const editFunc = (key, value) => {
     const editObj = { cardId: content.cardId, [key]: value };
-    dispatch(__editCardInfos(roomId, editObj));
+    dispatch(__editSchedule(roomId, editObj));
   };
 
   const kindOfColor = ["blue", "violet", "yellow", "orange", "mint"];
@@ -46,6 +50,8 @@ const ModalForms = ({ content }) => {
 
   return (
     <Container>
+      {/* <BucketSelect bucketId={content.bucketId} cardId={content.cardId} /> */}
+
       <StyleDiv wh={["480px", "26px"]} mg="0 0 20px 0">
         <StyleDiv flex={["flex-start", "center", "10"]}>
           <BoardDrop.Container
@@ -69,8 +75,8 @@ const ModalForms = ({ content }) => {
             <InputToggle
               name="cardTitle"
               value={content.cardTitle}
+              placeholder="일정 제목을 입력해주세요."
               saveFunc={editFunc}
-              limit={15}
             />
           </StText>
         </StyleDiv>
@@ -85,7 +91,7 @@ const ModalForms = ({ content }) => {
           endDate={endDate}
           setEndDate={setEndDate}
           content={content}
-          mode="card" // card or schedule
+          mode="schedule" // schedule or card
         />
         <StyleDiv flex={["center", "center"]}>
           <DateText type="body_2" color="notice">
@@ -106,7 +112,6 @@ const ModalForms = ({ content }) => {
             value={content.desc}
             shape="textarea"
             saveFunc={editFunc}
-            limit={"제한없음"}
           />
         </StText>
       </StyleDiv>
@@ -115,12 +120,10 @@ const ModalForms = ({ content }) => {
 };
 
 const Container = styled.div`
-  padding: 40px;
+  padding: 78px 40px 40px 40px;
 `;
 
 const StyleDiv = styled.div`
-  position: relative;
-
   ${(props) =>
     props.tb &&
     css`
@@ -157,4 +160,4 @@ const DateText = styled(Text)`
   width: 44px;
 `;
 
-export default ModalForms;
+export default CalendarModalForms;

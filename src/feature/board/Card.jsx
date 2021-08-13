@@ -30,6 +30,20 @@ const Card = ({ card, index, bucketId }) => {
     setModalContent(currentContent);
   }, [currentContent]);
 
+  const dDay =
+    parseInt(
+      moment(moment(card.endDate).diff(moment().format("YYYY-MM-DD"))).format(
+        "D"
+      )
+    ) - 1;
+
+  const limitText = (text, limit) => {
+    if (text) {
+      return text.length <= limit ? text : text.substr(0, limit);
+    }
+    return;
+  };
+
   return (
     <>
       <Draggable draggableId={card.cardId} index={index}>
@@ -65,15 +79,15 @@ const Card = ({ card, index, bucketId }) => {
                 </CardDeleteBtn>
               </CardHeader>
               <CardBody>
-                <Text type="body_3">{card.desc}</Text>
+                <Text type="body_3">{limitText(card.desc, 80)}</Text>
               </CardBody>
               <CardFooter>
                 <EndDate>
                   <Text type="body_4" color="grey">
-                    10
+                    {card.endDate}
                   </Text>
                   <Text type="body_4" color="notice">
-                    D-{moment(moment(card.endDate) - Date.now()).format("DD")}
+                    {dDay !== 0 ? `D-${dDay}` : "D-DAY"}
                   </Text>
                 </EndDate>
                 <CardStat>

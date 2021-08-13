@@ -13,6 +13,8 @@ import Todo from "./Todo";
 import Icon from "../../components/Icon";
 import { body_3, body_4 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
+import CountText from "../../components/CountText";
+import { Text } from "../../elem";
 
 const Todos = ({ cardId }) => {
   const dispatch = useDispatch();
@@ -21,7 +23,7 @@ const Todos = ({ cardId }) => {
 
   useEffect(() => {
     dispatch(__loadTodos(roomId, cardId));
-  }, []);
+  }, [roomId, cardId, dispatch]);
 
   const formik = useFormik({
     initialValues: {
@@ -41,29 +43,40 @@ const Todos = ({ cardId }) => {
   return (
     <Container>
       <TodoList>
+        {todos.length === 0 && (
+          <TextBox>
+            <Text type="body_3" color="grey">
+              이 카드에서 추가된 할 일이 없습니다.
+            </Text>
+          </TextBox>
+        )}
         {todos.map((todo) => (
           <Todo key={todo.todoId} todo={todo} roomId={roomId} />
         ))}
       </TodoList>
       <TodoForm onSubmit={formik.handleSubmit}>
         <Icon icon="plus-lg" size="20px" />
-        <TodoInput
-          autoComplete="off"
-          type="text"
-          name="todoTitle"
-          value={formik.values.todoTitle}
-          onChange={formik.handleChange}
-          onClick={() => {
-            formik.setFieldValue("todoTitle", "");
-          }}
-          placeholder="새로운 할 일을 추가하고 Enter ✨"
-        />
+        <TodoBox>
+          <TodoInput
+            autoComplete="off"
+            type="text"
+            name="todoTitle"
+            value={formik.values.todoTitle}
+            onChange={formik.handleChange}
+            onClick={() => {
+              formik.setFieldValue("todoTitle", "");
+            }}
+            placeholder="새로운 할 일을 추가하고 Enter ✨"
+            maxLength={20}
+          />
+          {CountText(20, formik.values.todoTitle.length)}
+        </TodoBox>
       </TodoForm>
-      <TodoHelpMsg color="point">
+      {/* <TodoHelpMsg color="point">
         {formik.touched.todoTitle && formik.errors.todoTitle
           ? formik.errors.todoTitle
           : null}
-      </TodoHelpMsg>
+      </TodoHelpMsg> */}
     </Container>
   );
 };
@@ -115,6 +128,16 @@ const TodoList = styled.div`
     // chrome, safari, opera
     display: none;
   }
+`;
+
+const TextBox = styled.div`
+  ${flex()};
+  width: 100%;
+  height: 100%;
+`;
+
+const TodoBox = styled.div`
+  position: relative;
 `;
 
 const TodoHelpMsg = styled.div`

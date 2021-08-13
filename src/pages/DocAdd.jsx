@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Prompt } from "react-router-dom";
+import { useBeforeunload } from "react-beforeunload";
 
 // component
 import Writer from "../feature/document/Writer";
+import { docApi } from "../api/docApi";
 
 const DocAdd = () => {
   const [showPrompt, setShowPrompt] = useState(true);
 
   useEffect(() => {
-    return async () => {
+    return () => {
       setShowPrompt(false);
     };
   }, []);
@@ -21,7 +23,7 @@ const DocAdd = () => {
         message="문서가 저장되지 않았습니다. 정말로 떠나시겠습니까?"
       />
       <Container>
-        <Writer />
+        <Writer setShowPrompt={setShowPrompt} />
       </Container>
     </>
   );

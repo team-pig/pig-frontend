@@ -22,9 +22,9 @@ import Icon from "../../components/Icon";
 
 const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
   const dispatch = useDispatch();
-  const bucketName = "제목없는 버킷";
+  const bucketName = "제목 없음";
   const cardTitle = "눌러서 제목 수정";
-  const initDate = moment(Date.now()).format("YYYY-MM-DD");
+  const initDate = moment().format("YYYY-MM-DD");
   const initColor = "blue";
 
   // 전역변수
@@ -64,9 +64,10 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
                       saveFunc={editFunc}
                       value={
                         bucket.bucketName === null
-                          ? "제목없는 버킷"
+                          ? "제목 없음"
                           : bucket.bucketName
                       }
+                      maxLength={10}
                     />
                   </Text>
                 </BucketTitle>
@@ -185,6 +186,7 @@ const BucketHeader = styled.div`
 `;
 
 const BucketHeaderBar = styled.div`
+  flex-grow: 1;
   width: 260px;
   height: 4px;
   background-color: ${(props) => props.theme.colors["mint"]};

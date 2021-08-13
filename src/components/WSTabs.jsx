@@ -12,6 +12,9 @@ import { __getDocs } from "../redux/modules/document";
 const WSTabs = ({ url }) => {
   const history = useHistory();
 
+  const pureUrl =
+    url[url.length - 1] === "/" ? url.substr(0, url.length - 2) : url;
+
   const { roomId } = useParams();
 
   const docs = useSelector((state) => state.document.docList);
@@ -19,7 +22,7 @@ const WSTabs = ({ url }) => {
   const dispatch = useDispatch();
 
   const toMain = () => {
-    history.push(`${url}`);
+    history.push(`${pureUrl}`);
   };
 
   const toDocs = async () => {
@@ -28,17 +31,17 @@ const WSTabs = ({ url }) => {
     } catch (e) {
       console.log(e);
     } finally {
-      if (docs.length) history.push(`${url}/doc/${docs[0].docId}`);
-      else history.push(`${url}/doc/blank`);
+      if (docs.length) history.push(`${pureUrl}/doc/${docs[0].docId}`);
+      else history.push(`${pureUrl}/doc/blank`);
     }
   };
 
   const toBoard = () => {
-    history.push(`${url}/board`);
+    history.push(`${pureUrl}/board`);
   };
 
   const toCalendar = () => {
-    history.push(`${url}/timeline`);
+    history.push(`${pureUrl}/timeline`);
   };
 
   const checkTab = (keyword) => {
@@ -78,7 +81,6 @@ const WSTabs = ({ url }) => {
   );
 };
 
-// 가짜 스타일
 const List = styled.nav`
   display: flex;
   align-items: center;
@@ -87,6 +89,7 @@ const List = styled.nav`
 `;
 
 const Item = styled.button`
+  flex-shrink: 0;
   height: 100%;
   padding: 0 39px;
   color: var(--darkgrey);

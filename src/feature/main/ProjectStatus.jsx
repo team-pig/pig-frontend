@@ -6,10 +6,13 @@ import Graph from "./Graph";
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
 
-const ProjectStatus = ({ project }) => {
-  const guagePercent = Math.floor(
-    (project.completedTodos / project.totalTodos) * 100
-  );
+const ProjectStatus = ({ projectStatus }) => {
+  const { checked, notChecked } = projectStatus;
+  const guagePercent = isNaN(
+    ((checked / (checked + notChecked)) * 100).toFixed(0)
+  )
+    ? 0
+    : ((checked / (checked + notChecked)) * 100).toFixed(0);
 
   return (
     <Project>
@@ -18,9 +21,11 @@ const ProjectStatus = ({ project }) => {
         <Text type="sub_2" color="">
           {guagePercent}% 완료
         </Text>
-        <Line></Line>
+        <Line />
+        {/*  date를 기준으로 마감일 표시 하는 기능 추가 예정*/}
         <Text type="sub_2" color="notice">
-          프로젝트 마감 13일 전
+          {/* 프로젝트 마감 13일 전 */}
+          오늘도 힘찬 프로젝트!
         </Text>
       </ProjectInfo>
       <Graph color="violet" height="30px" percent={guagePercent} />

@@ -5,52 +5,49 @@ import Icon from "../../components/Icon";
 // component & elem
 import flex from "../../themes/flex";
 import Graph from "./Graph";
-import Tags from "./Tags";
+// import Tags from "./Tags";
 import { IconBtn, Text } from "../../elem";
+import { useSelector, useDispatch } from "react-redux";
+import { __editMyProfile } from "../../redux/modules/dashBoard";
+import { useParams } from "react-router-dom";
 
 const MemberStatus = ({ member, color }) => {
-  //가짜 데이터
-  const user = {
-    userId: "dsfk231",
-    nickname: "유리",
-  };
+  const dispatch = useDispatch();
+  const { checked, nickname, notChecked, userId, desc, tags } = member;
+  const myId = useSelector((state) => state.user.user.userId);
+  const memberPercent = isNaN(
+    ((checked / (checked + notChecked)) * 100).toFixed(0)
+  )
+    ? 0
+    : ((checked / (checked + notChecked)) * 100).toFixed(0);
 
-  const memberPercent = Math.floor(
-    (member.completedTodos / member.totalTodos) * 100
-  );
-
-  const isMe = member.userId === user.userId;
-  console.log(isMe);
+  const isMe = myId === userId;
+  const { roomId } = useParams();
 
   return (
     <Member>
       <MemberMain>
         <Name type="head_7" color="black">
-          {member.nickname}
-          {isMe === true && (
-            <Btn>
-              <Setting icon="setting" size="20px" color="#757575" />
-            </Btn>
-          )}
+          {nickname}
         </Name>
+        {isMe ? <Setting icon="setting" size="24px" color="#757575" /> : ""}
         <GraphBox>
           <Graph color={color} height="15px" percent={memberPercent} />
         </GraphBox>
       </MemberMain>
       <Desc type="body_4" color="darkgrey">
-        {member.desc}
+        {desc === null ? "상태 메시지가 없습니다." : desc}
       </Desc>
       <MemberInfo>
-        <Tags tags={member.tags} />
+        <Tags tags={tags} />
         <Line />
         <StatusNums>
-          <Text type="body_2" color="darkgrey">{`${Math.floor(
-            (member.completedTodos / member.totalTodos) * 100
-          )}% 완료`}</Text>
-          <Text
-            type="body_4"
-            color="grey"
-          >{`(${member.completedTodos}/${member.totalTodos})`}</Text>
+          <Text type="body_2" color="darkgrey">
+            {memberPercent}% 완료
+          </Text>
+          <Text type="body_4" color="grey">
+            ({checked} / {checked + notChecked})
+          </Text>
         </StatusNums>
       </MemberInfo>
     </Member>
@@ -69,7 +66,11 @@ const MemberMain = styled.div`
 
 const Name = styled(Text)`
   position: relative;
-  flex-shrink: 0;
+  /* flex-shrink: 0; */
+  width: 130px;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  overflow-y: hidden;
   margin-right: 8px;
 `;
 
@@ -83,8 +84,9 @@ const Btn = styled(IconBtn)`
 const Setting = styled(Icon)``;
 
 const GraphBox = styled.div`
-  width: 250px;
+  width: 240px;
   margin-left: 50px;
+  flex-shrink: 0;
 `;
 
 const Desc = styled(Text)`
@@ -106,4 +108,7 @@ const Line = styled.div`
   margin: 0 15px;
   background-color: var(--grey);
 `;
+
+const Tags = styled.div``;
+
 export default MemberStatus;

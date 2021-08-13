@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 // component
@@ -12,22 +12,40 @@ import { head_2, sub_2 } from "../../themes/textStyle";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
 
+import { roomApi } from "../../api/roomApi";
+import { useParams } from "react-router";
+import { useDispatch } from "react-redux";
+import { __editRoomInfos } from "../../redux/modules/dashBoard";
+
 const Information = () => {
+  const { roomId } = useParams();
   const [editMode, setEditMode] = useState(false);
-
   const editorRef = useRef();
+  const dispatch = useDispatch();
 
-  const [info, setInfo] = useState({
-    title: "협업돼지꿀꿀",
-    tags: ["태그1", "태그2", "태그3", "태그4"],
-    desc: "안녕하세요 협업돼지입니다.",
-    content: "### 개요를 입력해주세요.",
-  });
+  useEffect(() => {
+    try {
+      const fetchRoomInfo = async () => {
+        const {
+          data: {
+            result: { roomName, subtitle, desc, tag },
+          },
+        } = await roomApi.getOneRoom(roomId);
+        setEditedInfo({
+          roomName,
+          subtitle,
+          desc,
+          tag,
+        });
+      };
+      fetchRoomInfo();
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
 
-  const [editedInfo, setEditedInfo] = useState({
-    ...info,
-    tags: info.tags.join(", "),
-  });
+  const [editedInfo, setEditedInfo] = useState({});
+  console.log(editedInfo);
 
   const mainEditorOpt = {
     previewStyle: "tab",
@@ -36,46 +54,42 @@ const Information = () => {
     previewHighlight: false,
     height: "300px",
     ref: editorRef,
-    initialValue: editedInfo.content,
+    initialValue: editedInfo.desc,
     // colorSyntax: 글자 색 바꾸는 기능 / condeSyntaxHighlight : 언어에 따른 코드 색 변경
   };
 
-  const toggleEditMode = () => {
-    setEditMode((pre) => !pre);
-  };
-
   const mainViewerOpt = {
-    initialValue: info.content,
+    initialValue: editedInfo.desc,
   };
 
   const getContent = () => {
     const instance = editorRef.current.getInstance();
     const content_md = instance.getMarkdown();
-
     return content_md;
   };
 
   const clickSave = () => {
-    if (!info.title.trim()) {
+    if (!editedInfo.roomName.trim()) {
       alert("제목을 한 글자 이상 작성해주세요.");
       return;
     }
-
     const currentContent = getContent();
+
     const newInfo = {
       ...editedInfo,
-      content: currentContent,
-      tags: editedInfo.tags.split(",").map((info) => info.trim()),
+      roomId,
+      desc: currentContent,
     };
 
-    setInfo(newInfo);
-    toggleEditMode();
+    dispatch(__editRoomInfos(newInfo));
+    setEditMode((pre) => !pre);
   };
 
   const handleChange = (key, value) => {
     setEditedInfo((pre) => ({ ...pre, [key]: value }));
   };
 
+  if (Object.keys(editedInfo).length === 0) return <></>;
   if (editMode) {
     return (
       <Container>
@@ -83,8 +97,8 @@ const Information = () => {
           <TitleInput
             type="text"
             placeholder="제목을 입력하세요"
-            value={editedInfo.title}
-            onChange={(e) => handleChange("title", e.target.value)}
+            value={editedInfo.roomName}
+            onChange={(e) => handleChange("roomName", e.target.value)}
           />
           <TextBtn onClick={clickSave}>
             <Text type="button" color="darkgrey">
@@ -93,18 +107,17 @@ const Information = () => {
           </TextBtn>
         </TitleBox>
         <TagContainer>
-          {/* 태그 ','으로 구분하여 입력하도록 설정 */}
           <TagsInput
             type="text"
             placeholder="태그는 ','으로 구분하여 입력해주세요."
-            value={editedInfo.tags}
-            onChange={(e) => handleChange("tags", e.target.value)}
+            value={editedInfo.tag}
+            onChange={(e) => handleChange("tag", e.target.value)}
           />
         </TagContainer>
         <Textarea
-          value={editedInfo.desc}
+          value={editedInfo.subtitle}
           minHeight={40}
-          _onChange={(e) => handleChange("desc", e.target.value)}
+          _onChange={(e) => handleChange("subtitle", e.target.value)}
         />
         <EditorContainer>
           <MarkDownEditor option={mainEditorOpt} />
@@ -117,18 +130,22 @@ const Information = () => {
     <Container>
       <TitleBox>
         <Text type="head_2" color="black">
-          {info.title}
+          {editedInfo.roomName}
         </Text>
-        <IconBtn _onClick={toggleEditMode}>
+        <IconBtn
+          _onClick={() => {
+            setEditMode((pre) => !pre);
+          }}
+        >
           <Icon icon="edit" color="#757575" size="24px" />
         </IconBtn>
       </TitleBox>
       <TagContainer>
-        <Tags tags={info.tags} gap="14" textType="sub_2" color="dargrey" />
+        <Tags tag={editedInfo.tag} gap="14" textType="sub_2" color="dargrey" />
       </TagContainer>
-      {info.desc && (
+      {editedInfo.subtitle && (
         <Desc type="sub_1" color="grey">
-          {info.desc}
+          {editedInfo.subtitle}
         </Desc>
       )}
       <Line />

@@ -15,9 +15,11 @@ export const cardApi = {
   getCardById: (roomId, cardId) =>
     instance.get(`/room/${roomId}/card/${cardId}`),
 
-  editCardLocation: (roomId, newBucketInfo) =>
+  editCardLocation: (roomId, newBucketInfo, cardId, destinationBucketId) =>
     instance.patch(`/room/${roomId}/cardLocation`, {
       cardOrder: newBucketInfo,
+      cardId,
+      destinationBucketId,
     }),
 
   editCardInfo: (roomId, cardInfos) =>

@@ -27,6 +27,7 @@ const CalendarHeader = ({
 
   const dispatch = useDispatch();
   const current = useSelector((state) => state.date.current);
+  const buckets = useSelector((state) => state.board.columns);
 
   const showLastMonth = () => {
     dispatch(setCurrent(current.clone().subtract(1, "month")));
@@ -37,8 +38,9 @@ const CalendarHeader = ({
   };
 
   const clickCreateBtn = () => {
+    const bucketId = Object.keys(buckets)[0];
     setShowModal((pre) => !pre);
-    dispatch(__addSchedule(roomId));
+    dispatch(__addSchedule(roomId, bucketId));
   };
 
   return (

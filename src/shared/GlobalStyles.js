@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
+import { scrollbar } from "../themes/scrollbar";
 
 const GlobalStyles = createGlobalStyle`
 	${reset};
@@ -16,10 +17,10 @@ const GlobalStyles = createGlobalStyle`
 		--notice : #ff7776;
 
 		/* z-index */
+		--indexColorPicker: 20;
+		--indexDrop : 25;
 		--indexHeader : 30;
-		--indexDrop : 30;
-		--indexColorPicker: 50;
-		--indexModal : 40;
+		--indexModal : 60;
 
 		/* margin */
 		--xsMargin: 10px;
@@ -28,6 +29,7 @@ const GlobalStyles = createGlobalStyle`
   };
 
   * {
+		${scrollbar};
 		box-sizing : border-box;
 	}
 

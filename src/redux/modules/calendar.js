@@ -17,6 +17,7 @@ const LOAD_DETAIL = "calendar/LOAD_DETAIL";
 const LOAD_DAY_SCHEDULES = "calendar/LOAD_DAY_SCHEDULES";
 const ADD_SCHEDULE = "calendar/ADD_SCHEDULE";
 const EDIT_SCHEDULE = "calendar/EDIT_SCHEDULE";
+const EDIT_SCHEDULE_BUCKET = "calendar/EDIT_SCHEDULE_BUCKET";
 const DELETE_SCHEDULE = "calendar/DELETE_SCHEDULE";
 const GET_TODO_BY_SCHEDULE = "calendar/GET_TODO_BY_SCHEDULE";
 const RESET_TIMELINE = "calendar/RESET_TIMELINE";
@@ -40,6 +41,10 @@ const addSchedule = createAction(ADD_SCHEDULE, (schedule) => ({
 const editSchedule = createAction(EDIT_SCHEDULE, (scheduleObj) => ({
   scheduleObj,
 }));
+const editScheduleBucket = createAction(
+  EDIT_SCHEDULE_BUCKET,
+  (cardId, destinationBucketId) => ({ cardId, destinationBucketId })
+);
 const deleteSchedule = createAction(DELETE_SCHEDULE, (scheduleId) => ({
   scheduleId,
 }));
@@ -113,13 +118,46 @@ export const __editSchedule =
     }
   };
 
+export const __editScheduleBucket =
+  (roomId, cardId, sourceBucketId, destinationBucketId) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      const columns = getState().board.columns;
+
+      const cardOrder = {};
+      Object.entries(columns).forEach(
+        (entry) => (cardOrder[`${entry[0]}`] = entry[1].cardOrder)
+      );
+
+      cardOrder[`${sourceBucketId}`] = cardOrder[`${sourceBucketId}`].filter(
+        (id) => id !== cardId
+      );
+
+      cardOrder[`${destinationBucketId}`] = [
+        ...cardOrder[`${destinationBucketId}`],
+        cardId,
+      ];
+
+      const { data } = await cardApi.editCardLocation(
+        roomId,
+        cardOrder,
+        cardId,
+        destinationBucketId
+      );
+
+      dispatch(editScheduleBucket(cardId, destinationBucketId));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
 // schedule 삭제 thunk 함수
 // Board에서 __deleteCard(예상 thunk함수)와 같은 api 사용
 export const __deleteSchedule =
   (roomId, cardId) =>
   async (dispatch, getState, { history }) => {
     try {
-      await cardApi.deleteCard(cardId, roomId);
+      await cardApi.deleteCard("", cardId, roomId);
       dispatch(deleteSchedule(cardId));
     } catch (e) {
       console.log("삭제에 실패했습니다.", e);
@@ -192,6 +230,14 @@ const calendar = handleActions(
         for (const [key, value] of Object.entries(rest)) {
           draft.scheduleList[idx][key] = value;
         }
+      }),
+    [EDIT_SCHEDULE_BUCKET]: (state, action) =>
+      produce(state, (draft) => {
+        const { cardId, destinationBucketId } = action.payload;
+        const idx = draft.scheduleList.findIndex(
+          (schedule) => schedule.cardId === cardId
+        );
+        draft.scheduleList[idx].bucketId = destinationBucketId;
       }),
     [DELETE_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {

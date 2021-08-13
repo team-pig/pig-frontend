@@ -47,7 +47,7 @@ const ModalForms = ({ content }) => {
   return (
     <Container>
       <StyleDiv wh={["480px", "26px"]} mg="0 0 20px 0">
-        <StyleDiv flex={["flex-start", "center", "10"]}>
+        <StyleDiv flex={["flex-start", "center", "10"]} pd="10px 0 0 0">
           <BoardDrop.Container
             componentType="colorPicker"
             bgColor={content.color}

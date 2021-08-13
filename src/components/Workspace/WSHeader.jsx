@@ -9,6 +9,7 @@ import WSTabs from "../WSTabs";
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
 import { __logout } from "../../redux/modules/user";
+import { resetReducer } from "../../redux/configStore";
 
 const WSHeader = ({ url }) => {
   const history = useHistory();
@@ -17,6 +18,11 @@ const WSHeader = ({ url }) => {
 
   const user = useSelector((state) => state.user.user);
   const room = useSelector((state) => state.room.currentRoom);
+
+  const clickLogout = () => {
+    dispatch(__logout());
+    dispatch(resetReducer());
+  };
 
   return (
     <Container>
@@ -38,7 +44,7 @@ const WSHeader = ({ url }) => {
         <NameBtn>
           <NameTag name={user.nickname} />
         </NameBtn>
-        <HeaderBtn onClick={() => dispatch(__logout())}>
+        <HeaderBtn onClick={clickLogout}>
           <Text type="button" color="var(--black)">
             로그아웃
           </Text>

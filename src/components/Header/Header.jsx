@@ -17,12 +17,18 @@ import MobileLogo from "../../assets/logo/logo.svg";
 import { mobileHidden, mobileOnly } from "../../themes/responsive";
 import { button } from "../../themes/textStyle";
 import flex from "../../themes/flex";
+import { resetReducer } from "../../redux/configStore";
 
 const Header = () => {
   const history = useHistory();
 
   const dispatch = useDispatch();
   const { isLogin, user } = useSelector((state) => state.user);
+
+  const clickLogout = () => {
+    dispatch(__logout());
+    dispatch(resetReducer());
+  };
 
   return (
     <Container>
@@ -61,9 +67,7 @@ const Header = () => {
                 <NameBtn>
                   <NameTag name={user.nickname} />
                 </NameBtn>
-                <LogoutBtn onClick={() => dispatch(__logout())}>
-                  로그아웃
-                </LogoutBtn>
+                <LogoutBtn onClick={clickLogout}>로그아웃</LogoutBtn>
               </Btns>
             </>
           )}

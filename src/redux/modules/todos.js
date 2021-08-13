@@ -6,6 +6,8 @@ const LOAD_TODOS = "todos/LOAD_TODOS";
 const LOAD_MY_TODOS = "todos/LOAD_MY_TODOS";
 const CREATE_TODO = "todos/CREATE_TODO";
 const DELETE_TODO = "todos/DELETE_TODO";
+const EXIT_MY_TODO = "totos/EXIT_MY_TODO";
+const EXIT_MY_TODO_NOT_CHECKED = "todos/EXIT_MY_TODO_NOT_CHECKED";
 const EDIT_TODO_TITLE = "todos/EDIT_TODO_TITLE";
 const IS_CHECKED_TODO = "todos/IS_CHECKED_TODO";
 const GO_TO_CHECKED = "todos/GO_TO_CHECKED";
@@ -13,6 +15,7 @@ const GO_TO_NOT_CHECKED = "todos/GO_TO_NOT_CHECKED";
 const ADD_MEMBER = "todos/ADD_MEMBER";
 const REMOVE_MEMBER = "todos/REMOVE_MEMBER";
 const RESET_TODOS = "todos/RESET_TODOS";
+const TODOS_COUNT = "todos/TODOS_COUNT";
 
 /**
  * Action creator
@@ -27,6 +30,11 @@ const createTodo = createAction(CREATE_TODO, (newTodo) => ({
   newTodo,
 }));
 const deleteTodo = createAction(DELETE_TODO, (todoId) => ({ todoId }));
+const exitMyTodo = createAction(EXIT_MY_TODO, (todoId) => ({ todoId }));
+const exitMyTodoNotChecked = createAction(
+  EXIT_MY_TODO_NOT_CHECKED,
+  (todoId) => ({ todoId })
+);
 
 const editTodoTitle = createAction(EDIT_TODO_TITLE, (todoId, newTodoTitle) => ({
   todoId,
@@ -46,6 +54,8 @@ const isCheckedTodo = createAction(IS_CHECKED_TODO, (todoId, isChecked) => ({
   todoId,
   isChecked,
 }));
+
+const todosCount = createAction(TODOS_COUNT, (count) => ({ count }));
 
 const goToChecked = createAction(
   GO_TO_CHECKED,
@@ -70,10 +80,11 @@ export const resetTodos = createAction(RESET_TODOS, () => ({}));
 /**
  * Thunk
  */
-export const __loadTodos = (roodId, cardId) => async (dispatch) => {
+export const __loadTodos = (roodId, cardId) => async (dispatch, getState) => {
   try {
     const { data } = await todoApi.getTodo(roodId, cardId);
     dispatch(laodTodos(data.todos));
+    dispatch(todosCount(data.todos.length));
   } catch (e) {
     console.log(e);
   }
@@ -117,8 +128,7 @@ export const __editTotoTitle =
   };
 
 export const __checkedTodo =
-  (roomId, todoId, isChecked) => async (dispatch) => {
-    console.log(roomId, todoId, isChecked);
+  (roomId, todoId, isChecked) => async (dispatch, getState) => {
     try {
       const { data } = await todoApi.checkedTodo(roomId, todoId, isChecked);
       console.log(data);
@@ -143,8 +153,23 @@ export const __switchTodoStat =
     }
   };
 
+export const __removeMyTodo =
+  (roomId, todoId, memberId, isChecked) => async (dispatch) => {
+    try {
+      await todoApi.removeMember(roomId, todoId, memberId);
+      if (isChecked) {
+        dispatch(exitMyTodo(todoId));
+      } else {
+        dispatch(exitMyTodoNotChecked(todoId));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
 export const __memberHandler =
   (roomId, todoId, memberName) => async (dispatch, getState) => {
+    console.log(roomId, todoId, memberName);
     const memberList = getState().member.allMembers;
     const currentTodo = getState().todos.todos;
     const targetIdx = memberList.findIndex(
@@ -180,6 +205,7 @@ const initialState = {
   todos: [],
   checkedTodo: null,
   notCheckedTodo: null,
+  todosCount: null,
 };
 
 export const todos = handleActions(
@@ -254,10 +280,33 @@ export const todos = handleActions(
         const targetIdx = state.todos.findIndex(
           (todo) => todo.todoId === todoId
         );
+
         const targetMember = state.todos[targetIdx].members.findIndex(
           (member) => member.memberId === memberId
         );
         draft.todos[targetIdx].members.splice(targetMember, 1);
+      }),
+
+    [EXIT_MY_TODO]: (state, { payload }) =>
+      produce(state, (draft) => {
+        const { todoId } = payload;
+        const targetTodo = state.checkedTodo.findIndex(
+          (todo) => todo.todoId === todoId
+        );
+        console.log(targetTodo);
+        draft.checkedTodo.splice(targetTodo, 1);
+      }),
+
+    [EXIT_MY_TODO_NOT_CHECKED]: (state, { payload }) =>
+      produce(state, (draft) => {
+        const { todoId } = payload;
+        console.log(todoId);
+        console.log(state.notCheckedTodo);
+        const targetTodo = state.notCheckedTodo.findIndex(
+          (todo) => todo.todoId === todoId
+        );
+        console.log(targetTodo);
+        draft.notCheckedTodo.splice(targetTodo, 1);
       }),
 
     [ADD_MEMBER]: (state, { payload }) =>
@@ -272,6 +321,12 @@ export const todos = handleActions(
     [RESET_TODOS]: (state, { payload }) =>
       produce(state, (draft) => {
         draft.todos = [];
+      }),
+
+    [TODOS_COUNT]: (state, { payload }) =>
+      produce(state, (draft) => {
+        console.log(payload);
+        draft.todosCount = payload.todosCount;
       }),
   },
 

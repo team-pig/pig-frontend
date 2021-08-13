@@ -9,7 +9,6 @@ import { userApi } from "../../api/userApi";
 // action
 const LOGIN = "user/LOGIN";
 const LOGIN_CHECK = "user/LOGIN_CHECK";
-const REGISTER = "user/REGISTER";
 const LOGOUT = "user/LOGOUT";
 
 // action creator
@@ -18,7 +17,6 @@ const loginCheck = createAction(LOGIN_CHECK, (isLogin, user) => ({
   isLogin,
   ...user,
 }));
-const register = createAction(REGISTER, (userInfo) => ({ userInfo }));
 const logout = createAction(LOGOUT, (userInfo) => ({ userInfo }));
 
 // Thunk
@@ -38,7 +36,7 @@ export const __login =
       dispatch(login({ email, id }));
       history.replace("/roomlist");
     } catch (e) {
-      console.log(e);
+      window.alert(e.response.data.message);
     }
   };
 
@@ -61,12 +59,11 @@ export const __register =
   (userInfo) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { data } = userApi.register(userInfo);
-      console.log(data);
-      dispatch(register(userInfo));
+      await userApi.register(userInfo);
+      window.alert("회원가입이 완료되었습니다! ✨");
       history.replace("/login");
     } catch (e) {
-      console.log(e);
+      window.alert(e.response.data.errorMessage);
     }
   };
 
@@ -88,10 +85,7 @@ const user = handleActions(
         draft.user.nickname = action.payload.nickname;
         draft.user.userId = action.payload._id;
       }),
-    [REGISTER]: (state, action) =>
-      produce(state, (draft) => {
-        // draft.userInfo = action.payload.userInfo; // api 연결 후 수정 필요
-      }),
+
     [LOGOUT]: (state, action) =>
       produce(state, (draft) => {
         draft.isLogin = false;

@@ -24,7 +24,7 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
   const dispatch = useDispatch();
   const bucketName = "제목없는 버킷";
   const cardTitle = "눌러서 제목 수정";
-  const initDate = moment(Date.now()).format("YYYY-MM-DD");
+  const initDate = moment().format("YYYY-MM-DD");
   const initColor = "blue";
 
   // 전역변수

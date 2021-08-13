@@ -211,6 +211,7 @@ export const __createCard =
         bucketId,
         roomId,
         cardTitle,
+        endDate: initDate,
         color: initColor,
       };
 

@@ -23,7 +23,7 @@ const Todos = ({ cardId }) => {
 
   useEffect(() => {
     dispatch(__loadTodos(roomId, cardId));
-  }, []);
+  }, [roomId, cardId, dispatch]);
 
   const formik = useFormik({
     initialValues: {

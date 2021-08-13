@@ -18,12 +18,14 @@ import CardModal from "../feature/board/CardModal";
 import CalendarModalForms from "../feature/timeline/CalendarModalForms";
 import Todos from "../feature/board/Todos";
 import { Text } from "../elem";
+import { resetTodos } from "../redux/modules/todos";
 
 const Calendar = (props) => {
   const { roomId } = useParams();
 
   const dispatch = useDispatch();
   const current = useSelector((state) => state.date.current);
+  const modalId = useSelector((state) => state.calendar.modalId);
 
   const currentContent = useSelector((state) =>
     state.calendar.scheduleList.find(
@@ -37,6 +39,7 @@ const Calendar = (props) => {
   useEffect(() => {
     return () => {
       dispatch(resetTimeline());
+      dispatch(resetTodos());
     };
   }, [dispatch]);
 
@@ -71,7 +74,7 @@ const Calendar = (props) => {
           <TodosHeader type="sub_2" color="black">
             할 일
           </TodosHeader>
-          <Todos />
+          <Todos cardId={modalId} />
         </CardModal>
       )}
     </CalendarBox>

@@ -7,6 +7,7 @@ import "../../themes/niceDate.css";
 import { __editCardInfos } from "../../redux/modules/board";
 import moment from "moment";
 import styled from "styled-components";
+import { __editSchedule } from "../../redux/modules/calendar";
 
 const modifiers = {
   // disabled: (date) => getDay(date) === 6, // Disables Saturdays
@@ -25,6 +26,7 @@ const DatePickerExample = ({
   roomId,
   cardId,
   content,
+  mode,
 }) => {
   const dispatch = useDispatch();
   return (
@@ -36,12 +38,16 @@ const DatePickerExample = ({
       onStartDateChange={(date) => {
         const formatDate = moment(date).format("YYYY-MM-DD");
         setStartDate(date);
-        dispatch(__editCardInfos(roomId, { cardId, startDate: formatDate }));
+        mode === "card"
+          ? dispatch(__editCardInfos(roomId, { cardId, startDate: formatDate }))
+          : dispatch(__editSchedule(roomId, { cardId, startDate: formatDate }));
       }}
       onEndDateChange={(date) => {
         const formatDate = moment(date).format("YYYY-MM-DD");
         setEndDate(date);
-        dispatch(__editCardInfos(roomId, { cardId, endDate: formatDate }));
+        mode === "card"
+          ? dispatch(__editCardInfos(roomId, { cardId, endDate: formatDate }))
+          : dispatch(__editSchedule(roomId, { cardId, endDate: formatDate }));
       }}
       minimumDate={new Date()}
       minimumLength={0}

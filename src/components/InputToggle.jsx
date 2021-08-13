@@ -94,7 +94,10 @@ const InputToggle = ({
   };
 
   return (
-    <Container onClick={!editMode ? () => setEditMode((pre) => !pre) : null}>
+    <Container
+      onClick={!editMode ? () => setEditMode((pre) => !pre) : null}
+      editMode={editMode}
+    >
       {editMode ? (
         returnShape()
       ) : (
@@ -108,12 +111,17 @@ const Container = styled.div`
   ${scrollbar};
   width: 100%;
   height: 100%;
+  overflow: auto;
   ${(props) =>
     props.border &&
     css`
       border: 1px solid var(--line);
     `}
-  overflow: auto;
+  ${(props) =>
+    !props.editMode &&
+    css`
+      cursor: pointer;
+    `}
 `;
 
 const EditInput = styled.input`
@@ -138,7 +146,7 @@ const EditTextarea = styled.textarea`
 `;
 
 const TextAreaResult = styled(Text)`
-  cursor: text !important;
+  cursor: pointer !important;
   word-break: break-all;
   white-space: pre-wrap;
   overflow-y: auto;

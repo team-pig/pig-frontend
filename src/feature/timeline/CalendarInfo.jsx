@@ -159,15 +159,6 @@ const CalendarInfo = ({
             })}
         </Right>
       </Container>
-      {showModal && modalContent && (
-        <CardModal showModal={showModal} setShowModal={setShowModal}>
-          <CalendarModal
-            content={modalContent}
-            setContent={setModalContent}
-            setShowModal={setShowModal}
-          />
-        </CardModal>
-      )}
     </>
   );
 };

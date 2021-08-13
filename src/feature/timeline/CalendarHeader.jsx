@@ -15,6 +15,7 @@ import { __addSchedule } from "../../redux/modules/calendar";
 import { IconBtn, Text } from "../../elem";
 import flex from "../../themes/flex";
 import Icon from "../../components/Icon";
+import { useParams } from "react-router-dom";
 
 const CalendarHeader = ({
   modalContent,
@@ -22,6 +23,8 @@ const CalendarHeader = ({
   showModal,
   setShowModal,
 }) => {
+  const { roomId } = useParams();
+
   const dispatch = useDispatch();
   const current = useSelector((state) => state.date.current);
 
@@ -35,7 +38,7 @@ const CalendarHeader = ({
 
   const clickCreateBtn = () => {
     setShowModal((pre) => !pre);
-    dispatch(__addSchedule());
+    dispatch(__addSchedule(roomId));
   };
 
   return (
@@ -63,15 +66,6 @@ const CalendarHeader = ({
           </IconBtn>
         </BtnBox>
       </Header>
-      {showModal && modalContent && (
-        <CardModal showModal={showModal} setShowModal={setShowModal}>
-          <CalendarModal
-            content={modalContent}
-            setContent={setModalContent}
-            setShowModal={setShowModal}
-          />
-        </CardModal>
-      )}
     </>
   );
 };

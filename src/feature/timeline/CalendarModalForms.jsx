@@ -45,7 +45,9 @@ const CalendarModalForms = ({ content, setModalContent, setShowModal }) => {
 
   return (
     <Container>
-      <BucketSelect bucketId={content.bucketId} cardId={content.cardId} />
+      <StyleDiv mg="0 -42px 0 -42px">
+        <BucketSelect bucketId={content.bucketId} cardId={content.cardId} />
+      </StyleDiv>
 
       <StyleDiv wh={["480px", "26px"]} mg="0 0 20px 0">
         <StyleDiv flex={["flex-start", "center", "10"]}>
@@ -115,7 +117,7 @@ const CalendarModalForms = ({ content, setModalContent, setShowModal }) => {
 };
 
 const Container = styled.div`
-  padding: 78px 40px 40px 40px;
+  padding: 20px 40px 40px 40px;
 `;
 
 const StyleDiv = styled.div`

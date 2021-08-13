@@ -280,7 +280,7 @@ const Item = styled.li`
 `;
 
 const TextBtn = styled.button`
-  padding: 5px;
+  padding: 10px;
   margin-right: -10px;
 `;
 

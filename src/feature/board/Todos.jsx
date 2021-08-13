@@ -113,7 +113,7 @@ const TodoInput = styled.input`
 const TodoForm = styled.form`
   ${flex("between", "center")}
   width: 478px;
-  margin: 0 auto;
+  margin: 10px auto;
 `;
 
 const TodoList = styled.div`

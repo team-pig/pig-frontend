@@ -157,7 +157,7 @@ export const __deleteSchedule =
   (roomId, cardId) =>
   async (dispatch, getState, { history }) => {
     try {
-      await cardApi.deleteCard(cardId, roomId);
+      await cardApi.deleteCard("", cardId, roomId);
       dispatch(deleteSchedule(cardId));
     } catch (e) {
       console.log("삭제에 실패했습니다.", e);

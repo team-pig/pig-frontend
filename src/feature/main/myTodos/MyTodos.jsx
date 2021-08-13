@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { __loadMyTodos, __switchTodoStat } from "../../../redux/modules/todos";
+import {
+  __loadMyTodos,
+  __switchTodoStat,
+  __removeMyTodo,
+} from "../../../redux/modules/todos";
 import Icon from "../../../components/Icon";
 
 import { IconBtn, Text, Input } from "../../../elem";
@@ -13,7 +17,7 @@ const MyTodos = () => {
   const dispatch = useDispatch();
   const { roomId } = useParams();
   const { checkedTodo, notCheckedTodo } = useSelector((state) => state.todos);
-  console.log(checkedTodo);
+  const myId = useSelector((state) => state.user.user.userId);
 
   useEffect(() => {
     dispatch(__loadMyTodos(roomId));
@@ -63,7 +67,18 @@ const MyTodos = () => {
                     <Text type="sub_2">{item.todoTitle}</Text>
                   </Grid>
                   <RemoveGrid>
-                    <IconBtn _onClick={() => {}}>
+                    <IconBtn
+                      _onClick={() => {
+                        dispatch(
+                          __removeMyTodo(
+                            roomId,
+                            item.todoId,
+                            myId,
+                            item.isChecked
+                          )
+                        );
+                      }}
+                    >
                       <RemoveIcon icon="remove" size="20px" />
                     </IconBtn>
                   </RemoveGrid>
@@ -106,7 +121,18 @@ const MyTodos = () => {
                   <Text type="sub_2">{item.todoTitle}</Text>
                 </Grid>
                 <RemoveGrid>
-                  <IconBtn _onClick={() => {}}>
+                  <IconBtn
+                    _onClick={() => {
+                      dispatch(
+                        __removeMyTodo(
+                          roomId,
+                          item.todoId,
+                          myId,
+                          item.isChecked
+                        )
+                      );
+                    }}
+                  >
                     <RemoveIcon icon="remove" size="20px" />
                   </IconBtn>
                 </RemoveGrid>

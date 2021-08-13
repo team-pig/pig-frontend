@@ -19,6 +19,7 @@ import { __loadCardById, __deleteCard } from "../../redux/modules/board";
 const Card = ({ card, index, bucketId }) => {
   const dispatch = useDispatch();
   const currentContent = useSelector((state) => state.board.card);
+  // const todosCnt = useSelector((state) => state.todos.todosCount);
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState({});
 
@@ -69,7 +70,7 @@ const Card = ({ card, index, bucketId }) => {
               <CardFooter>
                 <EndDate>
                   <Text type="body_4" color="grey">
-                    {card.endDate}
+                    10
                   </Text>
                   <Text type="body_4" color="notice">
                     D-{moment(moment(card.endDate) - Date.now()).format("DD")}
@@ -85,7 +86,7 @@ const Card = ({ card, index, bucketId }) => {
                   <StatCnt>
                     <Icon icon="my" size="20px" color="var(--grey)" />
                     <Text color="grey" type="body_4">
-                      14
+                      {card.memberCount}
                     </Text>
                   </StatCnt>
                 </CardStat>

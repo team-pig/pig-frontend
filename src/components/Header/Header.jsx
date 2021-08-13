@@ -61,19 +61,11 @@ const Header = () => {
                 <NameBtn>
                   <NameTag name={user.nickname} />
                 </NameBtn>
+                <Item onClick={() => dispatch(__logout())}>로그아웃</Item>
               </Btns>
-              <Logout
-                onClick={() => {
-                  dispatch(__logout());
-                }}
-              >
-                로그아웃
-              </Logout>
             </>
           )}
         </RightSide>
-        {/* 로그아웃 모달 필요  */}
-        {/* 임시버튼 */}
       </InsideBox>
     </Container>
   );
@@ -108,7 +100,9 @@ const LeftSide = styled.section`
 `;
 
 const RightSide = styled.section`
+  ${flex("start", "center")};
   ${mobileHidden};
+  height: 100%;
   margin-right: -16px;
 `;
 
@@ -122,14 +116,18 @@ const LogoBox = styled.div`
   cursor: pointer;
 `;
 
-const Nav = styled.nav``;
+const Nav = styled.nav`
+  height: 100%;
+`;
 
 const List = styled.ul`
   ${flex("start")}
+  height: 100%;
 `;
 
-const Item = styled.li`
+const Item = styled.button`
   ${button};
+  height: 100%;
   margin: 0;
   padding: 4px 16px;
   color: var(--main);
@@ -138,26 +136,18 @@ const Item = styled.li`
 
 const Btns = styled.div`
   ${flex("center", "center")}
+  height: 100%;
   margin-right: -24px;
 `;
 
 const IconBtn = styled.button`
+  height: 100%;
   padding: 7px 14px;
 `;
 
 const NameBtn = styled.button`
+  height: 100%;
   padding: 12px 24px;
-`;
-
-// 임시버튼
-const Logout = styled.button`
-  ${button}
-  position: absolute;
-  bottom: 15px;
-  right: 250px;
-  padding: 8px 16px;
-  color: white;
-  background-color: var(--notice);
 `;
 
 export default Header;

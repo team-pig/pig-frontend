@@ -6,11 +6,14 @@ import NameTag from "../Header/NameTag";
 import Icon from "../Icon";
 import WSTabs from "../WSTabs";
 import { Text } from "../../elem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import flex from "../../themes/flex";
+import { __logout } from "../../redux/modules/user";
 
 const WSHeader = ({ url }) => {
   const history = useHistory();
+
+  const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.user);
 
@@ -31,8 +34,13 @@ const WSHeader = ({ url }) => {
             <Icon icon="notice-focus" size="28px" />
           </HeaderBtn>
         </Icons>
-        <HeaderBtn>
+        <NameBtn>
           <NameTag name={user.nickname} />
+        </NameBtn>
+        <HeaderBtn onClick={() => dispatch(__logout())}>
+          <Text type="button" color="var(--black)">
+            로그아웃
+          </Text>
         </HeaderBtn>
       </RightSide>
     </Container>
@@ -67,12 +75,15 @@ const TitleBox = styled.div`
 
 const Icons = styled.div`
   display: flex;
-  gap: 28px;
-  margin-right: 38px;
 `;
 
 const HeaderBtn = styled.button`
+  padding: 14px;
   cursor: pointer;
+`;
+
+const NameBtn = styled.button`
+  padding: 0 18px;
 `;
 
 export default WSHeader;

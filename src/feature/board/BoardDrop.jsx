@@ -108,7 +108,7 @@ const ColorPicker = styled.div`
 const ColorItem = styled.div`
   ${flex("center", "center")}
   position: absolute;
-  left: 50%;
+  left: 300%;
   bottom: -70px;
   transform: translateX(-50%);
   border: 1px solid var(--line);
@@ -117,6 +117,7 @@ const ColorItem = styled.div`
   height: 60px;
   border-radius: 10px;
   background-color: var(--white);
+  z-index: 99;
 `;
 
 // ---- default drop down ---- //

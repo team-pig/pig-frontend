@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
+import styled, { css } from "styled-components";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Text } from "../../elem";
-import { __editCardInfos, resetCard } from "../../redux/modules/board";
-import { resetTodos } from "../../redux/modules/todos";
-
-import styled, { css } from "styled-components";
-import InputToggle from "../../components/InputToggle";
 import DatePickerExample from "./DatePicker";
-import BoardDrop from "./BoardDrop";
 import moment from "moment";
+
+import { resetTodos } from "../../redux/modules/todos";
+import { __editCardInfos, resetCard } from "../../redux/modules/board";
+
+import BoardDrop from "./BoardDrop";
+import InputToggle from "../../components/InputToggle";
+import { scrollbar } from "../../themes/scrollbar";
+import { Text } from "../../elem";
 
 const ModalForms = ({ content }) => {
   const dispatch = useDispatch();

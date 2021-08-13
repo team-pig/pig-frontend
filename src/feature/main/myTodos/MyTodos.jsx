@@ -1,39 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { __loadMyTodos } from "../../../redux/modules/todos";
+import { __loadMyTodos, __switchTodoStat } from "../../../redux/modules/todos";
 import Icon from "../../../components/Icon";
 
-import { IconBtn, Text } from "../../../elem";
+import { IconBtn, Text, Input } from "../../../elem";
 import flex from "../../../themes/flex";
+import { body_2 } from "../../../themes/textStyle";
 
 const MyTodos = () => {
   const dispatch = useDispatch();
   const { roomId } = useParams();
-  const loadedMyTodos = useSelector((state) => state.todos.myTodos);
-  console.log(loadedMyTodos);
+  const { checkedTodo, notCheckedTodo } = useSelector((state) => state.todos);
+  console.log(checkedTodo);
 
   useEffect(() => {
     dispatch(__loadMyTodos(roomId));
   }, []);
 
-  // 더미데이터
-
-  const toggleTodo = (todoId) => {
-    // const idx = myTodos.findIndex((todo) => todo.todoId === todoId);
-    // const newAry = myTodos.slice();
-    // newAry[idx] = { ...newAry[idx], isChecked: !newAry[idx].isChecked };
-    // console.log(newAry);
-    // setMyTodos(newAry);
-  };
-
-  const deleteTodo = (todoId) => {
-    // const newAry = myTodos.slice().filter((todo) => todo.todoId !== todoId);
-    // setMyTodos(newAry);
-  };
-
-  if (!loadedMyTodos) return <></>;
   return (
     <Container>
       <TitleBox>
@@ -41,27 +26,94 @@ const MyTodos = () => {
           나의 할 일 목록
         </Text>
       </TitleBox>
-      <List>
-        {loadedMyTodos.map((item) => (
-          <Item key={item.todoId}>
-            <Grid>
-              <IconBtn _onClick={() => toggleTodo(item.todoId)}>
-                {!item.isChecked ? (
-                  <Icon icon="checkbox" size="20px" />
-                ) : (
-                  <Icon icon="checkbox-filled" size="20px" />
-                )}
-              </IconBtn>
-              <Text type="sub_2">{item.todoTitle}</Text>
-            </Grid>
-            <RemoveGrid>
-              <IconBtn _onClick={() => deleteTodo(item.todoId)}>
-                <RemoveIcon icon="remove" size="20px" />
-              </IconBtn>
-            </RemoveGrid>
-          </Item>
-        ))}
-      </List>
+      <MyTodoList>
+        <List>
+          <TodosTitle>아직 못한 일</TodosTitle>
+          {notCheckedTodo &&
+            notCheckedTodo.map((item) => {
+              return (
+                <Item key={item.todoId}>
+                  <Grid>
+                    <>
+                      <Input
+                        none
+                        type="checkbox"
+                        name="isChecked"
+                        id={item.todoId}
+                        checked={item.isChecked}
+                        _onChange={({ target }) => {
+                          dispatch(
+                            __switchTodoStat(
+                              roomId,
+                              item.todoId,
+                              target.checked,
+                              item.todoTitle
+                            )
+                          );
+                        }}
+                      />
+                      <Label htmlFor={item.todoId}>
+                        {item.isChecked ? (
+                          <Icon icon="checkbox-filled" size="20px" />
+                        ) : (
+                          <Icon icon="checkbox" size="20px" />
+                        )}
+                      </Label>
+                    </>
+                    <Text type="sub_2">{item.todoTitle}</Text>
+                  </Grid>
+                  <RemoveGrid>
+                    <IconBtn _onClick={() => {}}>
+                      <RemoveIcon icon="remove" size="20px" />
+                    </IconBtn>
+                  </RemoveGrid>
+                </Item>
+              );
+            })}
+        </List>
+        <List>
+          <TodosTitle>완료한 일</TodosTitle>
+          {checkedTodo &&
+            checkedTodo.map((item) => (
+              <Item key={item.todoId}>
+                <Grid>
+                  <>
+                    <Input
+                      none
+                      type="checkbox"
+                      name="isChecked"
+                      id={item.todoId}
+                      checked={item.isChecked}
+                      _onChange={({ target }) => {
+                        dispatch(
+                          __switchTodoStat(
+                            roomId,
+                            item.todoId,
+                            target.checked,
+                            item.todoTitle
+                          )
+                        );
+                      }}
+                    />
+                    <Label htmlFor={item.todoId}>
+                      {item.isChecked ? (
+                        <Icon icon="checkbox-filled" size="20px" />
+                      ) : (
+                        <Icon icon="checkbox" size="20px" />
+                      )}
+                    </Label>
+                  </>
+                  <Text type="sub_2">{item.todoTitle}</Text>
+                </Grid>
+                <RemoveGrid>
+                  <IconBtn _onClick={() => {}}>
+                    <RemoveIcon icon="remove" size="20px" />
+                  </IconBtn>
+                </RemoveGrid>
+              </Item>
+            ))}
+        </List>
+      </MyTodoList>
     </Container>
   );
 };
@@ -77,6 +129,7 @@ const TitleBox = styled.div`
 const List = styled.ul`
   ${flex("start", "start", false)};
   width: 100%;
+  min-height: 100px;
 `;
 
 const Grid = styled.div`
@@ -113,6 +166,20 @@ const Item = styled.li`
       visibility: initial;
     }
   }
+`;
+
+const MyTodoList = styled.div`
+  ${flex("between", "start")}
+  width: 1220px;
+`;
+
+const TodosTitle = styled.div`
+  ${body_2}
+  padding: 10px 20px;
+`;
+
+const Label = styled.label`
+  cursor: pointer;
 `;
 
 export default MyTodos;

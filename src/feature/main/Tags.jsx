@@ -4,16 +4,22 @@ import styled from "styled-components";
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
 
-const Tags = ({ tags, gap, textType }) => {
+const Tags = ({ tag, gap, textType }) => {
+  const newTags =
+    typeof tag === "string" ? tag.split(",").map((info) => info.trim()) : tag;
+
   return (
     <TagBox gap={gap}>
-      {tags.map((tag, idx) => (
-        <Tag key={idx}>
-          <Text type={textType ? textType : "body_4"} color="darkgrey">
-            {tag}
-          </Text>
-        </Tag>
-      ))}
+      {newTags.map((tag, idx) => {
+        console.log(tag);
+        return (
+          <Tag key={idx}>
+            <Text type={textType ? textType : "body_4"} color="darkgrey">
+              {tag}
+            </Text>
+          </Tag>
+        );
+      })}
     </TagBox>
   );
 };

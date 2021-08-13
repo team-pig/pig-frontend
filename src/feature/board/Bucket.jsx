@@ -22,7 +22,7 @@ import Icon from "../../components/Icon";
 
 const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
   const dispatch = useDispatch();
-  const bucketName = "제목없는 버킷";
+  const bucketName = "제목 없음";
   const cardTitle = "눌러서 제목 수정";
   const initDate = moment().format("YYYY-MM-DD");
   const initColor = "blue";

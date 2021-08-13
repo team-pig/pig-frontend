@@ -81,7 +81,6 @@ const WSTabs = ({ url }) => {
   );
 };
 
-// 가짜 스타일
 const List = styled.nav`
   display: flex;
   align-items: center;

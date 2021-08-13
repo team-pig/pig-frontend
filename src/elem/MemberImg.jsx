@@ -27,7 +27,7 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
                 <ProfileImg
                   style={{
                     position: "relative",
-                    left: (members.length - 1 - idx) * 7,
+                    left: (members.length - 1 - idx) * 6,
                   }}
                   key={idx}
                   {...member}
@@ -39,7 +39,7 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
                 <ProfileImg
                   style={{
                     position: "relative",
-                    left: -idx * 7,
+                    left: -idx * 6,
                   }}
                   key={idx}
                   {...member}
@@ -75,8 +75,8 @@ const ProfileImg = styled.div`
 const Nickname = styled.span`
 margin: 0 auto;
 color: var(--black);
-font-size: 18px;
-font-weight: 700;
+font-size: 17px;
+font-weight: 800;
 line-height: 30px;
 vertical-align: middle;
 `;

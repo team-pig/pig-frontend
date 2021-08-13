@@ -7,7 +7,7 @@ const RoomTags = ({ tag, type }) => {
   if (type === "modal") {
     return (
       <>
-        {tag.map((item, idx) => {
+        {tag && tag.map((item, idx) => {
           return <Tag key={idx}>#{item}</Tag>;
         })}
       </>
@@ -15,7 +15,7 @@ const RoomTags = ({ tag, type }) => {
   } else {
     return (
       <Text type="body_2">
-        {tag.map((item, idx) => {
+        {tag && tag.map((item, idx) => {
           return <Tag key={idx}>#{item}</Tag>;
         })}
       </Text>

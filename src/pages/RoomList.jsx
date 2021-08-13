@@ -46,7 +46,7 @@ const RoomList = ({ history }) => {
     // dispatch(__getUnMarkedList());
   }, []);
 
-  // const changeSearchContent = 
+  // const changeSearchContent =
   // async (e) => {
   //   // const keyword = e.target.value;
   //   // await setSearchContent(keyword);
@@ -77,15 +77,15 @@ const RoomList = ({ history }) => {
   //       console.log(e);
   //     }
   //   })
-    
+
   // }, 500);
 
-const changeSearchContent = (keyword) => {
-  dispatch(__searchRoom(keyword));
-  setSearchContent(keyword);
-}
+  const changeSearchContent = (keyword) => {
+    dispatch(__searchRoom(keyword));
+    setSearchContent(keyword);
+  };
 
-const delay = _.debounce(changeSearchContent, 500);
+  const delay = _.debounce(changeSearchContent, 500);
 
   const _onKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -129,8 +129,10 @@ const delay = _.debounce(changeSearchContent, 500);
       }
     })
     .map((room, idx) => {
+      const isCheck = room.bookmarkedMembers.includes(userId);
       return (
         <RoomCard
+          isMarked={isCheck ? true : false}
           userId={userId}
           openDrop={openDrop}
           closeDrop={closeDrop}
@@ -203,7 +205,9 @@ const delay = _.debounce(changeSearchContent, 500);
               <SearchInput
                 // ref={inputRef}
                 // onKeyUp={changeSearchContent}
-                onKeyUp={(e) => {delay(e.target.value)}}
+                onKeyUp={(e) => {
+                  delay(e.target.value);
+                }}
                 // onChange={changeSearchContent}
                 onKeyPress={_onKeyPress}
                 type="text"
@@ -273,7 +277,7 @@ const InputBox = styled.div`
 `;
 
 const SearchInput = styled.input`
-width: 100%;
+  width: 100%;
   height: 46px;
   padding-left: 45px;
   border: 1px solid var(--line);

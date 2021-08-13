@@ -6,8 +6,10 @@ import produce from "immer";
 import moment from "moment";
 import { cardApi } from "../../api/cardApi";
 import { todoApi } from "../../api/todoApi";
+import { bucketApi } from "../../api/bucketApi";
 
 // action
+const LOAD_BUCKETS = "calendar/LOAD_BUCKETS";
 const SET_CURRENT_ID = "calendar/SET_CURRENT_ID";
 const SET_MODAL_ID = "calendar/SET_MODAL_ID";
 const LOAD_SCHEDULES = "calendar/LOAD_SCHEDULES";
@@ -17,9 +19,13 @@ const ADD_SCHEDULE = "calendar/ADD_SCHEDULE";
 const EDIT_SCHEDULE = "calendar/EDIT_SCHEDULE";
 const DELETE_SCHEDULE = "calendar/DELETE_SCHEDULE";
 const GET_TODO_BY_SCHEDULE = "calendar/GET_TODO_BY_SCHEDULE";
+const RESET_TIMELINE = "calendar/RESET_TIMELINE";
 
 // action creator
-
+const loadBuckets = createAction(LOAD_BUCKETS, (buckets, bucketOrders) => ({
+  buckets,
+  bucketOrders,
+}));
 export const setCurrentId = createAction(SET_CURRENT_ID, (id) => ({ id }));
 export const setModalId = createAction(SET_MODAL_ID, (id) => ({ id }));
 const loadSchedules = createAction(LOAD_SCHEDULES, (schedules) => ({
@@ -40,18 +46,21 @@ const deleteSchedule = createAction(DELETE_SCHEDULE, (scheduleId) => ({
 const getTodoBySchedule = createAction(GET_TODO_BY_SCHEDULE, (todos) => ({
   todos,
 }));
-
-// defaultSchedule(스케줄 기본값)
-const defaultSchedule = {
-  cardTitle: "",
-  startDate: moment().clone().format("YYYY-MM-DD"),
-  endDate: moment().clone().format("YYYY-MM-DD"),
-  desc: "",
-  color: null,
-  taskMembers: [],
-};
+export const resetTimeline = createAction(RESET_TIMELINE);
 
 // thunk
+export const __loadBuckets =
+  (roomId) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      const { data } = await bucketApi.getBuckets(roomId);
+      console.log(data);
+      dispatch(loadBuckets(data.buckets, data.bucketOrder.bucketOrder));
+    } catch (e) {
+      console.log("버킷을 불러올 수 없습니다.", e);
+    }
+  };
+
 // 모든 일정을 받아오는 thunk 함수 (월 이동 시 불러옴, lodash-debounce 사용)
 export const __loadSchedules =
   (roomId, date) =>
@@ -66,12 +75,28 @@ export const __loadSchedules =
 
 // schedule 새로 생성 thunk 함수
 export const __addSchedule =
-  (roomId) =>
-  (dispatch, getState, { history }) => {
-    // 모두 빈 값으로 저장
-    // response로 오는 id를 currentId에 저장
-    let cardId = Date.now();
-    let scheduleObj = { ...defaultSchedule, cardId };
+  (roomId, bucketId) =>
+  async (dispatch, getState, { history }) => {
+    const cardTitle = "제목 없음";
+    const initDate = moment().format("YYYY-MM-DD");
+    const initColor = "blue";
+
+    const { data } = await cardApi.createCard(
+      roomId,
+      bucketId,
+      cardTitle,
+      initDate,
+      initColor
+    );
+    let scheduleObj = {
+      roomId,
+      bucketId,
+      cardTitle,
+      startDate: initDate,
+      endDate: initDate,
+      color: initColor,
+      cardId: data.cardId,
+    };
     dispatch(addSchedule(scheduleObj));
   };
 
@@ -114,6 +139,8 @@ export const __getTodoBySchedule =
 
 // initialState
 const initialState = {
+  buckets: [],
+  bucketOrders: [],
   scheduleList: [],
   currentList: [],
   currentScheduleId: null,
@@ -124,6 +151,11 @@ const initialState = {
 // reducer
 const calendar = handleActions(
   {
+    [LOAD_BUCKETS]: (state, action) =>
+      produce(state, (draft) => {
+        draft.buckets = action.payload.buckets;
+        draft.bucketOrders = action.payload.bucketOrders;
+      }),
     [SET_CURRENT_ID]: (state, action) =>
       produce(state, (draft) => {
         draft.currentScheduleId = action.payload.id;
@@ -147,6 +179,7 @@ const calendar = handleActions(
     [ADD_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
         const { schedule } = action.payload;
+        console.log(schedule);
         draft.modalId = schedule.cardId;
         draft.scheduleList.push(action.payload.schedule);
       }),
@@ -171,6 +204,10 @@ const calendar = handleActions(
     [GET_TODO_BY_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
         draft.currentTodos = action.payload.todos;
+      }),
+    [RESET_TIMELINE]: (state, action) =>
+      produce(action, (draft) => {
+        Object.entries(initialState).forEach((ary) => (draft[ary[0]] = ary[1]));
       }),
   },
   initialState

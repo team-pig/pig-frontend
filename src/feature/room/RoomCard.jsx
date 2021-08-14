@@ -71,10 +71,9 @@ const RoomCard = ({
     e.stopPropagation();
     e.preventDefault();
 
-
-     dispatch(__toggleBookmark(roomId, isMarked));
-     dispatch(__getMarkedList());
-     dispatch(__getUnMarkedList());
+     await dispatch(__toggleBookmark(roomId, isMarked));
+     await dispatch(__getMarkedList());
+     await dispatch(__getUnMarkedList());
      dispatch(__getMergedList());
     console.log(isMarked);
     console.log("즐겨찾기 취소");

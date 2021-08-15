@@ -8,6 +8,7 @@ import ModifyRoomModal from "./ModifyRoomModal";
 import Icon from "../../components/Icon";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import Drop from "../../components/Drop";
+import DropDown from "./DropDown";
 //elements
 import { Text, IconBtn } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
@@ -49,7 +50,7 @@ const RoomCard = ({
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
   const [showAllMember, setShowAllMember] = useState(false);
- 
+  const [isDisplayDrop, setIsDisplayDrop] = useState(false);
 
   useEffect(() => {
     memberCount();
@@ -70,7 +71,7 @@ const RoomCard = ({
   const clickBookmark = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-
+   
      await dispatch(__toggleBookmark(roomId, isMarked));
      await dispatch(__getMarkedList());
      await dispatch(__getUnMarkedList());
@@ -80,18 +81,18 @@ const RoomCard = ({
   
   };
 
-  
 
+  
   const exitRoom = (e) => {
     e.stopPropagation();
     dispatch(__exitRoom(roomId));
-
-
+    setIsDisplayDrop(false);
   };
 
   const deleteRoom = (e) => {
     e.stopPropagation();
     dispatch(__deleteRoom(roomId));
+    setIsDisplayDrop(false);
 
     // closeDrop();
   };
@@ -100,7 +101,7 @@ const RoomCard = ({
     e.stopPropagation();
     setShowModModal(true);
     roomId = { roomId };
-
+    setIsDisplayDrop(false);
     // closeDrop();
   };
 
@@ -156,7 +157,7 @@ const RoomCard = ({
             {/* <IconBtn padding="0" _onClick={handleClick} >
               <Icon icon="more" size="24px" />
             </IconBtn> */}
-            <Drop.Container
+            {/* <Drop.Container
              
               width="84px"
               height="126px"
@@ -171,7 +172,8 @@ const RoomCard = ({
               <Drop.Item height="42px" color="darkgrey" _onClick={deleteRoom}>
                 삭제
               </Drop.Item>
-            </Drop.Container>
+            </Drop.Container> */}
+            <DropDown isDisplayDrop={isDisplayDrop} setIsDisplayDrop={setIsDisplayDrop} exitRoom={exitRoom} deleteRoom={deleteRoom} openModModal={openModModal}></DropDown>
           </FooterItem>
         </CardFooter>
       </Container>

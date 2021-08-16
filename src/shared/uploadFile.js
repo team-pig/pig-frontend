@@ -14,7 +14,7 @@ AWS.config.update({
 export const uploadFile = async (file) => {
   const params = {
     Body: file,
-    Key: file.name,
+    Key: file.name + Date.now(),
     Bucket: S3_BUCKET,
     ACL: "public-read",
   };

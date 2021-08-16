@@ -47,7 +47,7 @@ const DocViewer = () => {
       const { data } = await docApi.checkCanEdit(roomId, docId);
 
       if (data.canEdit) history.push(`/workspace/${roomId}/doc/${docId}/edit`);
-      else alert(`현재${data.nickname}님이 수정중입니다.`);
+      else alert(`지금 ${data.nickname}님이 수정중이에요.`);
     } catch (e) {
       console.log(e);
     }

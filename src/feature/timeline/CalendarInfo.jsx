@@ -63,7 +63,13 @@ const CalendarInfo = ({
     dispatch(setModalId(currentId));
   };
 
-  const deleteSchedule = (cardId) => {
+  const deleteSchedule = (cardId, cardTitle) => {
+    if (
+      !window.confirm(
+        `정말 ${cardTitle} 일정을 삭제하시겠어요?\n일정을 삭제하면 보드에서도 삭제됩니다.`
+      )
+    )
+      return;
     dispatch(__deleteSchedule(roomId, cardId));
   };
 
@@ -107,7 +113,9 @@ const CalendarInfo = ({
                 onClick={() => clickSchedule(item.cardId, item.cardTitle)}
               >
                 <ScheduleText type="sub_2">{item.cardTitle}</ScheduleText>
-                <RemoveBtn _onClick={() => deleteSchedule(item.cardId)}>
+                <RemoveBtn
+                  _onClick={() => deleteSchedule(item.cardId, item.cardTitle)}
+                >
                   <Icon icon="remove" size="20px" color="var(--grey)" />
                 </RemoveBtn>
               </CurrentSchedule>

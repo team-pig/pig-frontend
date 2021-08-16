@@ -91,6 +91,13 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
         <Name type="head_7" color="black">
           {nickname}
         </Name>
+        <ActiveEdit
+          onClick={() => {
+            setEditMoe(true);
+          }}
+        >
+          <Icon icon="setting" size="24px" color="#757575" />
+        </ActiveEdit>
         <GraphBox>
           <Graph color="mint" height="15px" percent={memberPercent} />
         </GraphBox>
@@ -99,17 +106,6 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
         <Desc type="body_4" color="darkgrey">
           {desc === null ? "상태 메시지가 없습니다." : desc}
         </Desc>
-        <ActiveEdit
-          onClick={() => {
-            setEditMoe(true);
-          }}
-        >
-          <Icon icon="setting" size="24px" color="#757575" />
-        </ActiveEdit>
-      </Message>
-      <MemberInfo>
-        <Tags tag={tags} />
-        <Line />
         <StatusNums>
           <Text type="body_2" color="darkgrey">
             {memberPercent}% 완료
@@ -118,6 +114,10 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
             ({checked} / {checked + notChecked})
           </Text>
         </StatusNums>
+      </Message>
+      <MemberInfo>
+        <Tags tag={tags} />
+        {/* <Line /> */}
       </MemberInfo>
     </Container>
   );
@@ -144,7 +144,7 @@ const Name = styled(Text)`
 `;
 
 const GraphBox = styled.div`
-  width: 240px;
+  width: 220px;
   margin-left: 50px;
   flex-shrink: 0;
 `;
@@ -162,6 +162,7 @@ const MemberInfo = styled.div`
 const StatusNums = styled.div`
   ${flex("start", "center")};
   gap: 13px;
+  height: 30px;
 `;
 
 const Line = styled.div`

@@ -40,7 +40,7 @@ const DropDown = ({
         {isDisplayDrop && (
           <Container ref={dropDownModal}>
             <Btn onClick={openModModal}>수정</Btn>
-            <Btn exitRoom={exitRoom}>나가기</Btn>
+            <Btn onClick={exitRoom}>나가기</Btn>
             <Btn onClick={deleteRoom}>삭제</Btn>
           </Container>
         )}

@@ -44,7 +44,7 @@ const DocEdit = () => {
     <>
       <Prompt
         when={showPrompt}
-        message="문서가 저장되지 않았습니다. 정말로 떠나시겠습니까?"
+        message="문서가 아직 저장되지 않았어요. 정말로 떠나시겠습니까?"
       />
       <Container>
         {targetDoc && (

@@ -71,7 +71,7 @@ const updateCardLocate = createAction(
   })
 );
 
-const updateCardLocateOtherBucket = createAction(
+export const updateCardLocateOtherBucket = createAction(
   UPDATE_CARD_LOCATE_OTHER_BUCKET,
   (cardId, newBucketInfo) => ({ cardId, newBucketInfo })
 );
@@ -393,7 +393,9 @@ export const board = handleActions(
 
         draft.columns[destinationBucketId].cardOrder = destinationBucketOrder;
         draft.columns[sourceBucketId].cardOrder = sourceBucketOrder;
-        draft.cards[payload.cardId].bucketId = destinationBucketId;
+        if (state.cards) {
+          draft.cards[payload.cardId].bucketId = destinationBucketId;
+        }
       }),
 
     [UPDATE_CARD_INFOS]: (state, { payload }) =>

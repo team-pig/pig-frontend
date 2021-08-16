@@ -88,7 +88,7 @@ const CalendarModalForms = ({ content, setModalContent, setShowModal }) => {
           endDate={endDate}
           setEndDate={setEndDate}
           content={content}
-          mode="schedule" // schedule or card
+          mode="schedule" // card or schedule
         />
         <StyleDiv flex={["center", "center"]}>
           <DateText type="body_2" color="notice">
@@ -121,6 +121,8 @@ const Container = styled.div`
 `;
 
 const StyleDiv = styled.div`
+  position: relative;
+
   ${(props) =>
     props.tb &&
     css`

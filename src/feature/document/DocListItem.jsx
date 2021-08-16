@@ -18,8 +18,8 @@ const DocListItem = memo(({ doc, isCurrentDoc }) => {
   const showDocDetail = (docId) =>
     history.push(`/workspace/${roomId}/doc/${docId}`);
 
-  const clickDelete = () => {
-    // 정말 삭제할거냐는 안내 모달 필요
+  const clickDelete = (title) => {
+    if (!window.confirm(`정말 ${title}을 삭제하시겠습니까?`)) return;
     dispatch(__deleteDoc(docId, roomId));
   };
 
@@ -30,7 +30,7 @@ const DocListItem = memo(({ doc, isCurrentDoc }) => {
         isCurrentDoc={isCurrentDoc}
       >
         {isCurrentDoc ? (
-          <IconBox onClick={clickDelete}>
+          <IconBox onClick={() => clickDelete(doc.title)}>
             <Icon icon="remove" size="14px" color="var(--darkgrey)" />
           </IconBox>
         ) : (

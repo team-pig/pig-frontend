@@ -66,11 +66,7 @@ const Calendar = (props) => {
       <CalendarInfo setShowModal={setShowModal} />
       {showModal && modalContent && (
         <CardModal showModal={showModal} setShowModal={setShowModal}>
-          <CalendarModalForms
-            content={modalContent}
-            setContent={setModalContent}
-            setShowModal={setShowModal}
-          />
+          <CalendarModalForms content={modalContent} />
           <TodosHeader type="sub_2" color="black">
             할 일
           </TodosHeader>

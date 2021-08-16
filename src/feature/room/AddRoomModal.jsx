@@ -13,9 +13,12 @@ import { Button, Input } from "../../elem/index";
 //redux
 import { __addRoom, __editRoom } from "../../redux/modules/room";
 import { setPreview, uploadImageToS3 } from "../../redux/modules/image";
+import ImageModule from "../../components/ImageModule";
+
 
 const AddRoomModal = ({ roomId, showModal, closeModal }) => {
   const dispatch = useDispatch();
+  const [roomImg, setRoomImg] = useState("");
   const [contents, setContents] = useState({
     roomImage: "",
     roomName: "",
@@ -26,32 +29,25 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
   const roomList = useSelector((state) => state.room.room);
   const preview = useSelector((state) => state.image.preview);
 
-  const fileInput = useRef();
+
+  const getImgUrlFromS3 = async(callback, file) => {
+    const result = await callback(file);
+    console.log(result);
+    setContents({roomImage : result})
+    setRoomImg(result);
+  };
+
+  // const fileInput = useRef();
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
   };
 
-  // Upload to S3 image bucket!
-  const handleFileInput = async (e) => {
-    const file = fileInput.current.files[0];
 
-    const upload = new AWS.S3.ManagedUpload({
-      params: {
-        Bucket: "teampigbucket",
-        Key: file.name,
-        Body: file,
-      },
-    });
-
-    const { Location } = await upload.promise();
-    dispatch(uploadImageToS3(Location));
-    dispatch(__addRoom(contents));
-  };
 
   const saveFile = () => {
-    handleFileInput();
+    dispatch(__addRoom(contents, roomImg));
     closeModal();
     setIsImage(false);
   };
@@ -68,11 +64,11 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
             <ImageBox>
-              <ImgUploader
-                setIsImage={setIsImage}
-                isImage={isImage}
+
+              <ImageModule 
+                getImgUrlFromS3={getImgUrlFromS3}
                 name="roomImage"
-                fileInput={fileInput}
+                
               />
             </ImageBox>
             <InputBox>

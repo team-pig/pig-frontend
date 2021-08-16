@@ -39,6 +39,7 @@ const BucketSelect = ({ bucketId, cardId }) => {
     const sourceBucketId = currentId;
     const destinationBucketId = id;
     setCurrentId(id);
+    if (sourceBucketId === destinationBucketId) return;
     dispatch(
       __editScheduleBucket(roomId, cardId, sourceBucketId, destinationBucketId)
     );
@@ -54,7 +55,7 @@ const BucketSelect = ({ bucketId, cardId }) => {
           {isShow && (
             <Options>
               {bucketValues.length !== 0 &&
-                bucketValues.map((bucket, idx) => (
+                bucketValues.map((bucket) => (
                   <Option
                     key={bucket.bucketId}
                     onClick={() => clickOption(bucket.bucketId)}

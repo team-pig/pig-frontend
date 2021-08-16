@@ -7,6 +7,7 @@ import moment from "moment";
 import { cardApi } from "../../api/cardApi";
 import { todoApi } from "../../api/todoApi";
 import { bucketApi } from "../../api/bucketApi";
+import { updateCardLocateOtherBucket } from "./board";
 
 // action
 const LOAD_BUCKETS = "calendar/LOAD_BUCKETS";
@@ -145,6 +146,14 @@ export const __editScheduleBucket =
         destinationBucketId
       );
 
+      const bucketInfo = {
+        sourceBucketId,
+        destinationBucketId,
+        sourceBucketOrder: cardOrder[`${sourceBucketId}`],
+        destinationBucketOrder: cardOrder[`${destinationBucketId}`],
+      };
+
+      dispatch(updateCardLocateOtherBucket(cardId, bucketInfo));
       dispatch(editScheduleBucket(cardId, destinationBucketId));
     } catch (e) {
       console.log(e);
@@ -237,6 +246,7 @@ const calendar = handleActions(
         const idx = draft.scheduleList.findIndex(
           (schedule) => schedule.cardId === cardId
         );
+        console.log(state);
         draft.scheduleList[idx].bucketId = destinationBucketId;
       }),
     [DELETE_SCHEDULE]: (state, action) =>

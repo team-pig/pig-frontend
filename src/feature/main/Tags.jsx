@@ -3,15 +3,14 @@ import styled from "styled-components";
 
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
+import { regex } from "../../shared/regex";
 
 const Tags = ({ tag, gap, textType }) => {
-  const newTags =
-    typeof tag === "string" ? tag.split(",").map((info) => info.trim()) : tag;
-
+  const newTags = typeof tag === "string" ? tag.split(regex.commaAndTrim) : tag;
+  if (newTags.length === 0) return <Tag>태그없음</Tag>;
   return (
     <TagBox gap={gap}>
       {newTags.map((tag, idx) => {
-        console.log(tag);
         return (
           <Tag key={idx}>
             <Text type={textType ? textType : "body_4"} color="darkgrey">
@@ -27,6 +26,7 @@ const Tags = ({ tag, gap, textType }) => {
 const TagBox = styled.div`
   ${flex("start")};
   gap: ${(props) => (props.gap ? `${props.gap}px;` : "5px;")};
+  flex-wrap: wrap;
 `;
 
 const Tag = styled.div`

@@ -24,7 +24,7 @@ const Date = ({ idx, list, today, thisMonth, children, _onClick }) => {
             {children}
           </DateNum>
         </DateBox>
-        {list.map((item, idx) => {
+        {list.map((item) => {
           const { cardId, cardTitle, color } = item;
           // 누르면 모달 보이도록 기능 추가 필요
           if (idx >= 2) return null;

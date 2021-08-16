@@ -25,9 +25,9 @@ const DocList = ({ docList }) => {
         </PlusBtn>
       </TitleBox>
       <List>
-        {docList.map((doc, idx) => (
+        {docList.map((doc) => (
           <DocListItem
-            key={idx}
+            key={doc.docId}
             doc={doc}
             isCurrentDoc={docId === doc.docId ? true : false}
           />

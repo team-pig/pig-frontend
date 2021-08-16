@@ -99,9 +99,9 @@ const CalendarInfo = ({
             </Info>
           )}
           {currentSchedules &&
-            currentSchedules.map((item, idx) => (
+            currentSchedules.map((item) => (
               <CurrentSchedule
-                key={idx}
+                key={item.cardId}
                 color={item.color}
                 focus={item.cardId === currentId}
                 onClick={() => clickSchedule(item.cardId, item.cardTitle)}

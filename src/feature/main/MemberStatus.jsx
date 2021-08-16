@@ -1,28 +1,22 @@
 import React from "react";
 import styled from "styled-components";
-import Icon from "../../components/Icon";
 
 // component & elem
 import flex from "../../themes/flex";
 import Graph from "./Graph";
-// import Tags from "./Tags";
-import { IconBtn, Text } from "../../elem";
-import { useSelector, useDispatch } from "react-redux";
-import { __editMyProfile } from "../../redux/modules/dashBoard";
-import { useParams } from "react-router-dom";
+import Tags from "./Tags";
+import { Text } from "../../elem";
 
 const MemberStatus = ({ member, color }) => {
-  const dispatch = useDispatch();
   const { checked, nickname, notChecked, userId, desc, tags } = member;
-  const myId = useSelector((state) => state.user.user.userId);
+
   const memberPercent = isNaN(
     ((checked / (checked + notChecked)) * 100).toFixed(0)
   )
     ? 0
     : ((checked / (checked + notChecked)) * 100).toFixed(0);
 
-  const isMe = myId === userId;
-  const { roomId } = useParams();
+  if (member.length === 0) return <></>;
 
   return (
     <Member>
@@ -30,7 +24,6 @@ const MemberStatus = ({ member, color }) => {
         <Name type="head_7" color="black">
           {nickname}
         </Name>
-        {isMe ? <Setting icon="setting" size="24px" color="#757575" /> : ""}
         <GraphBox>
           <Graph color={color} height="15px" percent={memberPercent} />
         </GraphBox>
@@ -39,7 +32,7 @@ const MemberStatus = ({ member, color }) => {
         {desc === null ? "상태 메시지가 없습니다." : desc}
       </Desc>
       <MemberInfo>
-        <Tags tags={tags} />
+        <Tags tag={tags} />
         <Line />
         <StatusNums>
           <Text type="body_2" color="darkgrey">
@@ -66,22 +59,12 @@ const MemberMain = styled.div`
 
 const Name = styled(Text)`
   position: relative;
-  /* flex-shrink: 0; */
   width: 130px;
   text-overflow: ellipsis;
   overflow-x: hidden;
   overflow-y: hidden;
   margin-right: 8px;
 `;
-
-const Btn = styled(IconBtn)`
-  position: absolute;
-  top: 50%;
-  right: -18px;
-  transform: translate(50%, -50%);
-`;
-
-const Setting = styled(Icon)``;
 
 const GraphBox = styled.div`
   width: 240px;
@@ -108,7 +91,5 @@ const Line = styled.div`
   margin: 0 15px;
   background-color: var(--grey);
 `;
-
-const Tags = styled.div``;
 
 export default MemberStatus;

@@ -84,7 +84,12 @@ const Chart = () => {
       };
 
       dispatch(
-        __updateCardLocateOtherBucket(roomId, draggableId, newBucketInfo)
+        __updateCardLocateOtherBucket(
+          roomId,
+          draggableId,
+          newBucketInfo,
+          destination.droppableId
+        )
       );
       return;
     }

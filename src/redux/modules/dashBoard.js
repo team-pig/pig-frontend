@@ -1,6 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import { dashBoardApi } from "../../api/dashBoardApi";
+import { regex } from "../../shared/regex";
 
 const LOAD_ALL_STATUS = "dashBoard/LOAD_ALL_STATUS";
 const EDIT_MY_PROFILE = "dashBoard/EDIT_MY_PROFILE";
@@ -38,11 +39,17 @@ export const __loadAllStatus = (roomId) => async (dispatch) => {
   }
 };
 
-export const __editMyProfile = (roomId, desc, tags) => async (dispatch) => {
+export const __editMyProfile = (roomId, newMyInfo) => async (dispatch) => {
   try {
-    const newMyProfile = { desc, tags };
-    const { data } = await dashBoardApi.editMyProfile(roomId, newMyProfile);
-    console.log(data);
+    const willReqParams = {
+      ...newMyInfo,
+      tags:
+        typeof newMyInfo.tags === "object"
+          ? newMyInfo.tags
+          : newMyInfo.tags.split(regex.commaAndTrim),
+    };
+
+    await dashBoardApi.editMyProfile(roomId, willReqParams);
   } catch (e) {
     console.log(e);
   }
@@ -56,10 +63,21 @@ export const __loadAllRoomInfo = (roomId) => async (dispatch) => {
   } catch (e) {}
 };
 
-export const __editRoomInfos = (newRoominfos) => async (dispatch) => {
+export const __editRoomInfos = (roomId, newRoominfos) => async (dispatch) => {
   try {
-    const { data } = await dashBoardApi.editRoomInfos(newRoominfos);
-  } catch (e) {}
+    const willReqParams = {
+      roomId,
+      ...newRoominfos,
+      tag:
+        typeof newRoominfos.tag === "object"
+          ? newRoominfos.tag
+          : newRoominfos.tag.split(regex.commaAndTrim),
+    };
+
+    await dashBoardApi.editRoomInfos(willReqParams);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const initialState = {

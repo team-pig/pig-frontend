@@ -250,7 +250,8 @@ export const __updateCardLocate =
 
 // 다른 버킷으로 카드 위치 수정
 export const __updateCardLocateOtherBucket =
-  (roomId, cardId, buckets) => async (dispatch, getState) => {
+  (roomId, cardId, buckets, destinationBucketId) =>
+  async (dispatch, getState) => {
     try {
       const curBuckets = getState().board.columns;
       const tempBucket = {};
@@ -265,7 +266,12 @@ export const __updateCardLocateOtherBucket =
       };
 
       dispatch(updateCardLocateOtherBucket(cardId, buckets));
-      await cardApi.editCardLocation(roomId, paramBuckets);
+      await cardApi.editCardLocation(
+        roomId,
+        paramBuckets,
+        cardId,
+        destinationBucketId
+      );
     } catch (e) {
       console.log(`card 옮기기 실패! ${e}`);
     }

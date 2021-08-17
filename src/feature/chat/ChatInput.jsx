@@ -53,7 +53,9 @@ const InputBox = styled.form`
   width: 100%;
   height: 42px;
   padding: 0 4px;
+  padding-bottom: 1px;
   margin-left: -1px;
+  background-color: var(--white);
   border: 1px solid var(--line);
   border-bottom: none;
   border-top-left-radius: 4px;
@@ -64,8 +66,9 @@ const InputBox = styled.form`
 const Input = styled.input`
   ${body_3};
   flex-grow: 1;
-  color: var(--black);
+  height: 100%;
   padding: 0 10px;
+  color: var(--black);
 
   &::placeholder {
     ${body_3};

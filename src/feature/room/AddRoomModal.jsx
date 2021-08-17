@@ -1,50 +1,37 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import AWS from "aws-sdk";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 //components
-import ImgUploader from "../../components/ImgUploader";
 
 // elements
 import { Button, Input } from "../../elem/index";
 
 //redux
-import { __addRoom, __editRoom } from "../../redux/modules/room";
-import { setPreview, uploadImageToS3 } from "../../redux/modules/image";
+import { __addRoom } from "../../redux/modules/room";
 import ImageModule from "../../components/ImageModule";
 
 
-const AddRoomModal = ({ roomId, showModal, closeModal }) => {
+const AddRoomModal = ({ showModal, closeModal }) => {
   const dispatch = useDispatch();
   const [roomImg, setRoomImg] = useState("");
   const [contents, setContents] = useState({
-    roomImage: "",
     roomName: "",
     subtitle: "",
     tag: "",
   });
   const [isImage, setIsImage] = useState(false);
-  const roomList = useSelector((state) => state.room.room);
-  const preview = useSelector((state) => state.image.preview);
-
 
   const getImgUrlFromS3 = async(callback, file) => {
     const result = await callback(file);
-    console.log(result);
-    setContents({roomImage : result})
     setRoomImg(result);
   };
-
-  // const fileInput = useRef();
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
   };
-
-
 
   const saveFile = () => {
     dispatch(__addRoom(contents, roomImg));
@@ -66,9 +53,7 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
             <ImageBox>
 
               <ImageModule 
-                getImgUrlFromS3={getImgUrlFromS3}
-                name="roomImage"
-                
+                getImgUrlFromS3={getImgUrlFromS3}          
               />
             </ImageBox>
             <InputBox>

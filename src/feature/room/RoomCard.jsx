@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import _ from "lodash";
 
 //components
 import ModifyRoomModal from "./ModifyRoomModal";
-import Icon from "../../components/Icon";
-import { ReactComponent as Star } from "../../assets/icons/star.svg";
-import Drop from "../../components/Drop";
 import DropDown from "./DropDown";
 //elements
-import { Text, IconBtn } from "../../elem/index";
+import { Text } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
 import MemberImg from "../../elem/MemberImg";
 import BookMark from "./BookMark";
@@ -23,8 +20,6 @@ import {
   __exitRoom,
   __toggleBookmark,
   __getMarkedList,
-  // __getUnMarkedList,
-  // __getMergedList,
 } from "../../redux/modules/room";
 
 //roomList map의 list에서 받아오는 값
@@ -37,43 +32,41 @@ const RoomCard = ({
   memberStatus,
   createdAt,
   tag,
-  bookmarkedMembers,
-  userId,
+  isCheck,
   inviteCode,
   history,
-  index,
 
-  isMarked,
-  openDrop,
-  closeDrop,
 }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
   const [showAllMember, setShowAllMember] = useState(false);
   const [isDisplayDrop, setIsDisplayDrop] = useState(false);
+  const [isMarked, setIsMarked] = useState(false);
 
   useEffect(() => {
-    memberCount();
+    setIsCheck();
+    return () => setIsCheck(false);
   }, []);
 
-  const memberCount = () => {
-    if (members.length > 4) {
-      setShowAllMember(false);
+  const setIsCheck = () => {
+    if (isCheck) {
+      setIsMarked(true);
     } else {
-      setShowAllMember(true);
+      setIsMarked(false);
     }
   };
 
   const clickBookmark = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-
-    await dispatch(__toggleBookmark(roomId, isMarked));
-    await dispatch(__getMarkedList());
-    // await dispatch(__getUnMarkedList());
-    //  dispatch(__getMergedList());
-    console.log(isMarked);
-    console.log("즐겨찾기 취소");
+    dispatch(__toggleBookmark(roomId, isMarked));
+    if(isMarked){
+      setIsMarked(false);
+    }else{
+      setIsMarked(true);
+    }
+    
+    
   };
 
   const exitRoom = (e) => {
@@ -87,7 +80,6 @@ const RoomCard = ({
     dispatch(__deleteRoom(roomId));
     setIsDisplayDrop(false);
 
-    // closeDrop();
   };
 
   const openModModal = (e) => {
@@ -95,7 +87,6 @@ const RoomCard = ({
     setShowModModal(true);
     roomId = { roomId };
     setIsDisplayDrop(false);
-    // closeDrop();
   };
 
   const closeModModal = () => {
@@ -118,9 +109,12 @@ const RoomCard = ({
         }}
       >
         <IconBox>
-          {/* <Star /> */}
+         
           <LinkIcon inviteCode={inviteCode} />
-          <BookMark isMarked={isMarked} clickBookmark={clickBookmark} />
+          <BookMark
+            isMarked={isMarked}
+            clickBookmark={clickBookmark}
+          />
         </IconBox>
         <CardSection>
           <CardProfile>
@@ -138,32 +132,14 @@ const RoomCard = ({
         </CardSection>
         <CardFooter>
           <FooterItem>
-            <Text type="body_4">
+            <Text type="body_4" color="grey">
               {createDate[0] + ". " + createDate[1] + ". " + createDate[2]}
             </Text>
           </FooterItem>
           <FooterItem>
-            {/* members를 memberImg 배열로 바꾸기 */}
+           
             <MemberImg members={members} memberStatus={memberStatus} />
-            {/* <IconBtn padding="0" _onClick={handleClick} >
-              <Icon icon="more" size="24px" />
-            </IconBtn> */}
-            {/* <Drop.Container
-             
-              width="84px"
-              height="126px"
-              shadow
-            >
-              <Drop.Item height="42px" color="darkgrey" _onClick={openModModal}>
-                수정
-              </Drop.Item>
-              <Drop.Item height="42px" color="darkgrey" _onClick={exitRoom}>
-                나가기
-              </Drop.Item>
-              <Drop.Item height="42px" color="darkgrey" _onClick={deleteRoom}>
-                삭제
-              </Drop.Item>
-            </Drop.Container> */}
+      
             <DropDown
               isDisplayDrop={isDisplayDrop}
               setIsDisplayDrop={setIsDisplayDrop}

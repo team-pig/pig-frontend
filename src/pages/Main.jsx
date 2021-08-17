@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import flex from "../themes/flex";
 
@@ -6,28 +6,17 @@ import StatusSection from "../feature/main/StatusSection";
 import Information from "../feature/main/Information";
 import MyTodos from "../feature/main/myTodos/MyTodos";
 
-import { __loadMembers } from "../redux/modules/member";
-import { __loadAllStatus } from "../redux/modules/dashBoard";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router";
-
 const Main = () => {
-  const dispatch = useDispatch();
-  const { roomId } = useParams();
-
-  useEffect(() => {
-    dispatch(__loadMembers(roomId));
-    dispatch(__loadAllStatus(roomId));
-  }, []);
+  const [myTodoLength, setMyTodoLength] = useState(""); // useEffect [ ] 용 상태값
 
   return (
     <Container>
       <LeftSide>
-        <StatusSection />
+        <StatusSection myTodoLength={myTodoLength} />
       </LeftSide>
       <RightSide>
         <Information />
-        <MyTodos />
+        <MyTodos setMyTodoLength={setMyTodoLength} />
       </RightSide>
     </Container>
   );

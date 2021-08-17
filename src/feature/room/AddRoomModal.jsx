@@ -1,57 +1,40 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import AWS from "aws-sdk";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 //components
-import ImgUploader from "../../components/ImgUploader";
 
 // elements
 import { Button, Input } from "../../elem/index";
 
 //redux
-import { __addRoom, __editRoom } from "../../redux/modules/room";
-import { setPreview, uploadImageToS3 } from "../../redux/modules/image";
+import { __addRoom } from "../../redux/modules/room";
+import ImageModule from "../../components/ImageModule";
 
-const AddRoomModal = ({ roomId, showModal, closeModal }) => {
+
+const AddRoomModal = ({ showModal, closeModal }) => {
   const dispatch = useDispatch();
+  const [roomImg, setRoomImg] = useState("");
   const [contents, setContents] = useState({
-    roomImage: "",
     roomName: "",
     subtitle: "",
     tag: "",
   });
   const [isImage, setIsImage] = useState(false);
-  const roomList = useSelector((state) => state.room.room);
-  const preview = useSelector((state) => state.image.preview);
 
-  const fileInput = useRef();
+  const getImgUrlFromS3 = async(callback, file) => {
+    const result = await callback(file);
+    setRoomImg(result);
+  };
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
   };
 
-  // Upload to S3 image bucket!
-  const handleFileInput = async (e) => {
-    const file = fileInput.current.files[0];
-
-    const upload = new AWS.S3.ManagedUpload({
-      params: {
-        Bucket: "teampigbucket",
-        Key: file.name,
-        Body: file,
-      },
-    });
-
-    const { Location } = await upload.promise();
-    dispatch(uploadImageToS3(Location));
-    dispatch(__addRoom(contents));
-  };
-
   const saveFile = () => {
-    handleFileInput();
+    dispatch(__addRoom(contents, roomImg));
     closeModal();
     setIsImage(false);
   };
@@ -68,11 +51,9 @@ const AddRoomModal = ({ roomId, showModal, closeModal }) => {
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
             <ImageBox>
-              <ImgUploader
-                setIsImage={setIsImage}
-                isImage={isImage}
-                name="roomImage"
-                fileInput={fileInput}
+
+              <ImageModule 
+                getImgUrlFromS3={getImgUrlFromS3}          
               />
             </ImageBox>
             <InputBox>

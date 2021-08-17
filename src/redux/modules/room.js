@@ -16,9 +16,7 @@ const EXIT_ROOM = "room/EXIT_ROOM";
 const ADD_BOOKMARK = "room/ADD_BOOKMARK";
 const DELETE_BOOKMARK = "room/DELETE_BOOKMARK";
 const GET_MARKED_LIST = "room/GET_MARKED_LIST";
-const GET_UNMARKED_LIST = "room/GET_UNMARKED_LIST";
-const GET_MERGED_LIST = "room/GET_MERGED_LIST";
-// const SET_IS_MARKED = "room/SET_IS_MARKED";
+
 const LOADING = "LOADING";
 
 //initialState
@@ -32,22 +30,25 @@ const initialState = {
   markedList: [],
   unMarkedList: [],
   mergedList: [],
-  // isMarked: false,
   inviteCodeRoom: [],
   currentRoom: {},
+  _paging: { page: 1, next: null, size: 12 },
 };
 
 //action creator
-// export const setIsMarked = createAction(SET_IS_MARKED, (isMarked) => ({
-//   isMarked,
-// }))
+
 export const addRoom = createAction(ADD_ROOM, (room, markedList) => ({
   room,
   markedList,
 }));
-export const searchRoom = createAction(SEARCH_ROOM, (searchedRoom) => ({
-  searchedRoom,
-}));
+export const searchRoom = createAction(
+  SEARCH_ROOM,
+  (searchedRoom, paging, searchContent) => ({
+    searchedRoom,
+    paging,
+    searchContent,
+  })
+);
 export const getRoomList = createAction(
   GET_ROOM_LIST,
   (roomList, paging, userId) => ({
@@ -82,44 +83,19 @@ export const addBookmark = createAction(
 );
 export const deleteBookmark = createAction(
   DELETE_BOOKMARK,
-  (room, roomId, isMarked) => ({
-    room,
+  (roomId, isMarked, markedList) => ({
     roomId,
     isMarked,
+    markedList,
   })
 );
 export const getMarkedList = createAction(GET_MARKED_LIST, (markedList) => ({
   markedList,
 }));
-export const getUnMarkedList = createAction(
-  GET_UNMARKED_LIST,
-  (unMarkedList) => ({ unMarkedList })
-);
-
-export const getMergedList = createAction(
-  GET_MERGED_LIST,
-  (unMarkedList, markedList) => ({
-    unMarkedList,
-    markedList,
-  })
-);
 
 export const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 
 //thunk function
-// export const __setIsMarked =
-//   (roomId, isMarked) =>
-//   async (dispatch, getState, {history}) => {
-//     try{
-//       const _room = getState().room.room;
-//       let idx = _room.findIndex(
-//         (r) => r.roomId === roomId
-//       );
-
-//     }catch(e) {
-//       console.log(e);
-//     }
-//   }
 
 export const __joinRoom =
   (inviteCode) =>
@@ -149,14 +125,36 @@ export const __searchRoom =
   (searchContent) =>
   async (dispatch, getState, { history }) => {
     try {
-      console.log(searchContent);
+      const _next = getState().room._paging.next;
+      const _page = getState().room._paging.page;
+      const _size = getState().room._paging.size;
+      if (_page === false && _next === false) return;
+
       if (searchContent === "" || searchContent === null) {
-        const { data } = await roomApi.searchRoom(null);
+        const { data } = await roomApi.searchRoom(1, _size, null);
+        console.log(data);
         const _room = getState().room.room;
-        dispatch(searchRoom(_room));
+        const totalPages = data.totalPages;
+
+        let paging = {
+          page: data.room.length < _size ? false : _page + 1,
+          next: _page === totalPages ? false : true,
+          size: _size,
+        };
+        dispatch(searchRoom(_room, paging, searchContent));
       } else {
-        const { data } = await roomApi.searchRoom(searchContent);
-        dispatch(searchRoom(data));
+        console.log(_page);
+        const { data } = await roomApi.searchRoom(_page, _size, searchContent);
+        console.log(data);
+        const _room = getState().room.room;
+        const totalPages = data.totalPages;
+
+        let paging = {
+          page: data.room.length < _size ? false : _page + 1,
+          next: _page === totalPages ? false : true,
+          size: _size,
+        };
+        dispatch(searchRoom(data, paging, searchContent));
       }
     } catch (e) {
       console.log(e);
@@ -164,16 +162,17 @@ export const __searchRoom =
   };
 
 export const __addRoom =
-  (contents) =>
+  (contents, roomImg) =>
   async (dispatch, getState, { history }) => {
     try {
-      const _image = getState().image.imgUrl;
       const markedList = getState().room.markedList;
       console.log(markedList);
       // const _image = getState().image.preview;
       const willDispatchContents = {
         ...contents,
-        roomImage: _image,
+        roomImage: roomImg
+          ? roomImg
+          : "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png",
       };
       //api post
       const { data } = await roomApi.addRoom(willDispatchContents);
@@ -184,20 +183,20 @@ export const __addRoom =
   };
 
 export const __editRoom =
-  (roomId, contents, isEdit) =>
+  (roomId, contents, roomImg, isEdit) =>
   async (dispatch, getState, { history }) => {
     try {
-      const _image = getState().image.imgUrl;
       const newContent = {
         ...contents,
-        roomImage: _image,
+        roomImage: roomImg
+          ? roomImg
+          : "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png",
         roomId,
       };
 
       const { data } = await roomApi.editRoom(newContent);
       console.log(data);
       dispatch(editRoom(data));
-      // dispatch(editRoom(roomId, willDispatchContents));
     } catch (e) {
       console.log(e);
     }
@@ -209,30 +208,6 @@ export const __getMarkedList =
       const { data } = await roomApi.getMarkedList();
       console.log(data);
       dispatch(getMarkedList(data));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-export const __getUnMarkedList =
-  () =>
-  async (dispatch, getState, { history }) => {
-    try {
-      const { data } = await roomApi.getUnMarkedList();
-      console.log(data);
-      dispatch(getUnMarkedList(data));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-export const __getMergedList =
-  () =>
-  async (dispatch, getState, { history }) => {
-    try {
-      const unMarkedList = getState().room.unMarkedList;
-      const markedList = getState().room.markedList;
-      dispatch(getMergedList(unMarkedList, markedList));
     } catch (e) {
       console.log(e);
     }
@@ -306,15 +281,14 @@ export const __toggleBookmark =
     try {
       if (isMarked === false) {
         const data = await roomApi.addBookmark(roomId);
-        const markedList = getState().room.markedList;
-        const room = data.data;
+        const markedList = data.data.markedList;
+        const room = data.data.bookmarkedRoom;
         dispatch(addBookmark(room, roomId, isMarked, markedList));
-
-        // dispatch(addBookmark(data));
       } else if (isMarked === true) {
-        await roomApi.deleteBookmark(roomId);
-
-        dispatch(deleteBookmark(roomId, isMarked));
+        const data = await roomApi.deleteBookmark(roomId);
+        console.log(data);
+        const markedList = data.data.markedList;
+        dispatch(deleteBookmark(roomId, isMarked, markedList));
       }
     } catch (e) {
       console.log(e);
@@ -326,23 +300,25 @@ const room = handleActions(
   {
     [ADD_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        draft.room.splice(
-          action.payload.markedList.length,
-          0,
-          action.payload.room.room
-        );
+        draft.room.unshift(action.payload.room.room);
       }),
     [SEARCH_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        draft.searchedRoom = action.payload.searchedRoom;
+        if (
+          action.payload.searchContent === "" ||
+          action.payload.searchContent === null
+        ) {
+          draft.searchedRoom = action.payload.searchedRoom;
+        } else {
+          draft.searchedRoom = action.payload.searchedRoom.room;
+        }
+
+        draft.paging = action.payload.paging;
+        draft.isLoading = false;
       }),
     [JOIN_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        draft.room.splice(
-          action.payload.markedList.length,
-          0,
-          action.payload.inviteCode.room
-        );
+        draft.room.unshift(action.payload.room.room);
       }),
 
     [GET_INVITE_CODE_ROOM]: (state, action) =>
@@ -363,31 +339,11 @@ const room = handleActions(
         draft.isLoading = false;
       }),
 
-    [GET_MERGED_LIST]: (state, action) =>
-      produce(state, (draft) => {
-        draft.room = action.payload.markedList.concat(
-          action.payload.unMarkedList
-        );
-      }),
     [GET_MARKED_LIST]: (state, action) =>
       produce(state, (draft) => {
         draft.markedList = action.payload.markedList.markedList;
-        // const dupArr = draft.room.unshift(...draft.markedList);
-        // draft.room = dupArr.filter((item, index) => {
-        //   return dupArr.indexOf(item) === index;
-        // });
-        // draft.room = draft.markedList.concat(draft.room);
-
-        // .reduce(
-        //   (acc, curr) => (acc.includes(curr) ? acc : [...acc, curr]),
-        //   []
-        // );
       }),
 
-    [GET_UNMARKED_LIST]: (state, action) =>
-      produce(state, (draft) => {
-        draft.unMarkedList = action.payload.unMarkedList.unMarkedList;
-      }),
     [EDIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
         let idx = draft.room.findIndex(
@@ -405,6 +361,13 @@ const room = handleActions(
         if (idx !== -1) {
           draft.room.splice(idx, 1);
         }
+
+        let index = draft.markedList.findIndex(
+          (r) => r.roomId === action.payload.roomId
+        );
+        if (index !== -1) {
+          draft.markedList.splice(index, 1);
+        }
       }),
     [EXIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
@@ -418,12 +381,18 @@ const room = handleActions(
       }),
     [ADD_BOOKMARK]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.room.findIndex(
-          (r) => r.roomId === action.payload.room.roomId
-        );
-        // draft.room.splice(idx, 1);
+        draft.markedList.unshift(action.payload.room);
       }),
-    [DELETE_BOOKMARK]: (state, action) => produce(state, (draft) => {}),
+    [DELETE_BOOKMARK]: (state, action) =>
+      produce(state, (draft) => {
+        let idx = draft.markedList.findIndex(
+          (r) => r.roomId === action.payload.roomId
+        );
+
+        if (idx !== -1) {
+          draft.markedList.splice(idx, 1);
+        }
+      }),
   },
   initialState
 );

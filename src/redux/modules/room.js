@@ -32,7 +32,7 @@ const initialState = {
   mergedList: [],
   inviteCodeRoom: [],
   currentRoom: {},
-  _paging: { page: 1, next: null, size: 12 },
+  searchPaging: { page: 1, next: null, size: 12 },
 };
 
 //action creator
@@ -122,39 +122,40 @@ export const __exitRoom =
   };
 
 export const __searchRoom =
-  (searchContent) =>
+  (searchContent, page) =>
   async (dispatch, getState, { history }) => {
     try {
-      const _next = getState().room._paging.next;
-      const _page = getState().room._paging.page;
-      const _size = getState().room._paging.size;
+      const _next = getState().room.searchPaging.next;
+      const _page = getState().room.searchPaging.page;
+      const _size = getState().room.searchPaging.size;
       if (_page === false && _next === false) return;
 
       if (searchContent === "" || searchContent === null) {
-        const { data } = await roomApi.searchRoom(1, _size, null);
-        console.log(data);
+        const { data } = await roomApi.searchRoom(_page, _size, null);
+        console.log("page", _page);
+        console.log("모듈-검색어 비었을 때", data);
         const _room = getState().room.room;
         const totalPages = data.totalPages;
 
-        let paging = {
+        let searchPaging = {
           page: data.room.length < _size ? false : _page + 1,
           next: _page === totalPages ? false : true,
           size: _size,
         };
-        dispatch(searchRoom(_room, paging, searchContent));
+        dispatch(searchRoom(_room, searchPaging, searchContent));
       } else {
-        console.log(_page);
+        console.log("page", _page);
         const { data } = await roomApi.searchRoom(_page, _size, searchContent);
-        console.log(data);
+        console.log("모듈-검색어 있을 때", data);
         const _room = getState().room.room;
         const totalPages = data.totalPages;
 
-        let paging = {
+        let searchPaging = {
           page: data.room.length < _size ? false : _page + 1,
           next: _page === totalPages ? false : true,
           size: _size,
         };
-        dispatch(searchRoom(data, paging, searchContent));
+        dispatch(searchRoom(data, searchPaging, searchContent));
       }
     } catch (e) {
       console.log(e);

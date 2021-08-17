@@ -35,19 +35,25 @@ const RoomList = ({ history }) => {
   const [isJoin, setIsJoin] = useState(false);
   const [isShow, setIsShow] = useState(false);
   // const [searchContent, setSearchContent] = useState(null);
-  const [searchContent, setSearchContent] = useState(null);
+  const [searchContent, setSearchContent] = useState("");
   useEffect(() => {
     dispatch(__getRoomList());
     dispatch(__getMarkedList());
   }, []);
 
   const changeSearchContent = (keyword) => {
-    console.log(keyword);
+    console.log("검색키워드", keyword);
     dispatch(__searchRoom(keyword));
     setSearchContent(keyword);
+    console.log("체인지 함수 searchContent", searchContent);
   };
 
   const delay = _.debounce(changeSearchContent, 500);
+
+  const _onChangeContent = (e) => {
+    setSearchContent(e.target.value);
+    console.log("체인지 함수 searchContent", searchContent);
+  };
 
   const _onKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -81,6 +87,7 @@ const RoomList = ({ history }) => {
   const searchItem =
     searchedRoom &&
     searchedRoom.map((room, idx) => {
+      console.log("searchItem");
       const userIdList = room.bookmarkedMembers.map((member, index) => {
         return member.userId;
       });
@@ -102,12 +109,13 @@ const RoomList = ({ history }) => {
     });
 
   const notSearchItem = roomList.map((room, idx) => {
+    console.log("notSearchItem");
     const userIdList = room.bookmarkedMembers.map((member, index) => {
       return member.userId;
     });
 
     const isCheck = userIdList.includes(userId);
-    console.log(isCheck);
+    // console.log(isCheck);
     return (
       <RoomCard
         isCheck={isCheck}
@@ -153,15 +161,22 @@ const RoomList = ({ history }) => {
           <JoinRoomModal showModal={showModal} closeModal={closeModal} />
         )}
         <InfinityScroll
+          searchContent={searchContent}
           callNext={() => {
             console.log("next");
-            if (searchContent !== "" && searchContent !== null) {
-              dispatch(__searchRoom(searchContent, searchPaging.next));
-            } else {
+            console.log(searchContent);
+            if (searchContent === "" || searchContent === null) {
+              // if (searchContent === "") {
+              console.log("기본");
+              console.log("searchContent", searchContent);
               dispatch(__getRoomList(paging.next));
+            } else {
+              console.log("검색");
+              console.log("searchContent", searchContent);
+              dispatch(__searchRoom(searchContent, searchPaging.next));
             }
           }}
-          isNext={paging.next ? true : false}
+          isNext={paging.next || searchPaging.next ? true : false}
           isLoading={isLoading}
         >
           <Wrapper>
@@ -172,6 +187,7 @@ const RoomList = ({ history }) => {
                 </SearchIconBox>
 
                 <SearchInput
+                  onChange={_onChangeContent}
                   onKeyUp={(e) => {
                     delay(e.target.value);
                   }}
@@ -214,7 +230,7 @@ const RoomList = ({ history }) => {
                     );
 
                     const isCheck = userIdList.includes(userId);
-                    console.log(isCheck);
+                    // console.log(isCheck);
                     return (
                       <RoomCard
                         isCheck={isCheck}
@@ -237,7 +253,9 @@ const RoomList = ({ history }) => {
           <RoomContainer>
             <RoomBox>
               {/* {searchItem} */}
-              {searchContent === null || "" ? notSearchItem : searchItem}
+              {searchContent === null || searchContent === ""
+                ? notSearchItem
+                : searchItem}
             </RoomBox>
           </RoomContainer>
         </InfinityScroll>

@@ -7,7 +7,6 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
   const [showAllMember, setShowAllMember] = useState(false);
 
   useEffect(() => {
-    
     if (members.length > 4) {
       setShowAllMember(false);
     } else {
@@ -16,8 +15,6 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
   }, []);
   return (
     <>
-      {/* <ProfileImg src={memberImg} />
-      <ProfileImg {...rest}>{children}</ProfileImg> */}
 
       <MemberImgBox>
         {/* members배열 나중에 membersImg로 바꿔주기 */}
@@ -26,29 +23,32 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
               return (
                 <ProfileImg
                   style={{
-                    position: "relative",
                     left: (members.length - 1 - idx) * 6,
                   }}
-                  key={idx}
-                  {...member}
-                ><Nickname>{member.nickname.charAt(0).toUpperCase()}</Nickname></ProfileImg>
+                  key={member.userId}
+                >
+                  <Nickname>{member.nickname.charAt(0).toUpperCase()}</Nickname>
+                </ProfileImg>
               );
             })
           : memberStatus.slice(0, 3).map((member, idx) => {
               return (
                 <ProfileImg
                   style={{
-                    position: "relative",
                     left: -idx * 6,
                   }}
-                  key={idx}
-                  {...member}
-                  />
+                  idx={idx}
+                  key={member.userId}
+                >
+                  <Nickname>{member.nickname.charAt(0).toUpperCase()}</Nickname>
+                </ProfileImg>
               );
             })}
         {!showAllMember && (
           <MemberCount>
-            <Text type="body_3">+{memberStatus.length - 3}</Text>
+            <Text type="body_3" color="grey">
+              +{memberStatus.length - 3}
+            </Text>
           </MemberCount>
         )}
       </MemberImgBox>
@@ -58,6 +58,8 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
 
 const ProfileImg = styled.div`
   position: relative;
+
+  /* left: ${(props) => props.idx && props.idx * -6}; */
   display: flex;
   flex-shrink: 0;
 
@@ -73,12 +75,12 @@ const ProfileImg = styled.div`
 `;
 
 const Nickname = styled.span`
-margin: 0 auto;
-color: var(--black);
-font-size: 17px;
-font-weight: 800;
-line-height: 30px;
-vertical-align: middle;
+  margin: 0 auto;
+  color: var(--black);
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 30px;
+  vertical-align: middle;
 `;
 
 const MemberImgBox = styled.div`

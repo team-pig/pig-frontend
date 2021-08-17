@@ -1,16 +1,64 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import Icon from "../Icon";
 import flex from "../../themes/flex";
 import { body_3 } from "../../themes/textStyle";
 import { IconBtn } from "../../elem";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import {
+  joinRoom,
+  leaveRoom,
+  subscribeToChat,
+  sendMessage,
+} from "../../shared/useSocket";
 
 const Chat = () => {
+  const { roomId } = useParams();
+  const { userId, nickname } = useSelector((state) => state.user.user);
+
+  const [text, setText] = useState("");
+  const [chat, setChat] = useState([]);
+
+  useEffect(() => {
+    console.log(roomId);
+
+    if (roomId && nickname) {
+      joinRoom(roomId, nickname);
+    }
+
+    subscribeToChat((err, data) => {
+      if (err) console.log(err);
+      console.log(data);
+      setChat((chat) => [...chat, data]);
+    });
+
+    return () => leaveRoom(roomId, nickname);
+  }, [roomId, nickname]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendMessage(roomId, nickname, text);
+    setText("");
+  };
+
   return (
     <Container>
-      <InputBox>
-        <ChatInput type="text" placeholder="메세지를 입력하세요" />
+      <div>
+        {chat.length > 0 &&
+          chat.map((message, idx) => (
+            <div key={idx}>{`${message.nickname}: ${message.text}`}</div>
+          ))}
+      </div>
+      <InputBox onSubmit={handleSubmit}>
+        <ChatInput
+          type="text"
+          placeholder="메세지를 입력하세요"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
         <IconBtn>
           <Icon icon="smile" size="20px" color="var(--grey)" />
         </IconBtn>
@@ -31,7 +79,7 @@ const Container = styled.section`
   overflow: hidden;
 `;
 
-const InputBox = styled.div`
+const InputBox = styled.form`
   ${flex("between", "center")};
   position: absolute;
   left: 0;

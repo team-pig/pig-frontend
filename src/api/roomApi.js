@@ -1,4 +1,3 @@
-import RoomList from "../pages/RoomList";
 import { instance } from "./index";
 
 export const roomApi = {
@@ -34,25 +33,20 @@ export const roomApi = {
       },
     });
   },
-  getMarkedList: () => {
-    return instance.get("/rooms/markedlist");
-  },
-  getUnMarkedList: () => {
-    return instance.get("rooms/unmarkedlist");
-  },
-  addBookmark: (roomId) => {
-    return instance.post(`/room/${roomId}/bookmark`);
-  },
-  deleteBookmark: (roomId) => {
+  getMarkedList: () => instance.get("/rooms/markedlist"),
+
+  addBookmark: (roomId) => instance.post(`/room/${roomId}/bookmark`),
+  deleteBookmark: (roomId) =>
     instance.delete(`/room/${roomId}/bookmark`, {
       data: {
         roomId,
       },
-    });
-  },
-  searchRoom: (searchContent) => {
+    }),
+  searchRoom: (page, size, searchContent) => {
     return instance.get("/rooms/search", {
       params: {
+        page: page,
+        size: size,
         roomName: searchContent,
       },
     });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 // component & elem
@@ -6,25 +6,54 @@ import ProjectStatus from "./ProjectStatus";
 import Members from "./Members";
 
 // redux
-import { useSelector } from "react-redux";
+import { dashBoardApi } from "../../api/dashBoardApi";
+import { useParams } from "react-router-dom";
 
-const StatusSection = () => {
-  const { projectStatus, memberStatus } = useSelector(
-    (state) => state.dashBoard
-  );
+const StatusSection = ({ myTodoLength }) => {
+  const [loading, setLoading] = useState(true);
+  const [editedInfo, setEditedInfo] = useState([]);
+  const [myNewInfo, setMyNewInfo] = useState({});
+  const [projectStatus, setProjectStatus] = useState({});
 
-  console.log(memberStatus);
-  //가짜 데이터
-  const project = {
-    totalTodos: 120,
-    completedTodos: 99,
-  };
+  const { roomId } = useParams();
+  const myId = localStorage.getItem("userId");
 
-  if (memberStatus.length === 0) return <div></div>;
+  useEffect(() => {
+    const fetchMemberInfo = async () => {
+      try {
+        const {
+          data: { memberStatus, projectStatus },
+        } = await dashBoardApi.loadAllStatus(roomId);
+        const myIndx = memberStatus.findIndex(
+          (member) => member.userId === myId
+        );
+
+        setEditedInfo(memberStatus);
+        setMyNewInfo(memberStatus[myIndx]);
+        setProjectStatus(projectStatus);
+      } catch (e) {
+        console.log(`에러 발생 : ${e}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMemberInfo();
+    return () => setLoading(false);
+  }, [myTodoLength]);
+
+  if (loading) return <></>;
   return (
     <Container>
       <ProjectStatus projectStatus={projectStatus} />
-      <Members memberStatus={memberStatus} />
+      <Members
+        myTodoLength={myTodoLength}
+        editedInfo={editedInfo}
+        setEditedInfo={setEditedInfo}
+        myNewInfo={myNewInfo}
+        setMyNewInfo={setMyNewInfo}
+        myId={myId}
+      />
     </Container>
   );
 };

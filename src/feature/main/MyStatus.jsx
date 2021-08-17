@@ -1,29 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import flex from "../../themes/flex";
 import { Text } from "../../elem";
 import Icon from "../../components/Icon";
 import Graph from "./Graph";
 import Tags from "./Tags";
-import { body_4, head_7 } from "../../themes/textStyle";
+import { body_4 } from "../../themes/textStyle";
 
 // redux & api
 import { __editMyProfile } from "../../redux/modules/dashBoard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 //etc
 const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
   const dispatch = useDispatch();
   const { nickname, desc, checked, notChecked, tags } = myNewInfo;
-  const [editMode, setEditMoe] = useState(false);
+  const { total, checkedTodo } = useSelector(
+    (state) => state.todos.myTodoCount
+  );
+  const [editMode, setEditMode] = useState(false);
   const { roomId } = useParams();
 
   const memberPercent = isNaN(
     ((checked / (checked + notChecked)) * 100).toFixed(0)
   )
     ? 0
-    : ((checked / (checked + notChecked)) * 100).toFixed(0);
+    : ((checkedTodo / total) * 100).toFixed(0);
 
   const editMyInfoHandler = ({ target: { value, name } }) => {
     setMyNewInfo({ ...myNewInfo, [name]: value });
@@ -39,7 +42,7 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
             </Name>
             <ActiveEdit
               onClick={() => {
-                setEditMoe(false);
+                setEditMode(false);
                 dispatch(
                   __editMyProfile(roomId, {
                     desc: myNewInfo.desc,
@@ -53,7 +56,7 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
           </EditModeHeader>
           <form
             onSubmit={() => {
-              setEditMoe(false);
+              setEditMode(false);
               dispatch(
                 __editMyProfile(roomId, {
                   desc: myNewInfo.desc,
@@ -93,7 +96,7 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
         </Name>
         <ActiveEdit
           onClick={() => {
-            setEditMoe(true);
+            setEditMode(true);
           }}
         >
           <Icon icon="setting" size="24px" color="#757575" />
@@ -111,13 +114,12 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
             {memberPercent}% 완료
           </Text>
           <Text type="body_4" color="grey">
-            ({checked} / {checked + notChecked})
+            ({checkedTodo} / {total})
           </Text>
         </StatusNums>
       </Message>
       <MemberInfo>
         <Tags tag={tags} />
-        {/* <Line /> */}
       </MemberInfo>
     </Container>
   );
@@ -125,7 +127,6 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
 
 const Container = styled.article`
   border-bottom: 1px solid var(--line);
-  /* border: 1px solid red; */
 `;
 
 const MemberMain = styled.div`
@@ -165,13 +166,6 @@ const StatusNums = styled.div`
   height: 30px;
 `;
 
-const Line = styled.div`
-  width: 1px;
-  height: 20px;
-  margin: 0 15px;
-  background-color: var(--grey);
-`;
-
 const MyInfoEditInput = styled.input`
   border: 1px solid var(--line);
   height: 30px;
@@ -203,11 +197,6 @@ const HelpMessage = styled.div`
   text-align: right;
   color: var(--notice);
   margin-bottom: 20px;
-`;
-
-const NickName = styled.div`
-  ${head_7}
-  color : var(--black)
 `;
 
 export default MyStatus;

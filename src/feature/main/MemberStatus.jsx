@@ -6,34 +6,30 @@ import flex from "../../themes/flex";
 import Graph from "./Graph";
 import Tags from "./Tags";
 import { Text } from "../../elem";
+import { body_4 } from "../../themes/textStyle";
 
 const MemberStatus = ({ member, color }) => {
-  const { checked, nickname, notChecked, userId, desc, tags } = member;
-
+  const { checked, nickname, notChecked, desc, tags } = member;
   const memberPercent = isNaN(
     ((checked / (checked + notChecked)) * 100).toFixed(0)
   )
     ? 0
     : ((checked / (checked + notChecked)) * 100).toFixed(0);
 
-  if (member.length === 0) return <></>;
-
   return (
-    <Member>
+    <Container>
       <MemberMain>
         <Name type="head_7" color="black">
           {nickname}
         </Name>
         <GraphBox>
-          <Graph color={color} height="15px" percent={memberPercent} />
+          <Graph color="mint" height="15px" percent={memberPercent} />
         </GraphBox>
       </MemberMain>
-      <Desc type="body_4" color="darkgrey">
-        {desc === null ? "상태 메시지가 없습니다." : desc}
-      </Desc>
-      <MemberInfo>
-        <Tags tag={tags} />
-        <Line />
+      <Message>
+        <Desc type="body_4" color="darkgrey">
+          {desc === null ? "상태 메시지가 없습니다." : desc}
+        </Desc>
         <StatusNums>
           <Text type="body_2" color="darkgrey">
             {memberPercent}% 완료
@@ -42,12 +38,15 @@ const MemberStatus = ({ member, color }) => {
             ({checked} / {checked + notChecked})
           </Text>
         </StatusNums>
+      </Message>
+      <MemberInfo>
+        <Tags tag={tags} />
       </MemberInfo>
-    </Member>
+    </Container>
   );
 };
 
-const Member = styled.article`
+const Container = styled.article`
   border-bottom: 1px solid var(--line);
 `;
 
@@ -67,29 +66,30 @@ const Name = styled(Text)`
 `;
 
 const GraphBox = styled.div`
-  width: 240px;
+  width: 220px;
   margin-left: 50px;
   flex-shrink: 0;
 `;
 
-const Desc = styled(Text)`
-  margin-bottom: 12px;
+const Desc = styled.div`
+  ${body_4};
+  color: var(--darkgrey);
 `;
 const MemberInfo = styled.div`
   ${flex("start")};
   margin-bottom: 25px;
+  flex-wrap: wrap;
 `;
 
 const StatusNums = styled.div`
   ${flex("start", "center")};
   gap: 13px;
+  height: 30px;
 `;
 
-const Line = styled.div`
-  width: 1px;
-  height: 20px;
-  margin: 0 15px;
-  background-color: var(--grey);
+const Message = styled.div`
+  ${flex("between", "center")}
+  margin-bottom: 10px;
 `;
 
 export default MemberStatus;

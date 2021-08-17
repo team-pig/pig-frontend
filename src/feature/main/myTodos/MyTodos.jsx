@@ -13,7 +13,7 @@ import { IconBtn, Text, Input } from "../../../elem";
 import flex from "../../../themes/flex";
 import { body_2 } from "../../../themes/textStyle";
 
-const MyTodos = () => {
+const MyTodos = ({ setMyTodoLength }) => {
   const dispatch = useDispatch();
   const { roomId } = useParams();
   const { checkedTodo, notCheckedTodo } = useSelector((state) => state.todos);
@@ -54,6 +54,7 @@ const MyTodos = () => {
                               item.todoTitle
                             )
                           );
+                          setMyTodoLength(item.todoId);
                         }}
                       />
                       <Label htmlFor={item.todoId}>
@@ -108,6 +109,7 @@ const MyTodos = () => {
                             item.todoTitle
                           )
                         );
+                        setMyTodoLength(item.todoId);
                       }}
                     />
                     <Label htmlFor={item.todoId}>

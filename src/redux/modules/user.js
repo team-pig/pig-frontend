@@ -27,12 +27,14 @@ export const __login =
       const {
         data: { accessToken, email },
       } = await userApi.login(userInfo);
-      const { id } = jwt_decode(accessToken);
+      const { id, avatar, color } = jwt_decode(accessToken);
       cookies.set("accessToken", accessToken, {
         path: "/",
         maxAge: 172800, // 2 day
       });
       localStorage.setItem("userId", id);
+      localStorage.setItem("avatar", avatar);
+      localStorage.setItem("color", color);
       dispatch(login({ email, id }));
       history.replace("/roomlist");
     } catch (e) {
@@ -44,6 +46,8 @@ export const __logout =
   () =>
   (dispatch, getState, { history }) => {
     localStorage.removeItem("userId");
+    localStorage.removeItem("avatar");
+    localStorage.removeItem("color");
     cookies.remove("accessToken");
     dispatch(logout());
     history.push("/login");

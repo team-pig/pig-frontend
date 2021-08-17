@@ -15,7 +15,7 @@ const Dates = () => {
   const dispatch = useDispatch();
 
   const firstDay = current.clone().startOf("month");
-  const startDate = firstDay.clone().subtract("day", firstDay.day());
+  const startDate = firstDay.clone().subtract(firstDay.day(), "day");
   const nowFormat = parseInt(now.clone().format("YYYYMMDD")); // 오늘 확인용으로 사용 코드
 
   const loadSchedules = async (date, idAry) => {

@@ -19,7 +19,6 @@ import {
   __getRoomList,
   __searchRoom,
   __getMarkedList,
-  __getUnMarkedList,
 } from "../redux/modules/room";
 import SEO from "../components/SEO";
 
@@ -28,60 +27,22 @@ const RoomList = ({ history }) => {
   const roomList = useSelector((state) => state.room.room) || [];
   const isLoading = useSelector((state) => state.room.isLoading);
   const paging = useSelector((state) => state.room.paging);
+  const searchPaging = useSelector((state) => state.room.searchPaging);
   const searchedRoom = useSelector((state) => state.room.searchedRoom);
   const userId = useSelector((state) => state.room.userId);
+  const markedList = useSelector((state) => state.room.markedList);
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
   const [isShow, setIsShow] = useState(false);
+  // const [searchContent, setSearchContent] = useState(null);
   const [searchContent, setSearchContent] = useState(null);
-  const [timer, setTimer] = useState(0); //디바운싱 타이머
-
   useEffect(() => {
-    // if (roomList.length === 0) {
-    //   dispatch(__getRoomList());
-    //   dispatch(__getMarkedList());
-    //   dispatch(__getUnmarkedList());
-    // }
     dispatch(__getRoomList());
-    // dispatch(__getMarkedList());
-    // dispatch(__getUnMarkedList());
+    dispatch(__getMarkedList());
   }, []);
 
-  // const changeSearchContent =
-  // async (e) => {
-  //   // const keyword = e.target.value;
-  //   // await setSearchContent(keyword);
-  //   // await console.log(keyword);
-  //   // const keyword = e.target.value;
-  //   // await setSearchContent(keyword);
-  //   // console.log(keyword);
-
-  //   // await debounceDelay(e.target);
-
-  //   const keyword = e.target.value;
-  //   setSearchContent(keyword);
-  //   console.log(keyword);
-  //   delay(searchContent);
-  //   // dispatch(__searchRoom(searchContent));
-  //   console.log("된건가");
-  // };
-
-  // const debounceDelay = _.debounce((target) => {
-  //   if(timer){
-  //     console.log("clear timer");
-  //     clearTimeout(timer);
-  //   }
-  //   const newTimer = setTimeout(async() => {
-  //     try{
-  //       await setSearchContent(target.value);
-  //     }catch(e){
-  //       console.log(e);
-  //     }
-  //   })
-
-  // }, 500);
-
   const changeSearchContent = (keyword) => {
+    console.log(keyword);
     dispatch(__searchRoom(keyword));
     setSearchContent(keyword);
   };
@@ -93,11 +54,6 @@ const RoomList = ({ history }) => {
       dispatch(__searchRoom(searchContent));
     }
   };
-
-  // const delayedCall = useRef(_.debounce((q) => dispatch(__searchRoom(q), 500))).current
-
-  // const searchKeyword = _.debounce(setSearchContent, 1200);
-  // const searchKeyword = _.debounce(changeSearchContent, 1200);
 
   const openJoinModal = () => {
     setShowModal(true);
@@ -122,59 +78,69 @@ const RoomList = ({ history }) => {
   };
 
   //enter
-  const searchItem = searchedRoom
-    .filter((item) => {
-      if (item.roomName.includes(searchContent)) {
-        console.log("서버에서 받아온 배열");
-        return item;
-      }
-    })
-    .map((room, idx) => {
-      const isCheck = room.bookmarkedMembers.includes(userId);
+  const searchItem =
+    searchedRoom &&
+    searchedRoom.map((room, idx) => {
+      const userIdList = room.bookmarkedMembers.map((member, index) => {
+        return member.userId;
+      });
+
+      const isCheck = userIdList.includes(userId);
+
       return (
         <RoomCard
-          isMarked={isCheck ? true : false}
+          isCheck={isCheck}
           userId={userId}
           openDrop={openDrop}
           closeDrop={closeDrop}
           isShow={isShow}
-          index={idx}
-          key={idx}
+          key={room.roomId}
           {...room}
           history={history}
         />
       );
     });
+
+  const notSearchItem = roomList.map((room, idx) => {
+    const userIdList = room.bookmarkedMembers.map((member, index) => {
+      return member.userId;
+    });
+
+    const isCheck = userIdList.includes(userId);
+    console.log(isCheck);
+    return (
+      <RoomCard
+        isCheck={isCheck}
+        key={room.roomId}
+        {...room}
+        history={history}
+      />
+    );
+  });
 
   // const notSearchItem = roomList
-  const notSearchItem = roomList
-    .filter((item) => {
-      if (searchContent === null || searchContent === "") {
-        console.log("roomlist");
-        return item;
-      }
-      // else if(item.roomName.toLowerCase().includes(searchContent.toLowerCase())){
-      //   return item}
-    })
-    .map((room, idx) => {
-      // const markIdx = roomList.findIndex((item) =>
-      // item.bookmarkedMembers.includes(userId));
+  //   .filter((item) => {
+  //     if (searchContent === null || searchContent === "") {
+  //       console.log("roomlist");
+  //       return item;
+  //     }
+  //   })
+  //   .map((room, idx) => {
+  //     const userIdList = room.bookmarkedMembers.map((member, index) => {
+  //       return member.userId;
+  //     });
 
-      const isCheck = room.bookmarkedMembers.includes(userId);
-      return (
-        <RoomCard
-          isMarked={isCheck ? true : false}
-          userId={userId}
-          openDrop={openDrop}
-          closeDrop={closeDrop}
-          isShow={isShow}
-          index={idx}
-          key={idx}
-          {...room}
-          history={history}
-        />
-      );
-    });
+  //     const isCheck = userIdList.includes(userId);
+  //     console.log(isCheck);
+  //     return (
+  //       <RoomCard
+  //         isCheck={isCheck}
+  //         key={room.roomId}
+  //         {...room}
+  //         history={history}
+  //       />
+  //     );
+  //   });
 
   return (
     <>
@@ -189,7 +155,11 @@ const RoomList = ({ history }) => {
         <InfinityScroll
           callNext={() => {
             console.log("next");
-            dispatch(__getRoomList(paging.next));
+            if (searchContent !== "" && searchContent !== null) {
+              dispatch(__searchRoom(searchContent, searchPaging.next));
+            } else {
+              dispatch(__getRoomList(paging.next));
+            }
           }}
           isNext={paging.next ? true : false}
           isLoading={isLoading}
@@ -200,27 +170,16 @@ const RoomList = ({ history }) => {
                 <SearchIconBox>
                   <Icon icon="search" size="24px" />
                 </SearchIconBox>
-                {/* <Input
-                type="text"
-                placeholder="방 이름을 검색하세요"
-                // _onChange={searchKeyword}
-              /> */}
+
                 <SearchInput
-                  // ref={inputRef}
-                  // onKeyUp={changeSearchContent}
                   onKeyUp={(e) => {
                     delay(e.target.value);
                   }}
-                  // onChange={changeSearchContent}
                   onKeyPress={_onKeyPress}
                   type="text"
                   name="keyword"
                   placeholder="  방 이름을 검색하세요"
                 />
-                {/* <IconBox>
-                  <Icon icon="search" size="24px" />
-                </IconBox>
-              </Input> */}
               </InputBox>
               <BtnContainer>
                 <Button size="150" onClick={openJoinModal}>
@@ -234,7 +193,7 @@ const RoomList = ({ history }) => {
                   <Button shape="green-outline" size="150" onClick={openModal}>
                     <Btn>
                       <BtnContent>
-                        <Icon icon="plus-lg" size="24px" />{" "}
+                        <Icon icon="plus-lg" size="24px" />
                         <Span>방 만들기</Span>
                       </BtnContent>
                     </Btn>
@@ -243,12 +202,42 @@ const RoomList = ({ history }) => {
               </BtnContainer>
             </WrapperItem>
           </Wrapper>
+          {markedList && markedList.length > 0 ? (
+            <BookmarkContainer>
+              <BookmarkBox>
+                {markedList &&
+                  markedList.map((room, idx) => {
+                    const userIdList = room.bookmarkedMembers.map(
+                      (member, index) => {
+                        return member.userId;
+                      }
+                    );
 
-          <RoomContainer onClick={closeDrop}>
+                    const isCheck = userIdList.includes(userId);
+                    console.log(isCheck);
+                    return (
+                      <RoomCard
+                        isCheck={isCheck}
+                        userId={userId}
+                        openDrop={openDrop}
+                        closeDrop={closeDrop}
+                        isShow={isShow}
+                        key={room.roomId}
+                        {...room}
+                        history={history}
+                      />
+                    );
+                  })}
+              </BookmarkBox>
+            </BookmarkContainer>
+          ) : (
+            ""
+          )}
+
+          <RoomContainer>
             <RoomBox>
-              {searchContent === null || "" ? notSearchItem : searchItem}
-
               {/* {searchItem} */}
+              {searchContent === null || "" ? notSearchItem : searchItem}
             </RoomBox>
           </RoomContainer>
         </InfinityScroll>
@@ -325,8 +314,36 @@ const BtnContainer = styled.div`
   height: 50px;
 `;
 
+const BookmarkContainer = styled.div`
+  display: flex;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  height: 299px;
+  margin-bottom: 25px;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const BookmarkBox = styled.div`
+  display: grid;
+  grid-gap: 25px;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0 auto;
+  padding-bottom: 25px;
+  border-bottom: 1px solid var(--line);
+
+  @media (max-width: 960px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+`;
+
+const Line = styled.hr``;
+
 const RoomContainer = styled.div`
   display: flex;
+  margin-top: 25px;
 `;
 
 const RoomBox = styled.div`

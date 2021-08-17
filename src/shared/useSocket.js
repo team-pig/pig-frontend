@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 let socket;
 
-const ENDPOINT = "http://localhost:4000";
+const ENDPOINT = "http://13.125.222.70:3000";
 
 export const initiateSocket = () => {
   socket = io(ENDPOINT, { transports: ["websocket"] });
@@ -22,14 +22,14 @@ export const getMessages = (cb) => {
   });
 };
 export const sendMessage = (roomId, nickname, text) => {
-  if (socket) socket.emit("sendMessage", { roomId, nickname, text });
+  if (socket) socket.emit("sendMessage", { roomId, userName: nickname, text });
 };
-export const joinRoom = (roomId, nickname) => {
-  if (socket && roomId && nickname) {
-    socket.emit("joinRoom", { roomId, nickname });
+export const joinRoom = (roomId, nickname, userId) => {
+  if (socket && roomId && nickname && userId) {
+    socket.emit("join", { roomId, userName: nickname, userId });
   }
 };
-export const leaveRoom = (roomId, nickname) => {
-  if (socket && roomId && nickname)
-    socket.emit("leaveRoom", { roomId, nickname });
+export const leaveRoom = (roomId, nickname, userId) => {
+  if (socket && roomId && nickname && userId)
+    socket.emit("leave", { roomId, userName: nickname, userId });
 };

@@ -41,20 +41,20 @@ const Workspace = (props) => {
 
   // workspace에 들어갈 때마다 room에 join, 해당 방의 기존 메세지 받아오는 handler
   useEffect(() => {
-    if (roomId && nickname) {
-      joinRoom(roomId, nickname);
+    if (roomId && nickname && userId) {
+      joinRoom(roomId, nickname, userId);
     }
 
     getMessages((err, data) => {
       if (err) console.log(err);
       dispatch(loadMessages(data));
     });
-  }, [dispatch, roomId, nickname]);
+  }, [dispatch, roomId, nickname, userId]);
 
   // workspace에서 나갈 때 room에서 leave
   useEffect(() => {
-    return () => leaveRoom(roomId, nickname);
-  }, [roomId, nickname]);
+    return () => leaveRoom(roomId, nickname, userId);
+  }, [roomId, nickname, userId]);
 
   return (
     <>
@@ -63,7 +63,7 @@ const Workspace = (props) => {
         <WSHeader url={url} />
         <WSTemplate>
           <WSRouter path={path} />
-          <WSSidebar />
+          {/* <WSSidebar /> */}
         </WSTemplate>
       </div>
     </>

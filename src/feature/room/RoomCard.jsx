@@ -23,8 +23,8 @@ import {
   __exitRoom,
   __toggleBookmark,
   __getMarkedList,
-  __getUnMarkedList,
-  __getMergedList,
+  // __getUnMarkedList,
+  // __getMergedList,
 } from "../../redux/modules/room";
 
 //roomList map의 list에서 받아오는 값
@@ -54,7 +54,6 @@ const RoomCard = ({
 
   useEffect(() => {
     memberCount();
-
   }, []);
 
   const memberCount = () => {
@@ -65,24 +64,18 @@ const RoomCard = ({
     }
   };
 
-
-
-
   const clickBookmark = async (e) => {
     e.stopPropagation();
     e.preventDefault();
-   
-     await dispatch(__toggleBookmark(roomId, isMarked));
-     await dispatch(__getMarkedList());
-     await dispatch(__getUnMarkedList());
-     dispatch(__getMergedList());
+
+    await dispatch(__toggleBookmark(roomId, isMarked));
+    await dispatch(__getMarkedList());
+    // await dispatch(__getUnMarkedList());
+    //  dispatch(__getMergedList());
     console.log(isMarked);
     console.log("즐겨찾기 취소");
-  
   };
 
-
-  
   const exitRoom = (e) => {
     e.stopPropagation();
     dispatch(__exitRoom(roomId));
@@ -109,7 +102,6 @@ const RoomCard = ({
     setShowModModal(false);
   };
 
-  
   const createDate = createdAt.slice(0, 10).split("-");
 
   return (
@@ -125,7 +117,6 @@ const RoomCard = ({
           history.push(`/workspace/${roomId}`);
         }}
       >
-       
         <IconBox>
           {/* <Star /> */}
           <LinkIcon inviteCode={inviteCode} />
@@ -173,7 +164,13 @@ const RoomCard = ({
                 삭제
               </Drop.Item>
             </Drop.Container> */}
-            <DropDown isDisplayDrop={isDisplayDrop} setIsDisplayDrop={setIsDisplayDrop} exitRoom={exitRoom} deleteRoom={deleteRoom} openModModal={openModModal}></DropDown>
+            <DropDown
+              isDisplayDrop={isDisplayDrop}
+              setIsDisplayDrop={setIsDisplayDrop}
+              exitRoom={exitRoom}
+              deleteRoom={deleteRoom}
+              openModModal={openModModal}
+            ></DropDown>
           </FooterItem>
         </CardFooter>
       </Container>

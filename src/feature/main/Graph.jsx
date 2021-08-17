@@ -4,9 +4,7 @@ import styled from "styled-components";
 const Graph = ({ percent, color, height }) => {
   return (
     <Background height={height}>
-      <Gauge percent={percent} color={color}>
-        {/* <GaugeText type="body_3">{project.completedTodos}</GaugeText> */}
-      </Gauge>
+      <Gauge percent={percent} color={color}></Gauge>
     </Background>
   );
 };
@@ -27,15 +25,7 @@ const Gauge = styled.div`
   width: ${(props) => `${props.percent}%;`};
   height: 100%;
   background-color: ${(props) => props.theme.colors[`${props.color}`]};
-`;
-
-// text를 어떻게 할 지 결정 후 사용
-const GaugeText = styled(Text)`
-  position: absolute;
-  top: 50%;
-  right: 0;
-  color: var(--white);
-  transform: translateY(-50%);
+  transition: width ease-in-out 200ms;
 `;
 
 export default Graph;

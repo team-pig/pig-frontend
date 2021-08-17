@@ -18,16 +18,16 @@ import { useDispatch } from "react-redux";
 import { __editRoomInfos } from "../../redux/modules/dashBoard";
 
 const Information = () => {
+  const [loading, setLoading] = useState(true);
   const { roomId } = useParams();
   const [editMode, setEditMode] = useState(false);
   const [editedInfo, setEditedInfo] = useState({});
   const editorRef = useRef();
   const dispatch = useDispatch();
 
-  //  useSelect과 setState의 동기적 처리를 하지 못해, 수정용 데이터를 local state로만 처리함 [예상기]
   useEffect(() => {
-    try {
-      const fetchRoomInfo = async () => {
+    const fetchRoomInfo = async () => {
+      try {
         const {
           data: {
             result: { roomName, subtitle, desc, tag },
@@ -39,11 +39,14 @@ const Information = () => {
           desc,
           tag,
         });
-      };
-      fetchRoomInfo();
-    } catch (e) {
-      console.log(e);
-    }
+      } catch (e) {
+        console.log(`에러 발생 ${e}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRoomInfo();
+    return () => setLoading(false);
   }, []);
 
   const mainEditorOpt = {
@@ -80,6 +83,7 @@ const Information = () => {
     };
 
     dispatch(__editRoomInfos(roomId, newInfo));
+    setEditedInfo(newInfo);
     setEditMode((pre) => !pre);
   };
 
@@ -87,7 +91,7 @@ const Information = () => {
     setEditedInfo((pre) => ({ ...pre, [key]: value }));
   };
 
-  if (Object.keys(editedInfo).length === 0) return <></>; // api 로딩상태에 따른 에러 처리
+  if (loading) return <></>;
   if (editMode) {
     return (
       <Container>
@@ -142,9 +146,9 @@ const Information = () => {
         <Tags tag={editedInfo.tag} gap="14" textType="sub_2" color="dargrey" />
       </TagContainer>
       {editedInfo.subtitle && (
-        <Desc type="sub_1" color="grey">
+        <SubTitle type="sub_1" color="grey">
           {editedInfo.subtitle}
-        </Desc>
+        </SubTitle>
       )}
       <Line />
       <ViewerContainer padding={true}>
@@ -190,7 +194,7 @@ const TagsInput = styled.input`
   height: 100%;
 `;
 
-const Desc = styled(Text)`
+const SubTitle = styled(Text)`
   min-height: 40px;
   word-break: break-all;
   padding: 0 12px;

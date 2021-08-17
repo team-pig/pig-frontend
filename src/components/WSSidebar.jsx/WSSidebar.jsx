@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import Notice from "./Notice";
 import RoomMember from "./RoomMember";
-import Chat from "./Chat";
+import Chat from "../../feature/chat/Chat";
 
 const WSSidebar = () => {
   return (

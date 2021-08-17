@@ -1,8 +1,7 @@
 // redux
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { createAction, handleActions } from "redux-actions";
-import produce from "immer";
+import { createAction } from "redux-actions";
 
 import user from "./modules/user";
 import room from "./modules/room";
@@ -14,6 +13,7 @@ import board from "./modules/board";
 import todos from "./modules/todos";
 import member from "./modules/member";
 import dashBoard from "./modules/dashBoard";
+import chat from "./modules/chat";
 
 // middlewares
 import thunk from "redux-thunk";
@@ -34,6 +34,7 @@ const appReducer = combineReducers({
   document,
   date,
   calendar,
+  chat,
   router: connectRouter(history),
 });
 
@@ -50,11 +51,6 @@ const rootReducer = (state, action) => {
 
 const env = process.env.NODE_ENV;
 const middlewares = [thunk.withExtraArgument({ history })];
-
-if (env === "development") {
-  const { logger } = require("redux-logger");
-  middlewares.push(logger);
-}
 
 const enhancer =
   env === "development"

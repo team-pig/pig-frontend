@@ -223,14 +223,17 @@ const RoomList = ({ history }) => {
               <BookmarkBox>
                 {markedList &&
                   markedList.map((room, idx) => {
+                    console.log(room.bookmarkedMembers);
+
                     const userIdList = room.bookmarkedMembers.map(
                       (member, index) => {
                         return member.userId;
                       }
                     );
-
+                    console.log(userIdList);
                     const isCheck = userIdList.includes(userId);
-                    // console.log(isCheck);
+                    console.log(isCheck);
+
                     return (
                       <RoomCard
                         isCheck={isCheck}
@@ -266,8 +269,7 @@ const RoomList = ({ history }) => {
 
 const Wrapper = styled.div`
   display: flex;
-  /* justify-content: space-between;
-  align-items: center; */
+  align-items: center;
   height: 155px;
 `;
 
@@ -275,17 +277,26 @@ const WrapperItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1286px;
+  max-width: 1440px;
+  width: 100%;
+  padding: 0 80px;
   margin: 5px auto 0 auto;
+  ${({ theme }) => theme.device.mobile} {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 `;
 
 const InputBox = styled.div`
   position: relative;
-  max-width: 918px;
-  width: 100%;
+  flex: 1;
   height: 46px;
   margin: auto 0;
-  /* padding: 0 20px 0 20px; */
+  ${({ theme }) => theme.device.mobile} {
+    order: 0 !important;
+    width: 100%;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -321,15 +332,22 @@ const BtnContent = styled.div`
 const BtnBox = styled.div`
   position: relative;
   height: 50px;
-  margin-left: -1px;
+  /* margin-left: -1px; */
+  margin-left: 20px;
 `;
 
 const BtnContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 330px;
   height: 50px;
+  margin-left: 40px;
+
+  ${({ theme }) => theme.device.mobile} {
+    order: 1 !important;
+    width: 100%;
+    margin: 10px 0 0 0;
+  }
 `;
 
 const BookmarkContainer = styled.div`
@@ -356,8 +374,6 @@ const BookmarkBox = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
 `;
-
-const Line = styled.hr``;
 
 const RoomContainer = styled.div`
   display: flex;

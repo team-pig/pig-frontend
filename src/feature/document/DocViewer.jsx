@@ -14,7 +14,7 @@ import { body_4 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
 import MarkDownViewer from "../../components/MarkDownViewer";
 
-const DocViewer = () => {
+const DocViewer = ({ left }) => {
   const history = useHistory();
   const { roomId, docId } = useParams();
 
@@ -78,7 +78,7 @@ const DocViewer = () => {
   };
 
   return (
-    <Container>
+    <Container left={left}>
       <ViewerHeader>
         <TitleBox>
           <Title type="head_4">{current.title}</Title>
@@ -101,15 +101,17 @@ const DocViewer = () => {
   );
 };
 
-// 임시 스타일
 const Container = styled.section`
   --header: 48px;
   --minusHeight: calc(var(--header));
 
+  position: relative;
+  top: 0;
+  left: ${(props) => `${props.left}px;`};
   display: flex;
-  width: 100%;
-  min-height: calc(100vh - var(--minusHeight));
   flex-direction: column;
+  width: ${(props) => `calc(100% - ${props.left}px)`};
+  min-height: calc(100vh - var(--minusHeight));
   width: calc(100% - 260px);
   padding: var(--smMargin);
 `;

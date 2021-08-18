@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { body_3 } from "../../themes/textStyle";
 
 const Chat = memo(({ message }) => {
-  return <Bubble>{`${message.nickname}: ${message.text}`}</Bubble>;
+  return <Bubble>{`${message.userName}: ${message.text}`}</Bubble>;
 });
 
 const ChatBox = () => {

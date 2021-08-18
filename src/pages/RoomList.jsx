@@ -10,6 +10,7 @@ import JoinRoomModal from "../feature/room/JoinRoomModal";
 import RoomCard from "../feature/room/RoomCard";
 import InfinityScroll from "../components/InfinityScroll";
 import Icon from "../components/Icon";
+import RoomBlank from "../feature/room/RoomBlank";
 
 //elements
 import { Button, Input } from "../elem/index";
@@ -218,6 +219,7 @@ const RoomList = ({ history }) => {
               </BtnContainer>
             </WrapperItem>
           </Wrapper>
+          {roomList.length < 1 ? <RoomBlank display="flex" /> : ""}
           {markedList && markedList.length > 0 ? (
             <BookmarkContainer>
               <BookmarkBox>

@@ -1,9 +1,10 @@
 import React from "react";
 import _ from "lodash";
 
-const InfinityScroll = ({ children, callNext, isNext, isLoading }) => {
- 
-  const _handleScroll = _.throttle(() => {
+const InfinityScroll = ({  children, callNext, isNext, isLoading }) => {
+
+  
+ const _defaultHandleScroll = _.throttle(() => {
     const { innerHeight } = window;
     const { scrollHeight } = document.body;
 
@@ -19,20 +20,21 @@ const InfinityScroll = ({ children, callNext, isNext, isLoading }) => {
     }
   }, 700);
 
-  const handleScroll = React.useCallback(_handleScroll, [isLoading]);
+  const defaultHandleScroll = React.useCallback(_defaultHandleScroll, [isLoading]);
+
+
+ 
 
   React.useEffect(() => {
     if (isLoading) {
       return;
     }
-
     if (isNext) {
-      window.addEventListener("scroll", handleScroll);
-    } else {
-      window.removeEventListener("scroll", handleScroll);
+      window.addEventListener("scroll", defaultHandleScroll);
+    } else{
+      window.removeEventListener("scroll", defaultHandleScroll);
     }
-
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", defaultHandleScroll);
   }, [isNext, isLoading]);
 
   return <React.Fragment>{children}</React.Fragment>;

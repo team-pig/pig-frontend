@@ -125,37 +125,18 @@ export const __searchRoom =
   (searchContent, page) =>
   async (dispatch, getState, { history }) => {
     try {
-      const _next = getState().room.searchPaging.next;
-      const _page = getState().room.searchPaging.page;
-      const _size = getState().room.searchPaging.size;
-      if (_page === false && _next === false) return;
-
       if (searchContent === "" || searchContent === null) {
-        const { data } = await roomApi.searchRoom(_page, _size, null);
-        console.log("page", _page);
-        console.log("모듈-검색어 비었을 때", data);
         const _room = getState().room.room;
-        const totalPages = data.totalPages;
+        const { data } = await roomApi.searchRoom(1, 20, null);
 
-        let searchPaging = {
-          page: data.room.length < _size ? false : _page + 1,
-          next: _page === totalPages ? false : true,
-          size: _size,
-        };
-        dispatch(searchRoom(_room, searchPaging, searchContent));
+        dispatch(searchRoom(_room));
+        // dispatch(getRoomList(_room, searchPaging));
       } else {
-        console.log("page", _page);
-        const { data } = await roomApi.searchRoom(_page, _size, searchContent);
-        console.log("모듈-검색어 있을 때", data);
         const _room = getState().room.room;
-        const totalPages = data.totalPages;
+        const { data } = await roomApi.searchRoom(1, 20, searchContent);
 
-        let searchPaging = {
-          page: data.room.length < _size ? false : _page + 1,
-          next: _page === totalPages ? false : true,
-          size: _size,
-        };
-        dispatch(searchRoom(data, searchPaging, searchContent));
+        dispatch(searchRoom(data));
+        // }
       }
     } catch (e) {
       console.log(e);
@@ -313,8 +294,6 @@ const room = handleActions(
         } else {
           draft.searchedRoom = action.payload.searchedRoom.room;
         }
-
-        draft.paging = action.payload.paging;
         draft.isLoading = false;
       }),
     [JOIN_ROOM]: (state, action) =>

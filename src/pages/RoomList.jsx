@@ -11,6 +11,8 @@ import RoomCard from "../feature/room/RoomCard";
 import InfinityScroll from "../components/InfinityScroll";
 import Icon from "../components/Icon";
 import RoomBlank from "../feature/room/RoomBlank";
+import SearchResult from "../feature/room/SearchResult";
+import BookmarkList from "../feature/room/BookmarkList";
 
 //elements
 import { Button, Input } from "../elem/index";
@@ -32,29 +34,24 @@ const RoomList = ({ history }) => {
   const searchedRoom = useSelector((state) => state.room.searchedRoom);
   const userId = useSelector((state) => state.room.userId);
   const markedList = useSelector((state) => state.room.markedList);
+  const searchKeyword = useSelector((state) => state.room.searchContent);
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
   const [isShow, setIsShow] = useState(false);
-  // const [searchContent, setSearchContent] = useState(null);
   const [searchContent, setSearchContent] = useState("");
+  console.log(searchContent);
+
   useEffect(() => {
     dispatch(__getRoomList());
     dispatch(__getMarkedList());
   }, []);
 
   const changeSearchContent = (keyword) => {
-    console.log("검색키워드", keyword);
     dispatch(__searchRoom(keyword));
     setSearchContent(keyword);
-    console.log("체인지 함수 searchContent", searchContent);
   };
 
   const delay = _.debounce(changeSearchContent, 500);
-
-  const _onChangeContent = (e) => {
-    setSearchContent(e.target.value);
-    console.log("체인지 함수 searchContent", searchContent);
-  };
 
   const _onKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -109,47 +106,30 @@ const RoomList = ({ history }) => {
       );
     });
 
-  const notSearchItem = roomList.map((room, idx) => {
-    console.log("notSearchItem");
-    const userIdList = room.bookmarkedMembers.map((member, index) => {
-      return member.userId;
+  // filter로 검색키워드 없을 때만 나타남
+  const notSearchItem = roomList
+    .filter((item) => {
+      console.log("notSearchItem");
+      if (searchContent === null || searchContent === "") {
+        return item;
+      }
+    })
+    .map((room, idx) => {
+      const userIdList = room.bookmarkedMembers.map((member, index) => {
+        return member.userId;
+      });
+
+      const isCheck = userIdList.includes(userId);
+      console.log(isCheck);
+      return (
+        <RoomCard
+          isCheck={isCheck}
+          key={room.roomId}
+          {...room}
+          history={history}
+        />
+      );
     });
-
-    const isCheck = userIdList.includes(userId);
-    // console.log(isCheck);
-    return (
-      <RoomCard
-        isCheck={isCheck}
-        key={room.roomId}
-        {...room}
-        history={history}
-      />
-    );
-  });
-
-  // const notSearchItem = roomList
-  //   .filter((item) => {
-  //     if (searchContent === null || searchContent === "") {
-  //       console.log("roomlist");
-  //       return item;
-  //     }
-  //   })
-  //   .map((room, idx) => {
-  //     const userIdList = room.bookmarkedMembers.map((member, index) => {
-  //       return member.userId;
-  //     });
-
-  //     const isCheck = userIdList.includes(userId);
-  //     console.log(isCheck);
-  //     return (
-  //       <RoomCard
-  //         isCheck={isCheck}
-  //         key={room.roomId}
-  //         {...room}
-  //         history={history}
-  //       />
-  //     );
-  //   });
 
   return (
     <>
@@ -161,107 +141,37 @@ const RoomList = ({ history }) => {
         {isJoin && (
           <JoinRoomModal showModal={showModal} closeModal={closeModal} />
         )}
+        <SearchResult
+          delay={delay}
+          _onKeyPress={_onKeyPress}
+          openJoinModal={openJoinModal}
+          openModal={openModal}
+          searchItem={searchItem}
+        />
         <InfinityScroll
-          searchContent={searchContent}
           callNext={() => {
             console.log("next");
-            console.log(searchContent);
-            if (searchContent === "" || searchContent === null) {
-              // if (searchContent === "") {
-              console.log("기본");
-              console.log("searchContent", searchContent);
-              dispatch(__getRoomList(paging.next));
-            } else {
-              console.log("검색");
-              console.log("searchContent", searchContent);
-              dispatch(__searchRoom(searchContent, searchPaging.next));
-            }
+            dispatch(__getRoomList(paging.next));
           }}
           isNext={paging.next || searchPaging.next ? true : false}
           isLoading={isLoading}
         >
-          <Wrapper>
-            <WrapperItem>
-              <InputBox>
-                <SearchIconBox>
-                  <Icon icon="search" size="24px" />
-                </SearchIconBox>
-
-                <SearchInput
-                  onChange={_onChangeContent}
-                  onKeyUp={(e) => {
-                    delay(e.target.value);
-                  }}
-                  onKeyPress={_onKeyPress}
-                  type="text"
-                  name="keyword"
-                  placeholder="  방 이름을 검색하세요"
-                />
-              </InputBox>
-              <BtnContainer>
-                <Button size="150" onClick={openJoinModal}>
-                  <Btn>
-                    <BtnContent>
-                      <Icon icon="enter" size="24px" /> <Span>방 입장</Span>
-                    </BtnContent>
-                  </Btn>
-                </Button>
-                <BtnBox>
-                  <Button shape="green-outline" size="150" onClick={openModal}>
-                    <Btn>
-                      <BtnContent>
-                        <Icon icon="plus-lg" size="24px" />
-                        <Span>방 만들기</Span>
-                      </BtnContent>
-                    </Btn>
-                  </Button>
-                </BtnBox>
-              </BtnContainer>
-            </WrapperItem>
-          </Wrapper>
-          {roomList.length < 1 ? <RoomBlank display="flex" /> : ""}
-          {markedList && markedList.length > 0 ? (
-            <BookmarkContainer>
-              <BookmarkBox>
-                {markedList &&
-                  markedList.map((room, idx) => {
-                    console.log(room.bookmarkedMembers);
-
-                    const userIdList = room.bookmarkedMembers.map(
-                      (member, index) => {
-                        return member.userId;
-                      }
-                    );
-                    console.log(userIdList);
-                    const isCheck = userIdList.includes(userId);
-                    console.log(isCheck);
-
-                    return (
-                      <RoomCard
-                        isCheck={isCheck}
-                        userId={userId}
-                        openDrop={openDrop}
-                        closeDrop={closeDrop}
-                        isShow={isShow}
-                        key={room.roomId}
-                        {...room}
-                        history={history}
-                      />
-                    );
-                  })}
-              </BookmarkBox>
-            </BookmarkContainer>
+          {roomList.length < 1 ? <RoomBlank /> : ""}
+          {!searchContent && markedList && markedList.length > 0 ? (
+            <BookmarkList
+              markedList={markedList}
+              userId={userId}
+              openDrop={openDrop}
+              closeDrop={closeDrop}
+              isShow={isShow}
+              history={history}
+            />
           ) : (
             ""
           )}
 
           <RoomContainer>
-            <RoomBox>
-              {/* {searchItem} */}
-              {searchContent === null || searchContent === ""
-                ? notSearchItem
-                : searchItem}
-            </RoomBox>
+            <RoomBox>{notSearchItem}</RoomBox>
           </RoomContainer>
         </InfinityScroll>
       </Template>

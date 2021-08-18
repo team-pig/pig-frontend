@@ -22,7 +22,7 @@ const ImgBox = styled.div`
 `;
 
 const BlankImg = styled.div`
-  display: ${(props) => props.display};
+  /* display: ${(props) => props.display}; */
   width: 100%;
   height: 0;
   padding-top: calc(100% * (514 / 684));

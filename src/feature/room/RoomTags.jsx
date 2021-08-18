@@ -13,8 +13,6 @@ const RoomTags = ({ tag, type }) => {
   //     </>
   //   );
   // } else {
-  console.log(tag);
-  console.log(tag.length);
   return (
     <>
       <Text type="body_2">

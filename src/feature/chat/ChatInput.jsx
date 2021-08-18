@@ -24,10 +24,10 @@ const ChatInput = () => {
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
-      sendMessage(roomId, nickname, text);
+      sendMessage(roomId, nickname, userId, text);
       setText("");
     },
-    [nickname, roomId, text]
+    [nickname, roomId, text, userId]
   );
 
   return (

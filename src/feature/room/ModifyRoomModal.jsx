@@ -1,64 +1,59 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import AWS from "aws-sdk";
 
 import { useDispatch, useSelector } from "react-redux";
 
 //components
-import ImgUploader from "../../components/ImgUploader";
 
 // elements
 import { Button, Input } from "../../elem/index";
 
 //redux
-import { __addRoom, __editRoom } from "../../redux/modules/room";
-import { setPreview, uploadImageToS3 } from "../../redux/modules/image";
+import { __editRoom } from "../../redux/modules/room";
+import ImageModule from "../../components/ImageModule";
 
 const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
   const dispatch = useDispatch();
+  const [roomImg, setRoomImg] = useState("");
   const [newContent, setNewContent] = useState({
-    roomImage: "",
     roomName: "",
     subtitle: "",
     tag: "",
   });
   const [isImage, setIsImage] = useState(false);
-  const roomList = useSelector((state) => state.room.roomList);
+  const roomList = useSelector((state) => state.room.room);
   const preview = useSelector((state) => state.image.preview);
 
-  const fileInput = useRef();
+
 
   const isEdit = roomId ? true : false;
 
-  // let _room = isEdit ? roomList.find((r) => r.roomId === roomId) : null;
+  const _room = isEdit
+    ? roomList && roomList.find((r) => r.roomId === roomId)
+    : null;
 
-  // const [contents, setContents] = useState(_room ? _room.contents : "");
+    const getImgUrlFromS3 = async (callback, file) => {
+      const result = await callback(file);
+      if(result){
+        setRoomImg(result);
+      }else{
+        setRoomImg(_room.roomImage);
+      }
+    };
+
+  const [contents, setContents] = useState(
+    _room
+      ? { roomName: _room.roomName, subtitle: _room.subtitle, tag: _room.tag }
+      : ""
+  );
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
-    setNewContent({ ...newContent, [name]: value });
-  };
-
-  // Upload to S3 image bucket!
-  const handleFileInput = async (e) => {
-    const file = fileInput.current.files[0];
-
-    const upload = new AWS.S3.ManagedUpload({
-      params: {
-        Bucket: "teampigbucket",
-        Key: file.name,
-        Body: file,
-      },
-    });
-
-    const { Location } = await upload.promise();
-    dispatch(uploadImageToS3(Location));
-    dispatch(__editRoom(roomId, newContent));
+    setContents({ ...contents, [name]: value });
   };
 
   const modifyFile = () => {
-    // dispatch(__editRoom(roomId, newContent));
-    handleFileInput();
+    dispatch(__editRoom(roomId, contents, roomImg));
     closeModModal();
     setIsImage(false);
     console.log(roomId);
@@ -76,12 +71,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
             <ImageBox>
-              <ImgUploader
-                setIsImage={setIsImage}
-                isImage={isImage}
-                name="roomImage"
-                fileInput={fileInput}
-              />
+              <ImageModule getImgUrlFromS3={getImgUrlFromS3} />
             </ImageBox>
             <InputBox>
               <Input
@@ -89,18 +79,21 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
                 type="text"
                 placeholder="방 이름"
                 _onChange={changeHandler}
+                value={contents.roomName}
               />
               <Input
                 name="subtitle"
                 type="text"
                 placeholder="부제목"
                 _onChange={changeHandler}
+                value={contents.subtitle}
               />
               <Input
                 name="tag"
                 type="text"
                 placeholder="태그"
                 _onChange={changeHandler}
+                value={contents.tag}
               />
             </InputBox>
             <BtnBox>

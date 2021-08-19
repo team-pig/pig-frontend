@@ -65,8 +65,6 @@ const RoomCard = ({
     }else{
       setIsMarked(true);
     }
-    
-    
   };
 
   const exitRoom = (e) => {

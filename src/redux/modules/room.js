@@ -32,7 +32,7 @@ const initialState = {
   mergedList: [],
   inviteCodeRoom: [],
   currentRoom: {},
-  _paging: { page: 1, next: null, size: 12 },
+  searchPaging: { page: 1, next: null, size: 12 },
 };
 
 //action creator
@@ -122,39 +122,21 @@ export const __exitRoom =
   };
 
 export const __searchRoom =
-  (searchContent) =>
+  (searchContent, page) =>
   async (dispatch, getState, { history }) => {
     try {
-      const _next = getState().room._paging.next;
-      const _page = getState().room._paging.page;
-      const _size = getState().room._paging.size;
-      if (_page === false && _next === false) return;
-
       if (searchContent === "" || searchContent === null) {
-        const { data } = await roomApi.searchRoom(1, _size, null);
-        console.log(data);
         const _room = getState().room.room;
-        const totalPages = data.totalPages;
+        const { data } = await roomApi.searchRoom(1, 20, null);
 
-        let paging = {
-          page: data.room.length < _size ? false : _page + 1,
-          next: _page === totalPages ? false : true,
-          size: _size,
-        };
-        dispatch(searchRoom(_room, paging, searchContent));
+        dispatch(searchRoom(_room));
+        // dispatch(getRoomList(_room, searchPaging));
       } else {
-        console.log(_page);
-        const { data } = await roomApi.searchRoom(_page, _size, searchContent);
-        console.log(data);
         const _room = getState().room.room;
-        const totalPages = data.totalPages;
+        const { data } = await roomApi.searchRoom(1, 20, searchContent);
 
-        let paging = {
-          page: data.room.length < _size ? false : _page + 1,
-          next: _page === totalPages ? false : true,
-          size: _size,
-        };
-        dispatch(searchRoom(data, paging, searchContent));
+        dispatch(searchRoom(data));
+        // }
       }
     } catch (e) {
       console.log(e);
@@ -312,8 +294,6 @@ const room = handleActions(
         } else {
           draft.searchedRoom = action.payload.searchedRoom.room;
         }
-
-        draft.paging = action.payload.paging;
         draft.isLoading = false;
       }),
     [JOIN_ROOM]: (state, action) =>

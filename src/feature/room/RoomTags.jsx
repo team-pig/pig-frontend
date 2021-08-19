@@ -4,23 +4,32 @@ import styled from "styled-components";
 import { Text } from "../../elem/index";
 
 const RoomTags = ({ tag, type }) => {
-  if (type === "modal") {
-    return (
-      <>
-        {tag && tag.map((item, idx) => {
-          return <Tag key={idx}>#{item}</Tag>;
-        })}
-      </>
-    );
-  } else {
-    return (
+  // if (type === "modal") {
+  //   return (
+  //     <>
+  //       {tag && tag.map((item, idx) => {
+  //         return <Tag key={idx}>#{item}</Tag>;
+  //       })}
+  //     </>
+  //   );
+  // } else {
+  return (
+    <>
       <Text type="body_2">
-        {tag && tag.map((item, idx) => {
-          return <Tag key={idx}>#{item}</Tag>;
-        })}
+        {tag &&
+          tag.map((item, idx) => {
+            if (item !== "") {
+              return <Tag key={idx}>#{item}</Tag>;
+            }
+          })}
+        {/* {tag &&
+          tag.map((item, idx) => {
+            return <Tag key={idx}>#{item}</Tag>;
+          })} */}
       </Text>
-    );
-  }
+    </>
+  );
+  // }
 };
 
 const Tag = styled.span`

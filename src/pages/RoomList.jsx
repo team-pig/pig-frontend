@@ -10,6 +10,9 @@ import JoinRoomModal from "../feature/room/JoinRoomModal";
 import RoomCard from "../feature/room/RoomCard";
 import InfinityScroll from "../components/InfinityScroll";
 import Icon from "../components/Icon";
+import RoomBlank from "../feature/room/RoomBlank";
+import SearchResult from "../feature/room/SearchResult";
+import BookmarkList from "../feature/room/BookmarkList";
 
 //elements
 import { Button, Input } from "../elem/index";
@@ -31,18 +34,19 @@ const RoomList = ({ history }) => {
   const searchedRoom = useSelector((state) => state.room.searchedRoom);
   const userId = useSelector((state) => state.room.userId);
   const markedList = useSelector((state) => state.room.markedList);
+  const searchKeyword = useSelector((state) => state.room.searchContent);
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
   const [isShow, setIsShow] = useState(false);
-  // const [searchContent, setSearchContent] = useState(null);
-  const [searchContent, setSearchContent] = useState(null);
+  const [searchContent, setSearchContent] = useState("");
+  console.log(searchContent);
+
   useEffect(() => {
     dispatch(__getRoomList());
     dispatch(__getMarkedList());
   }, []);
 
   const changeSearchContent = (keyword) => {
-    console.log(keyword);
     dispatch(__searchRoom(keyword));
     setSearchContent(keyword);
   };
@@ -81,6 +85,7 @@ const RoomList = ({ history }) => {
   const searchItem =
     searchedRoom &&
     searchedRoom.map((room, idx) => {
+      console.log("searchItem");
       const userIdList = room.bookmarkedMembers.map((member, index) => {
         return member.userId;
       });
@@ -101,46 +106,30 @@ const RoomList = ({ history }) => {
       );
     });
 
-  const notSearchItem = roomList.map((room, idx) => {
-    const userIdList = room.bookmarkedMembers.map((member, index) => {
-      return member.userId;
+  // filter로 검색키워드 없을 때만 나타남
+  const notSearchItem = roomList
+    .filter((item) => {
+      console.log("notSearchItem");
+      if (searchContent === null || searchContent === "") {
+        return item;
+      }
+    })
+    .map((room, idx) => {
+      const userIdList = room.bookmarkedMembers.map((member, index) => {
+        return member.userId;
+      });
+
+      const isCheck = userIdList.includes(userId);
+      console.log(isCheck);
+      return (
+        <RoomCard
+          isCheck={isCheck}
+          key={room.roomId}
+          {...room}
+          history={history}
+        />
+      );
     });
-
-    const isCheck = userIdList.includes(userId);
-    console.log(isCheck);
-    return (
-      <RoomCard
-        isCheck={isCheck}
-        key={room.roomId}
-        {...room}
-        history={history}
-      />
-    );
-  });
-
-  // const notSearchItem = roomList
-  //   .filter((item) => {
-  //     if (searchContent === null || searchContent === "") {
-  //       console.log("roomlist");
-  //       return item;
-  //     }
-  //   })
-  //   .map((room, idx) => {
-  //     const userIdList = room.bookmarkedMembers.map((member, index) => {
-  //       return member.userId;
-  //     });
-
-  //     const isCheck = userIdList.includes(userId);
-  //     console.log(isCheck);
-  //     return (
-  //       <RoomCard
-  //         isCheck={isCheck}
-  //         key={room.roomId}
-  //         {...room}
-  //         history={history}
-  //       />
-  //     );
-  //   });
 
   return (
     <>
@@ -152,93 +141,37 @@ const RoomList = ({ history }) => {
         {isJoin && (
           <JoinRoomModal showModal={showModal} closeModal={closeModal} />
         )}
+        <SearchResult
+          delay={delay}
+          _onKeyPress={_onKeyPress}
+          openJoinModal={openJoinModal}
+          openModal={openModal}
+          searchItem={searchItem}
+        />
         <InfinityScroll
           callNext={() => {
             console.log("next");
-            if (searchContent !== "" && searchContent !== null) {
-              dispatch(__searchRoom(searchContent, searchPaging.next));
-            } else {
-              dispatch(__getRoomList(paging.next));
-            }
+            dispatch(__getRoomList(paging.next));
           }}
-          isNext={paging.next ? true : false}
+          isNext={paging.next || searchPaging.next ? true : false}
           isLoading={isLoading}
         >
-          <Wrapper>
-            <WrapperItem>
-              <InputBox>
-                <SearchIconBox>
-                  <Icon icon="search" size="24px" />
-                </SearchIconBox>
-
-                <SearchInput
-                  onKeyUp={(e) => {
-                    delay(e.target.value);
-                  }}
-                  onKeyPress={_onKeyPress}
-                  type="text"
-                  name="keyword"
-                  placeholder="  방 이름을 검색하세요"
-                />
-              </InputBox>
-              <BtnContainer>
-                <Button size="150" onClick={openJoinModal}>
-                  <Btn>
-                    <BtnContent>
-                      <Icon icon="enter" size="24px" /> <Span>방 입장</Span>
-                    </BtnContent>
-                  </Btn>
-                </Button>
-                <BtnBox>
-                  <Button shape="green-outline" size="150" onClick={openModal}>
-                    <Btn>
-                      <BtnContent>
-                        <Icon icon="plus-lg" size="24px" />
-                        <Span>방 만들기</Span>
-                      </BtnContent>
-                    </Btn>
-                  </Button>
-                </BtnBox>
-              </BtnContainer>
-            </WrapperItem>
-          </Wrapper>
-          {markedList && markedList.length > 0 ? (
-            <BookmarkContainer>
-              <BookmarkBox>
-                {markedList &&
-                  markedList.map((room, idx) => {
-                    const userIdList = room.bookmarkedMembers.map(
-                      (member, index) => {
-                        return member.userId;
-                      }
-                    );
-
-                    const isCheck = userIdList.includes(userId);
-                    console.log(isCheck);
-                    return (
-                      <RoomCard
-                        isCheck={isCheck}
-                        userId={userId}
-                        openDrop={openDrop}
-                        closeDrop={closeDrop}
-                        isShow={isShow}
-                        key={room.roomId}
-                        {...room}
-                        history={history}
-                      />
-                    );
-                  })}
-              </BookmarkBox>
-            </BookmarkContainer>
+          {roomList.length < 1 ? <RoomBlank /> : ""}
+          {!searchContent && markedList && markedList.length > 0 ? (
+            <BookmarkList
+              markedList={markedList}
+              userId={userId}
+              openDrop={openDrop}
+              closeDrop={closeDrop}
+              isShow={isShow}
+              history={history}
+            />
           ) : (
             ""
           )}
 
           <RoomContainer>
-            <RoomBox>
-              {/* {searchItem} */}
-              {searchContent === null || "" ? notSearchItem : searchItem}
-            </RoomBox>
+            <RoomBox>{notSearchItem}</RoomBox>
           </RoomContainer>
         </InfinityScroll>
       </Template>
@@ -248,8 +181,7 @@ const RoomList = ({ history }) => {
 
 const Wrapper = styled.div`
   display: flex;
-  /* justify-content: space-between;
-  align-items: center; */
+  align-items: center;
   height: 155px;
 `;
 
@@ -257,17 +189,26 @@ const WrapperItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1286px;
+  max-width: 1440px;
+  width: 100%;
+  padding: 0 80px;
   margin: 5px auto 0 auto;
+  ${({ theme }) => theme.device.mobile} {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 `;
 
 const InputBox = styled.div`
   position: relative;
-  max-width: 918px;
-  width: 100%;
+  flex: 1;
   height: 46px;
   margin: auto 0;
-  /* padding: 0 20px 0 20px; */
+  ${({ theme }) => theme.device.mobile} {
+    order: 0 !important;
+    width: 100%;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -303,15 +244,22 @@ const BtnContent = styled.div`
 const BtnBox = styled.div`
   position: relative;
   height: 50px;
-  margin-left: -1px;
+  /* margin-left: -1px; */
+  margin-left: 20px;
 `;
 
 const BtnContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 330px;
   height: 50px;
+  margin-left: 40px;
+
+  ${({ theme }) => theme.device.mobile} {
+    order: 1 !important;
+    width: 100%;
+    margin: 10px 0 0 0;
+  }
 `;
 
 const BookmarkContainer = styled.div`
@@ -338,8 +286,6 @@ const BookmarkBox = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
 `;
-
-const Line = styled.hr``;
 
 const RoomContainer = styled.div`
   display: flex;

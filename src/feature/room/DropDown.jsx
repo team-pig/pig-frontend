@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import Icon from "../../components/Icon";
@@ -13,7 +13,6 @@ const DropDown = ({
   isDisplayDrop,
   setIsDisplayDrop,
 }) => {
-  // const [isDisplayDrop, setIsDisplayDrop] = useState(false);
   const dropDownModal = useRef();
 
   const handleClickOutside = (e) => {

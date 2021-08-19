@@ -12,7 +12,7 @@ const DefaultRoomList = ({ history }) => {
   const { room, searchedRoom, userId, isLoading, paging } = useSelector(
     (state) => state.room
   );
-  console.log(searchedRoom);
+
   return (
     <>
       <InfinityScroll

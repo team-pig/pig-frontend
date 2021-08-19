@@ -7,7 +7,7 @@ import InfinityScroll from "../../components/InfinityScroll";
 
 import { __getRoomList } from "../../redux/modules/room";
 
-const DefaultRoomList = ({ history }) => {
+const DefaultRoomList = () => {
   const dispatch = useDispatch();
   const { room, searchedRoom, userId, isLoading, paging } = useSelector(
     (state) => state.room
@@ -39,7 +39,6 @@ const DefaultRoomList = ({ history }) => {
                     <RoomCard
                       isCheck={isCheck}
                       key={room.roomId}
-                      history={history}
                       {...room}
                     />
                   );

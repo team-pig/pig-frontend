@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import _ from "lodash";
+import { useHistory } from "react-router-dom";
 
 //components
 import ModifyRoomModal from "./ModifyRoomModal";
@@ -34,13 +34,13 @@ const RoomCard = ({
   tag,
   isCheck,
   inviteCode,
-  history,
 }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
   const [isDisplayDrop, setIsDisplayDrop] = useState(false);
   const [isMarked, setIsMarked] = useState(false);
   const userId = useSelector((state) => state.room.userId);
+  const history = useHistory();
 
   useEffect(() => {
     setIsCheck();

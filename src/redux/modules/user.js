@@ -25,12 +25,17 @@ export const __login =
   async (dispatch, getState, { history }) => {
     try {
       const {
-        data: { accessToken, email },
+        data: { accessToken, email, refreshToken },
       } = await userApi.login(userInfo);
       const { id, avatar, color } = jwt_decode(accessToken);
       cookies.set("accessToken", accessToken, {
         path: "/",
-        maxAge: 172800, // 2 day
+        maxAge: 1800, // 2 day
+      });
+
+      cookies.set("refreshToken", refreshToken, {
+        path: "/",
+        maxAge: 86400, // 2 day
       });
       localStorage.setItem("userId", id);
       localStorage.setItem("avatar", avatar);
@@ -48,6 +53,7 @@ export const __logout =
     localStorage.removeItem("userId");
     localStorage.removeItem("avatar");
     localStorage.removeItem("color");
+    cookies.remove("refreshToken");
     cookies.remove("accessToken");
     dispatch(logout());
     history.push("/login");

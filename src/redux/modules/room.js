@@ -16,12 +16,10 @@ const ADD_BOOKMARK = "room/ADD_BOOKMARK";
 const DELETE_BOOKMARK = "room/DELETE_BOOKMARK";
 const GET_MARKED_LIST = "room/GET_MARKED_LIST";
 const INIT_ROOM = "room/INIT_ROOM";
-
 const LOADING = "LOADING";
 
 //initialState
 const initialState = {
-  // roomList: [],
   searchedRoom: [],
   room: [],
   isLoading: false,
@@ -33,12 +31,11 @@ const initialState = {
   inviteCodeRoom: [],
   currentRoom: {},
   searchPaging: { page: 1, next: null, size: 12 },
+  isMarked: false,
 };
 
 //action creator
-
 export const initRoom = createAction(INIT_ROOM, () => ({}));
-
 export const addRoom = createAction(ADD_ROOM, (room, markedList) => ({
   room,
   markedList,
@@ -94,14 +91,17 @@ export const deleteBookmark = createAction(
     markedList,
   })
 );
-export const getMarkedList = createAction(GET_MARKED_LIST, (markedList) => ({
-  markedList,
-}));
+export const getMarkedList = createAction(
+  GET_MARKED_LIST,
+  (markedList, isMarked) => ({
+    markedList,
+    isMarked,
+  })
+);
 
 export const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 
 //thunk function
-
 export const __joinRoom =
   (inviteCode) =>
   async (dispatch, getState, { history }) => {
@@ -131,13 +131,9 @@ export const __searchRoom =
     try {
       if (searchContent === "" || searchContent === null) {
         const _room = getState().room.room;
-        const { data } = await roomApi.searchRoom(1, 20, null);
-
         dispatch(searchRoom(_room));
       } else {
-        const _room = getState().room.room;
-        const { data } = await roomApi.searchRoom(1, 20, searchContent);
-
+        const { data } = await roomApi.searchRoom(searchContent);
         dispatch(searchRoom(data));
       }
     } catch (e) {
@@ -182,11 +178,11 @@ export const __editRoom =
     }
   };
 export const __getMarkedList =
-  () =>
+  (isMarked) =>
   async (dispatch, getState, { history }) => {
     try {
       const { data } = await roomApi.getMarkedList();
-      dispatch(getMarkedList(data));
+      dispatch(getMarkedList(data, isMarked));
     } catch (e) {
       console.log(e);
     }
@@ -264,7 +260,6 @@ export const __toggleBookmark =
         dispatch(addBookmark(room, roomId, isMarked, markedList));
       } else if (isMarked === true) {
         const data = await roomApi.deleteBookmark(roomId);
-        console.log(data);
         const markedList = data.data.markedList;
         dispatch(deleteBookmark(roomId, isMarked, markedList));
       }
@@ -282,15 +277,7 @@ const room = handleActions(
       }),
     [SEARCH_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        if (
-          action.payload.searchContent === "" ||
-          action.payload.searchContent === null
-        ) {
-          draft.searchedRoom = action.payload.searchedRoom;
-        } else {
-          draft.searchedRoom = action.payload.searchedRoom.room;
-        }
-        draft.isLoading = false;
+        draft.searchedRoom = action.payload.searchedRoom.room;
       }),
     [JOIN_ROOM]: (state, action) =>
       produce(state, (draft) => {
@@ -318,6 +305,7 @@ const room = handleActions(
     [GET_MARKED_LIST]: (state, action) =>
       produce(state, (draft) => {
         draft.markedList = action.payload.markedList.markedList;
+        draft.isMarked = true;
       }),
 
     [EDIT_ROOM]: (state, action) =>
@@ -362,7 +350,7 @@ const room = handleActions(
     [DELETE_BOOKMARK]: (state, action) =>
       produce(state, (draft) => {
         let idx = draft.markedList.findIndex(
-          (r) => r.roomId === action.payload.roomId
+          (room) => room.roomId === action.payload.roomId
         );
 
         if (idx !== -1) {

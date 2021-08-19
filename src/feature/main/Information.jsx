@@ -12,42 +12,23 @@ import { head_2, sub_2 } from "../../themes/textStyle";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
 
-import { roomApi } from "../../api/roomApi";
+// redux & api
 import { useParams } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { __editRoomInfos } from "../../redux/modules/dashBoard";
 
 const Information = () => {
-  const [loading, setLoading] = useState(true);
   const { roomId } = useParams();
   const [editMode, setEditMode] = useState(false);
   const [editedInfo, setEditedInfo] = useState({});
   const editorRef = useRef();
   const dispatch = useDispatch();
+  const room = useSelector((state) => state.room.currentRoom);
 
   useEffect(() => {
-    const fetchRoomInfo = async () => {
-      try {
-        const {
-          data: {
-            result: { roomName, subtitle, desc, tag },
-          },
-        } = await roomApi.getOneRoom(roomId);
-        setEditedInfo({
-          roomName,
-          subtitle,
-          desc,
-          tag,
-        });
-      } catch (e) {
-        console.log(`에러 발생 ${e}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchRoomInfo();
-    return () => setLoading(false);
-  }, []);
+    const { roomName, desc, tag, subtitle } = room;
+    setEditedInfo({ roomName, desc, tag, subtitle });
+  }, [room]);
 
   const mainEditorOpt = {
     previewStyle: "tab",
@@ -57,7 +38,6 @@ const Information = () => {
     height: "300px",
     ref: editorRef,
     initialValue: editedInfo.desc,
-    // colorSyntax: 글자 색 바꾸는 기능 / condeSyntaxHighlight : 언어에 따른 코드 색 변경
   };
 
   const mainViewerOpt = {
@@ -91,7 +71,6 @@ const Information = () => {
     setEditedInfo((pre) => ({ ...pre, [key]: value }));
   };
 
-  if (loading) return <></>;
   if (editMode) {
     return (
       <Container>
@@ -152,7 +131,7 @@ const Information = () => {
       )}
       <Line />
       <ViewerContainer padding={true}>
-        <MarkDownViewer option={mainViewerOpt} />
+        {editedInfo.desc && <MarkDownViewer option={mainViewerOpt} />}
       </ViewerContainer>
     </Container>
   );
@@ -217,4 +196,4 @@ const EditorContainer = styled.div`
   min-height: 300px;
 `;
 
-export default Information;
+export default React.memo(Information);

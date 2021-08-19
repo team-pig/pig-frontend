@@ -1,9 +1,11 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import { todoApi } from "../../api/todoApi";
+import { __loadAllStatus } from "./dashBoard";
 
 const LOAD_TODOS = "todos/LOAD_TODOS";
 const LOAD_MY_TODOS = "todos/LOAD_MY_TODOS";
+const INIT_MY_TODOS = "todos/INIT_MY_TODOS";
 const CREATE_TODO = "todos/CREATE_TODO";
 const DELETE_TODO = "todos/DELETE_TODO";
 const EXIT_MY_TODO = "totos/EXIT_MY_TODO";
@@ -24,6 +26,7 @@ const loadMyTodos = createAction(
   LOAD_MY_TODOS,
   (checkedTodo, notCheckedTodo) => ({ checkedTodo, notCheckedTodo })
 );
+export const initMyTodos = createAction(INIT_MY_TODOS, () => ({}));
 
 const createTodo = createAction(CREATE_TODO, (newTodo) => ({
   newTodo,
@@ -137,7 +140,7 @@ export const __switchTodoStat =
   (roomId, todoId, isChecked, todoTitle) => async (dispatch) => {
     try {
       await todoApi.checkedTodo(roomId, todoId, isChecked);
-
+      dispatch(__loadAllStatus(roomId));
       if (isChecked) {
         dispatch(goToChecked(todoId, isChecked, todoTitle));
       } else {
@@ -152,6 +155,7 @@ export const __removeMyTodo =
   (roomId, todoId, memberId, isChecked) => async (dispatch) => {
     try {
       await todoApi.removeMember(roomId, todoId, memberId);
+      dispatch(__loadAllStatus(roomId));
       if (isChecked) {
         dispatch(exitMyTodo(todoId));
       } else {
@@ -323,6 +327,13 @@ export const todos = handleActions(
     [RESET_TODOS]: (state, { payload }) =>
       produce(state, (draft) => {
         draft.todos = [];
+      }),
+
+    [INIT_MY_TODOS]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.checkedTodo = [];
+        draft.notCheckedTodo = [];
+        draft.myTodoCount = {};
       }),
   },
 

@@ -6,6 +6,7 @@ import {
   __loadMyTodos,
   __switchTodoStat,
   __removeMyTodo,
+  initMyTodos,
 } from "../../../redux/modules/todos";
 import Icon from "../../../components/Icon";
 
@@ -13,14 +14,18 @@ import { IconBtn, Text, Input } from "../../../elem";
 import flex from "../../../themes/flex";
 import { body_2 } from "../../../themes/textStyle";
 
-const MyTodos = ({ setMyTodoLength }) => {
+const MyTodos = () => {
   const dispatch = useDispatch();
-  const { roomId } = useParams();
-  const { checkedTodo, notCheckedTodo } = useSelector((state) => state.todos);
   const myId = useSelector((state) => state.user.user.userId);
+  const { checkedTodo, notCheckedTodo } = useSelector((state) => state.todos);
+  const { roomId } = useParams();
 
   useEffect(() => {
     dispatch(__loadMyTodos(roomId));
+
+    return () => {
+      dispatch(initMyTodos());
+    };
   }, []);
 
   return (
@@ -54,7 +59,6 @@ const MyTodos = ({ setMyTodoLength }) => {
                               item.todoTitle
                             )
                           );
-                          setMyTodoLength(item.todoId);
                         }}
                       />
                       <Label htmlFor={item.todoId}>
@@ -109,7 +113,6 @@ const MyTodos = ({ setMyTodoLength }) => {
                             item.todoTitle
                           )
                         );
-                        setMyTodoLength(item.todoId);
                       }}
                     />
                     <Label htmlFor={item.todoId}>

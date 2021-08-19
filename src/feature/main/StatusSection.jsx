@@ -6,54 +6,23 @@ import ProjectStatus from "./ProjectStatus";
 import Members from "./Members";
 
 // redux
-import { dashBoardApi } from "../../api/dashBoardApi";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { __loadAllStatus, initAllStatus } from "../../redux/modules/dashBoard";
 
-const StatusSection = ({ myTodoLength }) => {
-  const [loading, setLoading] = useState(true);
-  const [editedInfo, setEditedInfo] = useState([]);
-  const [myNewInfo, setMyNewInfo] = useState({});
-  const [projectStatus, setProjectStatus] = useState({});
-
+const StatusSection = () => {
+  const dispatch = useDispatch();
   const { roomId } = useParams();
-  const myId = localStorage.getItem("userId");
 
   useEffect(() => {
-    const fetchMemberInfo = async () => {
-      try {
-        const {
-          data: { memberStatus, projectStatus },
-        } = await dashBoardApi.loadAllStatus(roomId);
-        const myIndx = memberStatus.findIndex(
-          (member) => member.userId === myId
-        );
+    dispatch(__loadAllStatus(roomId));
+    return () => dispatch(initAllStatus());
+  }, []);
 
-        setEditedInfo(memberStatus);
-        setMyNewInfo(memberStatus[myIndx]);
-        setProjectStatus(projectStatus);
-      } catch (e) {
-        console.log(`에러 발생 : ${e}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMemberInfo();
-    return () => setLoading(false);
-  }, [myTodoLength]);
-
-  if (loading) return <></>;
   return (
     <Container>
-      <ProjectStatus projectStatus={projectStatus} />
-      <Members
-        myTodoLength={myTodoLength}
-        editedInfo={editedInfo}
-        setEditedInfo={setEditedInfo}
-        myNewInfo={myNewInfo}
-        setMyNewInfo={setMyNewInfo}
-        myId={myId}
-      />
+      <ProjectStatus />
+      <Members />
     </Container>
   );
 };
@@ -67,4 +36,4 @@ const Container = styled.div`
   border-right: 1px solid var(--line);
 `;
 
-export default StatusSection;
+export default React.memo(StatusSection);

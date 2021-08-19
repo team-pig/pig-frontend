@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 // component & elem
@@ -7,26 +7,36 @@ import MemberStatus from "./MemberStatus";
 import { scrollbar } from "../../themes/scrollbar";
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
+import { useSelector } from "react-redux";
+import { useState } from "react";
 
-const Members = ({ editedInfo, myNewInfo, setMyNewInfo, myId }) => {
-  const colorAry = ["blue", "mint", "yellow", "orange"];
+const Members = () => {
+  const [memberStatus, setMemberStatus] = useState([]);
+  const [myInfo, setMyInfo] = useState({});
+
+  const __memberStatus = useSelector((state) => state.dashBoard.memberStatus);
+  const __id = useSelector((state) => state.user.user.userId);
+
+  useEffect(() => {
+    setMemberStatus(__memberStatus);
+    const myIndx = __memberStatus.findIndex((member) => member.userId === __id);
+    setMyInfo(__memberStatus[myIndx]);
+  }, [__memberStatus, __id]);
 
   return (
     <Container>
       <MembersHeader>
         <Text type="body_1">팀원 현황</Text>
       </MembersHeader>
-      <MyStatus myNewInfo={myNewInfo} setMyNewInfo={setMyNewInfo} />
-      {editedInfo.map(
-        (member, idx) =>
-          member.userId !== myId && (
-            <MemberStatus
-              key={member.userId}
-              member={member}
-              color={colorAry[idx % 4]}
-            />
-          )
-      )}
+      {myInfo && <MyStatus myInfo={myInfo} setMyInfo={setMyInfo} />}
+      {memberStatus &&
+        memberStatus.map((member, idx) => {
+          return (
+            member.userId !== __id && (
+              <MemberStatus key={member.userId} member={member} />
+            )
+          );
+        })}
     </Container>
   );
 };

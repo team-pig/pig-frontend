@@ -1,7 +1,6 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import { roomApi } from "../../api/roomApi";
-import { setPreview, uploadImageToS3 } from "./image";
 
 //action
 const ADD_ROOM = "room/ADD_ROOM";
@@ -16,6 +15,7 @@ const EXIT_ROOM = "room/EXIT_ROOM";
 const ADD_BOOKMARK = "room/ADD_BOOKMARK";
 const DELETE_BOOKMARK = "room/DELETE_BOOKMARK";
 const GET_MARKED_LIST = "room/GET_MARKED_LIST";
+const INIT_ROOM = "room/INIT_ROOM";
 
 const LOADING = "LOADING";
 
@@ -37,10 +37,13 @@ const initialState = {
 
 //action creator
 
+export const initRoom = createAction(INIT_ROOM, () => ({}));
+
 export const addRoom = createAction(ADD_ROOM, (room, markedList) => ({
   room,
   markedList,
 }));
+
 export const searchRoom = createAction(
   SEARCH_ROOM,
   (searchedRoom, paging, searchContent) => ({
@@ -49,6 +52,7 @@ export const searchRoom = createAction(
     searchContent,
   })
 );
+
 export const getRoomList = createAction(
   GET_ROOM_LIST,
   (roomList, paging, userId) => ({
@@ -72,6 +76,7 @@ export const joinRoom = createAction(JOIN_ROOM, (inviteCode, markedList) => ({
   markedList,
 }));
 export const exitRoom = createAction(EXIT_ROOM, (roomId) => ({ roomId }));
+
 export const addBookmark = createAction(
   ADD_BOOKMARK,
   (room, roomId, isMarked, markedList) => ({
@@ -136,7 +141,6 @@ export const __searchRoom =
         const { data } = await roomApi.searchRoom(1, 20, searchContent);
 
         dispatch(searchRoom(data));
-        // }
       }
     } catch (e) {
       console.log(e);
@@ -239,7 +243,6 @@ export const __getOneRoom =
         data: { result },
       } = await roomApi.getOneRoom(roomId);
       dispatch(getOneRoom(result));
-      console.log(result);
     } catch (e) {
       console.log(e);
     }
@@ -372,6 +375,11 @@ const room = handleActions(
         if (idx !== -1) {
           draft.markedList.splice(idx, 1);
         }
+      }),
+
+    [INIT_ROOM]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.currentRoom = {};
       }),
   },
   initialState

@@ -5,6 +5,5 @@ export const dashBoardApi = {
   editMyProfile: (roomId, willReqParams) =>
     instance.patch(`/room/${roomId}/myprofile`, willReqParams),
 
-  loadAllRoomInfo: (roomId) => instance.get(`/room/${roomId}/main`),
   editRoomInfos: (newRoomInfos) => instance.patch("/room", newRoomInfos),
 };

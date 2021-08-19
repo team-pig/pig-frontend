@@ -22,9 +22,14 @@ const UPDATE_CARD_INFOS = "board/UPDATE_CARD_INFOS";
 const DELETE_CARD = "board/DELETE_CARD";
 const RESET_CARD = "board/RESET_CARD";
 
+const INIT_BOARD = "board/INIT_BOARD";
+
 /**
  * action creatore
  */
+
+export const initBoard = createAction(INIT_BOARD, () => ({}));
+
 const loadBucket = createAction(
   LOAD_BUCKET,
   (loadedBuckets, loadedBucketOrder) => ({
@@ -423,6 +428,15 @@ export const board = handleActions(
     [RESET_CARD]: (state, { payload }) =>
       produce(state, (draft) => {
         draft.card = {};
+      }),
+
+    [INIT_BOARD]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.allMembers = [];
+        draft.card = {};
+        draft.cards = null;
+        draft.columns = {};
+        draft.columnOrder = [];
       }),
   },
   initialState

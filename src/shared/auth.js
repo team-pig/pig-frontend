@@ -23,7 +23,7 @@ export default (SpecialComponent, option, adminRoute = null) => {
             option === false &&
             (match.path === "/login" || match.path === "/register")
           ) {
-            history.replace("/roomlist");
+            // history.replace("/roomlist");
           }
           // 리덕스 업데이트
           dispatch(__loginCheck(isLogin, user));

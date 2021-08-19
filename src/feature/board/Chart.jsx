@@ -12,6 +12,7 @@ import {
   __updateCardLocate,
   __loadBucket,
   __loadCard,
+  initBoard,
 } from "../../redux/modules/board";
 
 const Chart = () => {
@@ -22,6 +23,8 @@ const Chart = () => {
   useEffect(() => {
     dispatch(__loadBucket(roomId));
     dispatch(__loadCard(roomId));
+
+    return () => dispatch(initBoard());
   }, []);
 
   // 아이템을 떨어뜨렸을 때 실행할 작업들

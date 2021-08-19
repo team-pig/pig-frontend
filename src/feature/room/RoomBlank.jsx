@@ -1,15 +1,21 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 //component
 import RoomBlankImg from "../../assets/img/room-blank-img.jpg";
 
-const RoomBlank = ({ display }) => {
+const RoomBlank = () => {
+  const { room } = useSelector((state) => state.room);
   return (
     <>
-      <ImgBox>
-        <BlankImg src={RoomBlankImg} />
-      </ImgBox>
+      {room.length > 0 ? (
+        ""
+      ) : (
+        <ImgBox>
+          <BlankImg src={RoomBlankImg} />
+        </ImgBox>
+      )}
     </>
   );
 };

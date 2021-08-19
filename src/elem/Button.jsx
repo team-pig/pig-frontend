@@ -6,7 +6,12 @@ const Button = ({ shape, children, ...rest }) => {
   switch (shape) {
     case "green-fill":
       return (
-        <GreenFill color="main" onClick={rest._onClick} {...rest}>
+        <GreenFill
+          disabled={rest.disabled}
+          color="main"
+          onClick={rest._onClick}
+          {...rest}
+        >
           {children}
         </GreenFill>
       );
@@ -62,10 +67,23 @@ const FillBtn = css`
   ${BtnDefault};
   color: var(--white);
   background-color: ${(props) => `var(--${props.color})`};
+  ${(props) =>
+    props.disabled
+      ? `background-color: var(--line); 
+    color: var(--grey);
+    border: 1px solid var(--grey);`
+      : ""}
 
   &:hover {
     color: ${(props) => `var(--${props.color})`};
     background-color: var(--white);
+
+    ${(props) =>
+      props.disabled
+        ? `background-color: var(--line); 
+    color: var(--grey);
+    border: 1px solid var(--grey)`
+        : ""}
   }
 `;
 

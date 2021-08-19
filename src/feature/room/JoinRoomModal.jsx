@@ -15,18 +15,13 @@ import RoomTags from "./RoomTags";
 //redux
 import {
   __getInviteCodeRoom,
-  __getMarkedList,
   __joinRoom,
 } from "../../redux/modules/room";
 
-const JoinRoomModal = ({ showModal, closeModal }) => {
+const JoinRoomModal = ({ showModal, joinModal }) => {
   const dispatch = useDispatch();
-  const [newContent, setNewContent] = useState({
-    roomImage: "",
-    roomName: "",
-    tag: "",
-  });
-  const [inviteCode, setInviteCode] = useState();
+
+  const [inviteCode, setInviteCode] = useState("");
   const [isInfo, setIsInfo] = useState(false);
   const roomImage = useSelector((state) => state.room.inviteCodeRoom.roomImage);
   const roomName = useSelector((state) => state.room.inviteCodeRoom.roomName);
@@ -35,20 +30,23 @@ const JoinRoomModal = ({ showModal, closeModal }) => {
   const changeHandler = async (e) => {
     const { value, name } = e.target;
     await setInviteCode({ ...inviteCode, [name]: value });
-    console.log(value);
     setIsInfo(true);
     dispatch(__getInviteCodeRoom(value));
   };
 
+  const disabled = inviteCode === "";
   const join = () => {
-    dispatch(__joinRoom(inviteCode));
+    if(!disabled){
+      dispatch(__joinRoom(inviteCode));
+    }
+    setInviteCode("");
     setIsInfo(false);
-    closeModal();
+    joinModal();
   };
 
   const cancel = () => {
     setIsInfo(false);
-    closeModal();
+    joinModal();
   };
 
   return (
@@ -97,7 +95,7 @@ const JoinRoomModal = ({ showModal, closeModal }) => {
                 취소
               </Button>
               <Btn>
-                <Button size="150" _onClick={join}>
+                <Button disabled={disabled} size="150" _onClick={join}>
                   입장하기
                 </Button>
               </Btn>
@@ -150,7 +148,7 @@ const DefaultImage = styled.div`
   height: 100px;
   border-radius: 50%;
   background-color: var(--line);
-  color: var(--darkgrey);
+  color: var(--grey);
 `;
 
 const ImageBox = styled.div`
@@ -179,7 +177,7 @@ const InviteCodeInput = styled.input`
   width: 100%;
   height: 46px;
   padding: 0 10px 0 10px;
-  border: 1px solid var(--darkgrey);
+  border: 1px solid var(--grey);
 `;
 
 const Content = styled.div`
@@ -191,7 +189,7 @@ const Content = styled.div`
   margin-bottom: 12px;
   padding: 0 10px 0 10px;
   background-color: var(--line);
-  border: 1px solid var(--darkgrey);
+  border: 1px solid var(--grey);
   color: var(--darkgrey);
 
   white-space: nowrap;

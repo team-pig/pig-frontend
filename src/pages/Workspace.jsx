@@ -10,7 +10,7 @@ import SEO from "../components/SEO";
 
 // redux & api
 import { __getDocs } from "../redux/modules/document";
-import { __getOneRoom } from "../redux/modules/room";
+import { __getOneRoom, initRoom } from "../redux/modules/room";
 import { loadMessages, resetMessages } from "../redux/modules/chat";
 
 // socket
@@ -19,9 +19,7 @@ import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
 const Workspace = (props) => {
   let { path, url } = useRouteMatch();
   const { roomId } = useParams();
-
   const dispatch = useDispatch();
-
   const { userId, nickname } = useSelector((state) => state.user.user);
   const docs = useSelector((state) => state.document.docList);
   const room = useSelector((state) => state.room.currentRoom);
@@ -53,19 +51,22 @@ const Workspace = (props) => {
 
   // workspace에서 나갈 때 room에서 leave
   useEffect(() => {
-    return () => leaveRoom(roomId, nickname, userId);
+    return () => {
+      leaveRoom(roomId, nickname, userId);
+      dispatch(initRoom());
+    };
   }, [roomId, nickname, userId]);
 
   return (
     <>
       <SEO title={room.roomName} />
-      <div>
+      <>
         <WSHeader url={url} />
         <WSTemplate>
           <WSRouter path={path} />
-          <WSSidebar />
+          {/* <WSSidebar /> */}
         </WSTemplate>
-      </div>
+      </>
     </>
   );
 };

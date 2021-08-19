@@ -4,10 +4,13 @@ import { dashBoardApi } from "../../api/dashBoardApi";
 import { regex } from "../../shared/regex";
 
 const LOAD_ALL_STATUS = "dashBoard/LOAD_ALL_STATUS";
+const INIT_ALL_STATUS = "dashBoard/INIT_ALL_STATUS";
 
 const loadAllStatus = createAction(LOAD_ALL_STATUS, (allMembers) => ({
   allMembers,
 }));
+
+export const initAllStatus = createAction(INIT_ALL_STATUS, () => ({}));
 
 export const __loadAllStatus = (roomId) => async (dispatch) => {
   try {
@@ -20,12 +23,14 @@ export const __loadAllStatus = (roomId) => async (dispatch) => {
 
 export const __editMyProfile = (roomId, newMyInfo) => async (dispatch) => {
   try {
+    const filterTags =
+      typeof newMyInfo.tags === "object"
+        ? newMyInfo.tags
+        : newMyInfo.tags.split(regex.commaAndTrim).filter(Boolean);
+
     const willReqParams = {
       ...newMyInfo,
-      tags:
-        typeof newMyInfo.tags === "object"
-          ? newMyInfo.tags
-          : newMyInfo.tags.split(regex.commaAndTrim),
+      tags: filterTags,
     };
 
     await dashBoardApi.editMyProfile(roomId, willReqParams);
@@ -36,13 +41,15 @@ export const __editMyProfile = (roomId, newMyInfo) => async (dispatch) => {
 
 export const __editRoomInfos = (roomId, newRoominfos) => async (dispatch) => {
   try {
+    const filterTags =
+      typeof newRoominfos.tag === "object"
+        ? newRoominfos.tag
+        : newRoominfos.tag.split(regex.commaAndTrim).filter(Boolean);
+
     const willReqParams = {
       roomId,
       ...newRoominfos,
-      tag:
-        typeof newRoominfos.tag === "object"
-          ? newRoominfos.tag
-          : newRoominfos.tag.split(regex.commaAndTrim),
+      tag: filterTags,
     };
 
     await dashBoardApi.editRoomInfos(willReqParams);
@@ -63,6 +70,12 @@ export const dashBoard = handleActions(
         const { projectStatus, memberStatus } = payload.allMembers;
         draft.projectStatus = projectStatus;
         draft.memberStatus = memberStatus;
+      }),
+
+    [INIT_ALL_STATUS]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.projectStatus = {};
+        draft.memberStatus = [];
       }),
   },
   initialState

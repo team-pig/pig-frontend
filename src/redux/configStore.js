@@ -14,6 +14,7 @@ import todos from "./modules/todos";
 import member from "./modules/member";
 import dashBoard from "./modules/dashBoard";
 import chat from "./modules/chat";
+import resize from "./modules/resize";
 
 // middlewares
 import thunk from "redux-thunk";
@@ -35,6 +36,7 @@ const appReducer = combineReducers({
   date,
   calendar,
   chat,
+  resize,
   router: connectRouter(history),
 });
 

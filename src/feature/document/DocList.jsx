@@ -38,10 +38,10 @@ const DocList = ({ docList }) => {
 };
 
 const Container = styled.aside`
-  --WSHeaderHeight: 48px;
-  width: 260px;
-  max-height: calc(100vh - var(--WSHeaderHeight) + 20px);
+  width: 100%;
+  max-height: 100%;
   border-right: 1px solid var(--line);
+  background-color: var(--white);
 `;
 
 const TitleBox = styled.div`

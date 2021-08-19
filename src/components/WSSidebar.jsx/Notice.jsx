@@ -5,10 +5,10 @@ import Icon from "../Icon";
 import { IconBtn, Text } from "../../elem";
 import flex from "../../themes/flex";
 
-const Notice = () => {
+const Notice = ({ _onClick }) => {
   return (
     <NotiContainer>
-      <IconBox>
+      <IconBox onClick={_onClick}>
         <Icon icon="bookmark" size="20px" color="var(--main)" />
       </IconBox>
       <NotiText type="body_3">8월 14일 발표까지 MVP 전부 만들기!!!!!!</NotiText>

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
 
 // elem  & etc
@@ -11,13 +11,21 @@ const ImageModule = ({
   getImgUrlFromS3,
   useInitPreview = true,
   useSaveAvartar = false,
+  ...rest
 }) => {
   const fileInput = useRef();
   const [preview, setPreview] = useState("");
   const [imgObject, setImgObject] = useState(null);
 
+  useEffect(() => {
+    if(rest.roomPreview){
+      setPreview(rest.roomPreview);
+    }
+  }, []);
+  
   // useSaveAvartar === false 일때 (이미지를 업로드함과 동시에 S3에 저장)
   const imagePreview = async (e) => {
+
     const file = fileInput.current.files[0];
     if (!file) return; // 파일선택 후 '취소' 했을 때 발생하는 오류 처리
 
@@ -26,8 +34,9 @@ const ImageModule = ({
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setPreview(reader.result);
+      console.log(preview);
     };
-
+    
     if (!useSaveAvartar) getImgUrlFromS3(uploadFile, file);
   };
 

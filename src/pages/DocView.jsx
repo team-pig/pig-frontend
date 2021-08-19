@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Rnd } from "react-rnd";
 
 // component
 import DocList from "../feature/document/DocList";
 import DocViewer from "../feature/document/DocViewer";
+import ResizeWidth from "../components/ResizeWidth";
 
 // redux & api
 import { __getDocs } from "../redux/modules/document";
@@ -19,55 +19,44 @@ const DocView = (props) => {
   const docList = useSelector((state) => state.document.docList) || [];
   const docListWidth = useSelector((state) => state.resize.docListWidth);
 
+  useEffect(() => {
+    dispatch(__getDocs(roomId));
+  }, [dispatch, roomId]);
+
+  // 아래 내용들은 모두 ResizeWidth 관련
   const [size, setSize] = useState({
     width: docListWidth,
     height: "calc(100vh - 48px + 20px)",
   });
 
-  useEffect(() => {
-    dispatch(__getDocs(roomId));
-  }, [dispatch, roomId]);
-
-  const onResize = (event, dir, refToElement, delta, position) => {
-    setSize((pre) => ({
-      ...pre,
-      width: refToElement.style.width.split("px")[0],
-    }));
+  const option = {
+    minWidth: "260px",
+    maxWidth: "500px",
   };
 
-  const onResizeStop = (event) => {
-    dispatch(resizeDocList(size.width));
-  };
+  const handleSize = useCallback(
+    (width) => setSize((pre) => ({ ...pre, width })),
+    []
+  );
 
   return (
     <Container>
-      {size.width && (
-        <Rnd
-          default={{
-            x: 0,
-            y: 0,
-            width: size.width,
-          }}
-          minWidth="260px"
-          maxWidth="500px"
-          minHeight="100vh"
-          maxHeight="100vh"
-          resizeGrid={[1, 1]}
-          disableDragging={true}
-          bounds="window"
-          enableResizing={{ top: false, bottom: false, right: true }}
-          onResize={onResize}
-          onResizeStop={onResizeStop}
+      {
+        <ResizeWidth
+          size={size}
+          handleSize={handleSize}
+          drag="right"
+          option={option}
+          storeSaveFunc={resizeDocList}
         >
           <DocList docList={docList} />
-        </Rnd>
-      )}
+        </ResizeWidth>
+      }
       <DocViewer left={size.width} />
     </Container>
   );
 };
 
-// 임시 스타일
 const Container = styled.section`
   display: flex;
   width: 100%;

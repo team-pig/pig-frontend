@@ -5,9 +5,13 @@ import styled from "styled-components";
 import Graph from "./Graph";
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
+import { useSelector } from "react-redux";
 
-const ProjectStatus = ({ projectStatus }) => {
-  const { checked, notChecked } = projectStatus;
+const ProjectStatus = () => {
+  const { checked, notChecked } = useSelector(
+    (state) => state.dashBoard.projectStatus
+  );
+
   const guagePercent = isNaN(
     ((checked / (checked + notChecked)) * 100).toFixed(0)
   )
@@ -22,9 +26,7 @@ const ProjectStatus = ({ projectStatus }) => {
           {guagePercent}% 완료
         </Text>
         <Line />
-        {/*  date를 기준으로 마감일 표시 하는 기능 추가 예정*/}
         <Text type="sub_2" color="notice">
-          {/* 프로젝트 마감 13일 전 */}
           오늘도 힘찬 프로젝트!
         </Text>
       </ProjectInfo>

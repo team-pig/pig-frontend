@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 import flex from "../../themes/flex";
 import { Text } from "../../elem";
@@ -13,13 +13,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 //etc
-const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
+const MyStatus = ({ myInfo, setMyInfo }) => {
   const dispatch = useDispatch();
-  const { nickname, desc, checked, notChecked, tags } = myNewInfo;
+  const [editMode, setEditMode] = useState(false);
   const { total, checkedTodo } = useSelector(
     (state) => state.todos.myTodoCount
   );
-  const [editMode, setEditMode] = useState(false);
+
+  const { nickname, desc, checked, notChecked, tags } = myInfo;
   const { roomId } = useParams();
 
   const memberPercent = isNaN(
@@ -28,9 +29,12 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
     ? 0
     : ((checkedTodo / total) * 100).toFixed(0);
 
-  const editMyInfoHandler = ({ target: { value, name } }) => {
-    setMyNewInfo({ ...myNewInfo, [name]: value });
-  };
+  const onChangeHandler = useCallback(
+    ({ target: { value, name } }) => {
+      setMyInfo({ ...myInfo, [name]: value });
+    },
+    [myInfo, setMyInfo]
+  );
 
   if (editMode)
     return (
@@ -45,8 +49,8 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
                 setEditMode(false);
                 dispatch(
                   __editMyProfile(roomId, {
-                    desc: myNewInfo.desc,
-                    tags: myNewInfo.tags,
+                    desc: myInfo.desc,
+                    tags: myInfo.tags,
                   })
                 );
               }}
@@ -59,28 +63,24 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
               setEditMode(false);
               dispatch(
                 __editMyProfile(roomId, {
-                  desc: myNewInfo.desc,
-                  tags: myNewInfo.tags,
+                  desc,
+                  tags,
                 })
               );
             }}
           >
-            <InputWrapper>
-              <MyInfoEditInput
-                tyoe="text"
-                name="desc"
-                value={desc || ""}
-                onChange={editMyInfoHandler}
-              />
-            </InputWrapper>
-            <InputWrapper>
-              <MyInfoEditInput
-                type="text"
-                name="tags"
-                value={tags || ""}
-                onChange={editMyInfoHandler}
-              />
-            </InputWrapper>
+            <MyInfoEditInput
+              tyoe="text"
+              name="desc"
+              value={desc || ""}
+              onChange={onChangeHandler}
+            />
+            <MyInfoEditInput
+              type="text"
+              name="tags"
+              value={tags || ""}
+              onChange={onChangeHandler}
+            />
           </form>
           <HelpMessage>
             역할은 " , " 로 구분해서 작성할 수 있습니다.
@@ -88,6 +88,7 @@ const MyStatus = ({ myNewInfo, setMyNewInfo }) => {
         </EditModeWrapper>
       </Container>
     );
+
   return (
     <Container>
       <MemberMain>
@@ -190,8 +191,6 @@ const Message = styled.div`
   margin-bottom: 10px;
 `;
 
-const InputWrapper = styled.div``;
-
 const HelpMessage = styled.div`
   ${body_4}
   text-align: right;
@@ -199,4 +198,4 @@ const HelpMessage = styled.div`
   margin-bottom: 20px;
 `;
 
-export default MyStatus;
+export default React.memo(MyStatus);

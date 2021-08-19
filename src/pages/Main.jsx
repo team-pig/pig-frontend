@@ -7,16 +7,14 @@ import Information from "../feature/main/Information";
 import MyTodos from "../feature/main/myTodos/MyTodos";
 
 const Main = () => {
-  const [myTodoLength, setMyTodoLength] = useState(""); // useEffect [ ] 용 상태값
-
   return (
     <Container>
       <LeftSide>
-        <StatusSection myTodoLength={myTodoLength} />
+        <StatusSection />
       </LeftSide>
       <RightSide>
         <Information />
-        <MyTodos setMyTodoLength={setMyTodoLength} />
+        <MyTodos />
       </RightSide>
     </Container>
   );

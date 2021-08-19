@@ -92,4 +92,4 @@ const Message = styled.div`
   margin-bottom: 10px;
 `;
 
-export default MemberStatus;
+export default React.memo(MemberStatus);

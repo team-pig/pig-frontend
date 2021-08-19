@@ -12,8 +12,7 @@ import { Button, Input } from "../../elem/index";
 import { __addRoom } from "../../redux/modules/room";
 import ImageModule from "../../components/ImageModule";
 
-
-const AddRoomModal = ({ showModal, closeModal }) => {
+const AddRoomModal = ({ showModal, addModal }) => {
   const dispatch = useDispatch();
   const [roomImg, setRoomImg] = useState("");
   const [contents, setContents] = useState({
@@ -23,7 +22,7 @@ const AddRoomModal = ({ showModal, closeModal }) => {
   });
   const [isImage, setIsImage] = useState(false);
 
-  const getImgUrlFromS3 = async(callback, file) => {
+  const getImgUrlFromS3 = async (callback, file) => {
     const result = await callback(file);
     setRoomImg(result);
   };
@@ -33,14 +32,23 @@ const AddRoomModal = ({ showModal, closeModal }) => {
     setContents({ ...contents, [name]: value });
   };
 
+  const disabled = contents.roomName === "";
+
   const saveFile = () => {
-    dispatch(__addRoom(contents, roomImg));
-    closeModal();
+    if (!disabled) {
+      dispatch(__addRoom(contents, roomImg));
+    }
+    setContents({
+      roomName: "",
+      subtitle: "",
+      tag: "",
+    });
+    addModal();
     setIsImage(false);
   };
 
   const cancelFile = () => {
-    closeModal();
+    addModal();
     setIsImage(false);
   };
 
@@ -51,10 +59,7 @@ const AddRoomModal = ({ showModal, closeModal }) => {
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
             <ImageBox>
-
-              <ImageModule 
-                getImgUrlFromS3={getImgUrlFromS3}          
-              />
+              <ImageModule getImgUrlFromS3={getImgUrlFromS3} />
             </ImageBox>
             <InputBox>
               <Input
@@ -81,7 +86,7 @@ const AddRoomModal = ({ showModal, closeModal }) => {
                 취소
               </Button>
               <Btn>
-                <Button size="150" _onClick={saveFile}>
+                <Button disabled={disabled} size="150" _onClick={saveFile}>
                   만들기
                 </Button>
               </Btn>

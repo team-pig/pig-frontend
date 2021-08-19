@@ -1,17 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import Icon from "../../components/Icon";
 import { button } from "../../themes/textStyle";
 
 const DropDown = ({
+  userId,
+  master,
   openModModal,
   deleteRoom,
   exitRoom,
   isDisplayDrop,
   setIsDisplayDrop,
 }) => {
-  // const [isDisplayDrop, setIsDisplayDrop] = useState(false);
   const dropDownModal = useRef();
 
   const handleClickOutside = (e) => {
@@ -31,6 +32,8 @@ const DropDown = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [dropDownModal]);
 
+  const disabled = !(userId === master);
+
   return (
     <>
       <Wrapper>
@@ -41,7 +44,9 @@ const DropDown = ({
           <Container ref={dropDownModal}>
             <Btn onClick={openModModal}>수정</Btn>
             <Btn onClick={exitRoom}>나가기</Btn>
-            <Btn onClick={deleteRoom}>삭제</Btn>
+            <Btn disabled={disabled} onClick={deleteRoom}>
+              삭제
+            </Btn>
           </Container>
         )}
       </Wrapper>
@@ -79,11 +84,13 @@ const Btn = styled.div`
   width: 84px;
   height: 42px;
   padding-left: 20px;
-
-  color: var(--darkgrey);
-
+  ${(props) =>
+    props.disabled
+      ? `background-color: var(--line); color: var(--grey);`
+      : `color: var(--darkgrey);`}
   &:hover {
-    color: var(--main);
+    ${(props) =>
+      props.disabled ? `color: var(--grey);` : `color: var(--main);`}
   }
 `;
 

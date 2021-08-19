@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 
 //components
@@ -19,7 +19,6 @@ import {
   __deleteRoom,
   __exitRoom,
   __toggleBookmark,
-  __getMarkedList,
 } from "../../redux/modules/room";
 
 //roomList map의 list에서 받아오는 값
@@ -27,6 +26,7 @@ const RoomCard = ({
   roomId,
   roomImage,
   roomName,
+  master,
   subtitle,
   members,
   memberStatus,
@@ -35,13 +35,12 @@ const RoomCard = ({
   isCheck,
   inviteCode,
   history,
-
 }) => {
   const dispatch = useDispatch();
   const [showModModal, setShowModModal] = useState(false);
-  const [showAllMember, setShowAllMember] = useState(false);
   const [isDisplayDrop, setIsDisplayDrop] = useState(false);
   const [isMarked, setIsMarked] = useState(false);
+  const userId = useSelector((state) => state.room.userId);
 
   useEffect(() => {
     setIsCheck();
@@ -60,9 +59,9 @@ const RoomCard = ({
     e.stopPropagation();
     e.preventDefault();
     dispatch(__toggleBookmark(roomId, isMarked));
-    if(isMarked){
+    if (isMarked) {
       setIsMarked(false);
-    }else{
+    } else {
       setIsMarked(true);
     }
   };
@@ -75,15 +74,17 @@ const RoomCard = ({
 
   const deleteRoom = (e) => {
     e.stopPropagation();
-    dispatch(__deleteRoom(roomId));
     setIsDisplayDrop(false);
-
+    if (userId === master) {
+      dispatch(__deleteRoom(roomId));
+      window.alert("🗑정말 이 방을 삭제할까요?");
+    }
   };
 
   const openModModal = (e) => {
+    // close와 합쳐보려고 하였으나 모달 닫기 시 e.stop...에서 에러가 남
     e.stopPropagation();
     setShowModModal(true);
-    roomId = { roomId };
     setIsDisplayDrop(false);
   };
 
@@ -107,12 +108,8 @@ const RoomCard = ({
         }}
       >
         <IconBox>
-         
           <LinkIcon inviteCode={inviteCode} />
-          <BookMark
-            isMarked={isMarked}
-            clickBookmark={clickBookmark}
-          />
+          <BookMark isMarked={isMarked} clickBookmark={clickBookmark} />
         </IconBox>
         <CardSection>
           <CardProfile>
@@ -135,10 +132,11 @@ const RoomCard = ({
             </Text>
           </FooterItem>
           <FooterItem>
-           
             <MemberImg members={members} memberStatus={memberStatus} />
-      
+
             <DropDown
+              userId={userId}
+              master={master}
               isDisplayDrop={isDisplayDrop}
               setIsDisplayDrop={setIsDisplayDrop}
               exitRoom={exitRoom}

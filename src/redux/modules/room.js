@@ -108,7 +108,6 @@ export const __joinRoom =
     try {
       const { data } = await roomApi.joinRoom(inviteCode);
       const markedList = getState().room.markedList;
-      console.log(markedList);
       dispatch(joinRoom(data, markedList));
     } catch (e) {
       console.log(e);
@@ -135,7 +134,6 @@ export const __searchRoom =
         const { data } = await roomApi.searchRoom(1, 20, null);
 
         dispatch(searchRoom(_room));
-        // dispatch(getRoomList(_room, searchPaging));
       } else {
         const _room = getState().room.room;
         const { data } = await roomApi.searchRoom(1, 20, searchContent);
@@ -152,8 +150,6 @@ export const __addRoom =
   async (dispatch, getState, { history }) => {
     try {
       const markedList = getState().room.markedList;
-      console.log(markedList);
-      // const _image = getState().image.preview;
       const willDispatchContents = {
         ...contents,
         roomImage: roomImg
@@ -179,9 +175,7 @@ export const __editRoom =
           : "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png",
         roomId,
       };
-
       const { data } = await roomApi.editRoom(newContent);
-      console.log(data);
       dispatch(editRoom(data));
     } catch (e) {
       console.log(e);
@@ -192,7 +186,6 @@ export const __getMarkedList =
   async (dispatch, getState, { history }) => {
     try {
       const { data } = await roomApi.getMarkedList();
-      console.log(data);
       dispatch(getMarkedList(data));
     } catch (e) {
       console.log(e);

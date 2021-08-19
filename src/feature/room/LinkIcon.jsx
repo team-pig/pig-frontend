@@ -17,7 +17,7 @@ const LinkIcon = ({inviteCode}) => {
     copyCodeRef.current.select();
     document.execCommand("copy");
     e.target.focus();
-    console.log("복사완료");
+    window.alert("✔초대코드 복사완료");
   }
   return(
     <>

@@ -15,19 +15,10 @@ import ImageModule from "../../components/ImageModule";
 const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
   const dispatch = useDispatch();
   const [roomImg, setRoomImg] = useState("");
-  const [newContent, setNewContent] = useState({
-    roomName: "",
-    subtitle: "",
-    tag: "",
-  });
+
   const [isImage, setIsImage] = useState(false);
   const roomList = useSelector((state) => state.room.room);
-  const preview = useSelector((state) => state.image.preview);
-
-
-
   const isEdit = roomId ? true : false;
-
   const _room = isEdit
     ? roomList && roomList.find((r) => r.roomId === roomId)
     : null;
@@ -52,11 +43,14 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
     setContents({ ...contents, [name]: value });
   };
 
+  const disabled = contents.roomName === "";
+
   const modifyFile = () => {
-    dispatch(__editRoom(roomId, contents, roomImg));
+    if(!disabled){
+      dispatch(__editRoom(roomId, contents, roomImg));
+    }
     closeModModal();
     setIsImage(false);
-    console.log(roomId);
   };
 
   const cancelFile = () => {
@@ -71,7 +65,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
             <ImageBox>
-              <ImageModule getImgUrlFromS3={getImgUrlFromS3} />
+              <ImageModule roomPreview={_room.roomImage} getImgUrlFromS3={getImgUrlFromS3} />
             </ImageBox>
             <InputBox>
               <Input
@@ -101,7 +95,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
                 취소
               </Button>
               <Btn>
-                <Button size="150" _onClick={modifyFile}>
+                <Button disabled={disabled} size="150" _onClick={modifyFile}>
                   수정
                 </Button>
               </Btn>

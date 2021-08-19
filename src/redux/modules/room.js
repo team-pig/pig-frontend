@@ -135,7 +135,6 @@ export const __searchRoom =
         const { data } = await roomApi.searchRoom(1, 20, null);
 
         dispatch(searchRoom(_room));
-        // dispatch(getRoomList(_room, searchPaging));
       } else {
         const _room = getState().room.room;
         const { data } = await roomApi.searchRoom(1, 20, searchContent);

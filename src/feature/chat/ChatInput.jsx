@@ -1,7 +1,8 @@
-import React, { useState, useCallback } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Picker from "emoji-picker-react";
 
 // component & elem
 import Icon from "../../components/Icon";
@@ -17,7 +18,21 @@ const ChatInput = () => {
 
   const { userId, nickname } = useSelector((state) => state.user.user);
 
+  const inputRef = useRef();
+
   const [text, setText] = useState("");
+  const [showEmoji, setShowEmoji] = useState(false);
+
+  const toggleEmoji = useCallback(() => setShowEmoji((pre) => !pre), []);
+
+  const clickEmoji = useCallback(
+    (e, emoji) => {
+      setText((pre) => pre + emoji.emoji);
+      inputRef.current.focus(); // 이모티콘 선택 후 바로 텍스트 입력할 수 있도록 focus
+      toggleEmoji();
+    },
+    [toggleEmoji]
+  );
 
   const handleSubmit = useCallback(
     (e) => {
@@ -30,13 +45,20 @@ const ChatInput = () => {
 
   return (
     <InputBox onSubmit={handleSubmit}>
+      {showEmoji && (
+        <PickerContainer>
+          <Picker onEmojiClick={clickEmoji} pickerStyle={{ width: "100%" }} />
+        </PickerContainer>
+      )}
       <Input
         type="text"
         placeholder="메세지를 입력하세요"
         value={text}
         onChange={(e) => setText(e.target.value)}
+        ref={inputRef}
       />
-      <IconBtn type="button">
+
+      <IconBtn type="button" onClick={toggleEmoji}>
         <Icon icon="smile" size="20px" color="var(--grey)" />
       </IconBtn>
     </InputBox>
@@ -58,7 +80,6 @@ const InputBox = styled.form`
   border-bottom: none;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  overflow: hidden;
 `;
 
 const Input = styled.input`
@@ -72,6 +93,14 @@ const Input = styled.input`
     ${body_3};
     color: var(--grey);
   }
+`;
+
+const PickerContainer = styled.div`
+  --inputbox: 42px;
+
+  position: absolute;
+  right: 0;
+  bottom: var(--inputbox);
 `;
 
 export default ChatInput;

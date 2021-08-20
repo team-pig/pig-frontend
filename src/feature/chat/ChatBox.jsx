@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, memo } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { body_3 } from "../../themes/textStyle";
 import { hiddenScroll } from "../../themes/hiddenScroll";
 import Bubble from "./Bubble";
 
-const ChatBox = () => {
+const ChatBox = memo(() => {
   const [chatLength, setChatLength] = useState(0);
 
   const user = useSelector((state) => state.user.user);
@@ -38,7 +37,7 @@ const ChatBox = () => {
         ))}
     </Container>
   );
-};
+});
 
 const Container = styled.div`
   --inputBox: 42px;

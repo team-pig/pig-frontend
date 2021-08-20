@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 // component & elem
 import Icon from "../../components/Icon";
@@ -14,8 +14,6 @@ import { sendMessage } from "../../shared/useSocket";
 
 const ChatInput = () => {
   const { roomId } = useParams();
-
-  const dispatch = useDispatch();
 
   const { userId, nickname } = useSelector((state) => state.user.user);
 
@@ -38,7 +36,7 @@ const ChatInput = () => {
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <IconBtn>
+      <IconBtn type="button">
         <Icon icon="smile" size="20px" color="var(--grey)" />
       </IconBtn>
     </InputBox>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
-import moment from "moment";
 
 // elem & compo
 import { Text } from "../../elem";
@@ -11,6 +10,9 @@ import CardModal from "./CardModal";
 import ModalForms from "./ModalForms";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
+
+// function
+import setDday from "../../functions/setDday";
 
 // redux & api
 import { useSelector, useDispatch } from "react-redux";
@@ -30,12 +32,7 @@ const Card = ({ card, index, bucketId }) => {
     setModalContent(currentContent);
   }, [currentContent]);
 
-  const dDay =
-    parseInt(
-      moment(moment(card.endDate).diff(moment().format("YYYY-MM-DD"))).format(
-        "D"
-      )
-    ) - 1;
+  const dDay = setDday(card.endDate);
 
   const limitText = (text, limit) => {
     if (text) {
@@ -87,7 +84,7 @@ const Card = ({ card, index, bucketId }) => {
                     {card.endDate}
                   </Text>
                   <Text type="body_4" color="notice">
-                    {dDay !== 0 ? `D-${dDay}` : "D-DAY"}
+                    {dDay}
                   </Text>
                 </EndDate>
                 <CardStat>

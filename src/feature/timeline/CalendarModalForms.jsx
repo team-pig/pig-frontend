@@ -3,17 +3,20 @@ import styled, { css } from "styled-components";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import DatePickerExample from "../board/DatePicker";
-import moment from "moment";
+
+// function
+import setDday from "../../functions/setDday";
+
+// component & elem
+import BoardDrop from "../board/BoardDrop";
+import BucketSelect from "./BucketSelect";
+import InputToggle from "../../components/InputToggle";
+import Icon from "../../components/Icon";
+import flex from "../../themes/flex";
+import { Text } from "../../elem";
 
 // redux
 import { setModalId, __editSchedule } from "../../redux/modules/calendar";
-
-import BoardDrop from "../board/BoardDrop";
-import BucketSelect from "./BucketSelect";
-import Icon from "../../components/Icon";
-import InputToggle from "../../components/InputToggle";
-import flex from "../../themes/flex";
-import { Text } from "../../elem";
 
 const CalendarModalForms = ({ content, setModalContent, setShowModal }) => {
   const dispatch = useDispatch();
@@ -36,12 +39,7 @@ const CalendarModalForms = ({ content, setModalContent, setShowModal }) => {
 
   const kindOfColor = ["blue", "violet", "yellow", "orange", "mint"];
 
-  const dDay =
-    parseInt(
-      moment(
-        moment(content.endDate).diff(moment().format("YYYY-MM-DD"))
-      ).format("D")
-    ) - 1;
+  const dDay = setDday(content.endDate);
 
   return (
     <Container>
@@ -92,7 +90,7 @@ const CalendarModalForms = ({ content, setModalContent, setShowModal }) => {
         />
         <StyleDiv flex={["center", "center"]}>
           <DateText type="body_2" color="notice">
-            {dDay !== 0 ? `D-${dDay}` : "D-DAY"}
+            {dDay}
           </DateText>
         </StyleDiv>
       </StyleDiv>

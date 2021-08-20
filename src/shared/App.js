@@ -13,6 +13,8 @@ import {
   initiateSocket,
   disconnectSocket,
   subscribeToChat,
+  subscribeInfoText,
+  subscribeWarning,
 } from "../shared/useSocket";
 import { addMessage } from "../redux/modules/chat";
 
@@ -37,6 +39,14 @@ const App = () => {
     subscribeToChat((err, data) => {
       if (err) console.log(err);
       dispatch(addMessage(data));
+    });
+
+    subscribeInfoText((err, data) => {
+      if (err) console.log(err);
+    });
+
+    subscribeWarning((err, data) => {
+      if (err) console.log(err);
     });
   }, [dispatch]);
 

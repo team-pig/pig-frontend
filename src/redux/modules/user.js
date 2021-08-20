@@ -30,12 +30,12 @@ export const __login =
       const { id, avatar, color } = jwt_decode(accessToken);
       cookies.set("accessToken", accessToken, {
         path: "/",
-        maxAge: 1800, // 2 day
+        maxAge: 1800, // 30분
       });
 
       cookies.set("refreshToken", refreshToken, {
         path: "/",
-        maxAge: 86400, // 2 day
+        maxAge: 86400, // 1일
       });
       localStorage.setItem("userId", id);
       localStorage.setItem("avatar", avatar);
@@ -53,10 +53,14 @@ export const __logout =
     localStorage.removeItem("userId");
     localStorage.removeItem("avatar");
     localStorage.removeItem("color");
-    cookies.remove("refreshToken");
-    cookies.remove("accessToken");
+    cookies.remove("refreshToken", {
+      path: "/",
+    });
+    cookies.remove("accessToken", {
+      path: "/",
+    });
+    history.replace("/");
     dispatch(logout());
-    history.push("/login");
   };
 
 export const __loginCheck =

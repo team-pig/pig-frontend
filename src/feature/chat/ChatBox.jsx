@@ -46,6 +46,7 @@ const Container = styled.div`
   width: 100%;
   height: calc(100% - var(--inputBox));
   padding: 0 20px;
+  padding-bottom: 5px;
   overflow-y: auto;
 `;
 

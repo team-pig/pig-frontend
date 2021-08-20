@@ -39,7 +39,7 @@ const Date = ({ idx, list, today, thisMonth, children, _onClick }) => {
               color={color}
               thisMonth={thisMonth}
             >
-              <ScheduleText type="body_3" color="white">
+              <ScheduleText type="body_3" color={color}>
                 {cardTitle}
               </ScheduleText>
             </ScheduleBtn>
@@ -101,6 +101,10 @@ const ScheduleText = styled(Text)`
   width: 100 - 20px;
   white-space: nowrap;
   overflow: hidden;
+  color: ${(props) =>
+    props.color === "yellow" || props.color === "mint"
+      ? "var(--darkgrey);"
+      : "var(--white);"};
   text-overflow: ellipsis;
 `;
 

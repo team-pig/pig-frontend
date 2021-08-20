@@ -2,17 +2,19 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import moment from "moment";
+
+// function
+import getModifiedTime from "../../functions/getModifiedTime";
+
+// component & elem
+import MarkDownViewer from "../../components/MarkDownViewer";
+import Icon from "../../components/Icon";
+import flex from "../../themes/flex";
+import { body_4 } from "../../themes/textStyle";
+import { Text, IconBtn } from "../../elem";
 
 // redux & api
 import { docApi } from "../../api/docApi";
-
-// elem
-import { Text, IconBtn } from "../../elem";
-import Icon from "../../components/Icon";
-import { body_4 } from "../../themes/textStyle";
-import flex from "../../themes/flex";
-import MarkDownViewer from "../../components/MarkDownViewer";
 
 const DocViewer = ({ left }) => {
   const history = useHistory();
@@ -53,29 +55,11 @@ const DocViewer = ({ left }) => {
     }
   };
 
-  // 현재 시간과 마지막 수정시간(없을 경우 최초 작성시간)과의 차이를 text로 return하는 함수
-  const getModifiedTime = () => {
-    let target;
-    if (docId === current.docId) {
-      if (current.modifiedAt) {
-        target = moment.utc(current.modifiedAt); // 한국시간으로 바꿔줌
-      } else if (current.createAt) {
-        target = moment.utc(current.modifiedAt);
-      }
-      const now = moment();
-      const diff = {
-        day: moment.duration(now.diff(target)).days(),
-        hours: moment.duration(now.diff(target)).hours(),
-        minute: moment.duration(now.diff(target)).minutes(),
-        second: moment.duration(now.diff(target)).seconds(),
-      };
-      const text = `${diff.day !== 0 ? diff.day + "일" : ""} ${
-        diff.hours !== 0 ? diff.hours + "시간" : ""
-      } ${diff.minute !== 0 ? diff.minute + "분" : "0분"} 전`.trim();
+  let modifiedTime;
 
-      return text;
-    }
-  };
+  if (docId === current.docId) {
+    modifiedTime = getModifiedTime(current);
+  }
 
   return (
     <Container left={left}>
@@ -91,7 +75,7 @@ const DocViewer = ({ left }) => {
           <InfoBox>
             마지막 편집
             <User>{current.nickname}</User>
-            <ModifiedTime>{getModifiedTime()}</ModifiedTime>
+            <ModifiedTime>{modifiedTime}</ModifiedTime>
           </InfoBox>
         )}
       </ViewerHeader>

@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 
 const ProjectStatus = () => {
   const { checked, notChecked } = useSelector(
-    (state) => state.dashBoard.projectStatus
+    (state) => state.todos.projectStatus
   );
 
   const guagePercent = isNaN(

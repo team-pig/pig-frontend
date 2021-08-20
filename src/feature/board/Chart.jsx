@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Bucket from "./Bucket";
@@ -10,22 +10,12 @@ import {
   __updateBucket,
   __updateCardLocateOtherBucket,
   __updateCardLocate,
-  __loadBucket,
-  __loadCard,
-  initBoard,
 } from "../../redux/modules/board";
 
 const Chart = () => {
   const dispatch = useDispatch();
   const { cards, columnOrder, columns } = useSelector((state) => state.board);
   const { roomId } = useParams();
-
-  useEffect(() => {
-    dispatch(__loadBucket(roomId));
-    dispatch(__loadCard(roomId));
-
-    return () => dispatch(initBoard());
-  }, []);
 
   // 아이템을 떨어뜨렸을 때 실행할 작업들
   const onDragEnd = ({ destination, source, draggableId, type }) => {

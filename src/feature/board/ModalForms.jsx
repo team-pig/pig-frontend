@@ -10,10 +10,10 @@ import { __editCardInfos, resetCard } from "../../redux/modules/board";
 
 import BoardDrop from "./BoardDrop";
 import InputToggle from "../../components/InputToggle";
-import { scrollbar } from "../../themes/scrollbar";
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
 import Icon from "../../components/Icon";
+import { body_2, body_3, sub_1 } from "../../themes/textStyle";
 
 const ModalForms = ({ content }) => {
   const dispatch = useDispatch();
@@ -46,37 +46,35 @@ const ModalForms = ({ content }) => {
 
   return (
     <Container>
-      <StyleDiv wh={["480px", "26px"]} mg="0 0 20px 0">
-        <StyleDiv flex={["flex-start", "center", "10"]} pd="10px 0 0 0">
-          <BoardDrop.Container
-            componentType="colorPicker"
-            bgColor={content.color}
-          >
-            {kindOfColor.map((color, idx) => (
-              <BoardDrop.Item
-                key={idx}
-                componentType="colorPicker"
-                color={color}
-                _onClick={() => {
-                  editFunc("color", color);
-                }}
-              >
-                {content.color === color && <Icon icon="check" size="20px" />}
-              </BoardDrop.Item>
-            ))}
-          </BoardDrop.Container>
-          <StText type="sub_1">
-            <InputToggle
-              name="cardTitle"
-              value={content.cardTitle}
-              saveFunc={editFunc}
-              limit={15}
-            />
-          </StText>
-        </StyleDiv>
-      </StyleDiv>
+      <ModalHeader>
+        <BoardDrop.Container
+          componentType="colorPicker"
+          bgColor={content.color}
+        >
+          {kindOfColor.map((color, idx) => (
+            <BoardDrop.Item
+              key={idx}
+              componentType="colorPicker"
+              color={color}
+              _onClick={() => {
+                editFunc("color", color);
+              }}
+            >
+              {content.color === color && <Icon icon="check" size="20px" />}
+            </BoardDrop.Item>
+          ))}
+        </BoardDrop.Container>
+        <Title type="sub_1">
+          <InputToggle
+            name="cardTitle"
+            value={content.cardTitle}
+            saveFunc={editFunc}
+            limit={15}
+          />
+        </Title>
+      </ModalHeader>
 
-      <StyleDiv mg="0 0 6px auto" flex={["flex-end", "center"]}>
+      <DateInput>
         <DatePickerExample
           cardId={content.cardId}
           roomId={roomId}
@@ -87,18 +85,12 @@ const ModalForms = ({ content }) => {
           content={content}
           mode="card" // card or schedule
         />
-        <StyleDiv flex={["center", "center"]}>
-          <DateText type="body_2" color="notice">
-            {dDay !== 0 ? `D-${dDay}` : "D-DAY"}
-          </DateText>
-        </StyleDiv>
-      </StyleDiv>
-      <StyleDiv
-        wh={["480px", "180px"]}
-        pd="10px"
-        border="1px solid var(--line)"
-      >
-        <StText type="body_3">
+        <DueDate>
+          <DateText>{dDay !== 0 ? `D-${dDay}` : "D-DAY"}</DateText>
+        </DueDate>
+      </DateInput>
+      <DescContainer>
+        <TodoContainer>
           <InputToggle
             resize="none"
             name="desc"
@@ -108,8 +100,8 @@ const ModalForms = ({ content }) => {
             saveFunc={editFunc}
             limit={"제한없음"}
           />
-        </StText>
-      </StyleDiv>
+        </TodoContainer>
+      </DescContainer>
     </Container>
   );
 };
@@ -118,35 +110,35 @@ const Container = styled.div`
   padding: 40px;
 `;
 
-const StyleDiv = styled.div`
-  position: relative;
-
-  ${(props) =>
-    props.tb &&
-    css`
-      border: 1px solid red;
-    `}
-  ${(props) =>
-    props.wh &&
-    css`
-      width: ${props.wh[0]};
-      height: ${props.wh[1]};
-    `}
-    
-  ${(props) =>
-    props.flex &&
-    css`
-      display: flex;
-      justify-content: ${props.flex[0]};
-      align-items: ${props.flex[1]};
-      gap: ${props.flex[2]}px;
-    `}
-  padding: ${(props) => props.pd};
-  margin: ${(props) => props.mg};
-  border: ${(props) => props.border};
+const ModalHeader = styled.div`
+  ${flex("start", "center")};
+  gap: 10px;
+  padding: 10px 0 0 0;
 `;
 
-const StText = styled(Text)`
+const Title = styled.h1`
+  ${sub_1}
+  width: 100%;
+`;
+
+const DescContainer = styled.div`
+  width: 480px;
+  height: 180px;
+  padding: 10px;
+  border: 1px solid var(--line);
+`;
+
+const DateInput = styled.div`
+  ${flex("end", "center")};
+  margin: 0 0 6px auto;
+`;
+
+const DueDate = styled.div`
+  ${flex()}
+`;
+
+const TodoContainer = styled(Text)`
+  ${body_3};
   width: 100%;
   height: 100%;
   overflow-y: auto;
@@ -154,7 +146,9 @@ const StText = styled(Text)`
 
 const DateText = styled(Text)`
   ${flex("end", "center")};
+  ${body_2};
   width: 44px;
+  color: var(--notice);
 `;
 
 export default ModalForms;

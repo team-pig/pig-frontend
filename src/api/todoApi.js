@@ -27,4 +27,6 @@ export const todoApi = {
     instance.delete(`room/${roomId}/todo`, { data: { todoId } }),
 
   loadMyTodo: (roomid) => instance.get(`/room/${roomid}/main/todos`),
+
+  loadProjectTodo: (roomId) => instance.get(`/room/${roomId}/main/status`),
 };

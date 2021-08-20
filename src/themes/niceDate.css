@@ -220,14 +220,13 @@
   border-radius: 8px;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.12);
   margin: 8px 0;
-  max-width: 71%;
   position: absolute;
   transform-origin: top;
   transform: perspective(1000px);
   transition-property: transform, opacity;
   transition-duration: 400ms;
   transition-timing-function: cubic-bezier(0.4, 0.2, 0, 1.1);
-  width: 100%;
+  width: 400px;
   will-change: transform, opacity;
   z-index: 9;
 }

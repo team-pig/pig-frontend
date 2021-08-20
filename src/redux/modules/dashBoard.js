@@ -3,23 +3,7 @@ import produce from "immer";
 import { dashBoardApi } from "../../api/dashBoardApi";
 import { regex } from "../../shared/regex";
 
-const LOAD_ALL_STATUS = "dashBoard/LOAD_ALL_STATUS";
 const INIT_ALL_STATUS = "dashBoard/INIT_ALL_STATUS";
-
-const loadAllStatus = createAction(LOAD_ALL_STATUS, (allMembers) => ({
-  allMembers,
-}));
-
-export const initAllStatus = createAction(INIT_ALL_STATUS, () => ({}));
-
-export const __loadAllStatus = (roomId) => async (dispatch) => {
-  try {
-    const { data } = await dashBoardApi.loadAllStatus(roomId);
-    dispatch(loadAllStatus(data));
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 export const __editMyProfile = (roomId, newMyInfo) => async (dispatch) => {
   try {
@@ -59,19 +43,11 @@ export const __editRoomInfos = (roomId, newRoominfos) => async (dispatch) => {
 };
 
 const initialState = {
-  projectStatus: {},
-  memberStatus: [],
+  roomInfo: {},
 };
 
 export const dashBoard = handleActions(
   {
-    [LOAD_ALL_STATUS]: (state, { payload }) =>
-      produce(state, (draft) => {
-        const { projectStatus, memberStatus } = payload.allMembers;
-        draft.projectStatus = projectStatus;
-        draft.memberStatus = memberStatus;
-      }),
-
     [INIT_ALL_STATUS]: (state, { payload }) =>
       produce(state, (draft) => {
         draft.projectStatus = {};

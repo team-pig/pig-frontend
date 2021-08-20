@@ -11,7 +11,7 @@ import date from "./modules/date";
 import calendar from "./modules/calendar";
 import board from "./modules/board";
 import todos from "./modules/todos";
-import member from "./modules/member";
+
 import dashBoard from "./modules/dashBoard";
 import chat from "./modules/chat";
 import resize from "./modules/resize";
@@ -26,7 +26,6 @@ export const history = createBrowserHistory();
 
 const appReducer = combineReducers({
   dashBoard,
-  member,
   todos,
   board,
   user,

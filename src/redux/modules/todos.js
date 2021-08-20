@@ -1,7 +1,6 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import { todoApi } from "../../api/todoApi";
-import { __loadAllStatus } from "./dashBoard";
 
 const LOAD_TODOS = "todos/LOAD_TODOS";
 const LOAD_MY_TODOS = "todos/LOAD_MY_TODOS";
@@ -18,6 +17,8 @@ const ADD_MEMBER = "todos/ADD_MEMBER";
 const REMOVE_MEMBER = "todos/REMOVE_MEMBER";
 const RESET_TODOS = "todos/RESET_TODOS";
 
+const LOAD_PROJECT_TODOS = "todos/LOAD_PROJECT_TODOS";
+
 /**
  * Action creator
  */
@@ -26,6 +27,10 @@ const loadMyTodos = createAction(
   LOAD_MY_TODOS,
   (checkedTodo, notCheckedTodo) => ({ checkedTodo, notCheckedTodo })
 );
+const loadProjectTodo = createAction(LOAD_PROJECT_TODOS, (allTodos) => ({
+  allTodos,
+}));
+
 export const initMyTodos = createAction(INIT_MY_TODOS, () => ({}));
 
 const createTodo = createAction(CREATE_TODO, (newTodo) => ({
@@ -101,6 +106,15 @@ export const __loadMyTodos = (roomId) => async (dispatch) => {
   }
 };
 
+export const __loadProjectTodo = (roomId) => async (dispatch) => {
+  try {
+    const { data } = await todoApi.loadProjectTodo(roomId);
+    dispatch(loadProjectTodo(data));
+  } catch (e) {
+    //
+  }
+};
+
 export const __createTodo = (roomId, todoInfo) => async (dispatch) => {
   try {
     const { data } = await todoApi.createTodo(roomId, todoInfo);
@@ -140,7 +154,7 @@ export const __switchTodoStat =
   (roomId, todoId, isChecked, todoTitle) => async (dispatch) => {
     try {
       await todoApi.checkedTodo(roomId, todoId, isChecked);
-      dispatch(__loadAllStatus(roomId));
+      dispatch(__loadProjectTodo(roomId));
       if (isChecked) {
         dispatch(goToChecked(todoId, isChecked, todoTitle));
       } else {
@@ -155,7 +169,7 @@ export const __removeMyTodo =
   (roomId, todoId, memberId, isChecked) => async (dispatch) => {
     try {
       await todoApi.removeMember(roomId, todoId, memberId);
-      dispatch(__loadAllStatus(roomId));
+      dispatch(__loadProjectTodo(roomId));
       if (isChecked) {
         dispatch(exitMyTodo(todoId));
       } else {
@@ -167,26 +181,24 @@ export const __removeMyTodo =
   };
 
 export const __memberHandler =
-  (roomId, todoId, memberName) => async (dispatch, getState) => {
-    const memberList = getState().member.allMembers;
+  (roomId, todoId, memberName, userId) => async (dispatch, getState) => {
     const currentTodo = getState().todos.todos;
-    const targetIdx = memberList.findIndex(
-      (item) => item.memberName === memberName
+
+    const targetTodoIndex = currentTodo.findIndex(
+      (todo) => todo.todoId === todoId
     );
 
-    const targetMemberInfo = memberList[targetIdx];
-    const targetMemberId = memberList[targetIdx].memberId;
-    const targetTodo = currentTodo.findIndex((todo) => todo.todoId === todoId);
-    const isMemberFromTodo = currentTodo[targetTodo].members.findIndex(
-      (member) => member.memberName === memberName
+    const thisTodoMemberList = currentTodo[targetTodoIndex].members;
+    const includeIndex = thisTodoMemberList.findIndex(
+      (member) => member.memberId === userId
     );
 
-    if (isMemberFromTodo === -1) {
-      await todoApi.addMember(roomId, todoId, targetMemberId);
-      dispatch(addMember(todoId, targetMemberInfo));
+    if (includeIndex === -1) {
+      await todoApi.addMember(roomId, todoId, userId);
+      dispatch(addMember(todoId, userId));
     } else {
-      await todoApi.removeMember(roomId, todoId, targetMemberId);
-      dispatch(removeMember(todoId, targetMemberId));
+      await todoApi.removeMember(roomId, todoId, userId);
+      dispatch(removeMember(todoId, userId));
     }
   };
 
@@ -204,6 +216,8 @@ const initialState = {
   checkedTodo: [],
   notCheckedTodo: [],
   myTodoCount: { total: 0, checkedTodo: 0, notCheckedTodo: 0 },
+  memberStatus: [],
+  projectStatus: {},
 };
 
 export const todos = handleActions(
@@ -321,7 +335,10 @@ export const todos = handleActions(
         const targetIdx = state.todos.findIndex(
           (todo) => todo.todoId === todoId
         );
-        draft.todos[targetIdx].members.push(member);
+        draft.todos[targetIdx].members.push({
+          memberId: member,
+          isChecked: true,
+        });
       }),
 
     [RESET_TODOS]: (state, { payload }) =>
@@ -334,6 +351,12 @@ export const todos = handleActions(
         draft.checkedTodo = [];
         draft.notCheckedTodo = [];
         draft.myTodoCount = {};
+      }),
+
+    [LOAD_PROJECT_TODOS]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.projectStatus = payload.allTodos.projectStatus;
+        draft.memberStatus = payload.allTodos.memberStatus;
       }),
   },
 

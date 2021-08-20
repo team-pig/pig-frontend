@@ -21,7 +21,9 @@ import { body_3, body_4, button } from "../../themes/textStyle";
 
 const Todo = ({ todo }) => {
   const dispatch = useDispatch();
-  const allMembers = useSelector((state) => state.member.allMembers);
+  const _all = useSelector((state) => state.todos.memberStatus); // 모든 팀원
+  const isCheckedList = todo.members; // 이 투두에 참여한 팀원
+
   const [itemClicked, setItemClicked] = useState(false);
   const { roomId } = useParams();
   const ItemEl = useRef();
@@ -92,22 +94,36 @@ const Todo = ({ todo }) => {
         </TodoInputToggle>
         <TodoMembers>
           <BoardDrop.Container direction="right" type="default" shadow>
-            {allMembers &&
-              allMembers.map((member, idx) => (
-                <BoardDrop.Item
-                  key={idx}
-                  _onClick={() => {
-                    dispatch(
-                      __memberHandler(roomId, todo.todoId, member.memberName)
-                    );
-                  }}
-                >
-                  <Member>
-                    <Avatar />
-                    {member.memberName}
-                  </Member>
-                </BoardDrop.Item>
-              ))}
+            {_all &&
+              _all.map((member, idx) => {
+                const target =
+                  isCheckedList.findIndex(
+                    (seletedMember) => seletedMember.memberId === member.userId
+                  ) === -1
+                    ? false
+                    : true;
+                return (
+                  <BoardDrop.Item
+                    key={idx}
+                    target={target}
+                    _onClick={() => {
+                      dispatch(
+                        __memberHandler(
+                          roomId,
+                          todo.todoId,
+                          member.nickname,
+                          member.userId
+                        )
+                      );
+                    }}
+                  >
+                    <Member target={target}>
+                      <Avatar />
+                      {member.nickname}
+                    </Member>
+                  </BoardDrop.Item>
+                );
+              })}
           </BoardDrop.Container>
           <TodoMembersCnt> + {todo.members.length}</TodoMembersCnt>
         </TodoMembers>
@@ -188,13 +204,14 @@ const Member = styled.div`
   width: 100px;
   ${flex("start", "cetner")}
   ${button}
-  color: var(--darkgrey)
+  color: ${(props) => (props.target ? "var(--white)" : "var(--darkgrey)")}
 `;
 
 const Avatar = styled.div`
+  flex-shrink: 0;
   width: 30px;
   height: 30px;
-  border: 1px solid var(--line);
+  background-color: var(--notice);
   border-radius: 50% !important;
   margin-right: 10px;
 `;

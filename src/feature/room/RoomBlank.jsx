@@ -9,7 +9,7 @@ const RoomBlank = () => {
   const { room } = useSelector((state) => state.room);
   return (
     <>
-      {room.length > 0 ? (
+      {room && room.length > 0 ? (
         ""
       ) : (
         <ImgBox>

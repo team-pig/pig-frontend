@@ -46,7 +46,6 @@ const RoomList = () => {
         {isJoin && (
           <JoinRoomModal showModal={showModal} joinModal={joinModal} />
         )}
-
         <SearchBar joinModal={joinModal} addModal={addModal} />
         <RoomBlank />
         <BookmarkList />

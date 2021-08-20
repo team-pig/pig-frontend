@@ -201,7 +201,8 @@ const Item = styled.li`
 
 const MyTodoList = styled.div`
   ${flex("between", "start")}
-  width: 1220px;
+  flex-wrap: wrap;
+  width: 100%;
 `;
 
 const TodosTitle = styled.div`

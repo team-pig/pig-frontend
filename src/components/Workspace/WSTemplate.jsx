@@ -1,9 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 import flex from "../../themes/flex";
 
 const WSTemplate = ({ children }) => {
-  return <Template>{children}</Template>;
+  const isShowSidebar = useSelector((state) => state.resize.isShowSidebar);
+
+  return <Template sidebar={isShowSidebar}>{children}</Template>;
 };
 
 const Template = styled.main`
@@ -11,9 +14,11 @@ const Template = styled.main`
 
   ${flex("between", "start")};
   position: relative;
+  width: ${(props) => (props.sidebar ? `calc(100% - 260px);` : `100%;`)};
   padding: 0;
   padding-top: var(--header);
-  box-sizing: border-box; ;
+  box-sizing: border-box;
+  transition: width 500ms ease-in-out;
 `;
 
 export default WSTemplate;

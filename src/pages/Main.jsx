@@ -31,12 +31,15 @@ const Container = styled.div`
 
 const LeftSide = styled.section`
   flex-shrink: 0;
+  width: 425px;
   height: 100%;
 `;
 
 const RightSide = styled.section`
+  --leftSide: 425px;
+
   ${flex("start", "start", false)};
-  flex-grow: 1;
+  width: calc(100% - var(--leftSide));
   height: 100%;
 `;
 

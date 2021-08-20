@@ -37,6 +37,7 @@ const ChatInput = () => {
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
+      if (!text.trim()) return;
       sendMessage(roomId, nickname, userId, text);
       setText("");
     },

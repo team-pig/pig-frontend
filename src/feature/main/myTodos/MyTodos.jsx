@@ -1,13 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import {
-  __loadMyTodos,
-  __switchTodoStat,
-  __removeMyTodo,
-  initMyTodos,
-} from "../../../redux/modules/todos";
+import { __switchTodoStat, __removeMyTodo } from "../../../redux/modules/todos";
 import Icon from "../../../components/Icon";
 
 import { IconBtn, Text, Input } from "../../../elem";
@@ -19,14 +14,6 @@ const MyTodos = () => {
   const myId = useSelector((state) => state.user.user.userId);
   const { checkedTodo, notCheckedTodo } = useSelector((state) => state.todos);
   const { roomId } = useParams();
-
-  useEffect(() => {
-    dispatch(__loadMyTodos(roomId));
-
-    return () => {
-      dispatch(initMyTodos());
-    };
-  }, []);
 
   return (
     <Container>

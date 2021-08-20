@@ -1,24 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 // component & elem
 import ProjectStatus from "./ProjectStatus";
 import Members from "./Members";
 
-// redux
-import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { __loadAllStatus, initAllStatus } from "../../redux/modules/dashBoard";
-
 const StatusSection = () => {
-  const dispatch = useDispatch();
-  const { roomId } = useParams();
-
-  useEffect(() => {
-    dispatch(__loadAllStatus(roomId));
-    return () => dispatch(initAllStatus());
-  }, []);
-
   return (
     <Container>
       <ProjectStatus />

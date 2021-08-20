@@ -16,16 +16,20 @@ import {
   resetMessages,
   setPrevRoomId,
 } from "../redux/modules/chat";
+import { __loadBucket, __loadCard } from "../redux/modules/board";
+import {
+  initMyTodos,
+  __loadMyTodos,
+  __loadProjectTodo,
+} from "../redux/modules/todos";
 
 // socket
 import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
 
 const Workspace = (props) => {
+  const dispatch = useDispatch();
   let { path, url } = useRouteMatch();
   const { roomId } = useParams();
-
-  const dispatch = useDispatch();
-
   const { userId, nickname } = useSelector((state) => state.user.user);
   const docs = useSelector((state) => state.document.docList);
   const room = useSelector((state) => state.room.currentRoom);
@@ -33,8 +37,17 @@ const Workspace = (props) => {
 
   useEffect(() => {
     (docs.length === 0 || (docs.length !== 0 && docs[0].roomId !== roomId)) &&
-      dispatch(__getDocs(roomId));
-    dispatch(__getOneRoom(roomId));
+      dispatch(__getDocs(roomId)); // 문서
+    dispatch(__loadBucket(roomId)); // 보드 (버킷 정보)
+    dispatch(__loadCard(roomId)); // 보드 (카드 정보)
+    dispatch(__getOneRoom(roomId)); // 메인 (방 상세 정보)
+    dispatch(__loadMyTodos(roomId)); // 메인 (투두리스트)
+    dispatch(__loadProjectTodo(roomId)); // 메인 (대시보드)
+
+    return () => {
+      dispatch(initMyTodos());
+      // dispatch(initRoom());
+    };
   }, [dispatch, roomId]);
 
   // workspace에 들어갈 때마다 room에 join, 해당 방의 기존 메세지 받아오는 handler

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import RoomCard from "./RoomCard";
 
-const SearchResult = ({ history }) => {
+const SearchResult = () => {
   const { searchedRoom, userId } = useSelector(
     (state) => state.room
   );
@@ -25,7 +25,6 @@ const SearchResult = ({ history }) => {
                 <RoomCard
                   isCheck={isCheck}
                   key={room.roomId}
-                  history={history}
                   {...room}
                 />
               );

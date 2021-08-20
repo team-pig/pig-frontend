@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import RoomCard from "./RoomCard";
 
-const BookmarkList = ({ history }) => {
+const BookmarkList = () => {
   const { searchedRoom, markedList, userId } = useSelector(
     (state) => state.room
   );
@@ -17,11 +17,7 @@ const BookmarkList = ({ history }) => {
         <BookmarkContainer>
           <BookmarkBox>
             {markedList.map((room, idx) => {
-              const userIdList = room.bookmarkedMembers.map((member, index) => {
-                return member.userId;
-              });
-
-              const isCheck = userIdList.includes(userId);
+              const isCheck = true;
 
               return (
                 <RoomCard
@@ -29,7 +25,6 @@ const BookmarkList = ({ history }) => {
                   userId={userId}
                   key={room.roomId}
                   {...room}
-                  history={history}
                 />
               );
             })}

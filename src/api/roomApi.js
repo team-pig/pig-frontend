@@ -42,11 +42,9 @@ export const roomApi = {
         roomId,
       },
     }),
-  searchRoom: (page, size, searchContent) => {
+  searchRoom: (searchContent) => {
     return instance.get("/rooms/search", {
       params: {
-        page: page,
-        size: size,
         roomName: searchContent,
       },
     });

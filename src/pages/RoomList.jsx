@@ -17,7 +17,7 @@ import DefaultRoomList from "../feature/room/DefaultRoomList";
 import { __getRoomList, __getMarkedList } from "../redux/modules/room";
 import SEO from "../components/SEO";
 
-const RoomList = ({ history }) => {
+const RoomList = () => {
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState(false);
@@ -49,9 +49,9 @@ const RoomList = ({ history }) => {
 
         <SearchBar joinModal={joinModal} addModal={addModal} />
         <RoomBlank />
-        <BookmarkList history={history} />
-        <SearchResult history={history} />
-        <DefaultRoomList history={history} />
+        <BookmarkList />
+        <SearchResult />
+        <DefaultRoomList />
       </Template>
     </>
   );

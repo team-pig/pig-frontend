@@ -5,9 +5,7 @@ import styled from "styled-components";
 import RoomCard from "./RoomCard";
 
 const SearchResult = () => {
-  const { searchedRoom, userId } = useSelector(
-    (state) => state.room
-  );
+  const { searchedRoom, markedList } = useSelector((state) => state.room);
 
   return (
     <>
@@ -17,13 +15,12 @@ const SearchResult = () => {
           북마크 여부 확인하기 위해 userId를 뽑아내서 확인함 */}
           {searchedRoom &&
             searchedRoom.map((room, idx) => {
-              const userIdList = room.bookmarkedMembers.map((member, index) => {
-                return member.userId;
-              });
-              const isCheck = userIdList.includes(userId);
+
+              const markedIdx = markedList.findIndex((markedRoom) => markedRoom.roomId === room.roomId)
+
               return (
                 <RoomCard
-                  isCheck={isCheck}
+                  isCheck={markedIdx === -1 ? false : true}
                   key={room.roomId}
                   {...room}
                 />

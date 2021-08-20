@@ -9,7 +9,7 @@ import { __getRoomList } from "../../redux/modules/room";
 
 const DefaultRoomList = () => {
   const dispatch = useDispatch();
-  const { room, searchedRoom, userId, isLoading, paging } = useSelector(
+  const { room, searchedRoom, markedList, isLoading, paging } = useSelector(
     (state) => state.room
   );
 
@@ -29,15 +29,12 @@ const DefaultRoomList = () => {
             {searchedRoom && searchedRoom.length > 0
               ? ""
               : room.map((room, idx) => {
-                  const userIdList = room.bookmarkedMembers.map(
-                    (member, index) => {
-                      return member.userId;
-                    }
-                  );
-                  const isCheck = userIdList.includes(userId);
+
+                  const markedIdx = markedList.findIndex((markedRoom) => markedRoom.roomId === room.roomId)
+
                   return (
                     <RoomCard
-                      isCheck={isCheck}
+                      isCheck={markedIdx === -1 ? false : true}
                       key={room.roomId}
                       {...room}
                     />

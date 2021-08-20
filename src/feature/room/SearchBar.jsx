@@ -65,9 +65,6 @@ const SearchBar = ({ joinModal, addModal }) => {
           </BtnContainer>
         </WrapperItem>
       </Wrapper>
-      {/* <RoomContainer>
-        <RoomBox>{searchItem}</RoomBox>
-      </RoomContainer> */}
     </>
   );
 };
@@ -75,7 +72,7 @@ const SearchBar = ({ joinModal, addModal }) => {
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  height: 155px;
+  height: 150px;
 `;
 
 const WrapperItem = styled.div`
@@ -85,7 +82,7 @@ const WrapperItem = styled.div`
   max-width: 1440px;
   width: 100%;
   padding: 0 80px;
-  margin: 5px auto 0 auto;
+  margin: 15px auto 0 auto;
   ${({ theme }) => theme.device.mobile} {
     display: flex;
     justify-content: center;
@@ -96,7 +93,7 @@ const WrapperItem = styled.div`
 const InputBox = styled.div`
   position: relative;
   flex: 1;
-  height: 46px;
+  height: 50px;
   margin: auto 0;
   ${({ theme }) => theme.device.mobile} {
     order: 0 !important;
@@ -106,7 +103,7 @@ const InputBox = styled.div`
 
 const SearchInput = styled.input`
   width: 100%;
-  height: 46px;
+  height: 50px;
   padding-left: 45px;
   border: 1px solid var(--line);
 `;
@@ -155,18 +152,4 @@ const BtnContainer = styled.div`
   }
 `;
 
-const RoomContainer = styled.div`
-  display: flex;
-`;
-
-const RoomBox = styled.div`
-  display: grid;
-  grid-gap: 25px;
-  grid-template-columns: repeat(4, 1fr);
-  margin: 0 auto;
-
-  @media (max-width: 960px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-`;
 export default SearchBar;

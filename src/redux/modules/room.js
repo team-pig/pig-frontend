@@ -31,14 +31,12 @@ const initialState = {
   inviteCodeRoom: [],
   currentRoom: {},
   searchPaging: { page: 1, next: null, size: 12 },
-  isMarked: false,
 };
 
 //action creator
 export const initRoom = createAction(INIT_ROOM, () => ({}));
-export const addRoom = createAction(ADD_ROOM, (room, markedList) => ({
+export const addRoom = createAction(ADD_ROOM, (room) => ({
   room,
-  markedList,
 }));
 
 export const searchRoom = createAction(
@@ -76,18 +74,16 @@ export const exitRoom = createAction(EXIT_ROOM, (roomId) => ({ roomId }));
 
 export const addBookmark = createAction(
   ADD_BOOKMARK,
-  (room, roomId, isMarked, markedList) => ({
+  (room, roomId, markedList) => ({
     room,
     roomId,
-    isMarked,
     markedList,
   })
 );
 export const deleteBookmark = createAction(
   DELETE_BOOKMARK,
-  (roomId, isMarked, markedList) => ({
+  (roomId, markedList) => ({
     roomId,
-    isMarked,
     markedList,
   })
 );
@@ -142,7 +138,7 @@ export const __searchRoom =
   };
 
 export const __addRoom =
-  (contents, roomImg) =>
+  (contents, roomImg, tagList) =>
   async (dispatch, getState, { history }) => {
     try {
       const markedList = getState().room.markedList;
@@ -151,6 +147,7 @@ export const __addRoom =
         roomImage: roomImg
           ? roomImg
           : "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png",
+        tag: tagList,
       };
       //api post
       const { data } = await roomApi.addRoom(willDispatchContents);
@@ -161,7 +158,7 @@ export const __addRoom =
   };
 
 export const __editRoom =
-  (roomId, contents, roomImg, isEdit) =>
+  (roomId, contents, roomImg, tagList) =>
   async (dispatch, getState, { history }) => {
     try {
       const newContent = {
@@ -169,6 +166,7 @@ export const __editRoom =
         roomImage: roomImg
           ? roomImg
           : "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png",
+        tag: tagList,
         roomId,
       };
       const { data } = await roomApi.editRoom(newContent);
@@ -257,11 +255,11 @@ export const __toggleBookmark =
         const data = await roomApi.addBookmark(roomId);
         const markedList = data.data.markedList;
         const room = data.data.bookmarkedRoom;
-        dispatch(addBookmark(room, roomId, isMarked, markedList));
+        dispatch(addBookmark(room, roomId, markedList));
       } else if (isMarked === true) {
         const data = await roomApi.deleteBookmark(roomId);
         const markedList = data.data.markedList;
-        dispatch(deleteBookmark(roomId, isMarked, markedList));
+        dispatch(deleteBookmark(roomId, markedList));
       }
     } catch (e) {
       console.log(e);
@@ -281,7 +279,7 @@ const room = handleActions(
       }),
     [JOIN_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        draft.room.unshift(action.payload.room.room);
+        draft.room.unshift(action.payload.inviteCode.room);
       }),
 
     [GET_INVITE_CODE_ROOM]: (state, action) =>
@@ -310,37 +308,53 @@ const room = handleActions(
 
     [EDIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.room.findIndex(
-          (r) => r.roomId === action.payload.room.room.roomId
+        let defaultRoomIdx = draft.room.findIndex(
+          (defaultRoom) =>
+            defaultRoom.roomId === action.payload.room.room.roomId
         );
+        draft.room[defaultRoomIdx] = {
+          ...draft.room[defaultRoomIdx],
+          ...action.payload.room.room,
+        };
 
-        draft.room[idx] = { ...draft.room[idx], ...action.payload.room.room };
+        let markedRoomIdx = draft.markedList.findIndex(
+          (markedRoom) => markedRoom.roomId === action.payload.room.room.roomId
+        );
+        draft.markedList[markedRoomIdx] = {
+          ...draft.markedList[markedRoomIdx],
+          ...action.payload.room.room,
+        };
       }),
     [DELETE_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.room.findIndex(
-          (r) => r.roomId === action.payload.roomId
+        let defaultRoomIdx = draft.room.findIndex(
+          (defaultRoom) => defaultRoom.roomId === action.payload.roomId
         );
 
-        if (idx !== -1) {
-          draft.room.splice(idx, 1);
+        if (defaultRoomIdx !== -1) {
+          draft.room.splice(defaultRoomIdx, 1);
         }
 
-        let index = draft.markedList.findIndex(
-          (r) => r.roomId === action.payload.roomId
+        let markedRoomIdx = draft.markedList.findIndex(
+          (markedRoom) => markedRoom.roomId === action.payload.roomId
         );
-        if (index !== -1) {
-          draft.markedList.splice(index, 1);
+        if (markedRoomIdx !== -1) {
+          draft.markedList.splice(markedRoomIdx, 1);
         }
       }),
     [EXIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.room.findIndex(
-          (r) => r.roomId === action.payload.roomId
+        let defaultRoomIdx = draft.room.findIndex(
+          (defaultRoom) => defaultRoom.roomId === action.payload.roomId
         );
-
-        if (idx !== -1) {
-          draft.room.splice(idx, 1);
+        if (defaultRoomIdx !== -1) {
+          draft.room.splice(defaultRoomIdx, 1);
+        }
+        let markedRoomIdx = draft.markedList.findIndex(
+          (markedRoom) => markedRoom.roomId === action.payload.roomId
+        );
+        if (markedRoomIdx !== -1) {
+          draft.markedList.splice(markedRoomIdx, 1);
         }
       }),
     [ADD_BOOKMARK]: (state, action) =>
@@ -349,12 +363,11 @@ const room = handleActions(
       }),
     [DELETE_BOOKMARK]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.markedList.findIndex(
-          (room) => room.roomId === action.payload.roomId
+        let markedRoomIdx = draft.markedList.findIndex(
+          (markedRoom) => markedRoom.roomId === action.payload.roomId
         );
-
-        if (idx !== -1) {
-          draft.markedList.splice(idx, 1);
+        if (markedRoomIdx !== -1) {
+          draft.markedList.splice(markedRoomIdx, 1);
         }
       }),
 

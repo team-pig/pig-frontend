@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { Text } from "../../elem/index";
 
+//joinModal 띄울 때
 const RoomTags = ({ tag, type }) => {
   if (type === "modal") {
     return (

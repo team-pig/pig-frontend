@@ -18,6 +18,8 @@ const AddRoomModal = ({ showModal, addModal }) => {
   const [contents, setContents] = useState({
     roomName: "",
     subtitle: "",
+  });
+  const [tagText, setTagText] = useState({
     tag: "",
   });
   const [isImage, setIsImage] = useState(false);
@@ -30,13 +32,15 @@ const AddRoomModal = ({ showModal, addModal }) => {
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
+    setTagText({ ...tagText, [name]: value });
   };
 
+  const tagList = tagText.tag.split(",");
+  
   const disabled = contents.roomName === "";
-
   const saveFile = () => {
     if (!disabled) {
-      dispatch(__addRoom(contents, roomImg));
+      dispatch(__addRoom(contents, roomImg, tagList));
     }
     setContents({
       roomName: "",

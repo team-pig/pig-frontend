@@ -23,31 +23,46 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
     ? roomList && roomList.find((r) => r.roomId === roomId)
     : null;
 
-    const getImgUrlFromS3 = async (callback, file) => {
-      const result = await callback(file);
-      if(result){
-        setRoomImg(result);
-      }else{
-        setRoomImg(_room.roomImage);
-      }
-    };
+  const getImgUrlFromS3 = async (callback, file) => {
+    const result = await callback(file);
+    if (result) {
+      setRoomImg(result);
+    } else {
+      setRoomImg(_room.roomImage);
+    }
+  };
 
   const [contents, setContents] = useState(
     _room
-      ? { roomName: _room.roomName, subtitle: _room.subtitle, tag: _room.tag }
+      ? {
+          roomName: _room.roomName,
+          subtitle: _room.subtitle,
+        }
+      : ""
+  );
+
+  const [tagText, setTagText] = useState(
+    _room
+      ? {
+          tag: _room.tag,
+        }
       : ""
   );
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
+    setTagText({ ...tagText, [name]: value });
   };
+
+  const tagList =
+    typeof tagText.tag === "string" ? tagText.tag.split(",") : tagText.tag;
 
   const disabled = contents.roomName === "";
 
   const modifyFile = () => {
-    if(!disabled){
-      dispatch(__editRoom(roomId, contents, roomImg));
+    if (!disabled) {
+      dispatch(__editRoom(roomId, contents, roomImg, tagList));
     }
     closeModModal();
     setIsImage(false);
@@ -65,7 +80,10 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
             <ImageBox>
-              <ImageModule roomPreview={_room.roomImage} getImgUrlFromS3={getImgUrlFromS3} />
+              <ImageModule
+                roomPreview={_room.roomImage}
+                getImgUrlFromS3={getImgUrlFromS3}
+              />
             </ImageBox>
             <InputBox>
               <Input
@@ -87,7 +105,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
                 type="text"
                 placeholder="태그"
                 _onChange={changeHandler}
-                value={contents.tag}
+                value={tagText.tag}
               />
             </InputBox>
             <BtnBox>

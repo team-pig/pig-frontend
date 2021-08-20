@@ -19,6 +19,7 @@ import {
   __deleteRoom,
   __exitRoom,
   __toggleBookmark,
+  __getRoomList,
 } from "../../redux/modules/room";
 
 //roomList map의 list에서 받아오는 값
@@ -45,7 +46,7 @@ const RoomCard = ({
   useEffect(() => {
     setIsCheck();
     return () => setIsCheck(false);
-  }, []);
+  }, [isCheck]);
 
   const setIsCheck = () => {
     if (isCheck) {

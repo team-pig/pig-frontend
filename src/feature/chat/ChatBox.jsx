@@ -1,22 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { body_3 } from "../../themes/textStyle";
 import { hiddenScroll } from "../../themes/hiddenScroll";
-
-const Chat = ({ message }) => {
-  return <Bubble>{`${message.userName}: ${message.text}`}</Bubble>;
-};
+import Bubble from "./Bubble";
 
 const ChatBox = () => {
   const [chatLength, setChatLength] = useState(0);
 
+  const user = useSelector((state) => state.user.user);
   const chat = useSelector((state) => state.chat.messages);
   const scrollRef = useRef();
 
   const scrollToBottom = () => {
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   };
+
+  const checkMine = useCallback(
+    (messageUserId) => (messageUserId === user.userId ? "my" : "common"),
+    [user.userId]
+  );
 
   useEffect(() => {
     scrollToBottom();
@@ -30,7 +33,9 @@ const ChatBox = () => {
     <Container ref={scrollRef}>
       {chat &&
         chat.length > 0 &&
-        chat.map((message, idx) => <Chat key={idx} message={message} />)}
+        chat.map((message, idx) => (
+          <Bubble message={message} type={checkMine(message.userId)} />
+        ))}
     </Container>
   );
 };
@@ -41,11 +46,8 @@ const Container = styled.div`
   ${hiddenScroll};
   width: 100%;
   height: calc(100% - var(--inputBox));
+  padding: 0 20px;
   overflow-y: auto;
-`;
-
-const Bubble = styled.div`
-  ${body_3};
 `;
 
 export default ChatBox;

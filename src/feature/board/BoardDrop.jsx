@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
 
-const Item = ({ children, _onClick, componentType, color }) => {
+const Item = ({ children, _onClick, componentType, color, target }) => {
   if (componentType === "colorPicker")
     return (
       <Color color={color} onClick={_onClick}>
@@ -12,7 +12,7 @@ const Item = ({ children, _onClick, componentType, color }) => {
     );
 
   return (
-    <Link onClick={_onClick}>
+    <Link onClick={_onClick} target={target}>
       <Text type="body_3">{children}</Text>
     </Link>
   );
@@ -58,7 +58,6 @@ const Container = ({
   }, [modalEl]);
 
   // ---- 다른 영역 클릭 시, 드랍다운 off ---- //
-
   if (componentType === "colorPicker") {
     return (
       <ColorPicker
@@ -133,6 +132,8 @@ const DropdownBtn = styled.div`
 `;
 
 const ItemWrapper = styled.div`
+  ${flex("center", "center", false)}
+  gap: 5px;
   position: absolute;
   left: 0;
   top: 20px;
@@ -140,12 +141,12 @@ const ItemWrapper = styled.div`
   background-color: #fff;
   z-index: var(--indexDrop);
   border-radius: 4px;
-  div:nth-child(1) {
+  /* div:nth-child(1) {
     border-radius: 4px 4px 0 0;
   }
   div:last-child {
     border-radius: 0 0 4px 4px;
-  }
+  } */
 `;
 
 const Link = styled.div`
@@ -153,9 +154,11 @@ const Link = styled.div`
   width: 132px;
   height: 44px;
   cursor: pointer;
-  background-color: var(--white);
+  background-color: ${(props) =>
+    props.target ? "var(--main)" : "var(--white)"};
+  transition: transform ease-in-out 200ms;
   &:hover {
-    background-color: var(--line);
+    transform: scale(1.03);
   }
 `;
 

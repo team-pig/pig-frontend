@@ -72,11 +72,6 @@ const Todos = ({ cardId }) => {
           {CountText(20, formik.values.todoTitle.length)}
         </TodoBox>
       </TodoForm>
-      {/* <TodoHelpMsg color="point">
-        {formik.touched.todoTitle && formik.errors.todoTitle
-          ? formik.errors.todoTitle
-          : null}
-      </TodoHelpMsg> */}
     </Container>
   );
 };
@@ -86,6 +81,7 @@ const Container = styled.div`
   flex-direction: column;
   gap: 12px;
   margin: 0 auto;
+  padding-bottom: 40px;
 `;
 
 const TodoInput = styled.input`
@@ -121,7 +117,7 @@ const TodoList = styled.div`
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
-  height: 250px;
+  height: 200px;
   overflow-y: auto;
   scrollbar-width: none; //firefox
   ::-webkit-scrollbar {
@@ -138,13 +134,6 @@ const TextBox = styled.div`
 
 const TodoBox = styled.div`
   position: relative;
-`;
-
-const TodoHelpMsg = styled.div`
-  ${body_4}
-  color : var(--notice);
-  text-align: right;
-  padding-right: 40px;
 `;
 
 export default Todos;

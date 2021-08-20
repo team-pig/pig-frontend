@@ -15,6 +15,7 @@
 		"axios": "^0.21.1",
 		"connected-react-router": "^6.9.1",
 		"date-fns": "^2.23.0",
+		"emoji-picker-react": "^3.4.8",
 		"formik": "^2.2.9",
 		"history": "4.10.1",
 		"immer": "^9.0.5",

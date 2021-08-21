@@ -4,7 +4,7 @@ import { Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 
 // elem & compo
-import { Text } from "../../elem";
+import { Button, Text } from "../../elem";
 import Todos from "./Todos";
 import CardModal from "./CardModal";
 import ModalForms from "./ModalForms";
@@ -113,6 +113,16 @@ const Card = ({ card, index, bucketId }) => {
             할 일
           </TodosHeader>
           <Todos cardId={card.cardId} />
+          <BtnBox>
+            <Button
+              type="button"
+              shape="green-fill"
+              size="300"
+              _onClick={() => setShowModal(false)}
+            >
+              닫기
+            </Button>
+          </BtnBox>
         </CardModal>
       )}
     </>
@@ -186,6 +196,13 @@ const CardStat = styled.div`
 const StatCnt = styled.div`
   ${flex("between", "center")};
   gap: 6px;
+`;
+
+const BtnBox = styled.div`
+  ${flex()};
+  width: 100%;
+  margin-top: -10px;
+  margin-bottom: 40px;
 `;
 
 export default Card;

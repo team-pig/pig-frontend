@@ -12,6 +12,8 @@ const CardModal = ({ showModal, children, setShowModal }) => {
     };
   }, []);
 
+  const closeModal = () => setShowModal(false);
+
   return (
     <>
       {showModal ? (
@@ -21,7 +23,10 @@ const CardModal = ({ showModal, children, setShowModal }) => {
               setShowModal(false);
             }}
           >
-            <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalContent
+              onClick={(e) => e.stopPropagation()}
+              closeModal={closeModal}
+            >
               {children}
             </ModalContent>
           </ModalOverlay>

@@ -17,8 +17,9 @@ import CalendarInfo from "../feature/timeline/CalendarInfo";
 import CardModal from "../feature/board/CardModal";
 import CalendarModalForms from "../feature/timeline/CalendarModalForms";
 import Todos from "../feature/board/Todos";
-import { Text } from "../elem";
+import { Button, Text } from "../elem";
 import { resetTodos } from "../redux/modules/todos";
+import flex from "../themes/flex";
 
 const Calendar = (props) => {
   const { roomId } = useParams();
@@ -71,6 +72,16 @@ const Calendar = (props) => {
             할 일
           </TodosHeader>
           <Todos cardId={modalId} />
+          <BtnBox>
+            <Button
+              type="button"
+              shape="green-fill"
+              size="300"
+              _onClick={() => setShowModal(false)}
+            >
+              닫기
+            </Button>
+          </BtnBox>
         </CardModal>
       )}
     </CalendarBox>
@@ -86,4 +97,10 @@ const TodosHeader = styled(Text)`
   margin-bottom: 21px;
 `;
 
+const BtnBox = styled.div`
+  ${flex()};
+  width: 100%;
+  margin-top: -10px;
+  margin-bottom: 40px;
+`;
 export default Calendar;

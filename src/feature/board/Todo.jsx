@@ -119,7 +119,7 @@ const Todo = ({ todo }) => {
                   >
                     <Member target={target}>
                       <Avatar />
-                      {member.nickname}
+                      <Nickname type="body_3">{member.nickname}</Nickname>
                     </Member>
                   </BoardDrop.Item>
                 );
@@ -202,17 +202,27 @@ const CheckboxIcon = styled(Icon)`
   height: 20px;
 `;
 
+const Nickname = styled(Text)`
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
+`;
+
 const Member = styled.div`
   width: 100px;
   ${flex("start", "cetner")}
   ${button}
-  color: ${(props) => (props.target ? "var(--white)" : "var(--darkgrey)")};
+
+  ${Nickname} {
+    color: ${(props) => (props.target ? "var(--white)" : "var(--darkgrey)")};
+  }
 `;
 
 const Avatar = styled.div`
   flex-shrink: 0;
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   margin-right: 10px;
   border-radius: 50% !important;
   background-color: var(--notice);

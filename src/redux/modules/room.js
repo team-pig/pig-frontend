@@ -31,6 +31,7 @@ const initialState = {
   inviteCodeRoom: [],
   currentRoom: {},
   searchPaging: { page: 1, next: null, size: 12 },
+  searchKeyword: "",
 };
 
 //action creator
@@ -41,9 +42,8 @@ export const addRoom = createAction(ADD_ROOM, (room) => ({
 
 export const searchRoom = createAction(
   SEARCH_ROOM,
-  (searchedRoom, paging, searchContent) => ({
+  (searchedRoom, searchContent) => ({
     searchedRoom,
-    paging,
     searchContent,
   })
 );
@@ -130,7 +130,7 @@ export const __searchRoom =
         dispatch(searchRoom(_room));
       } else {
         const { data } = await roomApi.searchRoom(searchContent);
-        dispatch(searchRoom(data));
+        dispatch(searchRoom(data, searchContent));
       }
     } catch (e) {
       console.log(e);
@@ -276,6 +276,7 @@ const room = handleActions(
     [SEARCH_ROOM]: (state, action) =>
       produce(state, (draft) => {
         draft.searchedRoom = action.payload.searchedRoom.room;
+        draft.searchKeyword = action.payload.searchContent;
       }),
     [JOIN_ROOM]: (state, action) =>
       produce(state, (draft) => {

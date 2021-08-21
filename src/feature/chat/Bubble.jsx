@@ -1,16 +1,23 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { Text } from "../../elem";
+import { useSelector } from "react-redux";
+
+// elem & style
 import flex from "../../themes/flex";
-import { body_4 } from "../../themes/textStyle";
+import { body_4, button } from "../../themes/textStyle";
+import { Text } from "../../elem";
 
 const Bubble = ({ message, type }) => {
+  const members = useSelector((state) => state.members.members);
+
   const getTime = (submitTime) => {
     const timeAry = submitTime.split("/")[1].split(" ");
     const meridiem = timeAry[0] === "am" ? "오전" : "오후";
     const time = `${meridiem} ${timeAry[1]}`;
     return time;
   };
+
+  const target = members.find((member) => member.memberId === message.userId);
 
   if (type === "my") {
     return (
@@ -28,8 +35,12 @@ const Bubble = ({ message, type }) => {
     return (
       <CommonChat>
         <Left>
-          <ProfileImg />
+          {target && target.avatar && <ProfileImg target={target} />}
+          {target && target.memberName && !target.avatar && (
+            <ProfileImg target={target}>{target.memberName[0]}</ProfileImg>
+          )}
         </Left>
+
         <Right>
           <MessageInfo>
             <Name>{message.userName}</Name>
@@ -101,11 +112,29 @@ const Date = styled.div`
 `;
 
 const ProfileImg = styled.div`
+  ${flex()};
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-image: url("https://images.unsplash.com/photo-1629388684419-9001049809be?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80");
-  background-size: cover;
+  ${(props) => {
+    if (props.target.avatar) {
+      return css`
+        background-image: ${(props) => `url(${props.target.avatar});`};
+        background-size: cover;
+        background-position: center center;
+      `;
+    }
+    return css`
+      ${button};
+      color: ${(props) => {
+        if (props.target.color === "mint" || props.target.color === "yellow") {
+          return "var(--darkgrey);";
+        }
+        return "var(--white);";
+      }}
+      background-color: ${(props) => props.theme.colors[props.target.color]};
+    `;
+  }}
 `;
 
 export default Bubble;

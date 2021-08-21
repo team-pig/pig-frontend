@@ -1,22 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import AWS from "aws-sdk";
 
 import { useDispatch, useSelector } from "react-redux";
 
 //components
-import ImgUploader from "../../components/ImgUploader";
 import Icon from "../../components/Icon";
 
 // elements
-import { Button, Input, Text } from "../../elem/index";
+import { Button, Text } from "../../elem/index";
 import RoomTags from "./RoomTags";
 
 //redux
-import {
-  __getInviteCodeRoom,
-  __joinRoom,
-} from "../../redux/modules/room";
+import { __getInviteCodeRoom, __joinRoom } from "../../redux/modules/room";
 
 const JoinRoomModal = ({ showModal, joinModal }) => {
   const dispatch = useDispatch();
@@ -36,7 +31,7 @@ const JoinRoomModal = ({ showModal, joinModal }) => {
 
   const disabled = inviteCode === "";
   const join = () => {
-    if(!disabled){
+    if (!disabled) {
       dispatch(__joinRoom(inviteCode));
     }
     setInviteCode("");

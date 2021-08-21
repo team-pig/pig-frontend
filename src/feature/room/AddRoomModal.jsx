@@ -106,23 +106,18 @@ const ModalContainer = styled.div`
   top: 0;
   left: 0;
   z-index: 99;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   width: 100%;
   height: 100%;
 `;
 
 const ModalOverlay = styled.div`
   position: absolute;
-
   display: initial;
-
   width: 100%;
   height: 100%;
-
   background-color: rgba(0, 0, 0, 0.6);
 `;
 
@@ -130,6 +125,7 @@ const ModalContent = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 400px;
   height: 500px;
   padding-top: 5px;
@@ -137,22 +133,31 @@ const ModalContent = styled.div`
   background-color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   text-align: center;
+  ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    height: 100%;
+    padding: 70px 0 70px 0;
+    border-radius: 0px;
+  }
 `;
 
 const ImageBox = styled.div`
   margin: 0 auto;
-  padding: 46px 0 46px 0;
+  padding-top: 46px;
 `;
 
 const InputBox = styled.div`
   margin: 0 auto;
   width: 324px;
+  ${({ theme }) => theme.device.mobile} {
+    width: 320px;
+  }
 `;
 
 const BtnBox = styled.div`
   display: flex;
   width: 300px;
-  margin: auto auto 0 auto;
+  margin: 0 auto;
   padding-bottom: 46px;
 `;
 

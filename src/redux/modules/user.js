@@ -11,6 +11,8 @@ import { userApi } from "../../api/userApi";
 const LOGIN = "user/LOGIN";
 const LOGIN_CHECK = "user/LOGIN_CHECK";
 const LOGOUT = "user/LOGOUT";
+const RESET_PASSWORD = "user/RESET_PASSWORD";
+const SUBMIT_NEW_PASSWORD = "user/SUBMIT_NEW_PASSWORD";
 
 // action creator
 const login = createAction(LOGIN, (userInfo) => ({ userInfo }));
@@ -19,8 +21,45 @@ const loginCheck = createAction(LOGIN_CHECK, (isLogin, user) => ({
   ...user,
 }));
 const logout = createAction(LOGOUT, (userInfo) => ({ userInfo }));
+const resetPassword = createAction(RESET_PASSWORD, (userInfo) => ({
+  userInfo,
+}));
 
 // Thunk
+export const __submitNewPassword = (id, resetInfo) => async (dispatch) => {
+  try {
+    await userApi.submitNewPassword(id, resetInfo);
+    if (
+      window.confirm(
+        "비밀번호 변경이 완료되었습니다. 확인을 누르면 이 창이 닫힙니다."
+      )
+    ) {
+      window.close();
+    }
+  } catch (e) {}
+};
+
+export const __resetPassword = (email) => async (dispatch) => {
+  try {
+    dispatch(
+      pop({
+        value: true,
+        msg: "잠시만 기다려주세요.",
+      })
+    );
+    const data = await userApi.resetPassword(email);
+    console.log(data);
+    dispatch(
+      pop({
+        value: true,
+        msg: "가입하신 아이디로 비밀번호 변경 메일이 발송되었습니다.  🚀 ",
+      })
+    );
+  } catch (e) {
+    dispatch(pop({ value: true, msg: "존재하지 않는 아이디 입니다." }));
+  }
+};
+
 export const __login =
   (userInfo) =>
   async (dispatch, getState, { history }) => {
@@ -86,8 +125,13 @@ export const __register =
 
 const initialState = {
   isLogin: false,
-  loginResult: null,
-  user: { email: null, nickname: null, userId: null },
+  user: {
+    email: null,
+    nickname: null,
+    userId: null,
+    avatar: null,
+    color: null,
+  },
 };
 const user = handleActions(
   {
@@ -102,6 +146,8 @@ const user = handleActions(
         draft.user.email = action.payload.email;
         draft.user.nickname = action.payload.nickname;
         draft.user.userId = action.payload._id;
+        draft.user.avatar = action.payload.avatar;
+        draft.user.color = action.payload.color;
       }),
 
     [LOGOUT]: (state, action) =>

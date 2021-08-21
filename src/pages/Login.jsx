@@ -15,13 +15,15 @@ import { head_5 } from "../themes/textStyle";
 import flex from "../themes/flex";
 
 //redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { __login } from "../redux/modules/user";
+import Alert from "../components/Alert";
+import { pop } from "../redux/modules/alert";
 
 const Login = (props) => {
   const history = useHistory();
-
   const dispatch = useDispatch();
+  const { value, msg } = useSelector((state) => state.alert);
 
   const formik = useFormik({
     initialValues: {
@@ -49,6 +51,7 @@ const Login = (props) => {
     <>
       <SEO title="로그인" />
       <Template>
+        <Alert dispatcher={pop} msg={msg} status={value} />
         <Container>
           <Title type="head_3">좋은 하루 되세요!</Title>
           <FormContainer onSubmit={formik.handleSubmit}>

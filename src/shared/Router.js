@@ -15,10 +15,10 @@ const Router = () => {
   return (
     <Switch>
       <Route path="/" component={Auth(Intro, null)} exact />
-      <Route path="/login" component={Auth(Login, false)} exact />
+      <Route path="/login" component={Auth(Login, null)} exact />
       <Route path="/register" component={Auth(Register, null)} exact />
       <Route path="/roomlist" component={Auth(RoomList, true)} exact />
-      <Route path="/workspace/:roomId" component={Auth(Workspace, true)} />
+      <Route path="/workspace/:roomId" component={Auth(Workspace, null)} />
       <Redirect from="*" to="/" />
     </Switch>
   );

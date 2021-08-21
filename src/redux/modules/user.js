@@ -1,6 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import jwt_decode from "jwt-decode";
 import produce from "immer";
+import { pop } from "./alert";
 
 // shared & api
 import { cookies } from "../../shared/cookie";
@@ -30,12 +31,11 @@ export const __login =
       const { id, avatar, color } = jwt_decode(accessToken);
       cookies.set("accessToken", accessToken, {
         path: "/",
-        maxAge: 1800, // 30분
+        maxAge: 1800, // 2 day
       });
-
       cookies.set("refreshToken", refreshToken, {
         path: "/",
-        maxAge: 86400, // 1일
+        maxAge: 86400, // 2 day
       });
       localStorage.setItem("userId", id);
       localStorage.setItem("avatar", avatar);
@@ -43,7 +43,9 @@ export const __login =
       dispatch(login({ email, id }));
       history.replace("/roomlist");
     } catch (e) {
-      window.alert(e.response.data.message);
+      dispatch(
+        pop({ value: true, msg: "아이디 또는 비밀번호가 올바르지 않습니다." })
+      );
     }
   };
 
@@ -77,12 +79,14 @@ export const __register =
       window.alert("회원가입이 완료되었습니다! ✨");
       history.replace("/login");
     } catch (e) {
-      window.alert(e.response.data.errorMessage);
+      // window.alert(e.response.data.errorMessage);
+      dispatch(pop({ value: true, msg: e.response.data.errorMessage }));
     }
   };
 
 const initialState = {
   isLogin: false,
+  loginResult: null,
   user: { email: null, nickname: null, userId: null },
 };
 const user = handleActions(

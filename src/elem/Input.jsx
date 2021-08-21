@@ -2,8 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 import Icon from "../components/Icon";
-import { Text } from "../elem";
-import { body_3 } from "../themes/textStyle";
+import { body_3, body_4 } from "../themes/textStyle";
 
 const Input = (props) => {
   if (props.type === "text" || props.type === "password") {
@@ -31,9 +30,7 @@ const Input = (props) => {
         {props.useHelper &&
         props.useHelper.touched[props.name] &&
         props.useHelper.errors[props.name] ? (
-          <Helper>
-            <Text type="body_4">{props.useHelper.errors[props.name]}</Text>
-          </Helper>
+          <Helper>{props.useHelper.errors[props.name]}</Helper>
         ) : (
           ""
         )}
@@ -100,6 +97,7 @@ const InputText = styled.input`
 `;
 
 const Helper = styled.div`
+  ${body_4}
   position: absolute;
   bottom: -4px;
   right: 0;

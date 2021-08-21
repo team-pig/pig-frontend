@@ -11,7 +11,7 @@ import HelpBtns from "../components/HelpBtns";
 // elem
 import SEO from "../components/SEO";
 import { Button, Input, Text } from "../elem";
-import { head_5 } from "../themes/textStyle";
+import { body_4, head_5 } from "../themes/textStyle";
 import flex from "../themes/flex";
 
 //redux
@@ -81,7 +81,15 @@ const Login = (props) => {
               value={formik.values.password}
               placeholder="비밀번호"
             />
-            {/* <HelpBtns /> */}
+            <InputBottom>
+              <SaveMyId>
+                <Input type="checkbox" />
+                <div>아이디 저장</div>
+              </SaveMyId>
+              <Password onClick={() => history.push("/serach-password")}>
+                비밀번호를 분실했어요
+              </Password>
+            </InputBottom>
             <LoginBtn shape="green-fill" type="submit">
               로그인
             </LoginBtn>
@@ -96,7 +104,21 @@ const Login = (props) => {
     </>
   );
 };
-
+const InputBottom = styled.div`
+  ${flex("between")}
+`;
+const SaveMyId = styled.div`
+  ${flex()}
+  ${body_4}
+`;
+const Password = styled.div`
+  ${body_4}
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+    color: var(--notice);
+  }
+`;
 const Container = styled.section`
   ${flex("start", "center", false)}
   width: 100%;

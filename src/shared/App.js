@@ -25,7 +25,8 @@ const App = () => {
     location: { pathname },
   } = useSelector((state) => state.router);
 
-  const result = pathname.includes("workspace");
+  const result =
+    pathname.includes("workspace") || pathname.includes("password");
 
   useEffect(() => {
     initiateSocket();

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import styled from "styled-components";
+
+// component & elem
 import Icon from "../../components/Icon";
-import { Text } from "../../elem";
-import { __updateCardLocateOtherBucket } from "../../redux/modules/board";
-import flex from "../../themes/flex";
 import { button } from "../../themes/textStyle";
+import flex from "../../themes/flex";
+import { Text } from "../../elem";
+
+// redux & api
 import { __loadBucket } from "../../redux/modules/board";
 import { __editScheduleBucket } from "../../redux/modules/calendar";
 
@@ -73,8 +76,8 @@ const BucketSelect = ({ bucketId, cardId }) => {
 
 const Select = styled.div`
   ${flex("between")};
-  position: relative;
-  top: -20px;
+  position: absolute;
+  top: 0;
   left: 0;
   width: 100%;
   height: 58px;
@@ -84,6 +87,7 @@ const Select = styled.div`
   outline: none;
   cursor: pointer;
   z-index: var(--indexDrop);
+  box-sizing: border-box;
 `;
 
 const Options = styled.ul`

@@ -171,7 +171,7 @@ const CardDeleteBtn = styled.div`
   ${flex("center", "center")};
   transition: 200ms transform ease-in-out;
   &:hover {
-    transform: scale(1.3);
+    transform: scale(1.1);
   }
 `;
 const CardBody = styled.div`

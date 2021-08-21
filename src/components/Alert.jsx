@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Button } from "../elem";
 import { useDispatch } from "react-redux";
 import flex from "../themes/flex";
-import { body_1 } from "../themes/textStyle";
+import { body_3 } from "../themes/textStyle";
 
 const Alert = ({ status, dispatcher, msg }) => {
   const dispatch = useDispatch();
@@ -54,12 +54,13 @@ const ModalOverlay = styled.div`
 `;
 
 const Desc = styled.div`
-  ${body_1}
+  ${body_3}
 `;
 
 const ModalContent = styled.div`
   ${flex("end", "center", false)}
   position: absolute;
+  padding: 14px;
   left: 50%;
   top: 100px;
   transform: translate(-50%, 0);

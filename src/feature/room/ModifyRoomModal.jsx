@@ -157,7 +157,6 @@ const ModalContent = styled.div`
   width: 400px;
   height: 500px;
   padding-top: 5px;
-  border-radius: 10px;
   background-color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   text-align: center;

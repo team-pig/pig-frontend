@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { __logout } from "../../redux/modules/user";
 
 // component
-import Icon from "../Icon";
 import NameTag from "./NameTag";
 
 // assets
@@ -53,7 +52,6 @@ const Header = () => {
           {!isLogin ? (
             <Nav>
               <List>
-                <Item>제품소개</Item>
                 <Item onClick={() => history.push("/login")}>로그인</Item>
                 <Item onClick={() => history.push("/register")}>회원가입</Item>
               </List>
@@ -61,10 +59,7 @@ const Header = () => {
           ) : (
             <>
               <Btns>
-                {/* <IconBtn>
-                  <Icon icon="notice-focus" size="28px" />
-                </IconBtn> */}
-                <NameBtn>
+                <NameBtn onClick={() => history.push("/mypage")}>
                   <NameTag name={user.nickname} />
                 </NameBtn>
                 <LogoutBtn onClick={clickLogout}>로그아웃</LogoutBtn>

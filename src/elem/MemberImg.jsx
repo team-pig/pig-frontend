@@ -13,6 +13,7 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
       setShowAllMember(true);
     }
   }, []);
+  console.log(memberStatus);
   return (
     <>
 
@@ -26,12 +27,16 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
                     left: (members.length - 1 - idx) * 6,
                   }}
                   key={member.userId}
+                  src={member.avatar}
+                  bgColor={member.avatar==="" ? member.color : ""}
+                  border={memberStatus.length > 1 ? "--white" : ""}
                 >
-                  <Nickname>{member.nickname.charAt(0).toUpperCase()}</Nickname>
+                 {member.avatar==="" && <Nickname>{member.nickname[0].toLowerCase()}</Nickname>}
                 </ProfileImg>
               );
             })
           : memberStatus.slice(0, 3).map((member, idx) => {
+            console.log(member);
               return (
                 <ProfileImg
                   style={{
@@ -39,8 +44,11 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
                   }}
                   idx={idx}
                   key={member.userId}
+                  src={member.avatar}
+                  bgColor={member.avatar==="" ?  member.color : ""}
+                  border={"--white"}
                 >
-                  <Nickname>{member.nickname.charAt(0).toUpperCase()}</Nickname>
+                  {member.avatar==="" && <Nickname>{member.nickname[0].toLowerCase()}</Nickname>}
                 </ProfileImg>
               );
             })}
@@ -58,25 +66,23 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
 
 const ProfileImg = styled.div`
   position: relative;
-
-  /* left: ${(props) => props.idx && props.idx * -6}; */
   display: flex;
   flex-shrink: 0;
-
   right: 20px;
   width: 30px;
   height: 30px;
   margin: 0;
-
-  /* background-image: url("${(props) => props.src}"); */
-  background-color: white;
-  border: 1px solid black;
+  box-sizing: content-box;
+  background-size: cover;
+  ${(props) => (props.bgColor ? `background-color: ${props.bgColor};` : "")}
+  background-image: url("${(props) => props.src}");
+  border: 1px solid var(${(props) => props.border});
   border-radius: 50%;
 `;
 
 const Nickname = styled.span`
   margin: 0 auto;
-  color: var(--black);
+  color: var(--white);
   font-size: 17px;
   font-weight: 800;
   line-height: 30px;

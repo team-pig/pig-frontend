@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 //components
 import Template from "../components/Template";
@@ -14,19 +14,32 @@ import DefaultRoomList from "../feature/room/DefaultRoomList";
 //elements
 
 //redux
-import { __getRoomList, __getMarkedList } from "../redux/modules/room";
+import room, { __getRoomList, __getMarkedList } from "../redux/modules/room";
 import SEO from "../components/SEO";
 
 const RoomList = () => {
   const dispatch = useDispatch();
-
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
+  const [showImg, setShowImg] = useState(false);
+  const { room } = useSelector((state) => state.room) || [];
 
   useEffect(() => {
-    dispatch(__getRoomList());
-    dispatch(__getMarkedList());
-  }, []);
+    const getRoom = async() => {
+      const __getRoom = await dispatch(__getRoomList());
+      dispatch(__getMarkedList());
+      roomBlankImg();
+    }
+    getRoom();
+  }, [room]);
+
+  const roomBlankImg = () => {
+    if(room && room.length > 0){
+      setShowImg(false);
+    }else{
+      setShowImg(true);
+    }
+  }
 
   const joinModal = () => {
     setShowModal((pre) => !pre);
@@ -47,7 +60,7 @@ const RoomList = () => {
           <JoinRoomModal showModal={showModal} joinModal={joinModal} />
         )}
         <SearchBar joinModal={joinModal} addModal={addModal} />
-        <RoomBlank />
+       {showImg && <RoomBlank />}
         <BookmarkList />
         <SearchResult />
         <DefaultRoomList />

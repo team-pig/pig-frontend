@@ -20,8 +20,11 @@ const CardModal = ({ showModal, children, setShowModal }) => {
             onClick={() => {
               setShowModal(false);
             }}
-          />
-          <ModalContent>{children}</ModalContent>
+          >
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              {children}
+            </ModalContent>
+          </ModalOverlay>
         </ModalContainer>
       ) : null}
     </>
@@ -36,8 +39,8 @@ const ModalContainer = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
   z-index: var(--indexModal);
+  overflow-y: auto;
 `;
 
 const ModalOverlay = styled.div`
@@ -45,8 +48,13 @@ const ModalOverlay = styled.div`
   /* display: initial; */
   top: 0;
   left: 0;
+  display: flex;
+  align-items: center;
   width: 100%;
-  height: 100%;
+  height: auto;
+  min-height: 100%;
+  padding: 40px 0;
+
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
@@ -61,7 +69,8 @@ const ModalContent = styled.div`
   left: 0;
   z-index: var(--indexModal);
   width: 560px;
-  height: calc(100vh - var(--minusHeight));
+  height: auto;
+  margin: auto auto;
   background-color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 `;

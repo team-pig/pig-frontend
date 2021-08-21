@@ -13,7 +13,7 @@ const BookmarkList = () => {
 
   return (
     <>
-        <BookmarkContainer>
+        {markedList && markedList.length > 0 && <BookmarkContainer>
           <TitleWrapper>
             <BookmarkTitle>
               <Text type="body_1">즐겨찾기 방 목록</Text>
@@ -33,7 +33,7 @@ const BookmarkList = () => {
               );
             })}
           </BookmarkBox>
-        </BookmarkContainer>
+        </BookmarkContainer>}
     </>
   );
 };

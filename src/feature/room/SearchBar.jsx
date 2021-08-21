@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import _ from "lodash";
 
 import Icon from "../../components/Icon";
 import { Button } from "../../elem/index";
+import { head_1 } from "../../themes/textStyle";
 
 import { __searchRoom } from "../../redux/modules/room";
 
 const SearchBar = ({ joinModal, addModal }) => {
   const dispatch = useDispatch();
   const [searchContent, setSearchContent] = useState("");
+  const { searchedRoom } = useSelector((state) => state.room);
 
   const changeSearchContent = (keyword) => {
     dispatch(__searchRoom(keyword));
@@ -65,9 +67,25 @@ const SearchBar = ({ joinModal, addModal }) => {
           </BtnContainer>
         </WrapperItem>
       </Wrapper>
+      {searchContent && searchedRoom && searchedRoom.length === 0 && (
+        <TextBox>
+          <Text>찾으시는 방이 없네요</Text>
+        </TextBox>
+      )}
     </>
   );
 };
+
+const TextBox = styled.div`
+  display: flex;
+  align-items: center;
+  height: 500px;
+`;
+
+const Text = styled.div`
+  ${head_1}
+  margin: 0 auto;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -84,7 +102,6 @@ const WrapperItem = styled.div`
   padding: 0 80px;
   margin: 15px auto 0 auto;
   ${({ theme }) => theme.device.mobile} {
-    display: flex;
     justify-content: center;
     flex-wrap: wrap;
   }

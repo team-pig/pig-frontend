@@ -141,7 +141,7 @@ const Container = styled.div`
   border: ${(props) => props.isDragging && `1px solid ${props.bgColor}`};
   &:hover {
     border-radius: 4px;
-    border: ${(props) => `1px solid ${props.bgColor}`};
+    border: ${(props) => `1px solid ${props.theme.colors[props.bgColor]}`};
   }
 `;
 

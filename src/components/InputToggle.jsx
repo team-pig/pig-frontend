@@ -26,6 +26,11 @@ const InputToggle = ({
     setEditMode((pre) => !pre);
   };
 
+  const changeToEditMode = (e) => {
+    e.stopPropagation();
+    setEditMode((pre) => !pre);
+  };
+
   // Input 외 영역 클릭 시 저장
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -86,6 +91,7 @@ const InputToggle = ({
           onKeyPress={handleEnterEvent}
           padding={padding}
           maxLength={maxLength ? maxLength : limit}
+          autoFocus
         />
 
         {limit && CountText(limit, currentValue.length)}
@@ -95,7 +101,7 @@ const InputToggle = ({
 
   return (
     <Container
-      onClick={!editMode ? () => setEditMode((pre) => !pre) : null}
+      onClick={!editMode ? changeToEditMode : null}
       editMode={editMode}
     >
       {editMode ? (
@@ -109,6 +115,7 @@ const InputToggle = ({
 
 const Container = styled.div`
   ${scrollbar};
+  flex-grow: 1;
   width: 100%;
   height: 100%;
   overflow: auto;
@@ -128,6 +135,7 @@ const EditInput = styled.input`
   background-color: transparent;
   width: 100%;
   height: 100%;
+  padding: 0;
   cursor: text !important;
   border: none;
   font-size: inherit;
@@ -150,6 +158,7 @@ const TextAreaResult = styled(Text)`
   word-break: break-all;
   white-space: pre-wrap;
   overflow-y: auto;
+  border-bottom: 1px solid transparent;
 `;
 
 const InputBox = styled.div`

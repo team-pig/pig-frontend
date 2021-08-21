@@ -7,15 +7,12 @@ import { Text } from "../../elem/index.js";
 import RoomCard from "./RoomCard";
 
 const BookmarkList = () => {
-  const { searchedRoom, markedList, userId } = useSelector(
+  const { markedList, userId } = useSelector(
     (state) => state.room
   );
 
   return (
     <>
-      {(searchedRoom && searchedRoom.length > 0) || markedList.length === 0 ? (
-        ""
-      ) : (
         <BookmarkContainer>
           <TitleWrapper>
             <BookmarkTitle>
@@ -37,7 +34,6 @@ const BookmarkList = () => {
             })}
           </BookmarkBox>
         </BookmarkContainer>
-      )}
     </>
   );
 };

@@ -1,22 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import AWS from "aws-sdk";
 
 import { useDispatch, useSelector } from "react-redux";
 
 //components
-import ImgUploader from "../../components/ImgUploader";
 import Icon from "../../components/Icon";
 
 // elements
-import { Button, Input, Text } from "../../elem/index";
+import { Button, Text } from "../../elem/index";
 import RoomTags from "./RoomTags";
 
 //redux
-import {
-  __getInviteCodeRoom,
-  __joinRoom,
-} from "../../redux/modules/room";
+import { __getInviteCodeRoom, __joinRoom } from "../../redux/modules/room";
 
 const JoinRoomModal = ({ showModal, joinModal }) => {
   const dispatch = useDispatch();
@@ -36,7 +31,7 @@ const JoinRoomModal = ({ showModal, joinModal }) => {
 
   const disabled = inviteCode === "";
   const join = () => {
-    if(!disabled){
+    if (!disabled) {
       dispatch(__joinRoom(inviteCode));
     }
     setInviteCode("");
@@ -132,6 +127,7 @@ const ModalContent = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 400px;
   height: 500px;
   padding-top: 5px;
@@ -139,6 +135,12 @@ const ModalContent = styled.div`
   background-color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   text-align: center;
+  ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    height: 100%;
+    padding: 70px 0 70px 0;
+    border-radius: 0px;
+  }
 `;
 
 const DefaultImage = styled.div`
@@ -153,7 +155,7 @@ const DefaultImage = styled.div`
 
 const ImageBox = styled.div`
   margin: 0 auto;
-  padding: 46px 0 46px 0;
+  padding-top: 46px;
 `;
 
 const Image = styled.div`
@@ -171,6 +173,9 @@ const IconBox = styled.div`
 const InputBox = styled.div`
   margin: 0 auto;
   width: 324px;
+  ${({ theme }) => theme.device.mobile} {
+    width: 320px;
+  }
 `;
 
 const InviteCodeInput = styled.input`
@@ -200,7 +205,7 @@ const Content = styled.div`
 const BtnBox = styled.div`
   display: flex;
   width: 300px;
-  margin: auto auto 0 auto;
+  margin: 0 auto;
   padding-bottom: 46px;
 `;
 

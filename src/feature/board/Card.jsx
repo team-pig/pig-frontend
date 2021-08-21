@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
-import moment from "moment";
 
 // elem & compo
-import { Text } from "../../elem";
+import { Button, Text } from "../../elem";
 import Todos from "./Todos";
 import CardModal from "./CardModal";
 import ModalForms from "./ModalForms";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
+
+// function
+import setDday from "../../functions/setDday";
 
 // redux & api
 import { useSelector, useDispatch } from "react-redux";
@@ -30,12 +32,7 @@ const Card = ({ card, index, bucketId }) => {
     setModalContent(currentContent);
   }, [currentContent]);
 
-  const dDay =
-    parseInt(
-      moment(moment(card.endDate).diff(moment().format("YYYY-MM-DD"))).format(
-        "D"
-      )
-    ) - 1;
+  const dDay = setDday(card.endDate);
 
   const limitText = (text, limit) => {
     if (text) {
@@ -87,7 +84,7 @@ const Card = ({ card, index, bucketId }) => {
                     {card.endDate}
                   </Text>
                   <Text type="body_4" color="notice">
-                    {dDay !== 0 ? `D-${dDay}` : "D-DAY"}
+                    {dDay}
                   </Text>
                 </EndDate>
                 <CardStat>
@@ -116,6 +113,16 @@ const Card = ({ card, index, bucketId }) => {
             할 일
           </TodosHeader>
           <Todos cardId={card.cardId} />
+          <BtnBox>
+            <Button
+              type="button"
+              shape="green-fill"
+              size="300"
+              _onClick={() => setShowModal(false)}
+            >
+              닫기
+            </Button>
+          </BtnBox>
         </CardModal>
       )}
     </>
@@ -164,7 +171,7 @@ const CardDeleteBtn = styled.div`
   ${flex("center", "center")};
   transition: 200ms transform ease-in-out;
   &:hover {
-    transform: scale(1.3);
+    transform: scale(1.1);
   }
 `;
 const CardBody = styled.div`
@@ -189,6 +196,13 @@ const CardStat = styled.div`
 const StatCnt = styled.div`
   ${flex("between", "center")};
   gap: 6px;
+`;
+
+const BtnBox = styled.div`
+  ${flex()};
+  width: 100%;
+  margin-top: -10px;
+  margin-bottom: 40px;
 `;
 
 export default Card;

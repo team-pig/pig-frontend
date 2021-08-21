@@ -13,7 +13,7 @@ const Item = ({ children, _onClick, componentType, color, target }) => {
 
   return (
     <Link onClick={_onClick} target={target}>
-      <Text type="body_3">{children}</Text>
+      {children}
     </Link>
   );
 };
@@ -133,14 +133,16 @@ const DropdownBtn = styled.div`
 
 const ItemWrapper = styled.div`
   ${flex("center", "center", false)}
-  gap: 5px;
   position: absolute;
   left: 0;
   top: 20px;
-  box-shadow: 0px 0px 12px rgb(0 0 0 / 10%);
   background-color: #fff;
-  z-index: var(--indexDrop);
   border-radius: 4px;
+  box-shadow: 6px 6px 20px 0px rgba(21, 21, 21, 0.15);
+  -webkit-box-shadow: 6px 6px 20px 0px rgba(21, 21, 21, 0.15);
+  -moz-box-shadow: 6px 6px 20px 0px rgba(21, 21, 21, 0.15);
+  z-index: var(--indexDrop);
+  overflow: hidden;
   /* div:nth-child(1) {
     border-radius: 4px 4px 0 0;
   }
@@ -150,16 +152,13 @@ const ItemWrapper = styled.div`
 `;
 
 const Link = styled.div`
-  ${flex("center", "center")}
+  ${flex("center", "center")};
   width: 132px;
   height: 44px;
   cursor: pointer;
   background-color: ${(props) =>
     props.target ? "var(--main)" : "var(--white)"};
   transition: transform ease-in-out 200ms;
-  &:hover {
-    transform: scale(1.03);
-  }
 `;
 
 const BoardDrop = {

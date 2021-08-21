@@ -15,9 +15,9 @@ const Chat = () => {
 
 const Container = styled.section`
   --header: 48px;
-  --notice: 48px;
+  --notice: 48px; // 현재 비활성화
   --members: 48px;
-  --minusHeight: calc(var(--header) + var(--notice) + var(--members));
+  --minusHeight: calc(var(--header) + var(--members));
 
   position: relative;
   width: 100%;

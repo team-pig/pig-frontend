@@ -3,17 +3,21 @@ import styled, { css } from "styled-components";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import DatePickerExample from "./DatePicker";
-import moment from "moment";
 
-import { resetTodos } from "../../redux/modules/todos";
-import { __editCardInfos, resetCard } from "../../redux/modules/board";
+// function
+import setDday from "../../functions/setDday";
 
+// component & elem
 import BoardDrop from "./BoardDrop";
 import InputToggle from "../../components/InputToggle";
-import { Text } from "../../elem";
-import flex from "../../themes/flex";
 import Icon from "../../components/Icon";
+import flex from "../../themes/flex";
+import { Text } from "../../elem";
 import { body_2, body_3, sub_1 } from "../../themes/textStyle";
+
+// redux
+import { resetTodos } from "../../redux/modules/todos";
+import { __editCardInfos, resetCard } from "../../redux/modules/board";
 
 const ModalForms = ({ content }) => {
   const dispatch = useDispatch();
@@ -37,12 +41,7 @@ const ModalForms = ({ content }) => {
 
   const kindOfColor = ["blue", "violet", "yellow", "orange", "mint"];
 
-  const dDay =
-    parseInt(
-      moment(
-        moment(content.endDate).diff(moment().format("YYYY-MM-DD"))
-      ).format("D")
-    ) - 1;
+  const dDay = setDday(content.endDate);
 
   return (
     <Container>
@@ -86,7 +85,7 @@ const ModalForms = ({ content }) => {
           mode="card" // card or schedule
         />
         <DueDate>
-          <DateText>{dDay !== 0 ? `D-${dDay}` : "D-DAY"}</DateText>
+          <DateText>{dDay}</DateText>
         </DueDate>
       </DateInput>
       <DescContainer>

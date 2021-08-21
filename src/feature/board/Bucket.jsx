@@ -186,7 +186,6 @@ const BucketHeader = styled.div`
 `;
 
 const BucketHeaderBar = styled.div`
-  flex-grow: 1;
   width: 260px;
   height: 4px;
   background-color: ${(props) => props.theme.colors["mint"]};
@@ -195,7 +194,9 @@ const BucketHeaderBar = styled.div`
   margin-bottom: 14px;
 `;
 
-const BucketTitle = styled.div``;
+const BucketTitle = styled.div`
+  flex-grow: 1;
+`;
 
 const BucketHeadBtns = styled.div`
   ${flex("center", "center")};

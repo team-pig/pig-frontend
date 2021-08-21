@@ -69,9 +69,9 @@ const Todo = ({ todo }) => {
         />
         <label htmlFor={todo.todoId}>
           {todo.isChecked ? (
-            <CheckedIcon src={Filled} alt="체크됨" />
+            <CheckboxIcon icon="checkbox-filled" size="20px" />
           ) : (
-            <NotCheckboxIcon icon="checkbox" size="20px" />
+            <CheckboxIcon icon="checkbox" size="20px" />
           )}
         </label>
       </>
@@ -119,7 +119,7 @@ const Todo = ({ todo }) => {
                   >
                     <Member target={target}>
                       <Avatar />
-                      {member.nickname}
+                      <Nickname type="body_3">{member.nickname}</Nickname>
                     </Member>
                   </BoardDrop.Item>
                 );
@@ -128,16 +128,12 @@ const Todo = ({ todo }) => {
           <TodoMembersCnt> + {todo.members.length}</TodoMembersCnt>
         </TodoMembers>
         <RemoveTodoIcon>
-          {itemClicked ? (
-            <Icon
-              icon="remove"
-              size="14px"
-              color="var(--grey)"
-              onClick={deleteTodoHandler}
-            />
-          ) : (
-            ""
-          )}
+          <Icon
+            icon="remove"
+            size="14px"
+            color="var(--grey)"
+            onClick={deleteTodoHandler}
+          />
         </RemoveTodoIcon>
       </TodoItem>
     </Container>
@@ -148,6 +144,13 @@ const Container = styled.div`
   ${flex("between", "center")}
   width: 478px;
   margin: 0 auto;
+`;
+
+const RemoveTodoIcon = styled.div`
+  ${flex("center", "cetner")}
+  visibility: hidden;
+  width: 20px;
+  height: 20px;
 `;
 
 const TodoItem = styled.div`
@@ -162,8 +165,18 @@ const TodoItem = styled.div`
     props.itemClicked
       ? css`
           border: 1px solid var(--main);
+
+          ${RemoveTodoIcon} {
+            visibility: visible;
+          }
         `
       : ""}
+
+  &:hover {
+    ${RemoveTodoIcon} {
+      visibility: visible;
+    }
+  }
 `;
 
 const TodoMembers = styled.div`
@@ -183,37 +196,36 @@ const TodoInputToggle = styled.div`
   width: 300px;
 `;
 
-const NotCheckboxIcon = styled(Icon)`
+const CheckboxIcon = styled(Icon)`
   cursor: pointer;
   width: 20px;
   height: 20px;
 `;
 
-const RemoveTodoIcon = styled.div`
-  ${flex("center", "cetner")}
-  width: 20px;
-  height: 20px;
+const Nickname = styled(Text)`
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
 `;
 
-const CheckedIcon = styled.img`
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-`;
 const Member = styled.div`
   width: 100px;
   ${flex("start", "cetner")}
   ${button}
-  color: ${(props) => (props.target ? "var(--white)" : "var(--darkgrey)")}
+
+  ${Nickname} {
+    color: ${(props) => (props.target ? "var(--white)" : "var(--darkgrey)")};
+  }
 `;
 
 const Avatar = styled.div`
   flex-shrink: 0;
-  width: 30px;
-  height: 30px;
-  background-color: var(--notice);
-  border-radius: 50% !important;
+  width: 24px;
+  height: 24px;
   margin-right: 10px;
+  border-radius: 50% !important;
+  background-color: var(--notice);
 `;
 
 export default Todo;

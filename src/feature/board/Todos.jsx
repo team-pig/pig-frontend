@@ -80,6 +80,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: auto;
   margin: 0 auto;
   padding-bottom: 40px;
 `;
@@ -114,16 +115,10 @@ const TodoForm = styled.form`
 
 const TodoList = styled.div`
   display: flex;
+  height: auto;
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
-  height: 200px;
-  overflow-y: auto;
-  scrollbar-width: none; //firefox
-  ::-webkit-scrollbar {
-    // chrome, safari, opera
-    display: none;
-  }
 `;
 
 const TextBox = styled.div`

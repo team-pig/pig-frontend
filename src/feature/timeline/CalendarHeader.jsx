@@ -60,9 +60,9 @@ const CalendarHeader = ({
           </NavIcons>
         </Nav>
         <BtnBox>
-          <IconBtn _onClick={() => {}} padding="5px">
+          {/* <IconBtn _onClick={() => {}} padding="5px">
             <Icon icon="search" size="24px" color="var(--darkgrey)" />
-          </IconBtn>
+          </IconBtn> */}
           <IconBtn _onClick={clickCreateBtn} padding="5px">
             <Icon icon="plus-lg" size="24px" color="var(--darkgrey)" />
           </IconBtn>

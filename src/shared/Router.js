@@ -26,7 +26,11 @@ const Router = () => {
         component={Auth(SearchPassword, true)}
         exact
       />
-      <Route path="/password/:id" component={Auth(ResetPassword, true)} exact />
+      <Route
+        path="/resetPassword/:id"
+        component={Auth(ResetPassword, true)}
+        exact
+      />
       <Route path="/mypage" component={Auth(MyPage, true)} exact />
       <Route path="/workspace/:roomId" component={Auth(Workspace, null)} />
       <Redirect from="*" to="/" />

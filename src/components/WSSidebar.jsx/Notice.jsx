@@ -9,10 +9,10 @@ const Notice = ({ _onClick }) => {
   return (
     <NotiContainer>
       <IconBox onClick={_onClick}>
-        <Icon icon="bookmark" size="20px" color="var(--main)" />
+        <CloseIcon icon="arrow-down" size="20px" color="var(--main)" />
       </IconBox>
       <NotiText type="body_3">8월 14일 발표까지 MVP 전부 만들기!!!!!!</NotiText>
-      <IconBtn>
+      <IconBtn style={{ visibility: "hidden" }}>
         <Icon icon="arrow-down" size="14px" color="var(--darkgrey)" />
       </IconBtn>
     </NotiContainer>
@@ -30,6 +30,7 @@ const NotiContainer = styled.article`
 `;
 
 const NotiText = styled(Text)`
+  visibility: hidden;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -40,6 +41,11 @@ const IconBox = styled.div`
   ${flex()};
   flex-shrink: 0;
   margin-right: 4px;
+  cursor: pointer;
+`;
+
+const CloseIcon = styled(Icon)`
+  transform: rotate(-90deg);
 `;
 
 export default Notice;

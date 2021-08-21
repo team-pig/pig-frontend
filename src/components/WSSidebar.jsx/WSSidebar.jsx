@@ -20,7 +20,7 @@ const WSSidebar = () => {
     <>
       <Container sidebar={isShowSidebar}>
         <Notice _onClick={handleSidebar} />
-        <RoomMember />
+        {/* <RoomMember /> */}
         <Chat />
       </Container>
       {!isShowSidebar && (

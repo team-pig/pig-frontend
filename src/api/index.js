@@ -9,12 +9,28 @@ export const instance = axios.create({
   },
 });
 
+// 토큰이 필요없는 요청에 쓰일 인스턴스 (로그인, 회원가입)
+export const nonTokenInstance = axios.create({
+  baseURL: "http://13.125.222.70/",
+  headers: {
+    "content-type": "application/json;charset=UTF-8",
+    accept: "application/json,",
+  },
+});
+
 instance.interceptors.request.use((config) => {
   const accessToken = cookies.get("accessToken");
   config.headers.common["Authorization"] = `Bearer ${accessToken}`;
   return config;
 });
 
+nonTokenInstance.interceptors.request.use((config) => {
+  const accessToken = cookies.get("accessToken");
+  config.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  return config;
+});
+
+// Refresh Token 발급 로직
 let isTokenRefreshing = false;
 let refreshSubscribers = [];
 
@@ -29,7 +45,6 @@ const addRefreshSubscriber = (callback) => {
   refreshSubscribers.push(callback);
 };
 
-// Refresh Token 발급 로직
 instance.interceptors.response.use(
   (config) => {
     // 오류 없을 때
@@ -48,7 +63,7 @@ instance.interceptors.response.use(
         isTokenRefreshing = true; // false 일때는 true로 바꿔주고.
         const refreshToken = cookies.get("refreshToken"); // 리프레시 토큰을 쿠키에서 가져와서
 
-        const { data } = await axios.post("http://13.124.233.213/token", {
+        const { data } = await axios.post("http://13.125.222.70/token", {
           refreshToken,
         }); // 새로운 액세스 토큰 가져오는 api를 실행시키고
 

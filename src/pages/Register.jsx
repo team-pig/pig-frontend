@@ -13,15 +13,18 @@ import { head_5 } from "../themes/textStyle";
 import { Button, Input, Text } from "../elem";
 
 // redux & api
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { __register } from "../redux/modules/user";
 import flex from "../themes/flex";
 import ImageModule from "../components/ImageModule";
+import Alert from "../components/Alert";
+import { pop } from "../redux/modules/alert";
 
 const Register = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [avatar, setAvatar] = useState("");
+  const { value, msg } = useSelector((state) => state.alert);
 
   /**
    *
@@ -75,6 +78,7 @@ const Register = () => {
   return (
     <>
       <SEO title="회원가입" />
+      <Alert dispatcher={pop} msg={msg} status={value} />
       <Template>
         <Container>
           <Title type="head_3">반가워요!</Title>

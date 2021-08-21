@@ -1,7 +1,7 @@
-import { instance } from "./index";
+import { instance, nonTokenInstance } from "./index";
 
 export const userApi = {
-  login: (userInfo) => instance.post("/login", userInfo),
   loginCheck: () => instance.get("/token"),
-  register: (userInfo) => instance.post("register", userInfo),
+  login: (userInfo) => nonTokenInstance.post("/login", userInfo),
+  register: (userInfo) => nonTokenInstance.post("register", userInfo),
 };

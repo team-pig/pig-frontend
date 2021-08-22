@@ -134,8 +134,8 @@ const DropdownBtn = styled.div`
 const ItemWrapper = styled.div`
   ${flex("center", "center", false)}
   position: absolute;
-  left: 0;
-  top: 20px;
+  left: 20px;
+  bottom: 10px;
   background-color: #fff;
   border-radius: 4px;
   box-shadow: 6px 6px 20px 0px rgba(21, 21, 21, 0.15);
@@ -159,6 +159,21 @@ const Link = styled.div`
   background-color: ${(props) =>
     props.target ? "var(--main)" : "var(--white)"};
   transition: transform ease-in-out 200ms;
+
+  &:hover {
+    ${(props) => {
+      if (props.target) {
+        return css`
+          opacity: 0.9;
+        `;
+      }
+
+      if (!props.target) {
+        return css`
+          background-color: var(--line);
+        `;
+      }
+    }}
 `;
 
 const BoardDrop = {

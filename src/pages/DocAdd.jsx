@@ -5,7 +5,6 @@ import { useBeforeunload } from "react-beforeunload";
 
 // component
 import Writer from "../feature/document/Writer";
-import { docApi } from "../api/docApi";
 
 const DocAdd = () => {
   const [showPrompt, setShowPrompt] = useState(true);
@@ -15,6 +14,10 @@ const DocAdd = () => {
       setShowPrompt(false);
     };
   }, []);
+
+  useBeforeunload((e) => {
+    e.preventDefault();
+  });
 
   return (
     <>

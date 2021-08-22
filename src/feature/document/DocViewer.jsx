@@ -79,8 +79,9 @@ const DocViewer = ({ left }) => {
           </InfoBox>
         )}
       </ViewerHeader>
-      <div></div>
-      {current.content && <MarkDownViewer option={viewerOpt} />}
+      <ViewerBody>
+        {current.content && <MarkDownViewer option={viewerOpt} />}
+      </ViewerBody>
     </Container>
   );
 };
@@ -96,7 +97,6 @@ const Container = styled.section`
   flex-direction: column;
   width: ${(props) => `calc(100% - ${props.left}px)`};
   min-height: calc(100vh - var(--minusHeight));
-  width: calc(100% - 260px);
   padding: var(--smMargin);
 `;
 
@@ -137,6 +137,10 @@ const ModifiedTime = styled.span`
     margin: 0 4px;
     color: var(--grey);
   }
+`;
+
+const ViewerBody = styled.div`
+  width: 100%;
 `;
 
 export default DocViewer;

@@ -13,7 +13,6 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
       setShowAllMember(true);
     }
   }, []);
-  console.log(memberStatus);
   return (
     <>
 
@@ -36,7 +35,6 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
               );
             })
           : memberStatus.slice(0, 3).map((member, idx) => {
-            console.log(member);
               return (
                 <ProfileImg
                   style={{

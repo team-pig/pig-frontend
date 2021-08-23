@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -14,23 +14,18 @@ import ImageModule from "../../components/ImageModule";
 
 const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
   const dispatch = useDispatch();
-  const [roomImg, setRoomImg] = useState("");
-
-  const [isImage, setIsImage] = useState(false);
   const roomList = useSelector((state) => state.room.room);
   const isEdit = roomId ? true : false;
   const _room = isEdit
     ? roomList && roomList.find((r) => r.roomId === roomId)
     : null;
-
-  const getImgUrlFromS3 = async (callback, file) => {
-    const result = await callback(file);
-    if (result) {
-      setRoomImg(result);
-    } else {
-      setRoomImg(_room.roomImage);
-    }
-  };
+  const [roomImg, setRoomImg] = useState(
+    _room
+      ? {
+          roomImage: _room.roomImage,
+        }
+      : ""
+  );
 
   const [contents, setContents] = useState(
     _room
@@ -49,10 +44,16 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
       : ""
   );
 
+  const getImgUrlFromS3 = async (callback, file) => {
+    const result = await callback(file);
+    setRoomImg({ roomImage: result });
+  };
+
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
     setTagText({ ...tagText, [name]: value });
+    setRoomImg({ ...roomImg, [name]: value });
   };
 
   const tagList =
@@ -62,15 +63,13 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
 
   const modifyFile = () => {
     if (!disabled) {
-      dispatch(__editRoom(roomId, contents, roomImg, tagList));
+      dispatch(__editRoom(roomId, contents, roomImg.roomImage, tagList));
     }
     closeModModal();
-    setIsImage(false);
   };
 
   const cancelFile = () => {
     closeModModal();
-    setIsImage(false);
   };
 
   return (
@@ -81,11 +80,17 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
           <ModalContent>
             <ImageBox>
               <ImageModule
-                roomPreview={_room.roomImage}
+                roomPreview={roomImg.roomImage}
                 getImgUrlFromS3={getImgUrlFromS3}
               />
             </ImageBox>
             <InputBox>
+              <Input
+                name="roomImage"
+                type="text"
+                placeholder="이미지 url"
+                _onChange={changeHandler}
+              />
               <Input
                 name="roomName"
                 type="text"

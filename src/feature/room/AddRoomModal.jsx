@@ -35,14 +35,6 @@ const AddRoomModal = ({ showModal, addModal }) => {
       }
   };
 
-  // const changeImgUrl = (e) => {
-  //   const { value, name } = e.target;
-  //   setImgUrl({...imgUrl, [name]: value});
-  //   if(imgUrl.roomImage !== ""){
-  //     setRoomImg(imgUrl.roomImage);
-  //   }
-  // }
-
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
@@ -50,7 +42,6 @@ const AddRoomModal = ({ showModal, addModal }) => {
     setImgUrl({...imgUrl, [name]: value});
     if(imgUrl.roomImage !== ""){
       setRoomImg(imgUrl.roomImage);
-      console.log("imgUrl", imgUrl.roomImage);
     }
 
   };
@@ -60,7 +51,6 @@ const AddRoomModal = ({ showModal, addModal }) => {
   const disabled = contents.roomName === "";
   const saveFile = () => {
     if (!disabled) {
-      console.log(roomImg);
       dispatch(__addRoom(contents, roomImg, tagList));
     }
     setContents({

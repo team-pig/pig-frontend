@@ -41,6 +41,7 @@ const SearchBar = ({ joinModal, addModal }) => {
                 delay(e.target.value);
               }}
               onKeyPress={_onKeyPress}
+              autoComplete="off"
               type="text"
               name="keyword"
               placeholder="  방 이름을 검색하세요"

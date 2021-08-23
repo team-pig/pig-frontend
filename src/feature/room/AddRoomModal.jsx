@@ -15,6 +15,9 @@ import ImageModule from "../../components/ImageModule";
 const AddRoomModal = ({ showModal, addModal }) => {
   const dispatch = useDispatch();
   const [roomImg, setRoomImg] = useState("");
+  const [imgUrl, setImgUrl] = useState({
+    roomImage: ""
+  });
   const [contents, setContents] = useState({
     roomName: "",
     subtitle: "",
@@ -26,13 +29,30 @@ const AddRoomModal = ({ showModal, addModal }) => {
 
   const getImgUrlFromS3 = async (callback, file) => {
     const result = await callback(file);
-    setRoomImg(result);
+      setRoomImg(result);
+      if(result){
+        setImgUrl({roomImage : ""});
+      }
   };
+
+  // const changeImgUrl = (e) => {
+  //   const { value, name } = e.target;
+  //   setImgUrl({...imgUrl, [name]: value});
+  //   if(imgUrl.roomImage !== ""){
+  //     setRoomImg(imgUrl.roomImage);
+  //   }
+  // }
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
     setTagText({ ...tagText, [name]: value });
+    setImgUrl({...imgUrl, [name]: value});
+    if(imgUrl.roomImage !== ""){
+      setRoomImg(imgUrl.roomImage);
+      console.log("imgUrl", imgUrl.roomImage);
+    }
+
   };
 
   const tagList = tagText.tag.split(",");
@@ -40,6 +60,7 @@ const AddRoomModal = ({ showModal, addModal }) => {
   const disabled = contents.roomName === "";
   const saveFile = () => {
     if (!disabled) {
+      console.log(roomImg);
       dispatch(__addRoom(contents, roomImg, tagList));
     }
     setContents({
@@ -48,12 +69,14 @@ const AddRoomModal = ({ showModal, addModal }) => {
       tag: "",
     });
     addModal();
-    setIsImage(false);
+    setImgUrl({roomImage : ""});
+    setRoomImg("");
   };
 
   const cancelFile = () => {
     addModal();
-    setIsImage(false);
+    setImgUrl({roomImage : ""});
+    setRoomImg("");
   };
 
   return (
@@ -63,9 +86,17 @@ const AddRoomModal = ({ showModal, addModal }) => {
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
             <ImageBox>
-              <ImageModule getImgUrlFromS3={getImgUrlFromS3} />
+              <ImageModule 
+              roomPreview={imgUrl.roomImage}
+              getImgUrlFromS3={getImgUrlFromS3} />
             </ImageBox>
             <InputBox>
+            <Input
+                name="roomImage"
+                type="text"
+                placeholder="이미지 url"
+                _onChange={changeHandler}
+              />
               <Input
                 name="roomName"
                 type="text"
@@ -127,7 +158,7 @@ const ModalContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 400px;
-  height: 500px;
+  height: 550px;
   padding-top: 5px;
   background-color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);

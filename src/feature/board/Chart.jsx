@@ -93,7 +93,7 @@ const Chart = () => {
   }
 
   return (
-    <>
+    <ChartContainer>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="all-columns"
@@ -127,9 +127,14 @@ const Chart = () => {
           }}
         </Droppable>
       </DragDropContext>
-    </>
+    </ChartContainer>
   );
 };
+
+const ChartContainer = styled.div`
+  min-width: 100%;
+  height: 100%;
+`;
 
 const Container = styled.div`
   display: flex;

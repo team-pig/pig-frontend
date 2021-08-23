@@ -55,7 +55,7 @@ const Container = styled.div`
       : css`
           background-color: ${(props) => props.theme.colors[props.color]};
         `};
-
+  flex-shrink: 0;
   color: ${(props) => {
     if (props.color === "mint" || props.color === "yellow") {
       return "var(--darkgrey);";

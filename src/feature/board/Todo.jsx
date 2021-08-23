@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled, { css } from "styled-components";
 import { Input, Text } from "../../elem";
 import Filled from "../../assets/icons/checkbox-filled.svg";
@@ -18,6 +18,7 @@ import Icon from "../../components/Icon";
 import InputToggle from "../../components/InputToggle";
 import flex from "../../themes/flex";
 import { body_3, body_4, button } from "../../themes/textStyle";
+import Avatar from "../../elem/Avatar";
 
 const Todo = ({ todo }) => {
   const dispatch = useDispatch();
@@ -53,6 +54,16 @@ const Todo = ({ todo }) => {
       dispatch(__editTotoTitle(roomId, todo.todoId, value));
     }
   };
+
+  const getAvatarObj = useCallback(() => {
+    const avatarIdx =
+      _all &&
+      isCheckedList.length > 0 &&
+      _all.findIndex((member) => member.userId === isCheckedList[0].memberId);
+
+    const avatarObj = avatarIdx === -1 ? false : _all[avatarIdx];
+    return avatarObj;
+  }, [_all, isCheckedList]);
 
   return (
     <Container>
@@ -93,7 +104,12 @@ const Todo = ({ todo }) => {
           />
         </TodoInputToggle>
         <TodoMembers>
-          <BoardDrop.Container direction="right" type="default" shadow>
+          <BoardDrop.Container
+            direction="right"
+            type="default"
+            avatar={getAvatarObj()}
+            shadow
+          >
             {_all &&
               _all.map((member, idx) => {
                 const target =
@@ -118,7 +134,7 @@ const Todo = ({ todo }) => {
                     }}
                   >
                     <Member target={target}>
-                      <Avatar />
+                      <Avatar target={member} size={24} />
                       <Nickname type="body_3">{member.nickname}</Nickname>
                     </Member>
                   </BoardDrop.Item>
@@ -215,17 +231,8 @@ const Member = styled.div`
   ${button}
 
   ${Nickname} {
+    margin-left: 10px;
     color: ${(props) => (props.target ? "var(--white)" : "var(--darkgrey)")};
   }
 `;
-
-const Avatar = styled.div`
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  margin-right: 10px;
-  border-radius: 50% !important;
-  background-color: var(--notice);
-`;
-
 export default Todo;

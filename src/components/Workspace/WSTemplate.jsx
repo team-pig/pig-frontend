@@ -19,6 +19,7 @@ const Template = styled.main`
   padding-top: var(--header);
   box-sizing: border-box;
   transition: width 500ms ease-in-out;
+  overflow: hidden;
 `;
 
 export default WSTemplate;

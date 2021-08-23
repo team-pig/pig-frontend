@@ -3,8 +3,9 @@ import styled, { css } from "styled-components";
 import { useSelector } from "react-redux";
 
 // elem & style
+import Avatar from "../../elem/Avatar";
 import flex from "../../themes/flex";
-import { body_4, button } from "../../themes/textStyle";
+import { body_4 } from "../../themes/textStyle";
 import { Text } from "../../elem";
 
 const Bubble = ({ message, type }) => {
@@ -35,10 +36,7 @@ const Bubble = ({ message, type }) => {
     return (
       <CommonChat>
         <Left>
-          {target && target.avatar && <ProfileImg target={target} />}
-          {target && target.memberName && !target.avatar && (
-            <ProfileImg target={target}>{target.memberName[0]}</ProfileImg>
-          )}
+          <Avatar target={target} size={30} />
         </Left>
 
         <Right>
@@ -109,32 +107,6 @@ const Date = styled.div`
   font-size: 1.1rem;
   line-height: 1.8rem;
   color: var(--grey);
-`;
-
-const ProfileImg = styled.div`
-  ${flex()};
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  ${(props) => {
-    if (props.target.avatar) {
-      return css`
-        background-image: ${(props) => `url(${props.target.avatar});`};
-        background-size: cover;
-        background-position: center center;
-      `;
-    }
-    return css`
-      ${button};
-      color: ${(props) => {
-        if (props.target.color === "mint" || props.target.color === "yellow") {
-          return "var(--darkgrey);";
-        }
-        return "var(--white);";
-      }}
-      background-color: ${(props) => props.theme.colors[props.target.color]};
-    `;
-  }}
 `;
 
 export default Bubble;

@@ -9,6 +9,7 @@ import {
   __loadBuckets,
   __loadSchedules,
 } from "../redux/modules/calendar";
+import { resetTodos } from "../redux/modules/todos";
 
 // component
 import CalendarHeader from "../feature/timeline/CalendarHeader";
@@ -17,9 +18,9 @@ import CalendarInfo from "../feature/timeline/CalendarInfo";
 import CardModal from "../feature/board/CardModal";
 import CalendarModalForms from "../feature/timeline/CalendarModalForms";
 import Todos from "../feature/board/Todos";
-import { Button, Text } from "../elem";
-import { resetTodos } from "../redux/modules/todos";
+
 import flex from "../themes/flex";
+import { Button, Text } from "../elem";
 
 const Calendar = (props) => {
   const { roomId } = useParams();
@@ -89,7 +90,11 @@ const Calendar = (props) => {
 };
 
 const CalendarBox = styled.section`
+  --header: 48px;
+
   width: 100%;
+  height: calc(100vh - var(--header));
+  overflow-y: auto;
 `;
 
 const TodosHeader = styled(Text)`

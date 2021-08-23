@@ -43,17 +43,16 @@ const DocBlank = () => {
 
   return (
     <Container>
-      {
-        <ResizeWidth
-          size={size}
-          handleSize={handleSize}
-          drag="right"
-          option={option}
-          storeSaveFunc={resizeDocList}
-        >
-          <DocList docList={docList} />
-        </ResizeWidth>
-      }
+      <ResizeWidth
+        size={size}
+        handleSize={handleSize}
+        drag="right"
+        option={option}
+        storeSaveFunc={resizeDocList}
+      >
+        <DocList docList={docList} />
+      </ResizeWidth>
+
       <Content left={size.width}>
         <ImgBox>
           <BlankImgBox src={BlankImg} />
@@ -63,7 +62,6 @@ const DocBlank = () => {
   );
 };
 
-// 임시 스타일
 const Container = styled.section`
   --header: 48px;
   --padding: 40px;

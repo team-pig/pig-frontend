@@ -15,6 +15,7 @@ import alert from "./modules/alert";
 import dashBoard from "./modules/dashBoard";
 import chat from "./modules/chat";
 import resize from "./modules/resize";
+import members from "./modules/members";
 
 // middlewares
 import thunk from "redux-thunk";
@@ -37,6 +38,7 @@ const appReducer = combineReducers({
   calendar,
   chat,
   resize,
+  members,
   router: connectRouter(history),
 });
 

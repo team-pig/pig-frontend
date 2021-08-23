@@ -1,10 +1,23 @@
-import React, { useState, useCallback } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
+// component
 import ChatBox from "./ChatBox";
 import ChatInput from "./ChatInput";
 
+// redux & api
+import { __loadMembers } from "../../redux/modules/members";
+
 const Chat = () => {
+  const { roomId } = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(__loadMembers(roomId));
+  }, [dispatch, roomId]);
+
   return (
     <Container>
       <ChatBox />

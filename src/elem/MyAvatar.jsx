@@ -41,7 +41,12 @@ const Container = styled.div`
           background-color: ${(props) => props.theme.colors[props.color]};
         `}
 
-  color: var(--white);
+  color: ${(props) => {
+    if (props.color === "mint" || props.color === "yellow") {
+      return "var(--darkgrey);";
+    }
+    return "var(--white);";
+  }};
   margin: 0 auto;
 `;
 

@@ -20,7 +20,7 @@ const Main = () => {
   );
 };
 
-const Container = styled.div`
+const Container = styled.article`
   --header: 48px;
   --minusHeight: calc(var(--header));
 
@@ -29,14 +29,14 @@ const Container = styled.div`
   height: calc(100vh - var(--minusHeight));
 `;
 
-const LeftSide = styled.section`
+const LeftSide = styled.aside`
   flex-shrink: 0;
-  width: 425px;
+  width: 350px; // 8.22 width 수정 (425 -> 350)
   height: 100%;
 `;
 
 const RightSide = styled.section`
-  --leftSide: 425px;
+  --leftSide: 350px; // 8.22 width 수정 (425 -> 350)
 
   ${flex("start", "start", false)};
   width: calc(100% - var(--leftSide));

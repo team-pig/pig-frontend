@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Text } from "../../elem";
 import flex from "../../themes/flex";
 import { regex } from "../../shared/regex";
+import { body_4 } from "../../themes/textStyle";
 
 const Tags = ({ tag, gap, textType }) => {
   const filterTag =
@@ -14,13 +14,7 @@ const Tags = ({ tag, gap, textType }) => {
     <TagBox gap={gap}>
       {filterTag &&
         filterTag.map((tag, idx) => {
-          return (
-            <Tag key={idx}>
-              <Text type={textType ? textType : "body_4"} color="darkgrey">
-                {tag}
-              </Text>
-            </Tag>
-          );
+          return <Tag key={idx}>{tag}</Tag>;
         })}
     </TagBox>
   );
@@ -34,10 +28,15 @@ const TagBox = styled.div`
 `;
 
 const Tag = styled.div`
-  ${flex()}
+  ${body_4}
+  color: var(--darkgrey);
   padding: 4px 10px 3px 10px;
   border: 1px solid var(--grey);
   border-radius: 4px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export default Tags;

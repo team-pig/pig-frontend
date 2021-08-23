@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import flex from "../../themes/flex";
 import { Text } from "../../elem";
@@ -6,15 +6,18 @@ import Icon from "../../components/Icon";
 import Graph from "./Graph";
 import Tags from "./Tags";
 import { body_4 } from "../../themes/textStyle";
+import ReactTooltip from "react-tooltip";
 
 // redux & api
 import { __editMyProfile } from "../../redux/modules/dashBoard";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import MyAvatar from "../../elem/MyAvatar";
 
 //etc
 const MyStatus = ({ myInfo, setMyInfo }) => {
   const dispatch = useDispatch();
+  const [viewTag, setViewTag] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const { total, checkedTodo } = useSelector(
     (state) => state.todos.myTodoCount
@@ -74,12 +77,16 @@ const MyStatus = ({ myInfo, setMyInfo }) => {
               name="desc"
               value={desc || ""}
               onChange={onChangeHandler}
+              placeholder="팀원들에게 남기고 싶은 메시지를 입력하세요"
+              autoComplete="off"
             />
             <MyInfoEditInput
               type="text"
               name="tags"
               value={tags || ""}
               onChange={onChangeHandler}
+              placeholder="나의 역할 또는 태그로 나를 표현하세요"
+              autoComplete="off"
             />
           </form>
           <HelpMessage>
@@ -92,9 +99,20 @@ const MyStatus = ({ myInfo, setMyInfo }) => {
   return (
     <Container>
       <MemberMain>
-        <Name type="head_7" color="black">
-          {nickname}
-        </Name>
+        <MyAvatar medium data-tip data-for={nickname} />
+        <ReactTooltip
+          id={nickname}
+          place="top"
+          type="light"
+          backgroundColor="var(--white)"
+          borderColor="var(--line)"
+          border={true}
+        >
+          <span>{nickname}</span>
+        </ReactTooltip>
+        <GraphBox>
+          <Graph color="mint" height="15px" percent={memberPercent} />
+        </GraphBox>
         <ActiveEdit
           onClick={() => {
             setEditMode(true);
@@ -102,25 +120,59 @@ const MyStatus = ({ myInfo, setMyInfo }) => {
         >
           <Icon icon="setting" size="24px" color="#757575" />
         </ActiveEdit>
-        <GraphBox>
-          <Graph color="mint" height="15px" percent={memberPercent} />
-        </GraphBox>
       </MemberMain>
       <Message>
         <Desc type="body_4" color="darkgrey">
           {desc === null ? "상태 메시지가 없습니다." : desc}
         </Desc>
+      </Message>
+      <MemberInfo>
+        <div
+          onClick={() => {
+            setViewTag((pre) => !pre);
+          }}
+        >
+          {viewTag ? (
+            <ViewTag>
+              <TagStatus>
+                <div></div>
+              </TagStatus>
+              <TagButton>
+                <>태그 접기</>
+                <Icon icon="arrow-down" size="14px" color="var(--grey)" />
+              </TagButton>
+            </ViewTag>
+          ) : (
+            <>
+              <ViewTag>
+                <TagStatus>
+                  <div></div>
+                  {/* {tags && tags.length === 0
+                    ? "태그가 없습니다"
+                    : "등록된 태그가 있습니다"} */}
+                </TagStatus>
+                <TagButton>
+                  <>태그 보기</>
+                  <Icon icon="arrow-down" size="14px" color="var(--grey)" />
+                </TagButton>
+              </ViewTag>
+            </>
+          )}
+        </div>
+        {viewTag && (
+          <>
+            <Tags tag={tags} />
+          </>
+        )}
         <StatusNums>
+          <VerticalLine />
           <Text type="body_2" color="darkgrey">
             {memberPercent}% 완료
           </Text>
           <Text type="body_4" color="grey">
-            ({checkedTodo} / {total})
+            ({checked} / {checked + notChecked})
           </Text>
         </StatusNums>
-      </Message>
-      <MemberInfo>
-        <Tags tag={tags} />
       </MemberInfo>
     </Container>
   );
@@ -130,8 +182,11 @@ const Container = styled.article`
   border-bottom: 1px solid var(--line);
 `;
 
-const MemberMain = styled.div`
-  ${flex("start")};
+// 수정모드
+
+const EditModeWrapper = styled.div``;
+const EditModeHeader = styled.div`
+  ${flex("between", "center")}
   margin-top: 23px;
   margin-bottom: 15px;
 `;
@@ -145,28 +200,6 @@ const Name = styled(Text)`
   margin-right: 8px;
 `;
 
-const GraphBox = styled.div`
-  width: 220px;
-  margin-left: 50px;
-  flex-shrink: 0;
-`;
-
-const Desc = styled.div`
-  ${body_4};
-  color: var(--darkgrey);
-`;
-const MemberInfo = styled.div`
-  ${flex("start")};
-  margin-bottom: 25px;
-  flex-wrap: wrap;
-`;
-
-const StatusNums = styled.div`
-  ${flex("start", "center")};
-  gap: 13px;
-  height: 30px;
-`;
-
 const MyInfoEditInput = styled.input`
   border: 1px solid var(--line);
   height: 30px;
@@ -175,20 +208,8 @@ const MyInfoEditInput = styled.input`
   width: 100%;
 `;
 
-const EditModeWrapper = styled.div``;
-const EditModeHeader = styled.div`
-  ${flex("between", "center")}
-  margin-top: 23px;
-  margin-bottom: 15px;
-`;
-
 const ActiveEdit = styled.div`
   cursor: pointer;
-`;
-
-const Message = styled.div`
-  ${flex("between", "center")}
-  margin-bottom: 10px;
 `;
 
 const HelpMessage = styled.div`
@@ -196,6 +217,65 @@ const HelpMessage = styled.div`
   text-align: right;
   color: var(--notice);
   margin-bottom: 20px;
+`;
+
+// 조회모드
+
+const TagStatus = styled.div`
+  color: var(--grey);
+`;
+
+const TagButton = styled.div`
+  ${flex()};
+  gap: 5px;
+`;
+
+const ViewTag = styled.div`
+  ${flex("between", "center")}
+  cursor: pointer;
+  gap: 5px;
+  margin-bottom: 10px;
+`;
+
+const VerticalLine = styled.div`
+  width: 1px;
+  height: 20px;
+  background-color: var(--grey);
+`;
+
+const MemberMain = styled.div`
+  ${flex("start")};
+  margin-top: 23px;
+  margin-bottom: 15px;
+`;
+
+const GraphBox = styled.div`
+  margin: 0 23px;
+  width: 200px;
+  flex-shrink: 0;
+`;
+
+const Desc = styled.div`
+  ${body_4};
+  color: var(--darkgrey);
+`;
+
+const MemberInfo = styled.div`
+  ${body_4};
+  color: var(--darkgrey);
+  margin-bottom: 25px;
+`;
+
+const StatusNums = styled.div`
+  ${flex("start", "center")};
+  margin-top: 10px;
+  gap: 13px;
+  height: 30px;
+`;
+
+const Message = styled.div`
+  ${flex("between", "center")}
+  margin-bottom: 10px;
 `;
 
 export default React.memo(MyStatus);

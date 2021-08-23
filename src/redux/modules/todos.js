@@ -16,7 +16,6 @@ const GO_TO_NOT_CHECKED = "todos/GO_TO_NOT_CHECKED";
 const ADD_MEMBER = "todos/ADD_MEMBER";
 const REMOVE_MEMBER = "todos/REMOVE_MEMBER";
 const RESET_TODOS = "todos/RESET_TODOS";
-
 const LOAD_PROJECT_TODOS = "todos/LOAD_PROJECT_TODOS";
 
 /**
@@ -218,6 +217,7 @@ const initialState = {
   myTodoCount: { total: 0, checkedTodo: 0, notCheckedTodo: 0 },
   memberStatus: [],
   projectStatus: {},
+  myStatus: { tags: [], desc: "" },
 };
 
 export const todos = handleActions(

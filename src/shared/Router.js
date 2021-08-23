@@ -11,7 +11,6 @@ import ResetPassword from "../pages/ResetPassword";
 import RoomList from "../pages/RoomList";
 import SearchPassword from "../pages/SearchPassword";
 import Workspace from "../pages/Workspace";
-
 import Auth from "../shared/auth";
 
 const Router = () => {
@@ -32,7 +31,7 @@ const Router = () => {
         exact
       />
       <Route path="/mypage" component={Auth(MyPage, true)} exact />
-      <Route path="/workspace/:roomId" component={Auth(Workspace, null)} />
+      <Route path="/workspace/:roomId" component={Auth(Workspace, true)} />
       <Redirect from="*" to="/" />
     </Switch>
   );

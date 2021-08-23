@@ -4,13 +4,19 @@ import styled, { css } from "styled-components";
 import flex from "../themes/flex";
 import { head_2 } from "../themes/textStyle";
 
-const MyAvatar = ({ large }) => {
+const MyAvatar = ({ large, medium, ...rest }) => {
   const { color, avatar, nickname, email } = useSelector(
     (state) => state.user.user
   );
 
   return (
-    <Container color={color} avatar={avatar} large={large}>
+    <Container
+      color={color}
+      avatar={avatar}
+      large={large}
+      medium={medium}
+      {...rest}
+    >
       {nickname && avatar === "" && <Nickname>{nickname[0]}</Nickname>}
     </Container>
   );
@@ -19,17 +25,26 @@ const MyAvatar = ({ large }) => {
 const Container = styled.div`
   ${flex()}
   ${(props) =>
-    props.large
-      ? css`
-          ${head_2}
-          width: 100px;
-          height: 100px;
-        `
-      : css`
-          width: 24px;
-          height: 24px;
-        `}
-      border-radius: 50%;
+    props.large &&
+    css`
+      ${head_2}
+      width: 100px !important;
+      height: 100px !important;
+    `};
+
+  ${(props) =>
+    props.medium &&
+    css`
+      ${head_2}
+      width: 38px !important;
+      height: 38px !important;
+      font-size: 1.6rem;
+    `};
+
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+
   ${(props) =>
     props.avatar !== ""
       ? css`
@@ -39,7 +54,7 @@ const Container = styled.div`
         `
       : css`
           background-color: ${(props) => props.theme.colors[props.color]};
-        `}
+        `};
 
   color: ${(props) => {
     if (props.color === "mint" || props.color === "yellow") {
@@ -48,10 +63,10 @@ const Container = styled.div`
     return "var(--white);";
   }};
   margin: 0 auto;
+  flex-shrink: 0;
+  color: var(--white);
 `;
 
-const Nickname = styled.div`
-  /* text-transform: uppercase; */
-`;
+const Nickname = styled.div``;
 
 export default MyAvatar;

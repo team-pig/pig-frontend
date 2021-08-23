@@ -196,6 +196,7 @@ const RoundImg = styled.div`
   border-radius: 50%;
   background-image: url("${(props) => props.url}");
   background-size: cover;
+  background-position: center center;
 `;
 
 const TextBox = styled.div`

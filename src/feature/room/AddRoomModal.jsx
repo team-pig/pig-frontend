@@ -15,9 +15,7 @@ import ImageModule from "../../components/ImageModule";
 const AddRoomModal = ({ showModal, addModal }) => {
   const dispatch = useDispatch();
   const [roomImg, setRoomImg] = useState("");
-  const [imgUrl, setImgUrl] = useState({
-    roomImage: ""
-  });
+  const [imgUrl, setImgUrl] = useState("");
   const [contents, setContents] = useState({
     roomName: "",
     subtitle: "",
@@ -25,26 +23,26 @@ const AddRoomModal = ({ showModal, addModal }) => {
   const [tagText, setTagText] = useState({
     tag: "",
   });
-  const [isImage, setIsImage] = useState(false);
 
   const getImgUrlFromS3 = async (callback, file) => {
     const result = await callback(file);
       setRoomImg(result);
-      if(result){
-        setImgUrl({roomImage : ""});
-      }
+      setImgUrl("");
   };
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
     setTagText({ ...tagText, [name]: value });
-    setImgUrl({...imgUrl, [name]: value});
-    if(imgUrl.roomImage !== ""){
-      setRoomImg(imgUrl.roomImage);
+    if(imgUrl !== ""){
+      setRoomImg(imgUrl);
     }
 
   };
+
+  const changeImgUrl = (e) => {
+    setImgUrl(e.target.value);
+  }
 
   const tagList = tagText.tag.split(",");
   
@@ -59,13 +57,13 @@ const AddRoomModal = ({ showModal, addModal }) => {
       tag: "",
     });
     addModal();
-    setImgUrl({roomImage : ""});
+    setImgUrl("");
     setRoomImg("");
   };
 
   const cancelFile = () => {
     addModal();
-    setImgUrl({roomImage : ""});
+    setImgUrl("");
     setRoomImg("");
   };
 
@@ -77,7 +75,7 @@ const AddRoomModal = ({ showModal, addModal }) => {
           <ModalContent>
             <ImageBox>
               <ImageModule 
-              roomPreview={imgUrl.roomImage}
+              roomPreview={imgUrl}
               getImgUrlFromS3={getImgUrlFromS3} />
             </ImageBox>
             <InputBox>
@@ -85,7 +83,8 @@ const AddRoomModal = ({ showModal, addModal }) => {
                 name="roomImage"
                 type="text"
                 placeholder="이미지 url"
-                _onChange={changeHandler}
+                value={imgUrl}
+                _onChange={changeImgUrl}
               />
               <Input
                 name="roomName"

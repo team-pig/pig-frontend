@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled, { css } from "styled-components";
-import { Text } from "../../elem";
+
+// component & elem
+import Icon from "../../components/Icon";
+import Avatar from "../../elem/Avatar";
 import flex from "../../themes/flex";
 
 const Item = ({ children, _onClick, componentType, color, target }) => {
@@ -39,6 +42,7 @@ const Container = ({
   history,
   componentType,
   bgColor,
+  avatar,
 }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const modalEl = useRef();
@@ -77,19 +81,23 @@ const Container = ({
 
   // ---- Dropdown default ---- //
   return (
-    <DropdownBtn
-      size={size}
-      onClick={(e) => {
-        e.stopPropagation();
-        setIsMenuVisible((pre) => !pre);
-      }}
-    >
-      {isMenuVisible && (
-        <ItemWrapper history={history} direction={direction} ref={modalEl}>
-          {children}
-        </ItemWrapper>
-      )}
-    </DropdownBtn>
+    <>
+      <DropdownBtn
+        size={size}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsMenuVisible((pre) => !pre);
+        }}
+      >
+        {!avatar && <Icon icon="member-plus" size="24px" color="var(--grey)" />}
+        {avatar && <Avatar target={avatar} size="30" />}
+        {isMenuVisible && (
+          <ItemWrapper history={history} direction={direction} ref={modalEl}>
+            {children}
+          </ItemWrapper>
+        )}
+      </DropdownBtn>
+    </>
   );
 };
 
@@ -126,8 +134,6 @@ const DropdownBtn = styled.div`
   cursor: pointer;
   width: 30px;
   height: 30px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
   background-color: var(--white);
 `;
 

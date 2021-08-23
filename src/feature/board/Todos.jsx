@@ -11,7 +11,7 @@ import { __createTodo, __loadTodos } from "../../redux/modules/todos";
 // compo & elem
 import Todo from "./Todo";
 import Icon from "../../components/Icon";
-import { body_3, body_4 } from "../../themes/textStyle";
+import { body_3 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
 import CountText from "../../components/CountText";
 import { Text } from "../../elem";

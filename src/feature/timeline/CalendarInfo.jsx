@@ -106,7 +106,7 @@ const CalendarInfo = ({
               </Text>
             </Info>
           )}
-          {currentSchedules &&
+          {currentId &&
             currentSchedules.map((item) => (
               <CurrentSchedule
                 key={item.cardId}

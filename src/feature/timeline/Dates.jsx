@@ -10,7 +10,9 @@ import Date from "./Date";
 
 const Dates = () => {
   const { now, current } = useSelector((state) => state.date);
-  const { scheduleList } = useSelector((state) => state.calendar);
+  const { scheduleList, currentScheduleId } = useSelector(
+    (state) => state.calendar
+  );
 
   const dispatch = useDispatch();
 
@@ -38,8 +40,10 @@ const Dates = () => {
         parseInt(schedule["startDate"].split("-").join("")) <= targetFormat &&
         parseInt(schedule["endDate"].split("-").join("")) >= targetFormat
     );
-    clickDate(now, targetList);
-  }, [now, scheduleList]);
+    if (!currentScheduleId) {
+      clickDate(now, targetList);
+    }
+  }, [now, scheduleList, currentScheduleId]);
 
   return (
     <>

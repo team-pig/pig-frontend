@@ -70,7 +70,7 @@ instance.interceptors.response.use(
         const { accessToken: newAccessToken } = data;
         cookies.set("accessToken", newAccessToken, {
           path: "/",
-          maxAge: 1800, // 30분
+          maxAge: 300, // 30분
         }); // 쿠키에 다시 저장
 
         console.log("토큰 재생성 완료!"); // 토큰 생성이 완료되면

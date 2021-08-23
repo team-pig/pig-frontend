@@ -11,13 +11,11 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 
 const Members = () => {
-  // const [memberStatus, setMemberStatus] = useState([]);
   const [myInfo, setMyInfo] = useState({});
   const __memberStatus = useSelector((state) => state.todos.memberStatus);
   const __id = useSelector((state) => state.user.user.userId);
 
   useEffect(() => {
-    // setMemberStatus(__memberStatus);
     const myIndx = __memberStatus.findIndex((member) => member.userId === __id);
     setMyInfo(__memberStatus[myIndx]);
   }, [__memberStatus, __id]);

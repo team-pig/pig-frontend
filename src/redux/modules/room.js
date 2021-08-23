@@ -1,6 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import { roomApi } from "../../api/roomApi";
+import { regex } from "../../shared/regex";
 
 //action
 const ADD_ROOM = "room/ADD_ROOM";
@@ -175,6 +176,26 @@ export const __editRoom =
       console.log(e);
     }
   };
+
+export const __editRoomDetail = (roomId, newRoominfos) => async (dispatch) => {
+  try {
+    const filterTags =
+      typeof newRoominfos.tag === "object"
+        ? newRoominfos.tag
+        : newRoominfos.tag.split(regex.commaAndTrim).filter(Boolean);
+
+    const willReqParams = {
+      roomId,
+      ...newRoominfos,
+      tag: filterTags,
+    };
+
+    await roomApi.editRoom(willReqParams);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const __getMarkedList =
   (isMarked) =>
   async (dispatch, getState, { history }) => {

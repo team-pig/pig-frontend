@@ -70,11 +70,11 @@ export const __login =
       const { id, avatar, color } = jwt_decode(accessToken);
       cookies.set("accessToken", accessToken, {
         path: "/",
-        maxAge: 1800, // 2 day
+        maxAge: 300, // 5분
       });
       cookies.set("refreshToken", refreshToken, {
         path: "/",
-        maxAge: 86400, // 2 day
+        maxAge: 86400, // 1일
       });
       localStorage.setItem("userId", id);
       localStorage.setItem("avatar", avatar);

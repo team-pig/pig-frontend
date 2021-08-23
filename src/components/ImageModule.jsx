@@ -21,7 +21,7 @@ const ImageModule = ({
     if(rest.roomPreview){
       setPreview(rest.roomPreview);
     }
-  }, []);
+  }, [rest.roomPreview]);
   
   // useSaveAvartar === false 일때 (이미지를 업로드함과 동시에 S3에 저장)
   const imagePreview = async (e) => {

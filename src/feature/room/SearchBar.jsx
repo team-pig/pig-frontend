@@ -41,6 +41,7 @@ const SearchBar = ({ joinModal, addModal }) => {
                 delay(e.target.value);
               }}
               onKeyPress={_onKeyPress}
+              autoComplete="off"
               type="text"
               name="keyword"
               placeholder="  방 이름을 검색하세요"
@@ -100,10 +101,11 @@ const WrapperItem = styled.div`
   max-width: 1440px;
   width: 100%;
   padding: 0 80px;
+
   margin: 15px auto 0 auto;
-  ${({ theme }) => theme.device.mobile} {
+  @media (max-width: 1440px) {
     justify-content: center;
-    flex-wrap: wrap;
+    padding: 0 10px;
   }
 `;
 
@@ -112,13 +114,12 @@ const InputBox = styled.div`
   flex: 1;
   height: 50px;
   margin: auto 0;
-  ${({ theme }) => theme.device.mobile} {
-    order: 0 !important;
-    width: 100%;
-  }
+  /* ${({ theme }) => theme.device.mobile} {
+  } */
 `;
 
 const SearchInput = styled.input`
+  min-width: 566px;
   width: 100%;
   height: 50px;
   padding-left: 45px;
@@ -162,11 +163,8 @@ const BtnContainer = styled.div`
   height: 50px;
   margin-left: 40px;
 
-  ${({ theme }) => theme.device.mobile} {
-    order: 1 !important;
-    width: 100%;
-    margin: 10px 0 0 0;
-  }
+  /* ${({ theme }) => theme.device.mobile} {
+  } */
 `;
 
 export default SearchBar;

@@ -76,9 +76,9 @@ const RoomCard = ({
   const deleteRoom = (e) => {
     e.stopPropagation();
     setIsDisplayDrop(false);
-    if (userId === master) {
+    const deleteCheck = window.confirm("🗑정말 이 방을 삭제할까요?");
+    if (userId === master && deleteCheck) {
       dispatch(__deleteRoom(roomId));
-      window.alert("🗑정말 이 방을 삭제할까요?");
     }
   };
 
@@ -160,6 +160,9 @@ const Container = styled.div`
   border: 1.2px solid var(--grey);
   border-radius: 5px;
   cursor: pointer;
+  @media (max-width: 960px) {
+    margin-bottom: 15px;
+  }
 `;
 
 const CardSection = styled.div`
@@ -196,6 +199,7 @@ const RoundImg = styled.div`
   border-radius: 50%;
   background-image: url("${(props) => props.url}");
   background-size: cover;
+  background-position: center center;
 `;
 
 const TextBox = styled.div`

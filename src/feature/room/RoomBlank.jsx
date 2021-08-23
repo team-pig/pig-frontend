@@ -16,9 +16,10 @@ const RoomBlank = () => {
 
 const ImgBox = styled.div`
   display: flex;
-  max-width: 684px;
-  min-width: 350px;
+  max-width: 550px;
+  min-width: 250px;
   margin: 0 auto;
+  padding-top: 50px;
 `;
 
 const BlankImg = styled.div`

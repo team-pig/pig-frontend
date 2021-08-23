@@ -61,12 +61,16 @@ const BookmarkTitle = styled.div`
   max-width: 1440px;
   width: 100%;
   padding: 0 80px;
+
   margin: 0 auto;
-  ${({ theme }) => theme.device.mobile} {
+
+  @media (max-width: 1440px) {
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     flex-wrap: wrap;
+    padding: 0 10px;
   }
+
 `;
 
 const BookmarkBox = styled.div`
@@ -83,7 +87,9 @@ const BookmarkBox = styled.div`
     display: none;
   } */
   @media (max-width: 960px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    padding-bottom: 10px;
   }
 `;
 

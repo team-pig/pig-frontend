@@ -55,7 +55,8 @@ const RoomBox = styled.div`
   margin: 0 auto;
 
   @media (max-width: 960px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
   }
 `;
 

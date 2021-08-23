@@ -160,6 +160,9 @@ const Container = styled.div`
   border: 1.2px solid var(--grey);
   border-radius: 5px;
   cursor: pointer;
+  @media (max-width: 960px) {
+    margin-bottom: 15px;
+  }
 `;
 
 const CardSection = styled.div`

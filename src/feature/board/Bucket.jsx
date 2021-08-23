@@ -133,9 +133,10 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
 };
 
 const Container = styled.div`
-  background-color: #f5f5f5;
-  min-height: 900px;
+  flex-shrink: 0;
   width: 300px;
+  min-height: 900px;
+  background-color: #f5f5f5;
   border-radius: 4px;
   border: 1px solid var(--line);
   border: ${(props) => props.isDragging && "1px solid #7BA7FD"};
@@ -181,7 +182,7 @@ const AddCardBtn = styled.div`
 
 const BucketHeader = styled.div`
   ${flex("between", "center")};
-  padding: 18px 20px 0 20px;
+  padding: 18px 20px 0 20px !important;
   margin-bottom: 18px;
 `;
 

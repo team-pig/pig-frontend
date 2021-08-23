@@ -3,8 +3,6 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import CardModal from "../board/CardModal";
-import CalendarModal from "./CalendarModal";
 import Icon from "../../components/Icon";
 
 import { IconBtn, Text, Input } from "../../elem";
@@ -16,7 +14,12 @@ import {
   setModalId,
   __deleteSchedule,
 } from "../../redux/modules/calendar.js";
-import { __checkedTodo, __loadTodos } from "../../redux/modules/todos";
+import {
+  __checkedTodo,
+  __deleteTodo,
+  __loadTodos,
+} from "../../redux/modules/todos";
+import { hiddenScroll } from "../../themes/hiddenScroll";
 
 const CalendarInfo = ({
   modalContent,
@@ -45,12 +48,12 @@ const CalendarInfo = ({
     }
 
     if (currentSchedules.length !== 0) {
-      console.log(currentSchedules.find((item) => item.cardId === currentId));
       setTitle(
         currentSchedules.find((item) => item.cardId === currentId).cardTitle
       );
+      dispatch(__loadTodos(roomId, currentId));
     }
-  }, [roomId, currentId]);
+  }, [roomId, currentId, currentSchedules, dispatch]);
 
   const clickSchedule = (cardId, title) => {
     setTitle(title);
@@ -73,10 +76,9 @@ const CalendarInfo = ({
     dispatch(__deleteSchedule(roomId, cardId));
   };
 
-  // const deleteTodo = (todoId) => {
-  //   const newAry = todos.slice().filter((todo) => todo.todoId !== todoId);
-  //   setTodos(newAry);
-  // };
+  const deleteTodo = (todoId) => {
+    dispatch(__deleteTodo(roomId, todoId));
+  };
 
   // cardIsZero : 현재 스케줄(카드)이 없으면 true
   const cardIsZero = currentSchedules.length === 0;
@@ -160,15 +162,18 @@ const CalendarInfo = ({
                     <Text type="sub_2">{todo.todoTitle}</Text>
                   </Grid>
                   <BtnBox>
-                    <IconBtn _onClick={() => {}} padding="5px">
+                    {/* <IconBtn _onClick={() => {}} padding="5px">
                       <Icon
                         icon="member-plus"
                         size="20px"
                         color="var(--grey)"
                       />
-                    </IconBtn>
+                    </IconBtn> */}
                     <RemoveGrid>
-                      <IconBtn _onClick={() => {}} padding="5px">
+                      <IconBtn
+                        _onClick={() => deleteTodo(todo.todoId)}
+                        padding="5px"
+                      >
                         <RemoveIcon icon="remove" size="20px" />
                       </IconBtn>
                     </RemoveGrid>
@@ -184,8 +189,10 @@ const CalendarInfo = ({
 
 const Container = styled.section`
   ${flex()}
-  height: 200px;
+  height: 280px;
   background-color: var(--white);
+  border-bottom: 2px solid var(--line);
+  overflow-y: hidden;
 `;
 
 const Left = styled.div`
@@ -195,11 +202,13 @@ const Left = styled.div`
 `;
 
 const Right = styled.div`
+  ${hiddenScroll}
   display: ${(props) => props.cardIsZero && "none;"};
   width: calc(100% * (1.7 / 2.7));
   flex-shrink: 0;
   height: 100%;
   border-left: 1px solid var(--line);
+  overflow-y: auto;
 `;
 
 const TitleBox = styled.div`

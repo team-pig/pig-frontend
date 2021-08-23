@@ -30,7 +30,6 @@ const chat = handleActions(
   {
     [LOAD_MESSAGES]: (state, action) =>
       produce(state, (draft) => {
-        console.log(state);
         draft.messages = action.payload.messages;
       }),
     [ADD_MESSAGE]: (state, action) =>

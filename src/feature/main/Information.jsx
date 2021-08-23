@@ -15,7 +15,7 @@ import flex from "../../themes/flex";
 // redux & api
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { __editRoomInfos } from "../../redux/modules/dashBoard";
+import { __editRoomDetail } from "../../redux/modules/room";
 
 const Information = () => {
   const { roomId } = useParams();
@@ -62,7 +62,7 @@ const Information = () => {
       desc: currentContent,
     };
 
-    dispatch(__editRoomInfos(roomId, newInfo));
+    dispatch(__editRoomDetail(roomId, newInfo));
     setEditedInfo(newInfo);
     setEditMode((pre) => !pre);
   };

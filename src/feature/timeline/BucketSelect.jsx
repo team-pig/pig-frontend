@@ -52,7 +52,7 @@ const BucketSelect = ({ bucketId, cardId }) => {
       {bucketValues.length !== 0 && target && (
         <Select onClick={() => setIsShow((pre) => !pre)}>
           <Text type="button" color="main">
-            {target.bucketName}
+            {target.bucketName ? target.bucketName : "제목 없음"}
           </Text>
           <Icon icon="arrow-down" size="20px" />
           {isShow && (
@@ -63,7 +63,7 @@ const BucketSelect = ({ bucketId, cardId }) => {
                     key={bucket.bucketId}
                     onClick={() => clickOption(bucket.bucketId)}
                   >
-                    {bucket.bucketName}
+                    {bucket.bucketName ? bucket.bucketName : "제목 없음"}
                   </Option>
                 ))}
             </Options>

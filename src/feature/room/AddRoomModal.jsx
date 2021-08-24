@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 
 // elements
 import { Button, Input } from "../../elem/index";
+import RoomInput from "./RoomInput";
+
 
 //redux
 import { __addRoom } from "../../redux/modules/room";
@@ -67,6 +69,10 @@ const AddRoomModal = ({ showModal, addModal }) => {
     setRoomImg("");
   };
 
+  const onReset = () => {
+    setImgUrl("");
+  }
+
   return (
     <>
       {showModal ? (
@@ -85,20 +91,21 @@ const AddRoomModal = ({ showModal, addModal }) => {
                 placeholder="이미지 url"
                 value={imgUrl}
                 _onChange={changeImgUrl}
+                _onClick={onReset}
               />
-              <Input
+              <RoomInput
                 name="roomName"
                 type="text"
                 placeholder="방 이름"
                 _onChange={changeHandler}
               />
-              <Input
+              <RoomInput
                 name="subtitle"
                 type="text"
                 placeholder="부제목"
                 _onChange={changeHandler}
               />
-              <Input
+              <RoomInput
                 name="tag"
                 type="text"
                 placeholder="태그"

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 // elements
 import { Button, Input } from "../../elem/index";
+import RoomInput from "./RoomInput";
 
 //redux
 import { __editRoom } from "../../redux/modules/room";
@@ -19,14 +20,8 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
   const _room = isEdit
     ? roomList && roomList.find((r) => r.roomId === roomId)
     : null;
-  const [roomImg, setRoomImg] = useState(
-    _room
-      ? {
-          roomImage: _room.roomImage,
-        }
-      : ""
-  );
-
+  const [imgUrl, setImgUrl] = useState("");
+  const [roomImg, setRoomImg] = useState(_room.roomImage);
   const [contents, setContents] = useState(
     _room
       ? {
@@ -37,7 +32,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
   );
 
   const [tagText, setTagText] = useState(
-    _room
+    _room 
       ? {
           tag: _room.tag,
         }
@@ -46,14 +41,19 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
 
   const getImgUrlFromS3 = async (callback, file) => {
     const result = await callback(file);
-    setRoomImg({ roomImage: result });
+    setImgUrl("");
+    setRoomImg(result);
   };
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
     setTagText({ ...tagText, [name]: value });
-    setRoomImg({ ...roomImg, [name]: value });
+  };
+
+  const changeImgUrl = (e) => {
+    setImgUrl(e.target.value);
+    setRoomImg(e.target.value);
   };
 
   const tagList =
@@ -63,14 +63,23 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
 
   const modifyFile = () => {
     if (!disabled) {
-      dispatch(__editRoom(roomId, contents, roomImg.roomImage, tagList));
+      dispatch(__editRoom(roomId, contents, roomImg, tagList));
     }
+    setImgUrl("");
     closeModModal();
   };
 
   const cancelFile = () => {
+    setRoomImg(_room.roomImage);
+    setImgUrl("");
+    setContents({ roomName: _room.roomName, subtitle: _room.subtitle });
+    setTagText({ tag: _room.tag });
     closeModModal();
   };
+
+  const onReset = () => {
+    setImgUrl("");
+  }
 
   return (
     <>
@@ -80,7 +89,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
           <ModalContent>
             <ImageBox>
               <ImageModule
-                roomPreview={roomImg.roomImage}
+                roomPreview={roomImg}
                 getImgUrlFromS3={getImgUrlFromS3}
               />
             </ImageBox>
@@ -89,23 +98,25 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
                 name="roomImage"
                 type="text"
                 placeholder="이미지 url"
-                _onChange={changeHandler}
+                value={imgUrl}
+                _onChange={changeImgUrl}
+                _onClick={onReset}
               />
-              <Input
+              <RoomInput
                 name="roomName"
                 type="text"
                 placeholder="방 이름"
                 _onChange={changeHandler}
                 value={contents.roomName}
               />
-              <Input
+              <RoomInput
                 name="subtitle"
                 type="text"
                 placeholder="부제목"
                 _onChange={changeHandler}
                 value={contents.subtitle}
               />
-              <Input
+              <RoomInput
                 name="tag"
                 type="text"
                 placeholder="태그"
@@ -160,7 +171,7 @@ const ModalContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 400px;
-  height: 500px;
+  height: 550px;
   padding-top: 5px;
   background-color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);

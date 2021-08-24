@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import _ from "lodash";
 
+import { mobileHidden, mobileOnly } from "../../themes/responsive";
 import Icon from "../../components/Icon";
 import { Button } from "../../elem/index";
 import { head_1 } from "../../themes/textStyle";
+import RoomInput from "./RoomInput";
 
 import { __searchRoom } from "../../redux/modules/room";
 
@@ -30,21 +32,27 @@ const SearchBar = ({ joinModal, addModal }) => {
   return (
     <>
       <Wrapper>
+        {/* <WrapperMobileItem>
+            <IconBox><Icon icon="search" size="24px" /></IconBox>
+            <IconBox><Icon icon="enter" size="24px" /></IconBox>
+            <IconBox><Icon icon="plus-lg" size="24px" /></IconBox>
+        </WrapperMobileItem> */}
         <WrapperItem>
           <InputBox>
             <SearchIconBox>
               <Icon icon="search" size="24px" />
             </SearchIconBox>
 
-            <SearchInput
-              onKeyUp={(e) => {
+            <RoomInput
+              _onKeyUp={(e) => {
                 delay(e.target.value);
               }}
-              onKeyPress={_onKeyPress}
-              autoComplete="off"
+              _onKeyPress={_onKeyPress}
               type="text"
               name="keyword"
-              placeholder="  방 이름을 검색하세요"
+              placeholder="방 이름을 검색하세요"
+              height="50px"
+              padding="0 0 0 50px"
             />
           </InputBox>
           <BtnContainer>
@@ -94,7 +102,19 @@ const Wrapper = styled.div`
   height: 150px;
 `;
 
+const WrapperMobileItem = styled.div`
+${mobileOnly};
+display: flex;
+justify-content: flex-end;
+border: 1px solid black;
+`;
+
+const IconBox = styled.div`
+${mobileOnly}
+`;
+
 const WrapperItem = styled.div`
+${mobileHidden};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -116,14 +136,6 @@ const InputBox = styled.div`
   margin: auto 0;
   /* ${({ theme }) => theme.device.mobile} {
   } */
-`;
-
-const SearchInput = styled.input`
-  min-width: 566px;
-  width: 100%;
-  height: 50px;
-  padding-left: 45px;
-  border: 1px solid var(--line);
 `;
 
 const SearchIconBox = styled.div`

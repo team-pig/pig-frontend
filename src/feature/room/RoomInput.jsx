@@ -13,6 +13,10 @@ const RoomInput = (props) => {
         value={props.value}
         name={props.name}
         placeholder={props.placeholder}
+        onKeyUp={props._onKeyUp}
+        onKeyPress={props._onKeyPress}
+        height={props.height}
+        padding={props.padding}
       />
     </>
   );
@@ -21,10 +25,10 @@ const RoomInput = (props) => {
 const Input = styled.input`
   ${body_3};
   width: 100%;
-  height: 46px;
+  height: ${(props) => (props.height ? props.height : "46px")};
   color: var(--black);
   border: 1px solid var(--line);
-  padding: 12px 14px;
+  padding: ${(props) => (props.padding ? props.padding : "12px 14px")};
   margin-bottom: 12px;
   outline: none;
   transition: border-color 150ms ease-in-out;

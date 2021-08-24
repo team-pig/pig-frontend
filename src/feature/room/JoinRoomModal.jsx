@@ -9,13 +9,14 @@ import Icon from "../../components/Icon";
 // elements
 import { Button, Text } from "../../elem/index";
 import RoomTags from "./RoomTags";
+import RoomInput from "./RoomInput";
+
 
 //redux
 import { __getInviteCodeRoom, __joinRoom } from "../../redux/modules/room";
 
 const JoinRoomModal = ({ showModal, joinModal }) => {
   const dispatch = useDispatch();
-
   const [inviteCode, setInviteCode] = useState("");
   const [isInfo, setIsInfo] = useState(false);
   const roomImage = useSelector((state) => state.room.inviteCodeRoom.roomImage);
@@ -41,6 +42,7 @@ const JoinRoomModal = ({ showModal, joinModal }) => {
 
   const cancel = () => {
     setIsInfo(false);
+    setInviteCode("");
     joinModal();
   };
 
@@ -79,10 +81,10 @@ const JoinRoomModal = ({ showModal, joinModal }) => {
               )}
               {!isInfo && <Content></Content>}
 
-              <InviteCodeInput
+              <RoomInput
                 name="inviteCode"
                 placeholder="초대코드 입력해주세요!"
-                onChange={changeHandler}
+                _onChange={changeHandler}
               />
             </InputBox>
             <BtnBox>
@@ -193,7 +195,7 @@ const Content = styled.div`
   margin-bottom: 12px;
   padding: 0 10px 0 10px;
   background-color: var(--line);
-  border: 1px solid var(--grey);
+  border: 1px solid var(--line);
   color: var(--darkgrey);
 
   white-space: nowrap;

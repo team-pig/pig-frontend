@@ -69,8 +69,10 @@ const RoomCard = ({
 
   const exitRoom = (e) => {
     e.stopPropagation();
-    dispatch(__exitRoom(roomId));
     setIsDisplayDrop(false);
+    if(userId !== master){
+      dispatch(__exitRoom(roomId));
+    }
   };
 
   const deleteRoom = (e) => {

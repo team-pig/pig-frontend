@@ -37,7 +37,7 @@ const Information = () => {
     initialEditType: "markdown",
     useCommandShortcut: true,
     previewHighlight: false,
-    height: "300px",
+    height: "200px",
     ref: editorRef,
     initialValue: desc,
   };
@@ -142,8 +142,11 @@ const Information = () => {
 
 const Container = styled.section`
   width: 100%;
+  min-height: 40%;
+  max-height: 60%;
   padding: 20px;
   border-bottom: 1px solid var(--line);
+  overflow-y: auto;
 `;
 
 const TitleBox = styled.div`
@@ -191,12 +194,13 @@ const Line = styled.div`
 `;
 
 const ViewerContainer = styled.div`
+  max-width: 100%;
   padding: ${(props) => props.padding && "0 12px;"};
   padding-bottom: 18px;
 `;
 
 const EditorContainer = styled.div`
-  min-height: 300px;
+  min-height: 200px;
 `;
 
 export default React.memo(Information);

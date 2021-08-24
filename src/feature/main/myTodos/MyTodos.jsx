@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -6,14 +6,33 @@ import { __switchTodoStat, __removeMyTodo } from "../../../redux/modules/todos";
 import Icon from "../../../components/Icon";
 
 import { IconBtn, Text, Input } from "../../../elem";
-import flex from "../../../themes/flex";
 import { body_2 } from "../../../themes/textStyle";
+import { hiddenScroll } from "../../../themes/hiddenScroll";
+import flex from "../../../themes/flex";
 
 const MyTodos = () => {
   const dispatch = useDispatch();
   const myId = useSelector((state) => state.user.user.userId);
   const { checkedTodo, notCheckedTodo } = useSelector((state) => state.todos);
   const { roomId } = useParams();
+
+  const [offsetHeight, setOffsetHeight] = useState();
+
+  useEffect(() => {
+    window.addEventListener("resize", () =>
+      setOffsetHeight(document.body.offsetHeight)
+    );
+    return () =>
+      window.removeEventListener("resize", () =>
+        setOffsetHeight(document.body.offsetHeight)
+      );
+  }, []);
+
+  const myList = useRef();
+  let myListHeight;
+  if (myList.current && offsetHeight) {
+    myListHeight = offsetHeight - myList.current.offsetTop;
+  }
 
   return (
     <Container>
@@ -23,11 +42,68 @@ const MyTodos = () => {
         </Text>
       </TitleBox>
       <MyTodoList>
-        <List>
+        <TodoBox>
           <TodosTitle>아직 못한 일</TodosTitle>
-          {notCheckedTodo &&
-            notCheckedTodo.map((item) => {
-              return (
+          <List ref={myList} height={myListHeight}>
+            {notCheckedTodo &&
+              notCheckedTodo.map((item) => {
+                return (
+                  <Item key={item.todoId}>
+                    <Grid>
+                      <>
+                        <Input
+                          none
+                          type="checkbox"
+                          name="isChecked"
+                          id={item.todoId}
+                          checked={item.isChecked}
+                          _onChange={({ target }) => {
+                            dispatch(
+                              __switchTodoStat(
+                                roomId,
+                                item.todoId,
+                                target.checked,
+                                item.todoTitle
+                              )
+                            );
+                          }}
+                        />
+                        <Label htmlFor={item.todoId}>
+                          {item.isChecked ? (
+                            <Icon icon="checkbox-filled" size="20px" />
+                          ) : (
+                            <Icon icon="checkbox" size="20px" />
+                          )}
+                        </Label>
+                      </>
+                      <Text type="sub_2">{item.todoTitle}</Text>
+                    </Grid>
+                    <RemoveGrid>
+                      <IconBtn
+                        _onClick={() => {
+                          dispatch(
+                            __removeMyTodo(
+                              roomId,
+                              item.todoId,
+                              myId,
+                              item.isChecked
+                            )
+                          );
+                        }}
+                      >
+                        <RemoveIcon icon="remove" size="20px" />
+                      </IconBtn>
+                    </RemoveGrid>
+                  </Item>
+                );
+              })}
+          </List>
+        </TodoBox>
+        <TodoBox>
+          <TodosTitle>완료한 일</TodosTitle>
+          <List height={myListHeight}>
+            {checkedTodo &&
+              checkedTodo.map((item) => (
                 <Item key={item.todoId}>
                   <Grid>
                     <>
@@ -75,79 +151,42 @@ const MyTodos = () => {
                     </IconBtn>
                   </RemoveGrid>
                 </Item>
-              );
-            })}
-        </List>
-        <List>
-          <TodosTitle>완료한 일</TodosTitle>
-          {checkedTodo &&
-            checkedTodo.map((item) => (
-              <Item key={item.todoId}>
-                <Grid>
-                  <>
-                    <Input
-                      none
-                      type="checkbox"
-                      name="isChecked"
-                      id={item.todoId}
-                      checked={item.isChecked}
-                      _onChange={({ target }) => {
-                        dispatch(
-                          __switchTodoStat(
-                            roomId,
-                            item.todoId,
-                            target.checked,
-                            item.todoTitle
-                          )
-                        );
-                      }}
-                    />
-                    <Label htmlFor={item.todoId}>
-                      {item.isChecked ? (
-                        <Icon icon="checkbox-filled" size="20px" />
-                      ) : (
-                        <Icon icon="checkbox" size="20px" />
-                      )}
-                    </Label>
-                  </>
-                  <Text type="sub_2">{item.todoTitle}</Text>
-                </Grid>
-                <RemoveGrid>
-                  <IconBtn
-                    _onClick={() => {
-                      dispatch(
-                        __removeMyTodo(
-                          roomId,
-                          item.todoId,
-                          myId,
-                          item.isChecked
-                        )
-                      );
-                    }}
-                  >
-                    <RemoveIcon icon="remove" size="20px" />
-                  </IconBtn>
-                </RemoveGrid>
-              </Item>
-            ))}
-        </List>
+              ))}
+          </List>
+        </TodoBox>
       </MyTodoList>
     </Container>
   );
 };
 
 const Container = styled.section`
+  flex-grow: 1;
   width: 100%;
+  /* background-color: red; */
 `;
 
 const TitleBox = styled.div`
   padding: 20px 20px 30px 20px;
 `;
 
-const List = styled.ul`
-  ${flex("start", "start", false)};
+const MyTodoList = styled.div`
+  ${flex("between", "start")}
+  /* flex-wrap: wrap; */
   width: 100%;
-  min-height: 100px;
+`;
+
+const TodoBox = styled.div`
+  width: 50%;
+  padding-bottom: 20px;
+`;
+
+const List = styled.ul`
+  ${hiddenScroll};
+  ${flex("start", "start", false)}
+
+  width: 100%;
+  height: ${(props) => (props.height ? `${props.height}px;` : "400px")};
+  overflow-y: auto;
 `;
 
 const Grid = styled.div`
@@ -184,12 +223,6 @@ const Item = styled.li`
       visibility: initial;
     }
   }
-`;
-
-const MyTodoList = styled.div`
-  ${flex("between", "start")}
-  flex-wrap: wrap;
-  width: 100%;
 `;
 
 const TodosTitle = styled.div`

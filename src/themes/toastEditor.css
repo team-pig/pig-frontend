@@ -1,0 +1,21 @@
+.toastui-editor-contents {
+  width: 100%;
+}
+
+.toastui-editor-contents > p {
+  font-size: 1.4rem;
+  line-height: 2.2rem;
+  color: #151515;
+}
+
+.ProseMirror > div {
+  font-size: 1.4rem;
+  line-height: 2.4rem;
+  color: #151515;
+}
+
+.toastui-editor-md-tab-container .tab-item.active {
+  background-color: #4d6c56;
+  color: white;
+  font-size: 1.3rem;
+}

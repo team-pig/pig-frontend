@@ -12,6 +12,7 @@ import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import "prismjs/themes/prism.css";
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
+import "../themes/toastEditor.css";
 
 const MarkDownEditor = ({ option, functions }) => {
   // 추가 가능 옵션 ref

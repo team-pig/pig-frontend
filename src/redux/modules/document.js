@@ -27,13 +27,8 @@ export const __getDocs =
   async (dispatch, getState, { history }) => {
     try {
       const {
-        data: { ok, message, result: docs },
+        data: { result: docs },
       } = await docApi.getDocs(roomId);
-
-      if (!ok) {
-        console.log(message);
-        return;
-      }
 
       const newDocs = docs.map((doc) => {
         const { documentId: docId, ...rest } = doc;
@@ -72,14 +67,8 @@ export const __createDoc =
   async (dispatch, getState, { history }) => {
     try {
       const {
-        data: { ok, message, documentId },
+        data: { documentId },
       } = await docApi.createDoc(roomId, docObj);
-
-      if (!ok) {
-        // 에러 모달 필요(에러 모달 함수를 따로 빼서 재사용하는 것이 좋을 듯 합니다.)
-        console.log(message);
-        return;
-      }
 
       const newDocObj = { ...docObj, docId: documentId };
       dispatch(createDoc({ newDocObj }));
@@ -98,13 +87,7 @@ export const __editDoc =
       const { title, content, docId: documentId } = docObj;
       const newDocObj = { title, content, documentId };
 
-      const { ok, message } = await docApi.editDoc(roomId, newDocObj);
-
-      // response에서 ok가 잘못와서 일단 주석처리
-      // if (!ok) {
-      //   console.log(message);
-      //   return;
-      // }
+      const data = await docApi.editDoc(roomId, newDocObj);
 
       dispatch(editDoc(docObj));
       history.push(`/workspace/${roomId}/doc/${docObj.docId}`);
@@ -118,13 +101,7 @@ export const __deleteDoc =
   (docId, roomId) =>
   async (dispatch, getState, { history }) => {
     try {
-      const { ok, message } = await docApi.deleteDoc(roomId, docId);
-
-      // ok를 받지 못했을 때의 처리가 필요함
-      // if (!ok) {
-      //   console.log(message);
-      //   return;
-      // }
+      const data = await docApi.deleteDoc(roomId, docId);
 
       await dispatch(deleteDoc(docId));
       const lastDoc = getState().document.docList[0];

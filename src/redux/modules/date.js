@@ -18,7 +18,7 @@ export const selectDate = createAction(SELECT_DATE, (date) => ({ date }));
 const initialState = {
   now: moment(),
   current: moment(),
-  selectedDate: moment().clone().format("M월 D일"),
+  selectedDate: moment(),
 };
 
 // reducer

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 // component
@@ -23,13 +23,15 @@ const Information = () => {
   const [editedInfo, setEditedInfo] = useState({});
   const editorRef = useRef();
   const dispatch = useDispatch();
-  const room = useSelector((state) => state.room.currentRoom);
+  const room = useSelector((state) => state.room.roomInfos);
+  const my = useSelector((state) => state.user.user.userId);
+  const { roomName, desc, tag, subtitle, master } = room;
 
   useEffect(() => {
-    const { roomName, desc, tag, subtitle } = room;
-    setEditedInfo({ roomName, desc, tag, subtitle });
-  }, [room]);
+    setEditedInfo({ roomName, desc, tag, subtitle }); // onChange input value
+  }, [roomName, desc, tag, subtitle]);
 
+  // Editor option
   const mainEditorOpt = {
     previewStyle: "tab",
     initialEditType: "markdown",
@@ -37,11 +39,11 @@ const Information = () => {
     previewHighlight: false,
     height: "300px",
     ref: editorRef,
-    initialValue: editedInfo.desc,
+    initialValue: desc,
   };
 
   const mainViewerOpt = {
-    initialValue: editedInfo.desc,
+    initialValue: desc,
   };
 
   const getContent = () => {
@@ -51,7 +53,7 @@ const Information = () => {
   };
 
   const clickSave = () => {
-    if (!editedInfo.roomName.trim()) {
+    if (!roomName.trim()) {
       alert("제목을 한 글자 이상 작성해주세요.");
       return;
     }
@@ -63,13 +65,12 @@ const Information = () => {
     };
 
     dispatch(__editRoomDetail(roomId, newInfo));
-    setEditedInfo(newInfo);
     setEditMode((pre) => !pre);
   };
 
-  const handleChange = (key, value) => {
+  const handleChange = useCallback((key, value) => {
     setEditedInfo((pre) => ({ ...pre, [key]: value }));
-  };
+  }, []);
 
   if (editMode) {
     return (
@@ -111,27 +112,29 @@ const Information = () => {
     <Container>
       <TitleBox>
         <Text type="head_2" color="black">
-          {editedInfo.roomName}
+          {roomName}
         </Text>
-        <IconBtn
-          _onClick={() => {
-            setEditMode((pre) => !pre);
-          }}
-        >
-          <Icon icon="edit" color="#757575" size="24px" />
-        </IconBtn>
+        {my === master && (
+          <IconBtn
+            _onClick={() => {
+              setEditMode((pre) => !pre);
+            }}
+          >
+            <Icon icon="edit" color="#757575" size="24px" />
+          </IconBtn>
+        )}
       </TitleBox>
       <TagContainer>
-        <Tags tag={editedInfo.tag} gap="14" textType="sub_2" color="dargrey" />
+        <Tags tag={tag} gap="14" textType="sub_2" color="dargrey" />
       </TagContainer>
-      {editedInfo.subtitle && (
+      {subtitle && (
         <SubTitle type="sub_1" color="grey">
-          {editedInfo.subtitle}
+          {subtitle}
         </SubTitle>
       )}
       <Line />
       <ViewerContainer padding={true}>
-        {editedInfo.desc && <MarkDownViewer option={mainViewerOpt} />}
+        {desc && <MarkDownViewer option={mainViewerOpt} />}
       </ViewerContainer>
     </Container>
   );

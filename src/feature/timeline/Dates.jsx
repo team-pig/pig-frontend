@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-// redux
-import { selectDate } from "../../redux/modules/date";
-import { setCurrentId, loadDaySchedules } from "../../redux/modules/calendar";
+import clickDate from "./clickDate";
 
 // component
 import Date from "./Date";
@@ -20,30 +18,18 @@ const Dates = () => {
   const startDate = firstDay.clone().subtract(firstDay.day(), "day");
   const nowFormat = parseInt(now.clone().format("YYYYMMDD")); // 오늘 확인용으로 사용 코드
 
-  const loadSchedules = async (date, idAry) => {
-    dispatch(selectDate(date));
-    dispatch(loadDaySchedules(idAry));
-  };
-
-  const clickDate = (target, targetList) => {
-    const idAry = targetList.map((item) => item.cardId);
-    const date = target.format("M월 D일");
-    loadSchedules(date, idAry);
-    dispatch(setCurrentId(idAry[0]));
-  };
-
   // 처음 타임라인으로 들어왔을 때 당일의 일정들을 보여줌
   useEffect(() => {
     let targetFormat = now.clone().format("YYYYMMDD");
     let targetList = scheduleList.filter(
-      (schedule, idx) =>
+      (schedule) =>
         parseInt(schedule["startDate"].split("-").join("")) <= targetFormat &&
         parseInt(schedule["endDate"].split("-").join("")) >= targetFormat
     );
     if (!currentScheduleId) {
-      clickDate(now, targetList);
+      clickDate(now, targetList, dispatch);
     }
-  }, [now, scheduleList, currentScheduleId]);
+  }, [now, scheduleList, currentScheduleId, dispatch]);
 
   return (
     <>
@@ -70,7 +56,7 @@ const Dates = () => {
             list={targetList}
             today={today}
             thisMonth={checkThisMonth}
-            _onClick={() => clickDate(target, targetList)}
+            _onClick={() => clickDate(target, targetList, dispatch)}
           >
             {target.format("D")}
           </Date>

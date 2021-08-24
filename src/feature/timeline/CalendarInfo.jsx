@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,35 +21,40 @@ import {
 } from "../../redux/modules/todos";
 import { hiddenScroll } from "../../themes/hiddenScroll";
 
-const CalendarInfo = ({
-  modalContent,
-  setModalContent,
-  showModal,
-  setShowModal,
-}) => {
+const CalendarInfo = ({ setShowModal }) => {
   const { roomId } = useParams();
   const dispatch = useDispatch();
 
-  const { current } = useSelector((state) => state.date);
-  const today = current && current.clone().format("M월 D일");
+  const { selectedDate } = useSelector((state) => state.date);
 
-  const { currentList: currentSchedules, currentScheduleId: currentId } =
-    useSelector((state) => state.calendar);
-  const { selectedDate } = useSelector((state) => state.date) || {
-    selectedDate: today,
-  };
+  const { scheduleList, currentScheduleId: currentId } = useSelector(
+    (state) => state.calendar
+  );
+
   const loadedTodos = useSelector((state) => state.todos.todos);
 
   const [title, setTitle] = useState("");
+
+  const targetFormat = selectedDate.clone().format("YYYYMMDD");
+  const currentSchedules = useMemo(() => {
+    const schedules = scheduleList.filter(
+      (schedule, idx) =>
+        parseInt(schedule["startDate"].split("-").join("")) <= targetFormat &&
+        parseInt(schedule["endDate"].split("-").join("")) >= targetFormat
+    );
+    return schedules;
+  }, [scheduleList, targetFormat]);
 
   useEffect(() => {
     if (currentSchedules.length === 0) {
       setTitle("");
     }
 
-    if (currentSchedules.length !== 0) {
+    if (currentSchedules.length !== 0 && currentId) {
       setTitle(
-        currentSchedules.find((item) => item.cardId === currentId).cardTitle
+        currentSchedules.find((item) => item.cardId === currentId)
+          ? currentSchedules.find((item) => item.cardId === currentId).cardTitle
+          : ""
       );
       dispatch(__loadTodos(roomId, currentId));
     }
@@ -89,7 +94,7 @@ const CalendarInfo = ({
         <Left cardIsZero={cardIsZero}>
           <TitleBox>
             <Text type="body_1" color="black">
-              {selectedDate}
+              {selectedDate.clone().format("M월 D일")}
             </Text>
             <TextBtn>
               {!cardIsZero && (
@@ -107,6 +112,7 @@ const CalendarInfo = ({
             </Info>
           )}
           {currentId &&
+            currentSchedules &&
             currentSchedules.map((item) => (
               <CurrentSchedule
                 key={item.cardId}

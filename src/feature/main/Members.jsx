@@ -1,39 +1,29 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 // component & elem
 import MyStatus from "./MyStatus";
 import MemberStatus from "./MemberStatus";
 import { scrollbar } from "../../themes/scrollbar";
-import { Text } from "../../elem";
 import flex from "../../themes/flex";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { body_1 } from "../../themes/textStyle";
 
 const Members = () => {
-  const [myInfo, setMyInfo] = useState({});
-  const __memberStatus = useSelector((state) => state.todos.memberStatus);
-  const __id = useSelector((state) => state.user.user.userId);
-
-  useEffect(() => {
-    const myIndx = __memberStatus.findIndex((member) => member.userId === __id);
-    setMyInfo(__memberStatus[myIndx]);
-  }, [__memberStatus, __id]);
+  const memberStatus = useSelector((state) => state.todos.memberStatus);
+  const myId = useSelector((state) => state.user.user.userId);
 
   return (
     <Container>
-      <MembersHeader>
-        <Text type="body_1">팀원 현황</Text>
-      </MembersHeader>
-      {myInfo && <MyStatus myInfo={myInfo} setMyInfo={setMyInfo} />}
-      {__memberStatus &&
-        __memberStatus.map((member, idx) => {
-          return (
-            member.userId !== __id && (
+      <MembersHeader>팀원 현황</MembersHeader>
+      <MyStatus />
+      {memberStatus &&
+        memberStatus.map(
+          (member) =>
+            member.userId !== myId && (
               <MemberStatus key={member.userId} member={member} />
             )
-          );
-        })}
+        )}
     </Container>
   );
 };
@@ -50,7 +40,8 @@ const Container = styled.section`
 `;
 
 const MembersHeader = styled.div`
-  ${flex("between", "center")}
+  ${flex("between", "center")};
+  ${body_1};
   margin-bottom: 30px;
 `;
 

@@ -13,7 +13,6 @@ import { resetReducer } from "../../redux/configStore";
 
 const WSHeader = ({ url }) => {
   const history = useHistory();
-
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.user);
@@ -41,7 +40,7 @@ const WSHeader = ({ url }) => {
             <Icon icon="notice-focus" size="28px" />
           </HeaderBtn> */}
         </Icons>
-        <NameBtn>
+        <NameBtn onClick={() => history.push("/mypage")}>
           <NameTag name={user.nickname} />
         </NameBtn>
         <HeaderBtn onClick={clickLogout}>

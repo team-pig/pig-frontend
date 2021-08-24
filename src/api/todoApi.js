@@ -29,4 +29,7 @@ export const todoApi = {
   loadMyTodo: (roomid) => instance.get(`/room/${roomid}/main/todos`),
 
   loadProjectTodo: (roomId) => instance.get(`/room/${roomId}/main/status`),
+
+  editMyStatus: (roomId, willReqParams) =>
+    instance.patch(`/room/${roomId}/myprofile`, willReqParams),
 };

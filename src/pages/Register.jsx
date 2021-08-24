@@ -41,6 +41,8 @@ const Register = () => {
     // console.log(result); // 디버깅 할 때 사용하세요.
     setAvatar(result);
   };
+  const colors = ["blue", "violet", "yellow", "orange", "mint"];
+  const random = Math.floor(Math.random() * 5);
 
   const formik = useFormik({
     initialValues: {
@@ -48,7 +50,7 @@ const Register = () => {
       nickname: "",
       password: "",
       confirmPassword: "",
-      color: "blue",
+      color: colors[random],
     },
 
     validationSchema: Yup.object({

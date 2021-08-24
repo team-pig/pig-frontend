@@ -1,27 +1,45 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import { todoApi } from "../../api/todoApi";
+import { regex } from "../../shared/regex";
 
+// [보드 / 타임라인]
 const LOAD_TODOS = "todos/LOAD_TODOS";
 const LOAD_MY_TODOS = "todos/LOAD_MY_TODOS";
-const INIT_MY_TODOS = "todos/INIT_MY_TODOS";
 const CREATE_TODO = "todos/CREATE_TODO";
 const DELETE_TODO = "todos/DELETE_TODO";
-const EXIT_MY_TODO = "totos/EXIT_MY_TODO";
-const EXIT_MY_TODO_NOT_CHECKED = "todos/EXIT_MY_TODO_NOT_CHECKED";
 const EDIT_TODO_TITLE = "todos/EDIT_TODO_TITLE";
 const IS_CHECKED_TODO = "todos/IS_CHECKED_TODO";
-const GO_TO_CHECKED = "todos/GO_TO_CHECKED";
-const GO_TO_NOT_CHECKED = "todos/GO_TO_NOT_CHECKED";
 const ADD_MEMBER = "todos/ADD_MEMBER";
 const REMOVE_MEMBER = "todos/REMOVE_MEMBER";
 const RESET_TODOS = "todos/RESET_TODOS";
+
+// [메인]
+const EXIT_MY_TODO = "totos/EXIT_MY_TODO";
+const EXIT_MY_TODO_NOT_CHECKED = "todos/EXIT_MY_TODO_NOT_CHECKED";
+const GO_TO_CHECKED = "todos/GO_TO_CHECKED";
+const GO_TO_NOT_CHECKED = "todos/GO_TO_NOT_CHECKED";
 const LOAD_PROJECT_TODOS = "todos/LOAD_PROJECT_TODOS";
+const EIDT_MY_STATUS = "todos/EIDT_MY_STATUS";
+
+// clean up
+const INIT_MY_TODOS = "todos/INIT_MY_TODOS";
 
 /**
- * Action creator
+ *  ---- Action creator ---- //
  */
+
+/**
+ * ---- 클린 업 ---- //
+ */
+
+export const initMyTodos = createAction(INIT_MY_TODOS, () => ({}));
+
+// [메인]
 const laodTodos = createAction(LOAD_TODOS, (todos) => ({ todos }));
+
+const editMyStatus = createAction(EIDT_MY_STATUS, (myStatus) => ({ myStatus }));
+
 const loadMyTodos = createAction(
   LOAD_MY_TODOS,
   (checkedTodo, notCheckedTodo) => ({ checkedTodo, notCheckedTodo })
@@ -30,13 +48,13 @@ const loadProjectTodo = createAction(LOAD_PROJECT_TODOS, (allTodos) => ({
   allTodos,
 }));
 
-export const initMyTodos = createAction(INIT_MY_TODOS, () => ({}));
-
 const createTodo = createAction(CREATE_TODO, (newTodo) => ({
   newTodo,
 }));
 const deleteTodo = createAction(DELETE_TODO, (todoId) => ({ todoId }));
+
 const exitMyTodo = createAction(EXIT_MY_TODO, (todoId) => ({ todoId }));
+
 const exitMyTodoNotChecked = createAction(
   EXIT_MY_TODO_NOT_CHECKED,
   (todoId) => ({ todoId })
@@ -105,10 +123,16 @@ export const __loadMyTodos = (roomId) => async (dispatch) => {
   }
 };
 
-export const __loadProjectTodo = (roomId) => async (dispatch) => {
+export const __loadProjectTodo = (roomId) => async (dispatch, getState) => {
   try {
     const { data } = await todoApi.loadProjectTodo(roomId);
-    dispatch(loadProjectTodo(data));
+    const { memberStatus, projectStatus } = data;
+    const myId = getState().user.user.userId;
+
+    const myIndx = memberStatus.findIndex((member) => member.userId === myId);
+    const myStatus = memberStatus[myIndx];
+
+    dispatch(loadProjectTodo({ myStatus, memberStatus, projectStatus }));
   } catch (e) {
     //
   }
@@ -210,14 +234,33 @@ export const __deleteTodo = (roomId, todoId) => async (dispatch) => {
   }
 };
 
+export const __editMyStatus = (roomId, newMyInfo) => async (dispatch) => {
+  try {
+    const filterTags =
+      typeof newMyInfo.tags === "object"
+        ? newMyInfo.tags
+        : newMyInfo.tags.split(regex.commaAndTrim).filter(Boolean);
+
+    const willReqParams = {
+      ...newMyInfo,
+      tags: filterTags,
+    };
+
+    dispatch(editMyStatus(willReqParams));
+    await todoApi.editMyStatus(roomId, willReqParams);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const initialState = {
   todos: [],
   checkedTodo: [],
   notCheckedTodo: [],
-  myTodoCount: { total: 0, checkedTodo: 0, notCheckedTodo: 0 },
   memberStatus: [],
+  myTodoCount: { total: 0, checkedTodo: 0, notCheckedTodo: 0 },
   projectStatus: {},
-  myStatus: { tags: [], desc: "" },
+  myStatus: {},
 };
 
 export const todos = handleActions(
@@ -350,13 +393,23 @@ export const todos = handleActions(
       produce(state, (draft) => {
         draft.checkedTodo = [];
         draft.notCheckedTodo = [];
+        draft.memberStatus = [];
         draft.myTodoCount = {};
+        draft.projectStatus = {};
+        draft.myStatus = {};
       }),
 
     [LOAD_PROJECT_TODOS]: (state, { payload }) =>
       produce(state, (draft) => {
         draft.projectStatus = payload.allTodos.projectStatus;
         draft.memberStatus = payload.allTodos.memberStatus;
+        draft.myStatus = payload.allTodos.myStatus;
+      }),
+
+    [EIDT_MY_STATUS]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.myStatus.desc = payload.myStatus.desc;
+        draft.myStatus.tags = payload.myStatus.tags;
       }),
   },
 

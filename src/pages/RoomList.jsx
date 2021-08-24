@@ -14,8 +14,13 @@ import DefaultRoomList from "../feature/room/DefaultRoomList";
 //elements
 
 //redux
-import { __getRoomList, __getMarkedList } from "../redux/modules/room";
+import {
+  __getRoomList,
+  __getMarkedList,
+  initRoom,
+} from "../redux/modules/room";
 import SEO from "../components/SEO";
+import { initMyTodos } from "../redux/modules/todos";
 
 const RoomList = () => {
   const dispatch = useDispatch();
@@ -31,6 +36,9 @@ const RoomList = () => {
       roomBlankImg();
     };
     getRoom();
+
+    dispatch(initRoom({}));
+    dispatch(initMyTodos());
   }, [room]);
 
   const roomBlankImg = () => {
@@ -75,4 +83,4 @@ const RoomList = () => {
   );
 };
 
-export default RoomList;
+export default React.memo(RoomList);

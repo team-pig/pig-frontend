@@ -18,6 +18,7 @@ const DELETE_BOOKMARK = "room/DELETE_BOOKMARK";
 const GET_MARKED_LIST = "room/GET_MARKED_LIST";
 const INIT_ROOM = "room/INIT_ROOM";
 const LOADING = "LOADING";
+const EDIT_ROOM_DETAIL = "room/EDIT_ROOM_INFOS";
 
 //initialState
 const initialState = {
@@ -30,12 +31,16 @@ const initialState = {
   unMarkedList: [],
   mergedList: [],
   inviteCodeRoom: [],
+  roomInfos: {},
   currentRoom: {},
   searchPaging: { page: 1, next: null, size: 12 },
   searchKeyword: "",
 };
 
 //action creator
+const editRoomDetail = createAction(EDIT_ROOM_DETAIL, (roomInfos) => ({
+  roomInfos,
+}));
 export const initRoom = createAction(INIT_ROOM, () => ({}));
 export const addRoom = createAction(ADD_ROOM, (room) => ({
   room,
@@ -190,6 +195,7 @@ export const __editRoomDetail = (roomId, newRoominfos) => async (dispatch) => {
       tag: filterTags,
     };
 
+    dispatch(editRoomDetail(willReqParams));
     await roomApi.editRoom(willReqParams);
   } catch (e) {
     console.log(e);
@@ -294,11 +300,13 @@ const room = handleActions(
       produce(state, (draft) => {
         draft.room.unshift(action.payload.room.room);
       }),
+
     [SEARCH_ROOM]: (state, action) =>
       produce(state, (draft) => {
         draft.searchedRoom = action.payload.searchedRoom.room;
         draft.searchKeyword = action.payload.searchContent;
       }),
+
     [JOIN_ROOM]: (state, action) =>
       produce(state, (draft) => {
         draft.room.unshift(action.payload.inviteCode.room);
@@ -308,10 +316,13 @@ const room = handleActions(
       produce(state, (draft) => {
         draft.inviteCodeRoom = action.payload.room;
       }),
-    [GET_ONE_ROOM]: (state, action) =>
+
+    [GET_ONE_ROOM]: (state, { payload }) =>
       produce(state, (draft) => {
-        draft.currentRoom = action.payload.room;
+        draft.currentRoom = payload.room;
+        draft.roomInfos = payload.room;
       }),
+
     [GET_ROOM_LIST]: (state, action) =>
       produce(state, (draft) => {
         draft.room.push(...action.payload.roomList);
@@ -347,6 +358,7 @@ const room = handleActions(
           ...action.payload.room.room,
         };
       }),
+
     [DELETE_ROOM]: (state, action) =>
       produce(state, (draft) => {
         let defaultRoomIdx = draft.room.findIndex(
@@ -364,6 +376,7 @@ const room = handleActions(
           draft.markedList.splice(markedRoomIdx, 1);
         }
       }),
+
     [EXIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
         let defaultRoomIdx = draft.room.findIndex(
@@ -379,10 +392,12 @@ const room = handleActions(
           draft.markedList.splice(markedRoomIdx, 1);
         }
       }),
+
     [ADD_BOOKMARK]: (state, action) =>
       produce(state, (draft) => {
         draft.markedList.unshift(action.payload.room);
       }),
+
     [DELETE_BOOKMARK]: (state, action) =>
       produce(state, (draft) => {
         let markedRoomIdx = draft.markedList.findIndex(
@@ -395,7 +410,17 @@ const room = handleActions(
 
     [INIT_ROOM]: (state, { payload }) =>
       produce(state, (draft) => {
-        draft.currentRoom = {};
+        draft.roomInfos = {};
+      }),
+
+    [EDIT_ROOM_DETAIL]: (state, { payload }) =>
+      produce(state, (draft) => {
+        const { roomName, subtitle, desc, tag } = payload.roomInfos;
+        console.log(roomName);
+        draft.roomInfos.roomName = roomName;
+        draft.roomInfos.subtitle = subtitle;
+        draft.roomInfos.desc = desc;
+        draft.roomInfos.tag = tag;
       }),
   },
   initialState

@@ -17,11 +17,7 @@ import {
   setPrevRoomId,
 } from "../redux/modules/chat";
 import { __loadBucket, __loadCard } from "../redux/modules/board";
-import {
-  initMyTodos,
-  __loadMyTodos,
-  __loadProjectTodo,
-} from "../redux/modules/todos";
+import { __loadMyTodos, __loadProjectTodo } from "../redux/modules/todos";
 
 // socket
 import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
@@ -43,11 +39,6 @@ const Workspace = (props) => {
     dispatch(__getOneRoom(roomId)); // 메인 (방 상세 정보)
     dispatch(__loadMyTodos(roomId)); // 메인 (투두리스트)
     dispatch(__loadProjectTodo(roomId)); // 메인 (대시보드)
-
-    return () => {
-      dispatch(initMyTodos());
-      // dispatch(initRoom());
-    };
   }, [dispatch, roomId]);
 
   // workspace에 들어갈 때마다 room에 join, 해당 방의 기존 메세지 받아오는 handler
@@ -92,4 +83,4 @@ const Workspace = (props) => {
   );
 };
 
-export default Workspace;
+export default React.memo(Workspace);

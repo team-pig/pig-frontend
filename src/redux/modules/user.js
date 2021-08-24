@@ -100,14 +100,18 @@ export const __logout =
     cookies.remove("accessToken", {
       path: "/",
     });
-    history.replace("/");
+    history.replace("/login");
     dispatch(logout());
   };
 
 export const __loginCheck =
   (isLogin, user) =>
   async (dispatch, getState, { history }) => {
-    dispatch(loginCheck(isLogin, user));
+    try {
+      dispatch(loginCheck(isLogin, user));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
 export const __register =

@@ -129,7 +129,9 @@ export const __loadProjectTodo = (roomId) => async (dispatch, getState) => {
     const { memberStatus, projectStatus } = data;
     const myId = getState().user.user.userId;
 
-    const myIndx = memberStatus.findIndex((member) => member.userId === myId);
+    const myIndx = memberStatus.findIndex(
+      (member) => member.userId === myId && myId
+    );
     const myStatus = memberStatus[myIndx];
 
     dispatch(loadProjectTodo({ myStatus, memberStatus, projectStatus }));

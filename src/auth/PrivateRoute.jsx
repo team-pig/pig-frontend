@@ -22,20 +22,7 @@ const PrivateRoute = ({ Component, ...rest }) => {
    */
 
   useEffect(() => {
-    const loginCheck = async () => {
-      try {
-        const {
-          data: { ok: isLogin, user },
-        } = await userApi.loginCheck();
-        if (isLogin) {
-        }
-        dispatch(__loginCheck(isLogin, user));
-      } catch (e) {
-        dispatch(__loginCheck(false));
-      }
-    };
-
-    loginCheck();
+    dispatch(__loginCheck());
   }, []);
 
   return (

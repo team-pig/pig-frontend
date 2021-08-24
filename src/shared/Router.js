@@ -1,37 +1,52 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Redirect } from "react-router-dom";
 
 // pages
 import Intro from "../pages/Intro";
 import Login from "../pages/Login";
 import MyPage from "../pages/MyPage";
-
 import Register from "../pages/Register";
 import ResetPassword from "../pages/ResetPassword";
 import RoomList from "../pages/RoomList";
 import SearchPassword from "../pages/SearchPassword";
 import Workspace from "../pages/Workspace";
-import Auth from "../shared/auth";
+
+// HOC (high order components)
+import PublickRoute from "../auth/PublickRoute";
+import PrivateRoute from "../auth/PrivateRoute";
+
+/**
+ * routing nesting을 사용하는 경우, exact을 제외해야한다.
+ *
+ *
+ */
 
 const Router = () => {
   return (
     <Switch>
-      <Route path="/" component={Auth(Intro, null)} exact />
-      <Route path="/login" component={Auth(Login, null)} exact />
-      <Route path="/register" component={Auth(Register, null)} exact />
-      <Route path="/roomlist" component={Auth(RoomList, true)} exact />
-      <Route
+      <PublickRoute restricted={true} Component={Intro} path="/" exact />
+      <PublickRoute restricted={true} Component={Login} path="/login" exact />
+      <PublickRoute
+        restricted={true}
+        Component={Register}
+        path="/register"
+        exact
+      />
+      <PrivateRoute Component={RoomList} path="/roomlist" exact />
+      <PublickRoute
+        restricted={false}
+        Component={SearchPassword}
         path="/serach-password"
-        component={Auth(SearchPassword, true)}
         exact
       />
-      <Route
+      <PublickRoute
+        restricted={false}
+        Component={ResetPassword}
         path="/resetPassword/:id"
-        component={Auth(ResetPassword, true)}
         exact
       />
-      <Route path="/mypage" component={Auth(MyPage, true)} exact />
-      <Route path="/workspace/:roomId" component={Auth(Workspace, true)} />
+      <PrivateRoute Component={MyPage} path="/mypage" exact />
+      <PrivateRoute Component={Workspace} path="/workspace/:roomId" />
       <Redirect from="*" to="/" />
     </Switch>
   );

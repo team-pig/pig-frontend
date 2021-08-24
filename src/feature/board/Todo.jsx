@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled, { css } from "styled-components";
 import { Input, Text } from "../../elem";
-import Filled from "../../assets/icons/checkbox-filled.svg";
 import { useSelector } from "react-redux";
 import BoardDrop from "./BoardDrop";
 
@@ -22,7 +21,10 @@ import Avatar from "../../elem/Avatar";
 
 const Todo = ({ todo }) => {
   const dispatch = useDispatch();
-  const _all = useSelector((state) => state.todos.memberStatus); // 모든 팀원
+  const team = useSelector((state) => state.todos.memberStatus);
+  const my = useSelector((state) => state.todos.myStatus);
+  const _all = team.concat(my); // 모든 팀원
+
   const isCheckedList = todo.members; // 이 투두에 참여한 팀원
 
   const [itemClicked, setItemClicked] = useState(false);
@@ -124,12 +126,7 @@ const Todo = ({ todo }) => {
                     target={target}
                     _onClick={() => {
                       dispatch(
-                        __memberHandler(
-                          roomId,
-                          todo.todoId,
-                          member.nickname,
-                          member.userId
-                        )
+                        __memberHandler(roomId, todo.todoId, member.userId)
                       );
                     }}
                   >

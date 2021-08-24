@@ -60,7 +60,6 @@ export const __loadBuckets =
   async (dispatch, getState, { history }) => {
     try {
       const { data } = await bucketApi.getBuckets(roomId);
-      console.log(data);
       dispatch(loadBuckets(data.buckets, data.bucketOrder.bucketOrder));
     } catch (e) {
       console.log("버킷을 불러올 수 없습니다.", e);
@@ -226,7 +225,6 @@ const calendar = handleActions(
     [ADD_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
         const { schedule } = action.payload;
-        console.log(schedule);
         draft.modalId = schedule.cardId;
         draft.scheduleList.push(action.payload.schedule);
       }),
@@ -246,7 +244,6 @@ const calendar = handleActions(
         const idx = draft.scheduleList.findIndex(
           (schedule) => schedule.cardId === cardId
         );
-        console.log(state);
         draft.scheduleList[idx].bucketId = destinationBucketId;
       }),
     [DELETE_SCHEDULE]: (state, action) =>

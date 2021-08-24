@@ -48,7 +48,6 @@ export const __resetPassword = (email) => async (dispatch) => {
       })
     );
     const data = await userApi.resetPassword(email);
-    console.log(data);
     dispatch(
       pop({
         value: true,

@@ -266,7 +266,6 @@ export const __deleteRoom =
   (roomId) =>
   async (dispatch, getState, { history }) => {
     try {
-      console.log(roomId);
       await roomApi.deleteRoom(roomId);
       dispatch(deleteRoom(roomId));
     } catch (e) {

@@ -36,7 +36,7 @@ let refreshSubscribers = [];
 
 const onTokenRefreshed = (accessToken) => {
   refreshSubscribers.map((callback, idx) => {
-    console.log(idx + "번째 재요청 완료");
+    // console.log(idx + "번째 재요청 완료");
     return callback(accessToken);
   });
 };
@@ -73,7 +73,7 @@ instance.interceptors.response.use(
           maxAge: 300, // 30분
         }); // 쿠키에 다시 저장
 
-        console.log("토큰 재생성 완료!"); // 토큰 생성이 완료되면
+        // console.log("토큰 재생성 완료!"); // 토큰 생성이 완료되면
         isTokenRefreshing = false; // 토큰 생성중 상태를 fasle로 바꿔주고
 
         // 헤더를 새로운 액세스토큰으로 헤더 재설정
@@ -82,7 +82,7 @@ instance.interceptors.response.use(
 
         onTokenRefreshed(newAccessToken); // 첫 요청이 아닌 다른 쌓여있던 요청 다시 요청보내기
         refreshSubscribers = []; // 요청 배열 초기화
-        console.log("첫 요청도 다시 요청!");
+        // console.log("첫 요청도 다시 요청!");
         return axios(originalReq); // 첫 요청 다시 요청
       }
       // 토큰을 생성중일때  (if문을 passing 한 요청들은 )

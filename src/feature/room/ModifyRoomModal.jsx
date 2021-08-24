@@ -19,13 +19,8 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
   const _room = isEdit
     ? roomList && roomList.find((r) => r.roomId === roomId)
     : null;
-  const [roomImg, setRoomImg] = useState(
-    _room
-      ? {
-          roomImage: _room.roomImage,
-        }
-      : ""
-  );
+  const [imgUrl, setImgUrl] = useState("");
+  const [roomImg, setRoomImg] = useState(_room.roomImage);
 
   const [contents, setContents] = useState(
     _room
@@ -46,14 +41,19 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
 
   const getImgUrlFromS3 = async (callback, file) => {
     const result = await callback(file);
-    setRoomImg({ roomImage: result });
+    setImgUrl("");
+    setRoomImg(result);
   };
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
     setTagText({ ...tagText, [name]: value });
-    setRoomImg({ ...roomImg, [name]: value });
+  };
+
+  const changeImgUrl = (e) => {
+    setImgUrl(e.target.value);
+    setRoomImg(e.target.value);
   };
 
   const tagList =
@@ -63,12 +63,17 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
 
   const modifyFile = () => {
     if (!disabled) {
-      dispatch(__editRoom(roomId, contents, roomImg.roomImage, tagList));
+      dispatch(__editRoom(roomId, contents, roomImg, tagList));
     }
+    setImgUrl("");
     closeModModal();
   };
 
   const cancelFile = () => {
+    setRoomImg(_room.roomImage);
+    setImgUrl("");
+    setContents({ roomName: _room.roomName, subtitle: _room.subtitle });
+    setTagText({ tag: _room.tag });
     closeModModal();
   };
 
@@ -80,7 +85,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
           <ModalContent>
             <ImageBox>
               <ImageModule
-                roomPreview={roomImg.roomImage}
+                roomPreview={roomImg}
                 getImgUrlFromS3={getImgUrlFromS3}
               />
             </ImageBox>
@@ -89,7 +94,8 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
                 name="roomImage"
                 type="text"
                 placeholder="이미지 url"
-                _onChange={changeHandler}
+                value={imgUrl}
+                _onChange={changeImgUrl}
               />
               <Input
                 name="roomName"

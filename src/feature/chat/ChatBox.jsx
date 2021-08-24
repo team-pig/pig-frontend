@@ -33,7 +33,11 @@ const ChatBox = memo(() => {
       {chat &&
         chat.length > 0 &&
         chat.map((message, idx) => (
-          <Bubble message={message} type={checkMine(message.userId)} />
+          <Bubble
+            key={`${message.userId} + ${idx}`}
+            message={message}
+            type={checkMine(message.userId)}
+          />
         ))}
     </Container>
   );

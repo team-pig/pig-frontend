@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 // elements
 import { Button, Input } from "../../elem/index";
+import RoomInput from "./RoomInput";
 
 //redux
 import { __editRoom } from "../../redux/modules/room";
@@ -21,7 +22,6 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
     : null;
   const [imgUrl, setImgUrl] = useState("");
   const [roomImg, setRoomImg] = useState(_room.roomImage);
-
   const [contents, setContents] = useState(
     _room
       ? {
@@ -32,7 +32,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
   );
 
   const [tagText, setTagText] = useState(
-    _room
+    _room 
       ? {
           tag: _room.tag,
         }
@@ -77,6 +77,10 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
     closeModModal();
   };
 
+  const onReset = () => {
+    setImgUrl("");
+  }
+
   return (
     <>
       {showModModal ? (
@@ -96,22 +100,23 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
                 placeholder="이미지 url"
                 value={imgUrl}
                 _onChange={changeImgUrl}
+                _onClick={onReset}
               />
-              <Input
+              <RoomInput
                 name="roomName"
                 type="text"
                 placeholder="방 이름"
                 _onChange={changeHandler}
                 value={contents.roomName}
               />
-              <Input
+              <RoomInput
                 name="subtitle"
                 type="text"
                 placeholder="부제목"
                 _onChange={changeHandler}
                 value={contents.subtitle}
               />
-              <Input
+              <RoomInput
                 name="tag"
                 type="text"
                 placeholder="태그"
@@ -166,7 +171,7 @@ const ModalContent = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 400px;
-  height: 500px;
+  height: 550px;
   padding-top: 5px;
   background-color: white;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);

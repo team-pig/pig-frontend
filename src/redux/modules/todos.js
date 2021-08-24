@@ -126,17 +126,10 @@ export const __loadMyTodos = (roomId) => async (dispatch) => {
 export const __loadProjectTodo = (roomId) => async (dispatch, getState) => {
   try {
     const { data } = await todoApi.loadProjectTodo(roomId);
-    const { memberStatus, projectStatus } = data;
-    const myId = getState().user.user.userId;
-
-    const myIndx = memberStatus.findIndex(
-      (member) => member.userId === myId && myId
-    );
-    const myStatus = memberStatus[myIndx];
-
-    dispatch(loadProjectTodo({ myStatus, memberStatus, projectStatus }));
+    const { memberStatus, projectStatus, myStatus } = data;
+    dispatch(loadProjectTodo({ memberStatus, projectStatus, myStatus }));
   } catch (e) {
-    //
+    console.log(e);
   }
 };
 
@@ -166,7 +159,7 @@ export const __editTotoTitle =
   };
 
 export const __checkedTodo =
-  (roomId, todoId, isChecked) => async (dispatch, getState) => {
+  (roomId, todoId, isChecked) => async (dispatch) => {
     try {
       await todoApi.checkedTodo(roomId, todoId, isChecked);
       dispatch(isCheckedTodo(todoId, isChecked));
@@ -206,7 +199,7 @@ export const __removeMyTodo =
   };
 
 export const __memberHandler =
-  (roomId, todoId, memberName, userId) => async (dispatch, getState) => {
+  (roomId, todoId, userId) => async (dispatch, getState) => {
     const currentTodo = getState().todos.todos;
 
     const targetTodoIndex = currentTodo.findIndex(
@@ -256,17 +249,43 @@ export const __editMyStatus = (roomId, newMyInfo) => async (dispatch) => {
 };
 
 const initialState = {
-  todos: [],
-  checkedTodo: [],
-  notCheckedTodo: [],
-  memberStatus: [],
-  myTodoCount: { total: 0, checkedTodo: 0, notCheckedTodo: 0 },
-  projectStatus: {},
-  myStatus: {},
+  todos: [], // LOAD_TODOS
+  checkedTodo: [], // LOAD_MY_TODOS
+  notCheckedTodo: [], // LOAD_MY_TODOS
+  memberStatus: [], // LOAD_PROJECT_TODOS
+  projectStatus: {}, // LOAD_PROJECT_TODOS
+  myStatus: {}, //LOAD_PROJECT_TODOS
 };
 
 export const todos = handleActions(
   {
+    /**
+     * [board] Todo.jsx
+     */
+    [ADD_MEMBER]: (state, { payload }) =>
+      produce(state, (draft) => {
+        const { todoId, member } = payload;
+        const targetIdx = state.todos.findIndex(
+          (todo) => todo.todoId === todoId
+        );
+        draft.todos[targetIdx].members.push({
+          memberId: member,
+          isChecked: true,
+        });
+      }),
+
+    [REMOVE_MEMBER]: (state, { payload }) =>
+      produce(state, (draft) => {
+        const { todoId, memberId } = payload;
+        const targetIdx = state.todos.findIndex(
+          (todo) => todo.todoId === todoId
+        );
+        const targetMember = state.todos[targetIdx].members.findIndex(
+          (member) => member.memberId === memberId
+        );
+        draft.todos[targetIdx].members.splice(targetMember, 1);
+      }),
+
     [LOAD_TODOS]: (state, { payload }) =>
       produce(state, (draft) => {
         draft.todos = payload.todos;
@@ -277,9 +296,6 @@ export const todos = handleActions(
         const { checkedTodo, notCheckedTodo } = payload;
         draft.checkedTodo = checkedTodo;
         draft.notCheckedTodo = notCheckedTodo;
-        draft.myTodoCount["total"] = checkedTodo.length + notCheckedTodo.length;
-        draft.myTodoCount["checkedTodo"] = checkedTodo.length;
-        draft.myTodoCount["notCheckedTodo"] = notCheckedTodo.length;
       }),
 
     [CREATE_TODO]: (state, { payload }) =>
@@ -313,6 +329,9 @@ export const todos = handleActions(
         draft.todos[targetIdx].isChecked = isChecked;
       }),
 
+    /**
+     * [main] myTodos.jsx
+     */
     [GO_TO_CHECKED]: (state, { payload }) =>
       produce(state, (draft) => {
         const { todoId, isChecked, todoTitle } = payload;
@@ -320,9 +339,6 @@ export const todos = handleActions(
           (todo) => todo.todoId === todoId
         );
 
-        draft.myTodoCount["checkedTodo"] = state.myTodoCount["checkedTodo"] + 1;
-        draft.myTodoCount["notCheckedTodo"] =
-          state.myTodoCount["notCheckedTodo"] - 1;
         draft.checkedTodo.push({ todoId, isChecked, todoTitle });
         draft.notCheckedTodo.splice(targetTodo, 1);
       }),
@@ -333,24 +349,8 @@ export const todos = handleActions(
         const targetTodo = state.checkedTodo.findIndex(
           (todo) => todo.todoId === todoId
         );
-        draft.myTodoCount["checkedTodo"] = state.myTodoCount["checkedTodo"] - 1;
-        draft.myTodoCount["notCheckedTodo"] =
-          state.myTodoCount["notCheckedTodo"] + 1;
         draft.notCheckedTodo.push({ todoId, isChecked, todoTitle });
         draft.checkedTodo.splice(targetTodo, 1);
-      }),
-
-    [REMOVE_MEMBER]: (state, { payload }) =>
-      produce(state, (draft) => {
-        const { todoId, memberId } = payload;
-        const targetIdx = state.todos.findIndex(
-          (todo) => todo.todoId === todoId
-        );
-
-        const targetMember = state.todos[targetIdx].members.findIndex(
-          (member) => member.memberId === memberId
-        );
-        draft.todos[targetIdx].members.splice(targetMember, 1);
       }),
 
     [EXIT_MY_TODO]: (state, { payload }) =>
@@ -360,8 +360,6 @@ export const todos = handleActions(
           (todo) => todo.todoId === todoId
         );
         draft.checkedTodo.splice(targetTodo, 1);
-        draft.myTodoCount["checkedTodo"] = state.myTodoCount["checkedTodo"] - 1;
-        draft.myTodoCount["total"] = state.myTodoCount["total"] - 1;
       }),
 
     [EXIT_MY_TODO_NOT_CHECKED]: (state, { payload }) =>
@@ -371,20 +369,28 @@ export const todos = handleActions(
           (todo) => todo.todoId === todoId
         );
         draft.notCheckedTodo.splice(targetTodo, 1);
-        draft.myTodoCount["total"] = state.myTodoCount["total"] - 1;
       }),
 
-    [ADD_MEMBER]: (state, { payload }) =>
+    /**
+     * [main] myStatus.jsx
+     */
+    [EIDT_MY_STATUS]: (state, { payload }) =>
       produce(state, (draft) => {
-        const { todoId, member } = payload;
-        const targetIdx = state.todos.findIndex(
-          (todo) => todo.todoId === todoId
-        );
-        draft.todos[targetIdx].members.push({
-          memberId: member,
-          isChecked: true,
-        });
+        draft.myStatus.desc = payload.myStatus.desc;
+        draft.myStatus.tags = payload.myStatus.tags;
       }),
+
+    [LOAD_PROJECT_TODOS]: (state, { payload }) =>
+      produce(state, (draft) => {
+        const { projectStatus, memberStatus, myStatus } = payload.allTodos;
+        draft.projectStatus = projectStatus;
+        draft.memberStatus = memberStatus;
+        draft.myStatus = myStatus;
+      }),
+
+    /**
+     * clean up
+     */
 
     [RESET_TODOS]: (state, { payload }) =>
       produce(state, (draft) => {
@@ -399,19 +405,6 @@ export const todos = handleActions(
         draft.myTodoCount = {};
         draft.projectStatus = {};
         draft.myStatus = {};
-      }),
-
-    [LOAD_PROJECT_TODOS]: (state, { payload }) =>
-      produce(state, (draft) => {
-        draft.projectStatus = payload.allTodos.projectStatus;
-        draft.memberStatus = payload.allTodos.memberStatus;
-        draft.myStatus = payload.allTodos.myStatus;
-      }),
-
-    [EIDT_MY_STATUS]: (state, { payload }) =>
-      produce(state, (draft) => {
-        draft.myStatus.desc = payload.myStatus.desc;
-        draft.myStatus.tags = payload.myStatus.tags;
       }),
   },
 

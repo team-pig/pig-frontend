@@ -10,17 +10,15 @@ import SEO from "../components/SEO";
 
 // redux & api
 import { __getDocs } from "../redux/modules/document";
-import { __getOneRoom } from "../redux/modules/room";
 import {
   loadMessages,
   resetMessages,
   setPrevRoomId,
 } from "../redux/modules/chat";
-import { __loadBucket, __loadCard } from "../redux/modules/board";
-import { __loadMyTodos, __loadProjectTodo } from "../redux/modules/todos";
 
 // socket
 import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
+import { __getOneRoom } from "../redux/modules/room";
 
 const Workspace = (props) => {
   const dispatch = useDispatch();
@@ -34,11 +32,7 @@ const Workspace = (props) => {
   useEffect(() => {
     (docs.length === 0 || (docs.length !== 0 && docs[0].roomId !== roomId)) &&
       dispatch(__getDocs(roomId)); // 문서
-    dispatch(__loadBucket(roomId)); // 보드 (버킷 정보)
-    dispatch(__loadCard(roomId)); // 보드 (카드 정보)
-    dispatch(__getOneRoom(roomId)); // 메인 (방 상세 정보)
-    dispatch(__loadMyTodos(roomId)); // 메인 (투두리스트)
-    dispatch(__loadProjectTodo(roomId)); // 메인 (대시보드)
+    dispatch(__getOneRoom(roomId));
   }, [dispatch, roomId]);
 
   // workspace에 들어갈 때마다 room에 join, 해당 방의 기존 메세지 받아오는 handler

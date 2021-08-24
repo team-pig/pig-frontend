@@ -17,27 +17,22 @@ import { useParams } from "react-router-dom";
 //etc
 const MyStatus = () => {
   const dispatch = useDispatch();
+  const myStatus = useSelector((state) => state.todos.myStatus);
+  const { nickname, desc, tags, checked, notChecked } = myStatus;
   const [editInfo, setEditInfo] = useState({});
   const [viewTag, setViewTag] = useState(true);
   const [editMode, setEditMode] = useState(false);
-  const { total, checkedTodo } = useSelector(
-    (state) => state.todos.myTodoCount
-  );
-  const { nickname, desc, tags, checked, notChecked } = useSelector(
-    (state) => state.todos.myStatus
-  );
+  const { roomId } = useParams();
 
   useEffect(() => {
     setEditInfo({ desc, tags });
-  }, [desc, tags]);
-
-  const { roomId } = useParams();
+  }, [desc, tags, dispatch]);
 
   const memberPercent = isNaN(
     ((checked / (checked + notChecked)) * 100).toFixed(0)
   )
     ? 0
-    : ((checkedTodo / total) * 100).toFixed(0);
+    : ((checked / (checked + notChecked)) * 100).toFixed(0);
 
   const onChangeHandler = useCallback(
     ({ target: { value, name } }) => {
@@ -69,26 +64,24 @@ const MyStatus = () => {
             </ActiveEdit>
           </EditModeHeader>
           <form>
-            {desc && tags && (
-              <>
-                <MyInfoEditInput
-                  tyoe="text"
-                  name="desc"
-                  value={editInfo.desc || ""}
-                  onChange={onChangeHandler}
-                  placeholder="팀원들에게 남기고 싶은 메시지를 입력하세요"
-                  autoComplete="off"
-                />
-                <MyInfoEditInput
-                  type="text"
-                  name="tags"
-                  value={editInfo.tags || ""}
-                  onChange={onChangeHandler}
-                  placeholder="나의 역할 또는 태그로 나를 표현하세요"
-                  autoComplete="off"
-                />
-              </>
-            )}
+            <>
+              <MyInfoEditInput
+                tyoe="text"
+                name="desc"
+                value={editInfo.desc || ""}
+                onChange={onChangeHandler}
+                placeholder="팀원들에게 남기고 싶은 메시지를 입력하세요"
+                autoComplete="off"
+              />
+              <MyInfoEditInput
+                type="text"
+                name="tags"
+                value={editInfo.tags || ""}
+                onChange={onChangeHandler}
+                placeholder="나의 역할 또는 태그로 나를 표현하세요"
+                autoComplete="off"
+              />
+            </>
           </form>
           <HelpMessage>
             역할은 " , " 로 구분해서 작성할 수 있습니다.
@@ -148,9 +141,6 @@ const MyStatus = () => {
               <ViewTag>
                 <TagStatus>
                   <div></div>
-                  {/* {tags && tags.length === 0
-                    ? "태그가 없습니다"
-                    : "등록된 태그가 있습니다"} */}
                 </TagStatus>
                 <TagButton>
                   <>태그 보기</>

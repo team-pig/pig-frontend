@@ -108,10 +108,12 @@ export const __loginCheck =
   (isLogin, user) =>
   async (dispatch, getState, { history }) => {
     try {
+      const {
+        data: { ok: isLogin, user },
+      } = await userApi.loginCheck();
+
       dispatch(loginCheck(isLogin, user));
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
   };
 
 export const __register =

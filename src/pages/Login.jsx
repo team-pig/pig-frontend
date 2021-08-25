@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -7,10 +7,11 @@ import { useHistory } from "react-router-dom";
 import Template from "../components/Template";
 import AccountInfo from "../components/AccountInfo";
 import HelpBtns from "../components/HelpBtns";
+import { cookies } from "../shared/cookie";
 
 // elem
 import SEO from "../components/SEO";
-import { Button, Input, Text } from "../elem";
+import { Button, Text, Input } from "../elem";
 import { body_4, head_5 } from "../themes/textStyle";
 import flex from "../themes/flex";
 
@@ -19,15 +20,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { __login } from "../redux/modules/user";
 import Alert from "../components/Alert";
 import { pop } from "../redux/modules/alert";
+import Icon from "../components/Icon";
 
 const Login = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [saveId, setSaveId] = useState(false);
   const { value, msg } = useSelector((state) => state.alert);
+  const savedId = cookies.get("saveId");
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: savedId || "",
       password: "",
     },
 
@@ -43,6 +47,13 @@ const Login = (props) => {
 
     onSubmit: (values, { resetForm }) => {
       dispatch(__login(values));
+      if (saveId) {
+        cookies.set("saveId", values.email, {
+          path: "/",
+          maxAge: 864000, // 10일
+        });
+      }
+
       resetForm();
     },
   });
@@ -83,7 +94,20 @@ const Login = (props) => {
             />
             <InputBottom>
               <SaveMyId>
-                <Input type="checkbox" />
+                <SaveId
+                  id="saveId"
+                  type="checkbox"
+                  onChange={({ target }) => {
+                    setSaveId(target.checked);
+                  }}
+                />
+                <Label htmlFor="saveId">
+                  {saveId ? (
+                    <Icon icon="checkbox-filled" size="20px" />
+                  ) : (
+                    <Icon icon="checkbox" size="20px" />
+                  )}
+                </Label>
                 <div>아이디 저장</div>
               </SaveMyId>
               <Password onClick={() => history.push("/serach-password")}>
@@ -104,12 +128,22 @@ const Login = (props) => {
     </>
   );
 };
+
+const Label = styled.label`
+  ${flex()}
+`;
+
+const SaveId = styled.input`
+  display: none;
+`;
+
 const InputBottom = styled.div`
   ${flex("between")}
 `;
 const SaveMyId = styled.div`
   ${flex()}
   ${body_4}
+  gap: 10px;
 `;
 const Password = styled.div`
   ${body_4}

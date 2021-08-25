@@ -16,7 +16,7 @@ const WSHeader = ({ url }) => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.user);
-  const room = useSelector((state) => state.room.currentRoom);
+  const room = useSelector((state) => state.room.roomInfos);
 
   const clickLogout = () => {
     dispatch(__logout());

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router";
 import moment from "moment";
+import ReactTooltip from "react-tooltip";
 
 // compo & elem
 import Card from "./Card";
@@ -73,11 +74,34 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
                 </BucketTitle>
                 <BucketHeadBtns>
                   {BucketCnt === 1 ? (
-                    ""
+                    <>
+                      <IconButton data-tip data-for="delete">
+                        <Icon
+                          icon="minus"
+                          size="24px"
+                          color="var(--darkgrey)"
+                        />
+                      </IconButton>
+                      <ReactTooltip
+                        id="delete"
+                        place="top"
+                        type="light"
+                        backgroundColor="var(--white)"
+                        borderColor="var(--line)"
+                        border={true}
+                      >
+                        <span>마지막 버킷은 삭제 할 수 없어요!</span>
+                      </ReactTooltip>
+                    </>
                   ) : (
                     <IconButton
                       onClick={() => {
-                        dispatch(__deleteBucket(roomId, bucketId));
+                        const answer = window.confirm(
+                          "버킷을 삭제하면 모든 카드와 할일이 삭제됩니다. 버킷을 삭제 하시겠습니까?"
+                        );
+                        if (answer) {
+                          dispatch(__deleteBucket(roomId, bucketId));
+                        }
                       }}
                     >
                       <Icon icon="minus" size="24px" color="var(--darkgrey)" />

@@ -45,7 +45,7 @@ const Profiles = () => {
       role: "프론트엔드",
       tags: "#ENFP #INFP #한성키보드 #인테리어 #웹툰 #좌상기우지현 #개발은 장비빨 #스쿼시",
       desc: "야! 이게 뭐라고! 할 수 있다!",
-      avatar: "/img/ah.svg",
+      avatar: "/img/young.svg",
     },
     {
       name: "안나",

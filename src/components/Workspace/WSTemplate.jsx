@@ -2,11 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import flex from "../../themes/flex";
+import EventBtn from "../EventBtn";
 
 const WSTemplate = ({ children }) => {
   const isShowSidebar = useSelector((state) => state.resize.isShowSidebar);
 
-  return <Template sidebar={isShowSidebar}>{children}</Template>;
+  return (
+    <Template sidebar={isShowSidebar}>
+      {children}
+      <EventBtn />
+    </Template>
+  );
 };
 
 const Template = styled.main`

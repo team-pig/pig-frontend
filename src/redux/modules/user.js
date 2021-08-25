@@ -99,7 +99,7 @@ export const __logout =
     cookies.remove("accessToken", {
       path: "/",
     });
-    history.replace("/login");
+    history.replace("/");
     dispatch(logout());
   };
 

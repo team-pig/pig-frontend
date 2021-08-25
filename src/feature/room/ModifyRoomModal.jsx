@@ -87,6 +87,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
         <ModalContainer>
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
+            <InputBox>
             <ImageBox>
               <ImageModule
                 setRoomImg={setRoomImg}
@@ -95,7 +96,6 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
                 option="true"
               />
             </ImageBox>
-            <InputBox>
               <RoomInput
                 name="roomName"
                 type="text"

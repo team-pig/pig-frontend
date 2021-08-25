@@ -19,7 +19,6 @@ import {
   __deleteRoom,
   __exitRoom,
   __toggleBookmark,
-  __getRoomList,
 } from "../../redux/modules/room";
 
 //roomList map의 list에서 받아오는 값
@@ -70,25 +69,30 @@ const RoomCard = ({
   const exitRoom = (e) => {
     e.stopPropagation();
     setIsDisplayDrop(false);
-    if(userId !== master){
-      dispatch(__exitRoom(roomId));
+
+    if (userId !== master) {
+      const exitCheck = window.confirm("👋 정말 이 방을 나가시겠어요?");
+      exitCheck && dispatch(__exitRoom(roomId));
     }
   };
 
   const deleteRoom = (e) => {
     e.stopPropagation();
     setIsDisplayDrop(false);
-    const deleteCheck = window.confirm("🗑정말 이 방을 삭제할까요?");
-    if (userId === master && deleteCheck) {
-      dispatch(__deleteRoom(roomId));
+
+    if (userId === master) {
+      const deleteCheck = window.confirm("🗑 정말 이 방을 삭제할까요?");
+      deleteCheck && dispatch(__deleteRoom(roomId));
     }
   };
 
   const openModModal = (e) => {
     // close와 합쳐보려고 하였으나 모달 닫기 시 e.stop...에서 에러가 남
     e.stopPropagation();
-    setShowModModal(true);
     setIsDisplayDrop(false);
+    if (userId === master) {
+      setShowModModal(true);
+    }
   };
 
   const closeModModal = () => {

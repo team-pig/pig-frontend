@@ -1,8 +1,15 @@
 import React, { useEffect, useRef } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+
 import styled from "styled-components";
 
 import Icon from "../../components/Icon";
 import { button } from "../../themes/textStyle";
+
+// import ConfirmModal from "../../components/ConfirmModal";
+
+// import { __confirm } from "../../redux/modules/confirm";
+
 
 const DropDown = ({
   userId,
@@ -13,6 +20,8 @@ const DropDown = ({
   isDisplayDrop,
   setIsDisplayDrop,
 }) => {
+  // const dispatch = useDispatch();
+  // const show = useSelector((state) => state.confirm.show);
   const dropDownModal = useRef();
 
   const handleClickOutside = (e) => {
@@ -34,15 +43,22 @@ const DropDown = ({
 
   const disabled = !(userId === master);
 
+  // const openConfirm = (e) => {
+  //   e.stopPropagation();
+  //   dispatch(__confirm(show));
+  //   console.log(show);
+  // }
+
   return (
     <>
+    {/* {show && <ConfirmModal msg="🗑정말 이 방을 삭제할까요?" callback={deleteRoom} />} */}
       <Wrapper>
         <div>
           <Icon onClick={handleClickInside} icon="more" size="24px" />
         </div>
         {isDisplayDrop && (
           <Container ref={dropDownModal}>
-            <Btn onClick={openModModal}>수정</Btn>
+            <Btn disabled={disabled} onClick={openModModal}>수정</Btn>
             <Btn disabled={!disabled} onClick={exitRoom}>나가기</Btn>
             <Btn disabled={disabled} onClick={deleteRoom}>
               삭제

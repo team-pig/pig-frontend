@@ -34,7 +34,9 @@ const Wrapper = styled.div`
   overflow: hidden;
 `;
 
-const Infos = styled.div``;
+const Infos = styled.div`
+  z-index: 1;
+`;
 
 const MainImage = styled.img`
   position: absolute;

@@ -1,5 +1,4 @@
 import io from "socket.io-client";
-import moment from "moment";
 
 let socket;
 
@@ -7,8 +6,9 @@ let socket;
 const ENDPOINT = "http://13.125.222.70:3000";
 
 // 웹사이트에 들어올 때 소켓 연결
-export const initiateSocket = () => {
+export const initiateSocket = (cb) => {
   socket = io(ENDPOINT, { transports: ["websocket"] });
+  socket && cb(socket);
   // console.log("🤝🏻소켓연결!");
   // console.log(socket);
 };
@@ -37,13 +37,11 @@ export const getMessages = (cb) => {
 // 메시지 보내기
 export const sendMessage = (roomId, nickname, userId, text) => {
   if (socket) {
-    const submitTime = moment().format("YYYY.MM.DD.ddd/a h:mm");
     socket.emit("sendMessage", {
       roomId,
       userName: nickname,
       userId,
       text,
-      submitTime,
     });
   }
 };

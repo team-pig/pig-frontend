@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useRouteMatch } from "react-router-dom";
 
@@ -10,24 +10,23 @@ import SEO from "../components/SEO";
 
 // redux & api
 import { __getDocs } from "../redux/modules/document";
-import {
-  loadMessages,
-  resetMessages,
-  setPrevRoomId,
-} from "../redux/modules/chat";
+import { loadMessages, setPrevRoomId } from "../redux/modules/chat";
 
 // socket
 import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
 import { __getOneRoom } from "../redux/modules/room";
 
-const Workspace = (props) => {
+const Workspace = () => {
   const dispatch = useDispatch();
   let { path, url } = useRouteMatch();
   const { roomId } = useParams();
   const { userId, nickname } = useSelector((state) => state.user.user);
   const docs = useSelector((state) => state.document.docList);
   const room = useSelector((state) => state.room.currentRoom);
-  const prevRoomId = useSelector((state) => state.chat.prevLoadRoomId);
+  const { prevLoadRoomId: prevRoomId, socket } = useSelector(
+    (state) => state.chat
+  );
+  const [isJoin, setIsJoin] = useState(false);
 
   useEffect(() => {
     (docs.length === 0 || (docs.length !== 0 && docs[0].roomId !== roomId)) &&
@@ -37,10 +36,11 @@ const Workspace = (props) => {
 
   // workspace에 들어갈 때마다 room에 join, 해당 방의 기존 메세지 받아오는 handler
   useEffect(() => {
-    if (roomId && nickname && userId && room && room.roomName) {
+    if (socket && prevRoomId !== roomId) {
       joinRoom(roomId, nickname, userId, room.roomName);
+      setIsJoin(true);
     }
-  }, [dispatch, roomId, nickname, userId, room]);
+  }, [socket, roomId, nickname, userId, room, prevRoomId]);
 
   useEffect(() => {
     getMessages((err, data) => {
@@ -48,18 +48,19 @@ const Workspace = (props) => {
         console.log(err);
         return;
       }
-      if (prevRoomId !== roomId) {
+      if (isJoin) {
         dispatch(setPrevRoomId(roomId));
         dispatch(loadMessages(data));
-        return;
       }
     });
-  }, [prevRoomId, roomId, dispatch]);
+  }, [prevRoomId, roomId, dispatch, isJoin]);
 
   // workspace에서 나갈 때 room에서 leave
   useEffect(() => {
     return () => {
       leaveRoom(roomId, nickname, userId);
+      dispatch(setPrevRoomId(null));
+      dispatch(loadMessages([]));
     };
   }, [roomId, nickname, userId, dispatch]);
 

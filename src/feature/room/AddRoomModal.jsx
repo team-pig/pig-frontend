@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { Button, Input } from "../../elem/index";
 import RoomInput from "./RoomInput";
 
-
 //redux
 import { __addRoom } from "../../redux/modules/room";
 import ImageModule from "../../components/ImageModule";
@@ -28,26 +27,25 @@ const AddRoomModal = ({ showModal, addModal }) => {
 
   const getImgUrlFromS3 = async (callback, file) => {
     const result = await callback(file);
-      setRoomImg(result);
-      setImgUrl("");
+    setRoomImg(result);
+    setImgUrl("");
   };
 
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
     setTagText({ ...tagText, [name]: value });
-    if(imgUrl !== ""){
+    if (imgUrl !== "") {
       setRoomImg(imgUrl);
     }
-
   };
 
   const changeImgUrl = (e) => {
     setImgUrl(e.target.value);
-  }
+  };
 
   const tagList = tagText.tag.split(",");
-  
+
   const disabled = contents.roomName === "";
   const saveFile = () => {
     if (!disabled) {
@@ -71,7 +69,7 @@ const AddRoomModal = ({ showModal, addModal }) => {
 
   const onReset = () => {
     setImgUrl("");
-  }
+  };
 
   return (
     <>
@@ -80,12 +78,14 @@ const AddRoomModal = ({ showModal, addModal }) => {
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
             <ImageBox>
-              <ImageModule 
-              roomPreview={imgUrl}
-              getImgUrlFromS3={getImgUrlFromS3} />
+              <ImageModule
+                setRoomImg={setRoomImg}
+                roomPreview={imgUrl}
+                getImgUrlFromS3={getImgUrlFromS3}
+              />
             </ImageBox>
             <InputBox>
-            <Input
+              <Input
                 name="roomImage"
                 type="text"
                 placeholder="이미지 url"

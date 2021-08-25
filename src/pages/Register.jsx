@@ -23,7 +23,7 @@ import { pop } from "../redux/modules/alert";
 const Register = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [avatar, setAvatar] = useState("");
+  const [roomImg, setRoomImg] = useState("");
   const { value, msg } = useSelector((state) => state.alert);
 
   /**
@@ -39,7 +39,7 @@ const Register = () => {
   const getImgUrlFromS3 = async (callback, file) => {
     const result = await callback(file);
     // console.log(result); // 디버깅 할 때 사용하세요.
-    setAvatar(result);
+    setRoomImg(result);
   };
   const colors = ["blue", "violet", "yellow", "orange", "mint"];
   const random = Math.floor(Math.random() * 5);
@@ -72,7 +72,7 @@ const Register = () => {
     }),
 
     onSubmit: (values, { resetForm }) => {
-      dispatch(__register({ ...values, avatar }));
+      dispatch(__register({ ...values, avatar: roomImg }));
       resetForm();
     },
   });
@@ -98,6 +98,8 @@ const Register = () => {
             */}
             <ImageModule
               getImgUrlFromS3={getImgUrlFromS3}
+              setRoomImg={setRoomImg}
+              option={false}
               // useInitPreview={true}
               // useSaveAvartar={false}
             />

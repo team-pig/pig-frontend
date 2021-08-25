@@ -88,20 +88,14 @@ const List = styled.nav`
   height: 48px;
 `;
 
-const Item = styled.button`
-  flex-shrink: 0;
-  height: 100%;
-  padding: 0 39px;
-  color: var(--darkgrey);
-  cursor: pointer;
-`;
-
 const MenuText = styled(Text)`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  flex-grow: 0;
+  width: auto;
   height: 100%;
   color: ${(props) => (props.here ? "var(--main);" : "var(--darkgrey);")};
 
@@ -120,9 +114,32 @@ const MenuText = styled(Text)`
 
   &:hover {
     color: var(--main);
+  }
 
-    &::after {
-      background-color: var(--main);
+  ${({ theme }) => theme.device.mobile} {
+    /* display: inline-block; */
+    vertical-align: middle;
+  }
+`;
+
+const Item = styled.button`
+  flex-shrink: 0;
+  height: 100%;
+  padding: 0 39px;
+  color: var(--darkgrey);
+  cursor: pointer;
+
+  ${({ theme }) => theme.device.mobile} {
+    width: 25%;
+    padding: 0;
+    /* flex-grow: 1; */
+  }
+
+  &:hover {
+    ${MenuText} {
+      &::after {
+        background-color: var(--main);
+      }
     }
   }
 `;

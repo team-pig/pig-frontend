@@ -3,13 +3,15 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import NameTag from "../Header/NameTag";
-import Icon from "../Icon";
-import WSTabs from "../WSTabs";
-import { Text } from "../../elem";
-import flex from "../../themes/flex";
-import { __logout } from "../../redux/modules/user";
 import { resetReducer } from "../../redux/configStore";
+import { __logout } from "../../redux/modules/user";
+
+import NameTag from "../Header/NameTag";
+import WSTabs from "../WSTabs";
+import Icon from "../Icon";
+import { mobileHidden, desktopOnly } from "../../themes/responsive";
+import flex from "../../themes/flex";
+import { Text } from "../../elem";
 
 const WSHeader = ({ url }) => {
   const history = useHistory();
@@ -44,6 +46,7 @@ const WSHeader = ({ url }) => {
           <NameTag name={user.nickname} />
         </NameBtn>
         <HeaderBtn onClick={clickLogout}>
+          {/* 태블릿 버전에서 로그아웃은 아이콘으로 대체되어야 함 */}
           <Text type="button" color="var(--black)">
             로그아웃
           </Text>
@@ -64,18 +67,28 @@ const Container = styled.header`
   padding: 0 40px;
   background-color: var(--white);
   border-bottom: 1px solid var(--line);
+
+  ${({ theme }) => theme.device.mobile} {
+    padding: 0;
+  }
 `;
 
 const LeftSide = styled.div`
   ${flex("start", "center")}
+
+  ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+  }
 `;
 
 const RightSide = styled.div`
+  ${mobileHidden};
   ${flex("start", "center")}
   height: 100%;
 `;
 
 const TitleBox = styled.div`
+  ${mobileHidden};
   width: 260px;
   color: var(--main);
 `;

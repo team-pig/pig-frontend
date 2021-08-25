@@ -16,7 +16,7 @@ const Template = ({ children }) => {
 const Main = styled.main`
   position: relative;
   width: 100%;
-  padding: 72px 0 5vh 0;
+  padding: 72px 0 0 0;
   min-height: calc(100vh - 100px);
 `;
 

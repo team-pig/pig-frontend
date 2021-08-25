@@ -7,9 +7,9 @@ const Avatar = ({ target, size }) => {
   return (
     <>
       {target && target.avatar && <ProfileImg target={target} size={size} />}
-      {target && target.memberName && !target.avatar && (
+      {target && target.nickname && !target.avatar && (
         <ProfileImg target={target} size={size}>
-          {target.memberName[0]}
+          {target.nickname[0]}
         </ProfileImg>
       )}
     </>

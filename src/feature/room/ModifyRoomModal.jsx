@@ -32,7 +32,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
   );
 
   const [tagText, setTagText] = useState(
-    _room 
+    _room
       ? {
           tag: _room.tag,
         }
@@ -79,7 +79,7 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
 
   const onReset = () => {
     setImgUrl("");
-  }
+  };
 
   return (
     <>
@@ -89,19 +89,13 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
           <ModalContent>
             <ImageBox>
               <ImageModule
+                setRoomImg={setRoomImg}
                 roomPreview={roomImg}
                 getImgUrlFromS3={getImgUrlFromS3}
+                option="true"
               />
             </ImageBox>
             <InputBox>
-              <Input
-                name="roomImage"
-                type="text"
-                placeholder="이미지 url"
-                value={imgUrl}
-                _onChange={changeImgUrl}
-                _onClick={onReset}
-              />
               <RoomInput
                 name="roomName"
                 type="text"

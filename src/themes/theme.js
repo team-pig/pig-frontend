@@ -8,7 +8,7 @@ const colors = {
 
 const device = {
   mobile: `@media screen and (max-width: 767px)`,
-  // tablet: `@media screen and (min-width: 1024px)`,
+  tablet: `@media screen and (max-width: 1024px)`,
 };
 
 const theme = {

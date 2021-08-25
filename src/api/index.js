@@ -2,8 +2,8 @@ import axios from "axios";
 import { cookies } from "../shared/cookie";
 
 export const instance = axios.create({
-  baseURL: "https://itda.shop/",
-  // baseURL: "http://13.125.222.70/",
+  // baseURL: "https://itda.shop/",
+  baseURL: "http://13.125.222.70/",
   headers: {
     "content-type": "application/json;charset=UTF-8",
     accept: "application/json,",
@@ -12,8 +12,8 @@ export const instance = axios.create({
 
 // 토큰이 필요없는 요청에 쓰일 인스턴스 (로그인, 회원가입)
 export const nonTokenInstance = axios.create({
-  baseURL: "https://itda.shop/",
-  // baseURL: "http://13.125.222.70/",
+  // baseURL: "https://itda.shop/",
+  baseURL: "http://13.125.222.70/",
   headers: {
     "content-type": "application/json;charset=UTF-8",
     accept: "application/json,",
@@ -65,13 +65,13 @@ instance.interceptors.response.use(
         isTokenRefreshing = true; // false 일때는 true로 바꿔주고.
         const refreshToken = cookies.get("refreshToken"); // 리프레시 토큰을 쿠키에서 가져와서
 
-        const { data } = await axios.post("https://itda.shop/token", {
-          refreshToken,
-        }); // 새로운 액세스 토큰 가져오는 api를 실행시키고
-
-        // const { data } = await axios.post("http://13.125.222.70/token", {
+        // const { data } = await axios.post("https://itda.shop/token", {
         //   refreshToken,
-        // });
+        // }); // 새로운 액세스 토큰 가져오는 api를 실행시키고
+
+        const { data } = await axios.post("http://13.125.222.70/token", {
+          refreshToken,
+        });
 
         const { accessToken: newAccessToken } = data;
         cookies.set("accessToken", newAccessToken, {

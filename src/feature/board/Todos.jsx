@@ -63,9 +63,6 @@ const Todos = ({ cardId }) => {
             name="todoTitle"
             value={formik.values.todoTitle}
             onChange={formik.handleChange}
-            onClick={() => {
-              formik.setFieldValue("todoTitle", "");
-            }}
             placeholder="새로운 할 일을 추가하고 Enter ✨"
             maxLength={20}
           />

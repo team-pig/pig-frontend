@@ -11,6 +11,8 @@ const ImageModule = ({
   getImgUrlFromS3,
   useInitPreview = true,
   useSaveAvartar = false,
+  setRoomImg,
+  option,
   ...rest
 }) => {
   const fileInput = useRef();
@@ -26,6 +28,7 @@ const ImageModule = ({
   // useSaveAvartar === false 일때 (이미지를 업로드함과 동시에 S3에 저장)
   const imagePreview = async (e) => {
     const file = fileInput.current.files[0];
+    e.target.value = "";
     if (!file) return; // 파일선택 후 '취소' 했을 때 발생하는 오류 처리
 
     setImgObject(file);
@@ -45,6 +48,7 @@ const ImageModule = ({
 
   return (
     <Container>
+      {option ? <UrlInput disabled={preview !== ""}></UrlInput> : ""}
       <ImageInput>
         <input
           ref={fileInput}
@@ -62,6 +66,7 @@ const ImageModule = ({
           onClick={(e) => {
             e.stopPropagation();
             setPreview("");
+            setRoomImg("");
             setImgObject(null);
           }}
         >
@@ -71,6 +76,12 @@ const ImageModule = ({
     </Container>
   );
 };
+
+const UrlInput = styled.input`
+  border: 1px solid red;
+  width: 100%;
+  height: 50px;
+`;
 
 const Container = styled.div`
   position: relative;

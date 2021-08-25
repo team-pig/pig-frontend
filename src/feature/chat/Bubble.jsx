@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 // elem & style
 import Avatar from "../../elem/Avatar";
@@ -12,7 +13,9 @@ const Bubble = ({ message, type }) => {
   const members = useSelector((state) => state.members.members);
 
   const getTime = (submitTime) => {
-    const timeAry = submitTime.split("/")[1].split(" ");
+    const convertTime = moment.utc(submitTime).toDate();
+    const targetTime = moment(convertTime).format("YYYY.MM.DD.ddd/a h:mm");
+    const timeAry = targetTime.split("/")[1].split(" ");
     const meridiem = timeAry[0] === "am" ? "오전" : "오후";
     const time = `${meridiem} ${timeAry[1]}`;
     return time;

@@ -1,5 +1,4 @@
 import io from "socket.io-client";
-import moment from "moment";
 
 let socket;
 
@@ -37,13 +36,11 @@ export const getMessages = (cb) => {
 // 메시지 보내기
 export const sendMessage = (roomId, nickname, userId, text) => {
   if (socket) {
-    const submitTime = moment().format("YYYY.MM.DD.ddd/a h:mm");
     socket.emit("sendMessage", {
       roomId,
       userName: nickname,
       userId,
       text,
-      submitTime,
     });
   }
 };

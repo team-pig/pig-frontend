@@ -73,7 +73,7 @@ const ProfileImg = styled.div`
   box-sizing: content-box;
   background-size: cover;
   background-position: center center;
-  ${(props) => (props.bgColor ? `background-color: ${props.theme.colors[props.bgColor]};` : "")}
+  ${(props) => (props.bgColor && `background-color: ${props.theme.colors[props.bgColor]};`)}
   background-image: url("${(props) => props.src}");
   border: 1px solid var(${(props) => props.border});
   border-radius: 50%;

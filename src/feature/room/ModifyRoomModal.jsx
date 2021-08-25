@@ -77,9 +77,6 @@ const ModifyRoomModal = ({ roomId, showModModal, closeModModal }) => {
     closeModModal();
   };
 
-  const onReset = () => {
-    setImgUrl("");
-  };
 
   return (
     <>

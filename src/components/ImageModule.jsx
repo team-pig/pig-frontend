@@ -5,6 +5,7 @@ import styled, { css } from "styled-components";
 import { uploadFile } from "../shared/uploadFile";
 import flex from "../themes/flex";
 import Icon from "./Icon";
+import RoomInput from "../feature/room/RoomInput";
 
 const ImageModule = ({
   children,
@@ -18,10 +19,12 @@ const ImageModule = ({
   const fileInput = useRef();
   const [preview, setPreview] = useState("");
   const [imgObject, setImgObject] = useState(null);
+  const [imgUrl, setImgUrl] = useState("");
 
   useEffect(() => {
     if (rest.roomPreview) {
       setPreview(rest.roomPreview);
+      setImgObject(rest.roomPreview);
     }
   }, [rest.roomPreview]);
 
@@ -36,9 +39,17 @@ const ImageModule = ({
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setPreview(reader.result);
+      setImgUrl("");
     };
 
     if (!useSaveAvartar) getImgUrlFromS3(uploadFile, file);
+  };
+
+  const changeImgUrl = (e) => {
+    setImgUrl(e.target.value);
+    setPreview(e.target.value);
+    setImgObject(e.target.value);
+    setRoomImg(e.target.value);
   };
 
   // useSaveAvartar === true 일 때, (저장 버튼을 눌러야 S3에 저장)
@@ -47,46 +58,74 @@ const ImageModule = ({
   };
 
   return (
-    <Container>
-      {option ? <UrlInput disabled={preview !== ""}></UrlInput> : ""}
-      <ImageInput>
-        <input
-          ref={fileInput}
-          type="file"
-          id="fileUpload"
-          style={{ display: "none" }}
-          onChange={imagePreview}
-        />
-        <Label htmlFor="fileUpload" preview={preview}>
-          {preview === "" && <Icon icon="image" size="24px" color="darkgrey" />}
-        </Label>
-      </ImageInput>
-      {useInitPreview && imgObject && (
-        <InitAvatarBtn
-          onClick={(e) => {
-            e.stopPropagation();
-            setPreview("");
-            setRoomImg("");
-            setImgObject(null);
-          }}
-        >
-          <Icon icon="delete" size="20px" color="darkgrey" />
-        </InitAvatarBtn>
-      )}
-    </Container>
+    <>
+      <Container>
+        <ImgContainer>
+          <ImageInput>
+            <input
+              ref={fileInput}
+              type="file"
+              id="fileUpload"
+              style={{ display: "none" }}
+              onChange={imagePreview}
+            />
+            <Label htmlFor="fileUpload" preview={preview}>
+              {preview === "" && (
+                <Icon icon="image" size="24px" color="darkgrey" />
+              )}
+            </Label>
+          </ImageInput>
+          {useInitPreview && imgObject && (
+            <InitAvatarBtn
+              onClick={(e) => {
+                e.stopPropagation();
+                setPreview("");
+                setRoomImg("");
+                setImgUrl("");
+                setImgObject(null);
+              }}
+            >
+              <Icon icon="delete" size="20px" color="darkgrey" />
+            </InitAvatarBtn>
+          )}
+        </ImgContainer>
+        {option && (
+          <UrlInputBox>
+            <RoomInput
+              disabled={preview !== ""}
+              name="roomImage"
+              type="text"
+              placeholder="이미지 url 복사 후 붙여넣기하세요"
+              value={imgUrl}
+              _onChange={changeImgUrl}
+            />
+          </UrlInputBox>
+        )}
+      </Container>
+    </>
   );
 };
 
-const UrlInput = styled.input`
-  border: 1px solid red;
-  width: 100%;
-  height: 50px;
+const Container = styled.div`
+  ${flex("between", "center", false)}
+  height: 100%;
+  margin-bottom: 12px;
 `;
 
-const Container = styled.div`
+const UrlInputBox = styled.div`
+  width: 324px;
+  height: 46px;
+  margin-top: 40px;
+  ${({ theme }) => theme.device.mobile} {
+    width: 320px;
+  }
+`;
+
+const ImgContainer = styled.div`
   position: relative;
   ${flex("center", "end")}
-  width: 100%;
+  width: 100px;
+  margin: 0 auto;
 `;
 
 const ImageInput = styled.fieldset`

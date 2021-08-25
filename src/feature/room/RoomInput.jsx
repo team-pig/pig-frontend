@@ -17,6 +17,7 @@ const RoomInput = (props) => {
         onKeyPress={props._onKeyPress}
         height={props.height}
         padding={props.padding}
+        disabled={props.disabled}
       />
     </>
   );

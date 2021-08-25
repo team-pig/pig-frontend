@@ -77,22 +77,16 @@ const AddRoomModal = ({ showModal, addModal }) => {
         <ModalContainer>
           <ModalOverlay onClick={cancelFile}></ModalOverlay>
           <ModalContent>
+          
+            <InputBox>
             <ImageBox>
               <ImageModule
                 setRoomImg={setRoomImg}
                 roomPreview={imgUrl}
                 getImgUrlFromS3={getImgUrlFromS3}
+                option="true"
               />
             </ImageBox>
-            <InputBox>
-              <Input
-                name="roomImage"
-                type="text"
-                placeholder="이미지 url"
-                value={imgUrl}
-                _onChange={changeImgUrl}
-                _onClick={onReset}
-              />
               <RoomInput
                 name="roomName"
                 type="text"

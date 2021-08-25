@@ -5,7 +5,6 @@ import { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 import GlobalStyles from "../shared/GlobalStyles";
 import theme from "../themes/theme";
 
@@ -16,7 +15,7 @@ import {
   subscribeInfoText,
   subscribeWarning,
 } from "../shared/useSocket";
-import { addMessage } from "../redux/modules/chat";
+import { addMessage, setSocket } from "../redux/modules/chat";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,12 +28,13 @@ const App = () => {
     pathname.includes("workspace") || pathname.includes("password");
 
   useEffect(() => {
-    initiateSocket();
+    const setNewSocket = (socket) => dispatch(setSocket(socket));
+    initiateSocket(setNewSocket);
 
     return () => {
       disconnectSocket();
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     subscribeToChat((err, data) => {
@@ -43,7 +43,10 @@ const App = () => {
     });
 
     subscribeInfoText((err, data) => {
-      if (err) console.log(err);
+      if (err) {
+        console.log(err);
+        return;
+      }
     });
 
     subscribeWarning((err, data) => {
@@ -57,7 +60,6 @@ const App = () => {
         <GlobalStyles />
         {!result ? <Header /> : null}
         <Router />
-        {/* <Footer /> */}
       </ThemeProvider>
     </>
   );

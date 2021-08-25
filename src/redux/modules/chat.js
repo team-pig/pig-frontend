@@ -2,12 +2,14 @@ import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 
 // action type
+const SET_SOCKET = "chat/SET_SOCKET";
 const LOAD_MESSAGES = "chat/LOAD_MESSAGES";
 const ADD_MESSAGE = "chat/ADD_MESSAGES";
 const RESET_MESSAGES = "chat/RESET_MESSAGES";
 const SET_PREV_ROOMID = "chat/SET_PREVROOM_ID";
 
 // action creator
+export const setSocket = createAction(SET_SOCKET, (socket) => ({ socket }));
 export const loadMessages = createAction(LOAD_MESSAGES, (messages) => ({
   messages,
 }));
@@ -21,6 +23,7 @@ export const setPrevRoomId = createAction(SET_PREV_ROOMID, (newId) => ({
 
 // initialState
 const initialState = {
+  socket: null,
   messages: [],
   prevLoadRoomId: null,
 };
@@ -28,6 +31,10 @@ const initialState = {
 // reducer
 const chat = handleActions(
   {
+    [SET_SOCKET]: (state, action) =>
+      produce(state, (draft) => {
+        draft.socket = action.payload.socket;
+      }),
     [LOAD_MESSAGES]: (state, action) =>
       produce(state, (draft) => {
         draft.messages = action.payload.messages;

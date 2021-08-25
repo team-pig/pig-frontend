@@ -14,7 +14,7 @@ export const showSidebar = createAction(SHOW_SIDEBAR);
 // initialState
 const initialState = {
   docListWidth: 260,
-  isShowSidebar: false,
+  isShowSidebar: true,
 };
 
 // reducer

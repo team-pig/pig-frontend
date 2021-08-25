@@ -6,8 +6,9 @@ let socket;
 const ENDPOINT = "http://13.125.222.70:3000";
 
 // 웹사이트에 들어올 때 소켓 연결
-export const initiateSocket = () => {
+export const initiateSocket = (cb) => {
   socket = io(ENDPOINT, { transports: ["websocket"] });
+  socket && cb(socket);
   // console.log("🤝🏻소켓연결!");
   // console.log(socket);
 };

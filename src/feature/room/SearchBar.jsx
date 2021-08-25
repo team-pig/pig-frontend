@@ -6,7 +6,7 @@ import _ from "lodash";
 import { mobileHidden, mobileOnly } from "../../themes/responsive";
 import Icon from "../../components/Icon";
 import { Button } from "../../elem/index";
-import { head_1 } from "../../themes/textStyle";
+import { head_2 } from "../../themes/textStyle";
 import RoomInput from "./RoomInput";
 
 import { __searchRoom } from "../../redux/modules/room";
@@ -50,7 +50,7 @@ const SearchBar = ({ joinModal, addModal }) => {
               _onKeyPress={_onKeyPress}
               type="text"
               name="keyword"
-              placeholder="방 이름을 검색하세요"
+              placeholder="내가 참여한 방 이름을 검색하세요"
               height="50px"
               padding="0 0 0 50px"
             />
@@ -92,8 +92,9 @@ const TextBox = styled.div`
 `;
 
 const Text = styled.div`
-  ${head_1}
+  ${head_2}
   margin: 0 auto;
+  color: var(--grey);
 `;
 
 const Wrapper = styled.div`

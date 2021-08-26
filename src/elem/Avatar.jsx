@@ -4,12 +4,13 @@ import flex from "../themes/flex";
 import { button } from "../themes/textStyle";
 
 const Avatar = ({ target, size }) => {
+  const name = target.nickname ? target.nickname : target.memberName;
   return (
     <>
       {target && target.avatar && <ProfileImg target={target} size={size} />}
-      {target && target.nickname && !target.avatar && (
+      {target && name && !target.avatar && (
         <ProfileImg target={target} size={size}>
-          {target.nickname[0]}
+          {name[0]}
         </ProfileImg>
       )}
     </>

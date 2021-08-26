@@ -8,9 +8,13 @@ const Footer = () => {
   return (
     <Container>
       <Header>
-        <Logo src={logo}></Logo>
+        <Logo src={logo} />
       </Header>
-      <Copyright>&copy; 2020-2021 Teampig</Copyright>
+      <FooInfos>
+        <Info></Info>
+        <Info>&copy; 2021 Teampig</Info>
+        <Info>ver 1.0.0</Info>
+      </FooInfos>
     </Container>
   );
 };
@@ -26,12 +30,17 @@ const Header = styled.div`
   ${flex("start")}
 `;
 
-const Copyright = styled.div`
+const Info = styled.div`
   ${body_3}
   color: var(--white);
   margin-top: 96px;
   margin-bottom: 39px;
   text-align: center;
+  width: 200px;
+`;
+
+const FooInfos = styled.div`
+  ${flex("between")}
 `;
 
 const Logo = styled.img``;

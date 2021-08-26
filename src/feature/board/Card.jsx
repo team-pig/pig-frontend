@@ -88,18 +88,18 @@ const Card = ({ card, index, bucketId }) => {
                   </Text>
                 </EndDate>
                 <CardStat>
-                  <StatCnt>
+                  {/* <StatCnt>
                     <Icon icon="checkbox" size="20px" />
                     <Text color="grey" type="body_4">
                       7
                     </Text>
-                  </StatCnt>
-                  <StatCnt>
+                  </StatCnt> */}
+                  {/* <StatCnt>
                     <Icon icon="my" size="20px" color="var(--grey)" />
                     <Text color="grey" type="body_4">
                       {card.memberCount}
                     </Text>
-                  </StatCnt>
+                  </StatCnt> */}
                 </CardStat>
               </CardFooter>
             </Container>

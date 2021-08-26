@@ -33,7 +33,6 @@ const Header = () => {
     <Container>
       <InsideBox>
         <LeftSide>
-          test
           <LogoBox
             onClick={
               isLogin

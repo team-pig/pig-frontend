@@ -1,15 +1,8 @@
 import React, { useEffect, useRef } from "react";
-// import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import Icon from "../../components/Icon";
 import { button } from "../../themes/textStyle";
-
-// import ConfirmModal from "../../components/ConfirmModal";
-
-// import { __confirm } from "../../redux/modules/confirm";
-
 
 const DropDown = ({
   userId,
@@ -20,8 +13,6 @@ const DropDown = ({
   isDisplayDrop,
   setIsDisplayDrop,
 }) => {
-  // const dispatch = useDispatch();
-  // const show = useSelector((state) => state.confirm.show);
   const dropDownModal = useRef();
 
   const handleClickOutside = (e) => {
@@ -31,11 +22,6 @@ const DropDown = ({
     }
   };
 
-  const handleClickInside = (e) => {
-    e.stopPropagation();
-    setIsDisplayDrop((pre) => !pre);
-  };
-
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -43,44 +29,30 @@ const DropDown = ({
 
   const disabled = !(userId === master);
 
-  // const openConfirm = (e) => {
-  //   e.stopPropagation();
-  //   dispatch(__confirm(show));
-  //   console.log(show);
-  // }
-
   return (
     <>
-    {/* {show && <ConfirmModal msg="🗑정말 이 방을 삭제할까요?" callback={deleteRoom} />} */}
-      <Wrapper>
-        <div>
-          <Icon onClick={handleClickInside} icon="more" size="24px" />
-        </div>
-        {isDisplayDrop && (
-          <Container ref={dropDownModal}>
-            <Btn disabled={disabled} onClick={openModModal}>수정</Btn>
-            <Btn disabled={!disabled} onClick={exitRoom}>나가기</Btn>
-            <Btn disabled={disabled} onClick={deleteRoom}>
-              삭제
-            </Btn>
-          </Container>
-        )}
-      </Wrapper>
+      {isDisplayDrop && (
+        <Container ref={dropDownModal}>
+          <Btn disabled={disabled} onClick={openModModal}>
+            수정
+          </Btn>
+          <Btn disabled={!disabled} onClick={exitRoom}>
+            나가기
+          </Btn>
+          <Btn disabled={disabled} onClick={deleteRoom}>
+            삭제
+          </Btn>
+        </Container>
+      )}
     </>
   );
 };
 
-const Wrapper = styled.div`
-  position: relative;
-  z-index: 29;
-  cursor: pointer;
-`;
-
 const Container = styled.div`
   position: absolute;
   z-index: 29;
-  left: 15px;
-  top: 21px;
+  right: -52px;
+  bottom: -100px;
 
   display: flex;
   flex-direction: column;
@@ -90,6 +62,10 @@ const Container = styled.div`
   border-radius: 5px;
   box-shadow: -0.01px -0.01px 2px rgb(0 0 0 / 10%),
     6px 6px 15px rgba(0 0 0 / 0.1);
+  ${({ theme }) => theme.device.mobile} {
+    right: -20px;
+    bottom: -10px;
+  }
 `;
 
 const Btn = styled.div`

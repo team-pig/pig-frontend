@@ -140,7 +140,6 @@ const Wrapper = styled.div`
 
   ${({ theme }) => theme.device.mobile} {
     height: 50px;
-    margin-bottom: 20px;
   }
 `;
 

@@ -9,19 +9,23 @@ import DocViewer from "../feature/document/DocViewer";
 import ResizeWidth from "../components/ResizeWidth";
 
 // redux & api
-import { __getDocs } from "../redux/modules/document";
+import { __getDocs, __getDoc, resetDoc } from "../redux/modules/document";
 import { resizeDocList } from "../redux/modules/resize";
 
 const DocView = (props) => {
-  const { roomId } = useParams();
+  const { roomId, docId } = useParams();
   const dispatch = useDispatch();
 
   const docList = useSelector((state) => state.document.docList) || [];
   const docListWidth = useSelector((state) => state.resize.docListWidth);
 
   useEffect(() => {
-    dispatch(__getDocs(roomId));
-  }, [dispatch, roomId]);
+    dispatch(__getDocs(roomId, docId));
+    dispatch(__getDoc(roomId, docId));
+    return () => {
+      dispatch(resetDoc());
+    };
+  }, [dispatch, roomId, docId]);
 
   // 아래 내용들은 모두 ResizeWidth 관련
   const [size, setSize] = useState({

@@ -31,10 +31,7 @@ const DocViewer = ({ left }) => {
   const [current, setCurrent] = useState(initial);
 
   // 최적화 반드시 필요✨
-  const currentDoc = useSelector((state) => {
-    const idx = state.document.docList.findIndex((doc) => doc.docId === docId);
-    return state.document.docList[idx];
-  });
+  const currentDoc = useSelector((state) => state.document.currentDoc);
 
   useEffect(() => {
     setCurrent(currentDoc ? currentDoc : initial);

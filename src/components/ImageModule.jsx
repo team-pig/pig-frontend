@@ -50,6 +50,10 @@ const ImageModule = ({
     setPreview(e.target.value);
     setImgObject(e.target.value);
     setRoomImg(e.target.value);
+    if(e.target.value.length === 1){
+      setPreview("https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png");
+      setRoomImg("https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png");
+    }
   };
 
   // useSaveAvartar === true 일 때, (저장 버튼을 눌러야 S3에 저장)

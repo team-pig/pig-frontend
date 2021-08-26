@@ -2,8 +2,8 @@ import axios from "axios";
 import { cookies } from "../shared/cookie";
 
 export const instance = axios.create({
-  // baseURL: "https://itda.shop/",
-  baseURL: "http://13.125.222.70/",
+  baseURL: "https://itda.shop/",
+  // baseURL: "http://13.125.222.70/",
   headers: {
     "content-type": "application/json;charset=UTF-8",
     accept: "application/json,",
@@ -12,8 +12,8 @@ export const instance = axios.create({
 
 // 토큰이 필요없는 요청에 쓰일 인스턴스 (로그인, 회원가입)
 export const nonTokenInstance = axios.create({
-  // baseURL: "https://itda.shop/",
-  baseURL: "http://13.125.222.70/",
+  baseURL: "https://itda.shop/",
+  // baseURL: "http://13.125.222.70/",
   headers: {
     "content-type": "application/json;charset=UTF-8",
     accept: "application/json,",

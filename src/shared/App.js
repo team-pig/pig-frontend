@@ -20,6 +20,8 @@ import { addMessage, setSocket } from "../redux/modules/chat";
 const App = () => {
   const dispatch = useDispatch();
 
+  const socket = useSelector((state) => state.chat.socket);
+
   const {
     location: { pathname },
   } = useSelector((state) => state.router);
@@ -28,30 +30,32 @@ const App = () => {
     pathname.includes("workspace") || pathname.includes("password");
 
   useEffect(() => {
-    const setNewSocket = (socket) => dispatch(setSocket(socket));
-    initiateSocket(setNewSocket);
+    if (!socket) {
+      const setNewSocket = (socket) => dispatch(setSocket(socket));
+      initiateSocket(setNewSocket);
 
+      subscribeToChat((err, data) => {
+        if (err) console.log(err);
+        dispatch(addMessage(data));
+      });
+
+      subscribeInfoText((err, data) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+      });
+
+      subscribeWarning((err, data) => {
+        if (err) console.log(err);
+      });
+    }
+  }, [dispatch, socket]);
+
+  useEffect(() => {
     return () => {
       disconnectSocket();
     };
-  }, [dispatch]);
-
-  useEffect(() => {
-    subscribeToChat((err, data) => {
-      if (err) console.log(err);
-      dispatch(addMessage(data));
-    });
-
-    subscribeInfoText((err, data) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-    });
-
-    subscribeWarning((err, data) => {
-      if (err) console.log(err);
-    });
   }, [dispatch]);
 
   return (

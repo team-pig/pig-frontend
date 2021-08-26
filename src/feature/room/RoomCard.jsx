@@ -169,6 +169,9 @@ const Container = styled.div`
   @media (max-width: 960px) {
     margin-bottom: 15px;
   }
+    ${({ theme }) => theme.device.mobile} {
+      width: 320px;
+  }
 `;
 
 const CardSection = styled.div`

@@ -374,7 +374,6 @@ export const board = handleActions(
 
     [LOAD_CARD_BY_ID]: (state, { payload }) =>
       produce(state, (draft) => {
-        console.log(payload);
         draft.card = payload.card.result;
         draft.allMembers = payload.card.allMembers;
       }),

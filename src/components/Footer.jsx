@@ -13,7 +13,13 @@ const Footer = () => {
       <FooInfos>
         <Info></Info>
         <Info>&copy; 2021 Teampig</Info>
-        <Info>ver 1.0.0</Info>
+        <Info
+          onClick={() => {
+            console.log("8.26.15:18 하.. 버그가 넘 많다 ㅎ..");
+          }}
+        >
+          ver 1.0.0
+        </Info>
       </FooInfos>
     </Container>
   );

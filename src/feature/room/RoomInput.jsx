@@ -17,6 +17,7 @@ const RoomInput = (props) => {
         onKeyPress={props._onKeyPress}
         height={props.height}
         padding={props.padding}
+        borderRadius={props.borderRadius}
         disabled={props.disabled}
       />
     </>
@@ -29,6 +30,7 @@ const Input = styled.input`
   height: ${(props) => (props.height ? props.height : "46px")};
   color: var(--black);
   border: 1px solid var(--line);
+  ${(props) => (props.borderRadius && `border-radius: ${props.borderRadius};`)}
   padding: ${(props) => (props.padding ? props.padding : "12px 14px")};
   margin-bottom: 12px;
   outline: none;

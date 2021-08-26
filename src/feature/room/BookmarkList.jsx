@@ -91,6 +91,9 @@ const BookmarkBox = styled.div`
     grid-gap: 10px;
     padding-bottom: 10px;
   }
+  ${({ theme }) => theme.device.mobile} {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 export default BookmarkList;

@@ -14,6 +14,7 @@ import { __searchRoom } from "../../redux/modules/room";
 const SearchBar = ({ joinModal, addModal }) => {
   const dispatch = useDispatch();
   const [searchContent, setSearchContent] = useState("");
+  const [isShowSearch, setIsShowSearch] = useState(false);
   const { searchedRoom } = useSelector((state) => state.room);
 
   const changeSearchContent = (keyword) => {
@@ -29,14 +30,48 @@ const SearchBar = ({ joinModal, addModal }) => {
     }
   };
 
+  const openMobileSearch = () => {
+    setIsShowSearch((pre) => !pre);
+  };
+
   return (
     <>
       <Wrapper>
-        {/* <WrapperMobileItem>
-            <IconBox><Icon icon="search" size="24px" /></IconBox>
-            <IconBox><Icon icon="enter" size="24px" /></IconBox>
-            <IconBox><Icon icon="plus-lg" size="24px" /></IconBox>
-        </WrapperMobileItem> */}
+        <WrapperMobileItem>
+          {isShowSearch && (
+            <InputBox>
+              <SearchIconBox onClick={openMobileSearch}>
+                <Icon icon="search" size="24px" />
+              </SearchIconBox>
+
+              <RoomInput
+                _onKeyUp={(e) => {
+                  delay(e.target.value);
+                }}
+                _onKeyPress={_onKeyPress}
+                type="text"
+                name="keyword"
+                placeholder="내가 참여한 방 이름을 검색하세요"
+                height="50px"
+                padding="0 0 0 50px"
+                borderRadius="5px"
+              />
+            </InputBox>
+          )}
+          {!isShowSearch && (
+            <IconSet>
+              <IconBox>
+                <Icon icon="search" size="24px" onClick={openMobileSearch} />
+              </IconBox>
+              <IconBox>
+                <Icon icon="enter" size="24px" onClick={joinModal} />
+              </IconBox>
+              <IconBox>
+                <Icon icon="plus-lg" size="24px" onClick={addModal} />
+              </IconBox>
+            </IconSet>
+          )}
+        </WrapperMobileItem>
         <WrapperItem>
           <InputBox>
             <SearchIconBox>
@@ -100,22 +135,36 @@ const Text = styled.div`
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+  width: 100%;
   height: 150px;
+
+  ${({ theme }) => theme.device.mobile} {
+    height: 50px;
+    margin-bottom: 20px;
+  }
 `;
 
 const WrapperMobileItem = styled.div`
-${mobileOnly};
-display: flex;
-justify-content: flex-end;
-border: 1px solid black;
+  ${mobileOnly};
+  width: 100%;
+`;
+
+const IconSet = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const IconBox = styled.div`
-${mobileOnly}
+  ${mobileOnly}
+  width : 24px;
+  height: 24px;
+  margin-right: 24px;
+  color: var(--main);
+  cursor: pointer;
 `;
 
 const WrapperItem = styled.div`
-${mobileHidden};
+  ${mobileHidden};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -134,9 +183,10 @@ const InputBox = styled.div`
   position: relative;
   flex: 1;
   height: 50px;
-  margin: auto 0;
-  /* ${({ theme }) => theme.device.mobile} {
-  } */
+  margin: 0 auto;
+  ${({ theme }) => theme.device.mobile} {
+    width: 320px;
+  }
 `;
 
 const SearchIconBox = styled.div`
@@ -145,6 +195,9 @@ const SearchIconBox = styled.div`
   top: 25%;
   left: 18px;
   color: var(--darkgrey);
+  ${({ theme }) => theme.device.mobile} {
+    cursor: pointer;
+  }
 `;
 
 const Btn = styled.div`

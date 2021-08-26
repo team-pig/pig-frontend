@@ -6,6 +6,7 @@ import { pop } from "./alert";
 // shared & api
 import { cookies } from "../../shared/cookie";
 import { userApi } from "../../api/userApi";
+import { disconnectSocket } from "../../shared/useSocket";
 
 // action
 const LOGIN = "user/LOGIN";
@@ -100,6 +101,7 @@ export const __logout =
       path: "/",
     });
     history.replace("/");
+    disconnectSocket();
     dispatch(logout());
   };
 

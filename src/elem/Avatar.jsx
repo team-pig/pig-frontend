@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import flex from "../themes/flex";
 import { button } from "../themes/textStyle";
 
 const Avatar = ({ target, size }) => {
-  const name = target.nickname ? target.nickname : target.memberName;
+  const [name, setName] = useState(" ");
+
+  useEffect(() => {
+    if (target) {
+      setName(target.nickname ? target.nickname : target.memberName);
+    }
+  }, [target]);
   return (
     <>
       {target && target.avatar && <ProfileImg target={target} size={size} />}
@@ -16,7 +22,6 @@ const Avatar = ({ target, size }) => {
     </>
   );
 };
-
 const ProfileImg = styled.div`
   ${flex()};
   flex-shrink: 0;

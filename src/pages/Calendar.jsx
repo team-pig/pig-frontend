@@ -15,13 +15,13 @@ import { resetTodos } from "../redux/modules/todos";
 import CalendarHeader from "../feature/timeline/CalendarHeader";
 import CalendarBody from "../feature/timeline/CalendarBody";
 import CalendarInfo from "../feature/timeline/CalendarInfo";
-import CardModal from "../feature/card/CardModal";
-import Todos from "../feature/card/Todos";
+import CardModal from "../feature/task/CardModal";
+import Todos from "../feature/task/Todos";
 
 // etc
 import flex from "../themes/flex";
 import { Button, Text } from "../elem";
-import ModalForms from "../feature/card/ModalForms";
+import ModalForms from "../feature/task/ModalForms";
 
 const Calendar = () => {
   const dispatch = useDispatch();

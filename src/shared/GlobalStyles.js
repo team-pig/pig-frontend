@@ -22,6 +22,7 @@ const GlobalStyles = createGlobalStyle`
 		--indexHeader : 30;
 		--indexDrop : 35;
 		--indexModal : 60;
+		--indexEventBtn : 70;
 
 		/* margin */
 		--xsMargin: 10px;

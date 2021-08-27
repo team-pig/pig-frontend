@@ -10,7 +10,7 @@ import { __createDoc, __editDoc } from "../../redux/modules/document";
 import MarkDownEditor from "../../components/MarkDownEditor";
 
 // elem
-import { head_4 } from "../../themes/textStyle";
+import { head_4, sub_1 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
 import { Button } from "../../elem";
 
@@ -25,9 +25,11 @@ const Writer = ({ targetDoc, setShowPrompt }) => {
   );
 
   const docs = useSelector((state) => state.document.docList);
+  const isMobile = useSelector((state) => state.resize.isMobile);
 
   // editor 옵션 설정
   const documentOpt = {
+    previewStyle: isMobile ? "tab" : "vertical",
     ref: editorRef,
     initialValue: targetDoc ? targetDoc.content : "",
   };
@@ -89,16 +91,21 @@ const Writer = ({ targetDoc, setShowPrompt }) => {
       </EditorContainer>
 
       <BtnBox>
-        <Button _onClick={clickCancle} shape="green-outline" size="150">
+        <Button
+          _onClick={clickCancle}
+          shape="green-outline"
+          size="150"
+          smSize="120"
+        >
           취소
         </Button>
         {targetDoc && (
-          <Button _onClick={clickEdit} size="150">
+          <Button _onClick={clickEdit} size="150" smSize="120">
             수정
           </Button>
         )}
         {!targetDoc && (
-          <Button _onClick={clickSave} size="150">
+          <Button _onClick={clickSave} size="150" smSize="120">
             저장
           </Button>
         )}
@@ -112,6 +119,10 @@ const TitleBox = styled.div`
   height: 60px;
   margin-bottom: 20px;
   border: 1px solid var(--line);
+
+  ${({ theme }) => theme.device.tablet} {
+    height: 46px;
+  }
 `;
 
 const TitleInput = styled.input`
@@ -120,6 +131,10 @@ const TitleInput = styled.input`
   height: 100%;
   color: var(--black);
   padding: var(--xsMargin);
+
+  ${({ theme }) => theme.device.tabelt} {
+    ${sub_1}
+  }
 `;
 
 const EditorContainer = styled.div`
@@ -141,6 +156,11 @@ const BtnBox = styled.div`
   width: 50%;
   padding: 20px;
   margin-bottom: -20px;
+
+  ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    justify-content: center;
+  }
 `;
 
 export default Writer;

@@ -7,6 +7,11 @@ import { useParams } from "react-router-dom";
 import DocList from "../feature/document/DocList";
 import DocViewer from "../feature/document/DocViewer";
 import ResizeWidth from "../components/ResizeWidth";
+import MobileDocHeader from "../feature/document/MobileDocHeader";
+
+// theme & function
+import flex from "../themes/flex";
+import { mobileHidden, mobileOnly } from "../themes/responsive";
 
 // redux & api
 import { __getDocs, __getDoc, resetDoc } from "../redux/modules/document";
@@ -17,7 +22,9 @@ const DocView = (props) => {
   const dispatch = useDispatch();
 
   const docList = useSelector((state) => state.document.docList) || [];
-  const docListWidth = useSelector((state) => state.resize.docListWidth);
+  const { isMobile, docListWidth } = useSelector((state) => state.resize);
+
+  const [isOpenMobileList, setIsOpenMobileList] = useState(false);
 
   useEffect(() => {
     dispatch(__getDocs(roomId, docId));
@@ -43,27 +50,100 @@ const DocView = (props) => {
     []
   );
 
+  // 모바일 리스트가 있는 경우 뒤 스크롤이 움직이지 않도록 고정
+  useEffect(() => {
+    if (isMobile && isOpenMobileList) {
+      document.body.style.cssText = `position: fixed; top: -${window.scrollY}px`;
+      return () => {
+        const scrollY = document.body.style.top;
+        document.body.style.cssText = `position: ""; top: "";`;
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      };
+    }
+  }, [isMobile, isOpenMobileList]);
+
+  const clickShowList = () => setIsOpenMobileList((pre) => !pre);
+
   return (
     <Container>
-      {
-        <ResizeWidth
-          size={size}
-          handleSize={handleSize}
-          drag="right"
-          option={option}
-          storeSaveFunc={resizeDocList}
-        >
-          <DocList docList={docList} />
-        </ResizeWidth>
-      }
-      <DocViewer left={size.width} />
+      <Top>
+        <MobileDocHeader clickShowList={clickShowList} />
+      </Top>
+      <Bottom>
+        <ListContainer>
+          <ResizeWidth
+            size={size}
+            handleSize={handleSize}
+            drag="right"
+            option={option}
+            storeSaveFunc={resizeDocList}
+          >
+            <DocList docList={docList} />
+          </ResizeWidth>
+        </ListContainer>
+        <DocViewer left={size.width} />
+      </Bottom>
+      {isMobile && (
+        <>
+          <MobileListContainer isOpenMobileList={isOpenMobileList}>
+            <DocList docList={docList} />
+          </MobileListContainer>
+          <Overlay
+            isOpenMobileList={isOpenMobileList}
+            onClick={clickShowList}
+          ></Overlay>
+        </>
+      )}
     </Container>
   );
 };
 
 const Container = styled.section`
   display: flex;
+  flex-direction: column;
   width: 100%;
+`;
+
+const Top = styled.div`
+  ${mobileOnly};
+  width: 100%;
+  height: 48px;
+
+  ${({ theme }) => theme.device.mobile} {
+    ${flex("start", "center", true)};
+  }
+`;
+
+const Bottom = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+const ListContainer = styled.div`
+  ${mobileHidden};
+  height: auto;
+`;
+
+const Overlay = styled.div`
+  display: ${(props) => (props.isOpenMobileList ? "block;" : "none")};
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: display 500ms ease-in-out;
+`;
+
+const MobileListContainer = styled.div`
+  ${mobileOnly};
+
+  position: absolute;
+  top: 48px;
+  left: ${(props) => (props.isOpenMobileList ? `0;` : `-260px;`)};
+  width: 260px;
+  transition: left 500ms ease-in-out;
+  z-index: 60;
 `;
 
 export default DocView;

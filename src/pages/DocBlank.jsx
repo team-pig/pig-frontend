@@ -8,6 +8,8 @@ import DocList from "../feature/document/DocList";
 import BlankImg from "../assets/img/doc-blank-img.jpg";
 import ResizeWidth from "../components/ResizeWidth";
 import flex from "../themes/flex";
+import { mobileHidden, mobileOnly } from "../themes/responsive";
+import MobileDocHeader from "../feature/document/MobileDocHeader";
 
 // redux & api
 import { resizeDocList } from "../redux/modules/resize";
@@ -17,7 +19,9 @@ const DocBlank = () => {
   const { roomId } = useParams();
 
   const docList = useSelector((state) => state.document.docList) || [];
-  const docListWidth = useSelector((state) => state.resize.docListWidth);
+  const { isMobile, docListWidth } = useSelector((state) => state.resize);
+
+  const [isOpenMobileList, setIsOpenMobileList] = useState(false);
 
   if (docList.length > 0) {
     history.replace(
@@ -41,23 +45,42 @@ const DocBlank = () => {
     []
   );
 
+  const clickShowList = () => setIsOpenMobileList((pre) => !pre);
+
   return (
     <Container>
-      <ResizeWidth
-        size={size}
-        handleSize={handleSize}
-        drag="right"
-        option={option}
-        storeSaveFunc={resizeDocList}
-      >
-        <DocList docList={docList} />
-      </ResizeWidth>
-
-      <Content left={size.width}>
-        <ImgBox>
-          <BlankImgBox src={BlankImg} />
-        </ImgBox>
-      </Content>
+      <Top>
+        <MobileDocHeader clickShowList={clickShowList} />
+      </Top>
+      <Bottom>
+        <ListContainer>
+          <ResizeWidth
+            size={size}
+            handleSize={handleSize}
+            drag="right"
+            option={option}
+            storeSaveFunc={resizeDocList}
+          >
+            <DocList docList={docList} />
+          </ResizeWidth>
+        </ListContainer>
+        <Content left={size.width}>
+          <ImgBox>
+            <BlankImgBox src={BlankImg} />
+          </ImgBox>
+        </Content>
+      </Bottom>
+      {isMobile && (
+        <>
+          <MobileListContainer isOpenMobileList={isOpenMobileList}>
+            <DocList docList={docList} />
+          </MobileListContainer>
+          <Overlay
+            isOpenMobileList={isOpenMobileList}
+            onClick={clickShowList}
+          ></Overlay>
+        </>
+      )}
     </Container>
   );
 };
@@ -67,15 +90,40 @@ const Container = styled.section`
   --padding: 40px;
   --minusHeight: calc(var(--header) + var(--padding) + 20px);
 
-  ${flex("start", "start")};
+  ${flex("start", "start", false)};
   gap: 20px;
   width: 100%;
   min-height: calc(100vh - var(--minusHeight));
+
+  ${({ theme }) => theme.device.mobile} {
+    gap: 0;
+    height: calc(100vh - var(--header));
+  }
+`;
+
+const Top = styled.div`
+  ${mobileOnly};
+  width: 100%;
+  height: 48px;
+
+  ${({ theme }) => theme.device.mobile} {
+    ${flex("start", "center", true)};
+  }
+`;
+
+const Bottom = styled.div`
+  display: flex;
+  flex-grow: 1;
+  width: 100%;
+`;
+
+const ListContainer = styled.div`
+  ${mobileHidden};
 `;
 
 const Content = styled.section`
   --header: 48px;
-  --minusHeight: calc(var(--header));
+  --mobileList: 48px;
 
   ${flex};
   position: relative;
@@ -84,14 +132,20 @@ const Content = styled.section`
   width: ${(props) => `calc(100% - ${props.left}px)`};
   height: 100%;
   font-size: 2rem;
-  min-height: calc(100vh - var(--minusHeight));
+  min-height: calc(100vh - var(--header));
   overflow: hidden;
+
+  ${({ theme }) => theme.device.mobile} {
+    left: 0;
+    width: 100%;
+    height: calc(100% - var(--header) - var(--mobileList));
+  }
 `;
 
 const ImgBox = styled.div`
-  width: 70vmin;
+  width: 75vmin;
   max-width: 590px;
-  min-width: 300px;
+  min-width: 280px;
 `;
 
 const BlankImgBox = styled.div`
@@ -101,4 +155,28 @@ const BlankImgBox = styled.div`
   background-image: ${(props) => `url(${props.src})`};
   background-size: cover;
 `;
+
+const Overlay = styled.div`
+  display: ${(props) => (props.isOpenMobileList ? "block;" : "none")};
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: display 500ms ease-in-out;
+`;
+
+const MobileListContainer = styled.div`
+  ${mobileOnly};
+
+  position: absolute;
+  top: 48px;
+  left: ${(props) => (props.isOpenMobileList ? `0;` : `-260px;`)};
+  width: 260px;
+  height: 100%;
+  transition: left 500ms ease-in-out;
+  z-index: 60;
+`;
+
 export default DocBlank;

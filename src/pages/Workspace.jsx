@@ -15,6 +15,8 @@ import { loadMessages, setPrevRoomId } from "../redux/modules/chat";
 // socket
 import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
 import { __getOneRoom } from "../redux/modules/room";
+import styled from "styled-components";
+import { mobileHidden } from "../themes/responsive";
 
 const Workspace = () => {
   const dispatch = useDispatch();
@@ -71,11 +73,17 @@ const Workspace = () => {
         <WSHeader url={url} />
         <WSTemplate>
           <WSRouter path={path} />
-          <WSSidebar />
+          <HiddenMobile>
+            <WSSidebar />
+          </HiddenMobile>
         </WSTemplate>
       </>
     </>
   );
 };
+
+const HiddenMobile = styled.div`
+  ${mobileHidden}
+`;
 
 export default React.memo(Workspace);

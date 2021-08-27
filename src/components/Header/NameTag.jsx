@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Text } from "../../elem";
 import MyAvatar from "../../elem/MyAvatar";
 import flex from "../../themes/flex";
+import { desktopOnly } from "../../themes/responsive";
 
 const NameTag = ({ img, name }) => {
   // 한글 포함인지 확인
@@ -31,6 +32,7 @@ const Wrapper = styled.div`
 `;
 
 const Nickname = styled(Text)`
+  ${desktopOnly};
   flex-shrink: 0;
   &::first-letter {
     text-transform: uppercase;

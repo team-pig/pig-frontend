@@ -21,7 +21,7 @@ const DocList = ({ docList }) => {
         {/* 문서 목록은 나중에 검색으로 이용할 예정. inputToggle 사용 가능 */}
         <Text type="body_1">문서 목록</Text>
         <PlusBtn onClick={toDocAdd}>
-          <Icon icon="plus-lg" size="24px" color="#b7b7b7" />
+          <Icon icon="plus-lg" size="24px" color="var(--darkgrey)" />
         </PlusBtn>
       </TitleBox>
       <List>

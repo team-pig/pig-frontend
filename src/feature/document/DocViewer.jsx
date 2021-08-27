@@ -10,7 +10,7 @@ import getModifiedTime from "../../functions/getModifiedTime";
 import MarkDownViewer from "../../components/MarkDownViewer";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
-import { body_4 } from "../../themes/textStyle";
+import { body_4, head_4, sub_1 } from "../../themes/textStyle";
 import { Text, IconBtn } from "../../elem";
 
 // redux & api
@@ -95,6 +95,13 @@ const Container = styled.section`
   width: ${(props) => `calc(100% - ${props.left}px)`};
   min-height: calc(100vh - var(--minusHeight));
   padding: var(--smMargin);
+
+  ${({ theme }) => theme.device.mobile} {
+    --docBar: 48px;
+    left: 0;
+    width: 100%;
+    min-height: calc(100vh - var(--minusHeight) - var(--docBar));
+  }
 `;
 
 const ViewerHeader = styled.div`
@@ -110,9 +117,14 @@ const TitleBox = styled.div`
 `;
 
 const Title = styled(Text)`
+  ${head_4}
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  ${({ theme }) => theme.device.mobile} {
+    ${sub_1};
+  }
 `;
 
 const InfoBox = styled.div`

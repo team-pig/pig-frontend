@@ -61,6 +61,10 @@ const BtnDefault = css`
   font-weight: bold;
   line-height: 2.2rem;
   transition: color 300ms ease-in-out, background-color 300ms ease-in-out;
+
+  ${({ theme }) => theme.device.mobile} {
+    width: ${(props) => (props.smSize ? `${props.smSize}px;` : "100%;")};
+  }
 `;
 
 const FillBtn = css`

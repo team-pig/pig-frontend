@@ -32,7 +32,7 @@ const DocEdit = () => {
       setShowPrompt(false);
       await docApi.exitEditPage(roomId, docId);
     };
-  }, []);
+  }, [dispatch, docId, roomId]);
 
   // 새로고침하거나 창을 종료할 때 안내 메시지
   useBeforeunload((e) => {

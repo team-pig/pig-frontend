@@ -19,7 +19,6 @@ const FeatFirst = () => {
 };
 
 const Container = styled.section`
-  margin-top: 200px;
   width: 100%;
   height: 873px;
   background-color: #f9f9f9;

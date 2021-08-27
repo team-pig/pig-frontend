@@ -66,8 +66,8 @@ const Profiles = () => {
     <Container>
       <Title>TeamPig Members</Title>
       <Grid>
-        {teamPig.map((member) => (
-          <Profile member={member} />
+        {teamPig.map((member, idx) => (
+          <Profile member={member} key={idx} />
         ))}
       </Grid>
     </Container>
@@ -75,7 +75,7 @@ const Profiles = () => {
 };
 const Container = styled.section`
   max-width: 1440px;
-  margin: 0 auto;
+  margin: 0 auto 100px auto;
 `;
 
 const Grid = styled.article`

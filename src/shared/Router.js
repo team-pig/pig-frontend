@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Redirect } from "react-router-dom";
+import { Switch, Redirect, Route } from "react-router-dom";
 
 // pages
 import Intro from "../pages/Intro";
@@ -24,7 +24,7 @@ import PrivateRoute from "../auth/PrivateRoute";
 const Router = () => {
   return (
     <Switch>
-      <PublickRoute restricted={true} Component={Intro} path="/" exact />
+      <PublickRoute restricted={false} Component={Intro} path="/" exact />
       <PublickRoute restricted={true} Component={Login} path="/login" exact />
       <PublickRoute
         restricted={true}

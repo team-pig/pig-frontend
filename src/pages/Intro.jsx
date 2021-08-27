@@ -36,12 +36,12 @@ const Intro = () => {
               <HeadLineImg src="/img/head.svg" />
             </Gradation>
           </Headline>
-          <Profiles />
           <FeatFirst />
           <FeatSecond />
           <FeatThird />
           <FeatFourth />
           <FeatFifth />
+          <Profiles />
         </Container>
         <Footer />
       </Template>
@@ -56,7 +56,7 @@ const Container = styled.section`
 // Head
 const Headline = styled.article`
   ${flex("center", "cetner", false)}
-  margin: 106px 0;
+  margin-top: 106px;
 `;
 
 const Button = styled.button`

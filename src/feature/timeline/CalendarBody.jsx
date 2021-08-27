@@ -1,10 +1,12 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { Text } from "../../elem";
-import flex from "../../themes/flex";
 
 // component
 import Dates from "./Dates";
+
+// theme & elem
+import flex from "../../themes/flex";
+import { Text } from "../../elem";
 
 const CalendarBody = () => {
   const days = ["일", "월", "화", "수", "목", "금", "토"];

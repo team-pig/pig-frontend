@@ -18,7 +18,7 @@ import { Text } from "../../elem";
 // redux
 import { setModalId, __editSchedule } from "../../redux/modules/calendar";
 
-const CalendarModalForms = ({ content, setModalContent, setShowModal }) => {
+const CalendarModalForms = ({ content }) => {
   const dispatch = useDispatch();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();

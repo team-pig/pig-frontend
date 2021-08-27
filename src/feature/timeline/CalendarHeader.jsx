@@ -1,33 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
 // redux
 import { setCurrent } from "../../redux/modules/date";
 
-import CardModal from "../board/CardModal";
-import CalendarModal from "./CalendarModal";
-
-// redux
-import { __addSchedule } from "../../redux/modules/calendar";
-
 // elem
 import { IconBtn, Text } from "../../elem";
 import flex from "../../themes/flex";
 import Icon from "../../components/Icon";
-import { useParams } from "react-router-dom";
 
-const CalendarHeader = ({
-  modalContent,
-  setModalContent,
-  showModal,
-  setShowModal,
-}) => {
-  const { roomId } = useParams();
-
+const CalendarHeader = () => {
   const dispatch = useDispatch();
   const current = useSelector((state) => state.date.current);
-  const buckets = useSelector((state) => state.board.columns);
 
   const showLastMonth = () => {
     dispatch(setCurrent(current.clone().subtract(1, "month")));
@@ -35,12 +20,6 @@ const CalendarHeader = ({
 
   const showNextMonth = () => {
     dispatch(setCurrent(current.clone().add(1, "month")));
-  };
-
-  const clickCreateBtn = () => {
-    const bucketId = Object.keys(buckets)[0];
-    setShowModal((pre) => !pre);
-    dispatch(__addSchedule(roomId, bucketId));
   };
 
   return (
@@ -63,16 +42,12 @@ const CalendarHeader = ({
           {/* <IconBtn _onClick={() => {}} padding="5px">
             <Icon icon="search" size="24px" color="var(--darkgrey)" />
           </IconBtn> */}
-          <IconBtn _onClick={clickCreateBtn} padding="5px">
-            <Icon icon="plus-lg" size="24px" color="var(--darkgrey)" />
-          </IconBtn>
         </BtnBox>
       </Header>
     </>
   );
 };
 
-// 모두 임시스타일입니다.
 const Header = styled.div`
   ${flex("between")};
   width: 100%;

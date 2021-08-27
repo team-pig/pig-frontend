@@ -109,6 +109,7 @@ const Left = styled.section`
 
 const Right = styled.section`
   width: calc(100% - 260px);
+  height: 100%;
 `;
 
 const TodosHeader = styled(Text)`

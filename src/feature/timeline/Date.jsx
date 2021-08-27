@@ -7,6 +7,7 @@ import { setCurrentId } from "../../redux/modules/calendar";
 
 import { Text } from "../../elem";
 import flex from "../../themes/flex";
+import { hiddenScroll } from "../../themes/hiddenScroll";
 
 const Date = ({ idx, list, today, thisMonth, children, _onClick }) => {
   const dispatch = useDispatch();
@@ -24,27 +25,28 @@ const Date = ({ idx, list, today, thisMonth, children, _onClick }) => {
             {children}
           </DateNum>
         </DateBox>
-        {list.map((item, idx) => {
-          const { cardId, cardTitle, color } = item;
-          // 누르면 모달 보이도록 기능 추가 필요
-          if (idx >= 2) return null;
+        <ScheduleBtns>
+          {list.map((item, idx) => {
+            const { cardId, cardTitle, color } = item;
+            // if (idx >= 2) return null;
 
-          return (
-            <ScheduleBtn
-              key={cardId}
-              onClick={(e) => {
-                e.stopPropagation();
-                clickSchedule(cardId);
-              }}
-              color={color}
-              thisMonth={thisMonth}
-            >
-              <ScheduleText type="body_3" color={color}>
-                {cardTitle}
-              </ScheduleText>
-            </ScheduleBtn>
-          );
-        })}
+            return (
+              <ScheduleBtn
+                key={cardId}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  clickSchedule(cardId);
+                }}
+                color={color}
+                thisMonth={thisMonth}
+              >
+                <ScheduleText type="body_3" color={color}>
+                  {cardTitle}
+                </ScheduleText>
+              </ScheduleBtn>
+            );
+          })}
+        </ScheduleBtns>
       </DateContainer>
     </>
   );
@@ -82,9 +84,21 @@ const DateNum = styled(Text)`
       `;
   }}
 `;
+
+const ScheduleBtns = styled.div`
+  --dateBox: 32px;
+
+  ${flex("start", "center", false)};
+  ${hiddenScroll}
+  width: 100%;
+  height: calc(100% - var(--dateBox));
+  overflow: auto;
+`;
+
 const ScheduleBtn = styled.div`
   --margin: 6px;
   ${flex("start")}
+  flex-shrink: 0;
   width: calc(100% - (var(--margin) * 2));
   height: 24px;
   padding: 0 10px;

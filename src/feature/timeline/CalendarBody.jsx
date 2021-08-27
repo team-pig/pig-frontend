@@ -1,10 +1,12 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { Text } from "../../elem";
-import flex from "../../themes/flex";
 
 // component
 import Dates from "./Dates";
+
+// theme & elem
+import flex from "../../themes/flex";
+import { Text } from "../../elem";
 
 const CalendarBody = () => {
   const days = ["일", "월", "화", "수", "목", "금", "토"];
@@ -28,7 +30,10 @@ const CalendarBody = () => {
 };
 
 const Container = styled.section`
+  --calendarHeader: 60px;
+
   width: 100%;
+  height: calc(100% - var(--calendarHeader));
   padding: 0 20px;
 `;
 
@@ -44,7 +49,8 @@ const CalendarDays = styled.div`
 
 const CalendarDate = styled.div`
   ${CalendarGrid};
-  grid-template-rows: repeat(6, 100px);
+  height: calc(100% - 30px);
+  grid-template-rows: repeat(6, calc(100% / 6));
   border-top: 1px solid var(--grey);
   border-bottom: 1px solid var(--grey);
 `;

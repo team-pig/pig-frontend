@@ -22,7 +22,7 @@ import Todos from "../feature/board/Todos";
 import flex from "../themes/flex";
 import { Button, Text } from "../elem";
 
-const Calendar = (props) => {
+const Calendar = () => {
   const { roomId } = useParams();
 
   const dispatch = useDispatch();
@@ -63,9 +63,14 @@ const Calendar = (props) => {
 
   return (
     <CalendarBox>
-      <CalendarHeader setShowModal={setShowModal} />
-      <CalendarBody />
-      <CalendarInfo setShowModal={setShowModal} />
+      <Left>
+        <CalendarInfo setShowModal={setShowModal} />
+      </Left>
+      <Right>
+        <CalendarHeader />
+        <CalendarBody />
+      </Right>
+
       {showModal && modalContent && (
         <CardModal showModal={showModal} setShowModal={setShowModal}>
           <CalendarModalForms content={modalContent} />
@@ -92,9 +97,19 @@ const Calendar = (props) => {
 const CalendarBox = styled.section`
   --header: 48px;
 
+  ${flex("start", "start")}
   width: 100%;
   height: calc(100vh - var(--header));
   overflow-y: auto;
+`;
+
+const Left = styled.section`
+  height: 100%;
+`;
+
+const Right = styled.section`
+  width: calc(100% - 260px);
+  height: 100%;
 `;
 
 const TodosHeader = styled(Text)`

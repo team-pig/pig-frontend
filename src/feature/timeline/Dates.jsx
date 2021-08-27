@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { selectDate } from "../../redux/modules/date";
 
 import clickDate from "./clickDate";
 
@@ -27,6 +28,7 @@ const Dates = () => {
         parseInt(schedule["endDate"].split("-").join("")) >= targetFormat
     );
     if (!currentScheduleId) {
+      dispatch(selectDate(now));
       clickDate(now, targetList, dispatch);
     }
   }, [now, scheduleList, currentScheduleId, dispatch]);

@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { __switchTodoStat, __removeMyTodo } from "../../../redux/modules/todos";
-import Icon from "../../../components/Icon";
+import { __switchTodoStat, __removeMyTodo } from "../../redux/modules/todos";
+import Icon from "../../components/Icon";
 
-import { IconBtn, Text, Input } from "../../../elem";
-import { body_2 } from "../../../themes/textStyle";
-import { hiddenScroll } from "../../../themes/hiddenScroll";
-import flex from "../../../themes/flex";
+import { IconBtn, Text, Input } from "../../elem";
+import { body_2 } from "../../themes/textStyle";
+import { hiddenScroll } from "../../themes/hiddenScroll";
+import flex from "../../themes/flex";
 
 const MyTodos = () => {
   const dispatch = useDispatch();

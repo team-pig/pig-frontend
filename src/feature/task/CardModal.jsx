@@ -16,7 +16,7 @@ const CardModal = ({ showModal, children, setShowModal }) => {
 
   return (
     <>
-      {showModal ? (
+      {showModal && (
         <ModalContainer>
           <ModalOverlay
             onClick={() => {
@@ -31,7 +31,7 @@ const CardModal = ({ showModal, children, setShowModal }) => {
             </ModalContent>
           </ModalOverlay>
         </ModalContainer>
-      ) : null}
+      )}
     </>
   );
 };
@@ -50,7 +50,6 @@ const ModalContainer = styled.div`
 
 const ModalOverlay = styled.div`
   position: absolute;
-  /* display: initial; */
   top: 0;
   left: 0;
   display: flex;

@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import React, { useEffect } from "react";
+import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import DatePickerExample from "./DatePicker";
 
 // function
 import setDday from "../../functions/setDday";
 
 // component & elem
-import BoardDrop from "./BoardDrop";
+import BoardDrop from "../board/BoardDrop";
 import InputToggle from "../../components/InputToggle";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
@@ -18,12 +17,17 @@ import { body_2, body_3, sub_1 } from "../../themes/textStyle";
 // redux
 import { resetTodos } from "../../redux/modules/todos";
 import { __editCardInfos, resetCard } from "../../redux/modules/board";
+import DateInput from "./DateInput";
+import BucketSelect from "../timeline/BucketSelect";
 
-const ModalForms = ({ content }) => {
+/**
+ *
+ * source : 모달을 on 한 출발지 ("board" || "calendar")
+ * source 별로 dispatch 함수와 컴포넌트를 조건부로 실행시킴
+ */
+
+const ModalForms = ({ content, source }) => {
   const dispatch = useDispatch();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-
   // 전역변수
   const { roomId } = useParams();
 
@@ -36,21 +40,23 @@ const ModalForms = ({ content }) => {
 
   const editFunc = (key, value) => {
     const editObj = { cardId: content.cardId, [key]: value };
-    dispatch(__editCardInfos(roomId, editObj));
+    dispatch(__editCardInfos(roomId, editObj, source));
   };
 
-  const kindOfColor = ["blue", "violet", "yellow", "orange", "mint"];
-
+  const colors = ["blue", "violet", "yellow", "orange", "mint"];
   const dDay = setDday(content.endDate);
 
   return (
     <Container>
-      <ModalHeader>
+      {source === "calendar" && (
+        <BucketSelect bucketId={content.bucketId} cardId={content.cardId} />
+      )}
+      <ModalHeader source={source}>
         <BoardDrop.Container
           componentType="colorPicker"
           bgColor={content.color}
         >
-          {kindOfColor.map((color, idx) => (
+          {colors.map((color, idx) => (
             <BoardDrop.Item
               key={idx}
               componentType="colorPicker"
@@ -63,7 +69,7 @@ const ModalForms = ({ content }) => {
             </BoardDrop.Item>
           ))}
         </BoardDrop.Container>
-        <Title type="sub_1">
+        <Title>
           <InputToggle
             name="cardTitle"
             value={content.cardTitle}
@@ -72,22 +78,15 @@ const ModalForms = ({ content }) => {
           />
         </Title>
       </ModalHeader>
-
-      <DateInput>
-        <DatePickerExample
-          cardId={content.cardId}
-          roomId={roomId}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-          content={content}
-          mode="card" // card or schedule
-        />
+      {content && (
         <DueDate>
+          <DateInput type="start" mode="card" card={content} source={source} />
+          {"~"}
+          <DateInput type="end" mode="card" card={content} source={source} />
           <DateText>{dDay}</DateText>
         </DueDate>
-      </DateInput>
+      )}
+
       <DescContainer>
         <TodoContainer>
           <InputToggle
@@ -107,12 +106,15 @@ const ModalForms = ({ content }) => {
 
 const Container = styled.div`
   padding: 40px;
+  position: relative;
 `;
 
 const ModalHeader = styled.div`
   ${flex("start", "center")};
   gap: 10px;
   padding: 10px 0 0 0;
+  margin-top: ${(props) => props.source === "calendar" && "30px"};
+  margin-bottom: 24px;
 `;
 
 const Title = styled.h1`
@@ -127,13 +129,8 @@ const DescContainer = styled.div`
   border: 1px solid var(--line);
 `;
 
-const DateInput = styled.div`
-  ${flex("end", "center")};
-  margin: 0 0 6px auto;
-`;
-
 const DueDate = styled.div`
-  ${flex()}
+  ${flex("end")}
 `;
 
 const TodoContainer = styled(Text)`
@@ -144,7 +141,7 @@ const TodoContainer = styled(Text)`
 `;
 
 const DateText = styled(Text)`
-  ${flex("end", "center")};
+  ${flex()};
   ${body_2};
   width: 44px;
   color: var(--notice);

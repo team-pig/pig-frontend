@@ -24,7 +24,7 @@ const Register = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [roomImg, setRoomImg] = useState("");
-  const { value, msg } = useSelector((state) => state.alert);
+  const alertOption = useSelector((state) => state.alert);
 
   /**
    *
@@ -80,7 +80,7 @@ const Register = () => {
   return (
     <>
       <SEO title="회원가입" />
-      <Alert dispatcher={pop} msg={msg} status={value} />
+      <Alert dispatcher={pop} alertOption={alertOption} />
       <Template>
         <Container>
           <Title type="head_3">반가워요!</Title>

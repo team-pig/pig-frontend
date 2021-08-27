@@ -26,7 +26,7 @@ const Login = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [saveId, setSaveId] = useState(false);
-  const { value, msg } = useSelector((state) => state.alert);
+  const alertOption = useSelector((state) => state.alert);
   const savedId = cookies.get("saveId");
 
   const formik = useFormik({
@@ -62,7 +62,7 @@ const Login = (props) => {
     <>
       <SEO title="로그인" />
       <Template>
-        <Alert dispatcher={pop} msg={msg} status={value} />
+        <Alert dispatcher={pop} alertOption={alertOption} />
         <Container>
           <Title type="head_3">좋은 하루 되세요!</Title>
           <FormContainer onSubmit={formik.handleSubmit}>

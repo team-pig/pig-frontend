@@ -19,6 +19,7 @@ const RoomInput = (props) => {
         padding={props.padding}
         borderRadius={props.borderRadius}
         disabled={props.disabled}
+        maxLength={props.maxLength}
       />
     </>
   );

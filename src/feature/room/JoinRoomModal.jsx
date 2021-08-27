@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { useDispatch, useSelector } from "react-redux";
+import { debounce } from "lodash";
 
 //components
 import Icon from "../../components/Icon";
@@ -11,7 +12,6 @@ import { Button, Text } from "../../elem/index";
 import RoomTags from "./RoomTags";
 import RoomInput from "./RoomInput";
 
-
 //redux
 import { __getInviteCodeRoom, __joinRoom } from "../../redux/modules/room";
 
@@ -19,16 +19,24 @@ const JoinRoomModal = ({ showModal, joinModal }) => {
   const dispatch = useDispatch();
   const [inviteCode, setInviteCode] = useState("");
   const [isInfo, setIsInfo] = useState(false);
-  const roomImage = useSelector((state) => state.room.inviteCodeRoom.roomImage);
-  const roomName = useSelector((state) => state.room.inviteCodeRoom.roomName);
-  const tag = useSelector((state) => state.room.inviteCodeRoom.tag);
 
-  const changeHandler = async (e) => {
-    const { value, name } = e.target;
-    await setInviteCode({ ...inviteCode, [name]: value });
-    setIsInfo(true);
-    dispatch(__getInviteCodeRoom(value));
+  const _room = useSelector((state) => state.room.inviteCodeRoom);
+  const isInviteRoom =
+    _room.inviteCode === inviteCode.inviteCode ? true : false;
+
+  const { roomImage, roomName, tag } = useSelector(
+    (state) => state.room.inviteCodeRoom
+  );
+
+  const changeHandler = async (keyword) => {
+    setInviteCode(keyword);
+    if (keyword.length === 36) {
+      dispatch(__getInviteCodeRoom(keyword));
+      setIsInfo(true);
+    }
   };
+
+  const debounceFunc = debounce(changeHandler, 200);
 
   const disabled = inviteCode === "";
   const join = () => {
@@ -84,7 +92,11 @@ const JoinRoomModal = ({ showModal, joinModal }) => {
               <RoomInput
                 name="inviteCode"
                 placeholder="초대코드 입력해주세요!"
-                _onChange={changeHandler}
+                _onChange={(e) => {
+                  debounceFunc(e.target.value);
+                }}
+                type="text"
+                maxLength="36"
               />
             </InputBox>
             <BtnBox>

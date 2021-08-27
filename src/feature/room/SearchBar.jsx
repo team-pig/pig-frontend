@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import _ from "lodash";
+import { debounce } from "lodash";
 
 import { mobileHidden, mobileOnly } from "../../themes/responsive";
 import Icon from "../../components/Icon";
@@ -35,7 +35,7 @@ const SearchBar = ({ joinModal, addModal }) => {
     setSearchContent(keyword);
   };
 
-  const delay = _.debounce(changeSearchContent, 500);
+  const delay = debounce(changeSearchContent, 500);
 
   const _onKeyPress = (e) => {
     if (e.key === "Enter") {

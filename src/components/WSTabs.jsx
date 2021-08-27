@@ -8,6 +8,7 @@ import { Text } from "../elem";
 
 // api
 import { __getDocs } from "../redux/modules/document";
+import { body_2 } from "../themes/textStyle";
 
 const WSTabs = ({ url }) => {
   const history = useHistory();
@@ -118,6 +119,7 @@ const MenuText = styled(Text)`
 
   ${({ theme }) => theme.device.mobile} {
     /* display: inline-block; */
+    ${body_2}
     vertical-align: middle;
   }
 `;

@@ -10,7 +10,7 @@ import getModifiedTime from "../../functions/getModifiedTime";
 import MarkDownViewer from "../../components/MarkDownViewer";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
-import { body_4, head_4, sub_1 } from "../../themes/textStyle";
+import { body_4, head_5, sub_1 } from "../../themes/textStyle";
 import { Text, IconBtn } from "../../elem";
 
 // redux & api
@@ -62,8 +62,7 @@ const DocViewer = ({ left }) => {
     <Container left={left}>
       <ViewerHeader>
         <TitleBox>
-          <Title type="head_4">{current.title}</Title>
-          {/* 임시 적용 아이콘 => 변경 예정 */}
+          <Title type="head_5">{current.title}</Title>
           <IconBtn _onClick={() => toDocEdit(docId)}>
             <Icon icon="edit" size="24px" color="#757575" />
           </IconBtn>
@@ -94,7 +93,11 @@ const Container = styled.section`
   flex-direction: column;
   width: ${(props) => `calc(100% - ${props.left}px)`};
   min-height: calc(100vh - var(--minusHeight));
-  padding: var(--smMargin);
+  padding: var(--smMargin) var(--mdMargin);
+
+  ${({ theme }) => theme.device.tablet} {
+    padding: var(--smMargin);
+  }
 
   ${({ theme }) => theme.device.mobile} {
     --docBar: 48px;
@@ -110,14 +113,14 @@ const ViewerHeader = styled.div`
 `;
 
 const TitleBox = styled.div`
-  ${flex("between")}
+  ${flex("start")}
   width: 100%;
   height: 40px;
   margin-bottom: 14px;
 `;
 
 const Title = styled(Text)`
-  ${head_4}
+  ${head_5}
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

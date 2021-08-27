@@ -143,9 +143,9 @@ const Content = styled.section`
 `;
 
 const ImgBox = styled.div`
-  width: 70vmin;
+  width: 75vmin;
   max-width: 590px;
-  min-width: 350px;
+  min-width: 280px;
 `;
 
 const BlankImgBox = styled.div`

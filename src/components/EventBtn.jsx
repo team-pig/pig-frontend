@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { button, caption } from "../themes/textStyle";
+import { button, body_3 } from "../themes/textStyle";
 
 const EventBtn = ({ fixed }) => {
   return (
@@ -18,7 +18,7 @@ const pigAnimation = keyframes`
       transform: translateY(0);
     }
     100% {
-      transform : translateY(-10px);
+      transform : translateY(-5px);
     }
 
 `;
@@ -27,8 +27,8 @@ const LinkBtn = styled.a`
   position: ${(props) => (props.fixed ? "fixed" : "absolute")};
   bottom: 30px;
   right: 30px;
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   background-image: url("https://teampigbucket.s3.ap-northeast-2.amazonaws.com/character.png1629831791983");
   background-size: contain;
   background-position: center center;
@@ -42,7 +42,7 @@ const LinkBtn = styled.a`
     content: "이벤트참여!";
     position: absolute;
     top: -20px;
-    left: -10px;
+    left: -5px;
     display: none;
     width: 70px;
     white-space: nowrap;
@@ -63,12 +63,13 @@ const LinkBtn = styled.a`
   }
 
   ${({ theme }) => theme.device.mobile} {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
 
     &::before {
-      ${caption}
-      font-family: 'NanumSquareRound',sans-serif;
+      ${body_3}
+      left: 0px;
+      font-family: "NanumSquareRound", sans-serif;
     }
   }
 `;

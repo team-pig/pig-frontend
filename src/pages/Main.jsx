@@ -4,11 +4,12 @@ import flex from "../themes/flex";
 
 import StatusSection from "../feature/main/StatusSection";
 import Information from "../feature/main/Information";
-import MyTodos from "../feature/main/myTodos/MyTodos";
+
 import { useDispatch } from "react-redux";
 import { __loadMyTodos, __loadProjectTodo } from "../redux/modules/todos";
 
 import { useParams } from "react-router-dom";
+import MyTodos from "../feature/main/MyTodos";
 
 const Main = () => {
   const dispatch = useDispatch();

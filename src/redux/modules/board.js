@@ -4,6 +4,7 @@ import produce from "immer";
 import { bucketApi } from "../../api/bucketApi";
 import { cardApi } from "../../api/cardApi";
 import { __reqError } from "./error";
+import { editSchedule } from "./calendar";
 
 /**
  * action type
@@ -284,14 +285,20 @@ export const __updateCardLocateOtherBucket =
   };
 
 // 카드 정보 수정
-export const __editCardInfos = (roomId, cardInfos) => async (dispatch) => {
-  try {
-    await cardApi.editCardInfo(roomId, cardInfos);
-    dispatch(editCardInfos(cardInfos));
-  } catch (e) {
-    dispatch(__reqError(e));
-  }
-};
+export const __editCardInfos =
+  (roomId, cardInfos, source) => async (dispatch) => {
+    console.log(source);
+    try {
+      await cardApi.editCardInfo(roomId, cardInfos);
+      if (source === "board") {
+        dispatch(editCardInfos(cardInfos));
+      } else if (source === "calendar") {
+        dispatch(editSchedule(cardInfos));
+      }
+    } catch (e) {
+      dispatch(__reqError(e));
+    }
+  };
 
 // 카드삭제
 export const __deleteCard =

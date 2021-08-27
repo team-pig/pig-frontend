@@ -5,9 +5,9 @@ import { useParams } from "react-router-dom";
 
 // elem & compo
 import { Button, Text } from "../../elem";
-import Todos from "./Todos";
-import CardModal from "./CardModal";
-import ModalForms from "./ModalForms";
+import Todos from "../task/Todos";
+import CardModal from "../task/CardModal";
+import ModalForms from "../task/ModalForms";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
 
@@ -66,11 +66,15 @@ const Card = ({ card, index, bucketId }) => {
                 <CardDeleteBtn>
                   <Icon
                     icon="remove"
-                    size="14px"
+                    size="20px"
                     color="var(--grey)"
                     onClick={(e) => {
                       e.stopPropagation();
-                      dispatch(__deleteCard(bucketId, card.cardId, roomId));
+                      const answer = window.confirm(
+                        "카드를 삭제하면 포함된 모든 할일도 삭제됩니다. 카드를 삭제 하시겠습니까?"
+                      );
+                      if (answer)
+                        dispatch(__deleteCard(bucketId, card.cardId, roomId));
                     }}
                   />
                 </CardDeleteBtn>
@@ -108,7 +112,7 @@ const Card = ({ card, index, bucketId }) => {
       </Draggable>
       {Object.keys(modalContent).length !== 0 && (
         <CardModal showModal={showModal} setShowModal={setShowModal}>
-          <ModalForms content={modalContent} />
+          <ModalForms content={modalContent} source="board" />
           <TodosHeader type="sub_2" color="black">
             할 일
           </TodosHeader>

@@ -15,17 +15,17 @@ import { resetTodos } from "../redux/modules/todos";
 import CalendarHeader from "../feature/timeline/CalendarHeader";
 import CalendarBody from "../feature/timeline/CalendarBody";
 import CalendarInfo from "../feature/timeline/CalendarInfo";
-import CardModal from "../feature/board/CardModal";
-import CalendarModalForms from "../feature/timeline/CalendarModalForms";
-import Todos from "../feature/board/Todos";
+import CardModal from "../feature/task/CardModal";
+import Todos from "../feature/task/Todos";
 
+// etc
 import flex from "../themes/flex";
 import { Button, Text } from "../elem";
+import ModalForms from "../feature/task/ModalForms";
 
 const Calendar = () => {
-  const { roomId } = useParams();
-
   const dispatch = useDispatch();
+  const { roomId } = useParams();
   const current = useSelector((state) => state.date.current);
   const modalId = useSelector((state) => state.calendar.modalId);
 
@@ -73,7 +73,7 @@ const Calendar = () => {
 
       {showModal && modalContent && (
         <CardModal showModal={showModal} setShowModal={setShowModal}>
-          <CalendarModalForms content={modalContent} />
+          <ModalForms content={modalContent} source="calendar" />
           <TodosHeader type="sub_2" color="black">
             할 일
           </TodosHeader>

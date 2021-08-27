@@ -40,7 +40,7 @@ export const loadDaySchedules = createAction(LOAD_DAY_SCHEDULES, (idAry) => ({
 const addSchedule = createAction(ADD_SCHEDULE, (schedule) => ({
   schedule,
 }));
-const editSchedule = createAction(EDIT_SCHEDULE, (scheduleObj) => ({
+export const editSchedule = createAction(EDIT_SCHEDULE, (scheduleObj) => ({
   scheduleObj,
 }));
 const editScheduleBucket = createAction(
@@ -104,19 +104,6 @@ export const __addSchedule =
       cardId: data.cardId,
     };
     dispatch(addSchedule(scheduleObj));
-  };
-
-// schedule 수정 thunk 함수(patch)
-// cardId(Board와 연결) + 바꾸려는 정보만 담아서 보냄
-export const __editSchedule =
-  (roomId, editObj) =>
-  async (dispatch, getState, { history }) => {
-    try {
-      const { data } = await cardApi.editCardInfo(roomId, editObj);
-      dispatch(editSchedule(editObj));
-    } catch (e) {
-      console.log("수정에 실패했습니다.", e);
-    }
   };
 
 export const __editScheduleBucket =

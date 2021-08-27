@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import styled, { css } from "styled-components";
 import { Input, Text } from "../../elem";
 import { useSelector } from "react-redux";
-import BoardDrop from "./BoardDrop";
+import BoardDrop from "../board/BoardDrop";
 
 import {
   __memberHandler,
@@ -23,9 +23,9 @@ const Todo = ({ todo }) => {
   const dispatch = useDispatch();
   const team = useSelector((state) => state.todos.memberStatus);
   const my = useSelector((state) => state.todos.myStatus);
-  const _all = team.concat(my); // 모든 팀원
-
   const isCheckedList = todo.members; // 이 투두에 참여한 팀원
+  const _all = team.concat(my); // 모든 팀원
+  console.log(_all);
 
   const [itemClicked, setItemClicked] = useState(false);
   const { roomId } = useParams();

@@ -102,7 +102,7 @@ const AddRoomModal = ({ showModal, addModal }) => {
               <RoomInput
                 name="tag"
                 type="text"
-                placeholder="태그"
+                placeholder="태그,태그,태그..."
                 _onChange={changeHandler}
               />
             </InputBox>

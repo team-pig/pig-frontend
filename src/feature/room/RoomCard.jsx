@@ -7,12 +7,14 @@ import { useHistory } from "react-router-dom";
 import ModifyRoomModal from "./ModifyRoomModal";
 import DropDown from "./DropDown";
 //elements
+import { mobileHidden, mobileOnly } from "../../themes/responsive";
 import { Text } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
 import MemberImg from "../../elem/MemberImg";
 import BookMark from "./BookMark";
 import RoomTags from "./RoomTags";
 import LinkIcon from "./LinkIcon";
+import More from "./More";
 
 //redux
 import {
@@ -90,13 +92,16 @@ const RoomCard = ({
     // close와 합쳐보려고 하였으나 모달 닫기 시 e.stop...에서 에러가 남
     e.stopPropagation();
     setIsDisplayDrop(false);
-    if (userId === master) {
-      setShowModModal(true);
-    }
+    setShowModModal(true);
   };
 
   const closeModModal = () => {
     setShowModModal(false);
+  };
+
+  const dropDownModal = (e) => {
+    e.stopPropagation();
+    setIsDisplayDrop((pre) => !pre);
   };
 
   const createDate = createdAt.slice(0, 10).split("-");
@@ -114,6 +119,20 @@ const RoomCard = ({
           history.push(`/workspace/${roomId}`);
         }}
       >
+        <DropDown
+          userId={userId}
+          master={master}
+          isDisplayDrop={isDisplayDrop}
+          setIsDisplayDrop={setIsDisplayDrop}
+          exitRoom={exitRoom}
+          deleteRoom={deleteRoom}
+          openModModal={openModModal}
+        ></DropDown>
+        <IconMobileBox>
+          <LinkIcon inviteCode={inviteCode} />
+          <BookMark isMarked={isMarked} clickBookmark={clickBookmark} />
+          <More dropDownModal={dropDownModal} />
+        </IconMobileBox>
         <IconBox>
           <LinkIcon inviteCode={inviteCode} />
           <BookMark isMarked={isMarked} clickBookmark={clickBookmark} />
@@ -140,16 +159,7 @@ const RoomCard = ({
           </FooterItem>
           <FooterItem>
             <MemberImg members={members} memberStatus={memberStatus} />
-
-            <DropDown
-              userId={userId}
-              master={master}
-              isDisplayDrop={isDisplayDrop}
-              setIsDisplayDrop={setIsDisplayDrop}
-              exitRoom={exitRoom}
-              deleteRoom={deleteRoom}
-              openModModal={openModModal}
-            ></DropDown>
+            <More dropDownModal={dropDownModal} />
           </FooterItem>
         </CardFooter>
       </Container>
@@ -169,8 +179,9 @@ const Container = styled.div`
   @media (max-width: 960px) {
     margin-bottom: 15px;
   }
-    ${({ theme }) => theme.device.mobile} {
-      width: 320px;
+  ${({ theme }) => theme.device.mobile} {
+    width: 320px;
+    height: 154px;
   }
 `;
 
@@ -183,9 +194,23 @@ const CardSection = styled.div`
   padding: 20px 20px 15px 20px;
 `;
 
-const IconBox = styled.div`
+const IconMobileBox = styled.div`
   position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100px;
 
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const IconBox = styled.div`
+  ${mobileHidden};
+  position: absolute;
   top: 10px;
   right: 10px;
   display: flex;
@@ -209,6 +234,10 @@ const RoundImg = styled.div`
   background-image: url("${(props) => props.url}");
   background-size: cover;
   background-position: center center;
+  ${({ theme }) => theme.device.mobile} {
+    width: 60px;
+    height: 60px;
+  }
 `;
 
 const TextBox = styled.div`
@@ -218,6 +247,10 @@ const TextBox = styled.div`
   overflow: hidden;
   width: 138px;
   height: 100px;
+  ${({ theme }) => theme.device.mobile} {
+    left: 70px;
+    width: 206px;
+  }
 `;
 const RoomNameBox = styled.div`
   display: -webkit-box;
@@ -225,12 +258,16 @@ const RoomNameBox = styled.div`
   width: 138px;
   max-height: 52px;
   line-height: normal;
-
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
+  ${({ theme }) => theme.device.mobile} {
+    width: 206px;
+    -webkit-line-clamp: 1;
+  }
 `;
 const TagBox = styled.div`
+  ${mobileHidden};
   display: -webkit-box;
   overflow: hidden;
   width: 138px;
@@ -245,19 +282,29 @@ const TagBox = styled.div`
 `;
 
 const SubTitleBox = styled.div`
+  ${body_3};
   overflow: hidden;
   width: 262px;
   max-height: 44px;
   margin-top: auto;
   color: var(--darkgrey);
-
-  ${body_3};
-  white-space: nowrap;
+  line-height: 140%;
   text-overflow: ellipsis;
-  line-height: normal;
+
+  @media screen and (min-width: 768px) {
+    white-space: nowrap;
+  }
+
+  ${({ theme }) => theme.device.mobile} {
+    display: -webkit-box;
+    margin-top: 15px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
 `;
 
 const CardFooter = styled.div`
+  ${mobileHidden};
   display: flex;
   justify-content: space-between;
   align-items: center;

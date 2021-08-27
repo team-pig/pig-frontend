@@ -70,7 +70,10 @@ const BookmarkTitle = styled.div`
     flex-wrap: wrap;
     padding: 0 10px;
   }
-
+  ${({ theme }) => theme.device.mobile} {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const BookmarkBox = styled.div`

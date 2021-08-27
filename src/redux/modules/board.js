@@ -3,6 +3,7 @@ import produce from "immer";
 
 import { bucketApi } from "../../api/bucketApi";
 import { cardApi } from "../../api/cardApi";
+import { __reqError } from "./error";
 
 /**
  * action type
@@ -288,7 +289,7 @@ export const __editCardInfos = (roomId, cardInfos) => async (dispatch) => {
     await cardApi.editCardInfo(roomId, cardInfos);
     dispatch(editCardInfos(cardInfos));
   } catch (e) {
-    console.log(e);
+    dispatch(__reqError(e));
   }
 };
 

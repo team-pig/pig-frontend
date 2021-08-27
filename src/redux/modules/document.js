@@ -1,6 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import { docApi } from "../../api/docApi";
+import { __reqError } from "./error";
 
 // action
 const GET_DOCS = "document/GET_DOCS";
@@ -40,7 +41,7 @@ export const __getDocs =
 
       dispatch(getDocs(newDocs));
     } catch (e) {
-      console.log("문서 목록을 불러오지 못했습니다.", e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -56,7 +57,7 @@ export const __getDoc =
         dispatch(getDoc(docObj));
       }
     } catch (e) {
-      console.log("문서를 불러오지 못했습니다.", e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -101,7 +102,7 @@ export const __deleteDoc =
   (docId, roomId) =>
   async (dispatch, getState, { history }) => {
     try {
-      const data = await docApi.deleteDoc(roomId, docId);
+      await docApi.deleteDoc(roomId, docId);
 
       await dispatch(deleteDoc(docId));
       const lastDoc = getState().document.docList[0];
@@ -109,7 +110,7 @@ export const __deleteDoc =
         ? history.replace(`/workspace/${roomId}/doc/${lastDoc.docId}`)
         : history.replace(`/workspace/${roomId}/doc/blank`);
     } catch (e) {
-      console.log("문서 삭제에 실패했습니다.", e);
+      dispatch(__reqError(e));
     }
   };
 

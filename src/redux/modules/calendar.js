@@ -8,6 +8,7 @@ import { cardApi } from "../../api/cardApi";
 import { todoApi } from "../../api/todoApi";
 import { bucketApi } from "../../api/bucketApi";
 import { updateCardLocateOtherBucket } from "./board";
+import { __reqError } from "./error";
 
 // action
 const LOAD_BUCKETS = "calendar/LOAD_BUCKETS";
@@ -155,7 +156,7 @@ export const __editScheduleBucket =
       dispatch(updateCardLocateOtherBucket(cardId, bucketInfo));
       dispatch(editScheduleBucket(cardId, destinationBucketId));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 

@@ -45,18 +45,22 @@ export const __resetPassword = (email) => async (dispatch) => {
     dispatch(
       pop({
         value: true,
-        msg: "잠시만 기다려주세요.",
+        msg: "메일을 전송중입니다.....🚀  잠시만 기다려 주세요!",
+        option: false,
       })
     );
-    const data = await userApi.resetPassword(email);
+    await userApi.resetPassword(email);
     dispatch(
       pop({
         value: true,
-        msg: "가입하신 아이디로 비밀번호 변경 메일이 발송되었습니다.  🚀 ",
+        msg: "가입하신 아이디로 비밀번호 변경 메일이 발송되었습니다 ✨",
+        option: true,
       })
     );
   } catch (e) {
-    dispatch(pop({ value: true, msg: "존재하지 않는 아이디 입니다." }));
+    dispatch(
+      pop({ value: true, msg: e.response.data.errorMessage, option: true })
+    );
   }
 };
 
@@ -83,7 +87,11 @@ export const __login =
       history.replace("/roomlist");
     } catch (e) {
       dispatch(
-        pop({ value: true, msg: "아이디 또는 비밀번호가 올바르지 않습니다." })
+        pop({
+          value: true,
+          msg: e.response.data.errorMessage,
+          option: true,
+        })
       );
     }
   };
@@ -100,7 +108,7 @@ export const __logout =
     cookies.remove("accessToken", {
       path: "/",
     });
-    history.replace("/");
+    history.replace("/login");
     disconnectSocket();
     dispatch(logout());
   };
@@ -125,8 +133,9 @@ export const __register =
       window.alert("회원가입이 완료되었습니다! ✨");
       history.replace("/login");
     } catch (e) {
-      // window.alert(e.response.data.errorMessage);
-      dispatch(pop({ value: true, msg: e.response.data.errorMessage }));
+      dispatch(
+        pop({ value: true, msg: e.response.data.errorMessage, option: true })
+      );
     }
   };
 

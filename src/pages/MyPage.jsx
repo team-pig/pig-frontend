@@ -20,7 +20,7 @@ const MyPage = () => {
   const {
     user: { email, nickname },
   } = useSelector((state) => state.user);
-  const { value, msg } = useSelector((state) => state.alert);
+  const alertOption = useSelector((state) => state.alert);
 
   const changePasswordHandler = useCallback((email) => {
     dispatch(__resetPassword(email));
@@ -29,7 +29,7 @@ const MyPage = () => {
   return (
     <>
       <SEO title="마이페이지" />
-      <Alert dispatcher={pop} msg={msg} status={value} />
+      <Alert dispatcher={pop} alertOption={alertOption} />
       <Template>
         <Container>
           <Title>내 정보</Title>

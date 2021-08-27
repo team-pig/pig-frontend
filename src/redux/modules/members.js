@@ -1,6 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import { memberApi } from "../../api/memberApi";
+import { __reqError } from "./error";
 
 // action type
 const LOAD_MEMBERS = "members/LOAD_MEMBERS";
@@ -16,7 +17,7 @@ export const __loadMembers =
       const { data } = await memberApi.loadMembers(roomId);
       dispatch(loadMembers(data.allMembers));
     } catch (e) {
-      console.log("멤버 목록을 가져오지 못했습니다.", e);
+      dispatch(__reqError(e));
     }
   };
 

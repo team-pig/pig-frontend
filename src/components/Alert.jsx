@@ -5,24 +5,30 @@ import { useDispatch } from "react-redux";
 import flex from "../themes/flex";
 import { body_3 } from "../themes/textStyle";
 
-const Alert = ({ status, dispatcher, msg }) => {
+const Alert = ({ dispatcher, alertOption }) => {
+  const { value, msg, option } = alertOption;
+  console.log(option);
   const dispatch = useDispatch();
   return (
     <>
-      {status && (
+      {value && (
         <ModalContainer>
           <ModalOverlay>
             <ModalContent>
               <Desc>{msg}</Desc>
               <BtnSet>
-                <Button
-                  size="150"
-                  _onClick={() => {
-                    dispatch(dispatcher({ value: null, msg: null }));
-                  }}
-                >
-                  확인
-                </Button>
+                {option && (
+                  <Button
+                    size="150"
+                    _onClick={() => {
+                      dispatch(
+                        dispatcher({ value: null, msg: null, option: null })
+                      );
+                    }}
+                  >
+                    확인
+                  </Button>
+                )}
               </BtnSet>
             </ModalContent>
           </ModalOverlay>

@@ -2,6 +2,7 @@ import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import { todoApi } from "../../api/todoApi";
 import { regex } from "../../shared/regex";
+import { __reqError } from "./error";
 
 // [보드 / 타임라인]
 const LOAD_TODOS = "todos/LOAD_TODOS";
@@ -107,7 +108,7 @@ export const __loadTodos = (roodId, cardId) => async (dispatch, getState) => {
     const { data } = await todoApi.getTodo(roodId, cardId);
     dispatch(laodTodos(data.todos));
   } catch (e) {
-    console.log(e);
+    dispatch(__reqError(e));
   }
 };
 
@@ -119,7 +120,7 @@ export const __loadMyTodos = (roomId) => async (dispatch) => {
 
     dispatch(loadMyTodos(result.checked, result.notChecked));
   } catch (e) {
-    console.log(e);
+    dispatch(__reqError(e));
   }
 };
 
@@ -129,7 +130,7 @@ export const __loadProjectTodo = (roomId) => async (dispatch, getState) => {
     const { memberStatus, projectStatus, myStatus } = data;
     dispatch(loadProjectTodo({ memberStatus, projectStatus, myStatus }));
   } catch (e) {
-    console.log(e);
+    dispatch(__reqError(e));
   }
 };
 
@@ -154,7 +155,7 @@ export const __editTotoTitle =
       await todoApi.editTodoTtitle(roomId, todoId, todoTitle);
       dispatch(editTodoTitle(todoId, todoTitle));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -164,7 +165,7 @@ export const __checkedTodo =
       await todoApi.checkedTodo(roomId, todoId, isChecked);
       dispatch(isCheckedTodo(todoId, isChecked));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -179,7 +180,7 @@ export const __switchTodoStat =
         dispatch(goToNotChecked(todoId, isChecked, todoTitle));
       }
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -194,7 +195,7 @@ export const __removeMyTodo =
         dispatch(exitMyTodoNotChecked(todoId));
       }
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -225,7 +226,7 @@ export const __deleteTodo = (roomId, todoId) => async (dispatch) => {
     await todoApi.deleteTodo(roomId, todoId);
     dispatch(deleteTodo(todoId));
   } catch (e) {
-    console.log(e);
+    dispatch(__reqError(e));
   }
 };
 
@@ -244,7 +245,7 @@ export const __editMyStatus = (roomId, newMyInfo) => async (dispatch) => {
     dispatch(editMyStatus(willReqParams));
     await todoApi.editMyStatus(roomId, willReqParams);
   } catch (e) {
-    console.log(e);
+    dispatch(__reqError(e));
   }
 };
 

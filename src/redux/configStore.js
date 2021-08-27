@@ -16,6 +16,7 @@ import alert from "./modules/alert";
 import chat from "./modules/chat";
 import resize from "./modules/resize";
 import members from "./modules/members";
+import error from "./modules/error";
 
 // middlewares
 import thunk from "redux-thunk";
@@ -26,6 +27,7 @@ import { connectRouter } from "connected-react-router";
 export const history = createBrowserHistory();
 
 const appReducer = combineReducers({
+  error,
   alert,
   todos,
   board,

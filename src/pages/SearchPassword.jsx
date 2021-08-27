@@ -17,7 +17,7 @@ import { useHistory } from "react-router-dom";
 const ResetPassword = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { value, msg } = useSelector((state) => state.alert);
+  const alertOption = useSelector((state) => state.alert);
 
   const formik = useFormik({
     initialValues: {
@@ -39,7 +39,7 @@ const ResetPassword = () => {
   return (
     <>
       <SEO title="비밀번호 찾기" />
-      <Alert dispatcher={pop} msg={msg} status={value} />
+      <Alert dispatcher={pop} alertOption={alertOption} />
       <Template>
         <Container>
           <Title>비밀번호 찾기</Title>

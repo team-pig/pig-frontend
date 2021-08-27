@@ -2,6 +2,7 @@ import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 import { roomApi } from "../../api/roomApi";
 import { regex } from "../../shared/regex";
+import { __reqError } from "./error";
 
 //action
 const ADD_ROOM = "room/ADD_ROOM";
@@ -112,7 +113,7 @@ export const __joinRoom =
       const markedList = getState().room.markedList;
       dispatch(joinRoom(data, markedList));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -123,7 +124,7 @@ export const __exitRoom =
       await roomApi.exitRoom(roomId);
       dispatch(exitRoom(roomId));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -139,7 +140,7 @@ export const __searchRoom =
         dispatch(searchRoom(data, searchContent));
       }
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -159,7 +160,7 @@ export const __addRoom =
       const { data } = await roomApi.addRoom(willDispatchContents);
       dispatch(addRoom(data, markedList));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -178,7 +179,7 @@ export const __editRoom =
       const { data } = await roomApi.editRoom(newContent);
       dispatch(editRoom(data));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -198,7 +199,7 @@ export const __editRoomDetail = (roomId, newRoominfos) => async (dispatch) => {
     dispatch(editRoomDetail(willReqParams));
     await roomApi.editRoom(willReqParams);
   } catch (e) {
-    console.log(e);
+    dispatch(__reqError(e));
   }
 };
 
@@ -209,7 +210,7 @@ export const __getMarkedList =
       const { data } = await roomApi.getMarkedList();
       dispatch(getMarkedList(data, isMarked));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -234,7 +235,7 @@ export const __getRoomList =
       };
       dispatch(getRoomList(data.room, paging, userId));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -245,7 +246,7 @@ export const __getInviteCodeRoom =
       const { data } = await roomApi.getInviteCodeRoom(inviteCode);
       dispatch(getInviteCodeRoom(data));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -258,7 +259,7 @@ export const __getOneRoom =
       } = await roomApi.getOneRoom(roomId);
       dispatch(getOneRoom(result));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -269,7 +270,7 @@ export const __deleteRoom =
       await roomApi.deleteRoom(roomId);
       dispatch(deleteRoom(roomId));
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 
@@ -288,7 +289,7 @@ export const __toggleBookmark =
         dispatch(deleteBookmark(roomId, markedList));
       }
     } catch (e) {
-      console.log(e);
+      dispatch(__reqError(e));
     }
   };
 

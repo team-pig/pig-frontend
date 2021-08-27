@@ -17,6 +17,7 @@ import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
 import { __getOneRoom } from "../redux/modules/room";
 import styled from "styled-components";
 import { mobileHidden } from "../themes/responsive";
+import { __loadProjectTodo } from "../redux/modules/todos";
 
 const Workspace = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const Workspace = () => {
     (docs.length === 0 || (docs.length !== 0 && docs[0].roomId !== roomId)) &&
       dispatch(__getDocs(roomId)); // 문서
     dispatch(__getOneRoom(roomId));
+    dispatch(__loadProjectTodo(roomId)); // 메인, 보드, 타임라인
   }, [dispatch, roomId]);
 
   // workspace에 들어갈 때마다 room에 join, 해당 방의 기존 메세지 받아오는 handler

@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
+import { __loginCheck } from "../redux/modules/user";
 import isLogin from "./isLogin";
 
 /**
@@ -13,6 +15,12 @@ import isLogin from "./isLogin";
  */
 
 const PublickRoute = ({ Component, restricted, ...rest }) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(__loginCheck()); // 토큰 유효성 체크
+  }, []);
+
   return (
     <Route
       {...rest}

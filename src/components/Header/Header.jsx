@@ -17,13 +17,15 @@ import { mobileHidden, mobileOnly } from "../../themes/responsive";
 import { button } from "../../themes/textStyle";
 import flex from "../../themes/flex";
 import { resetReducer } from "../../redux/configStore";
+import isLogin from "../../auth/isLogin";
 
 const Header = () => {
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const { isLogin, user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
+  const logged = isLogin(); // 로그인 여부 체크
   const clickLogout = () => {
     dispatch(__logout());
     dispatch(resetReducer());
@@ -33,13 +35,7 @@ const Header = () => {
     <Container>
       <InsideBox>
         <LeftSide>
-          <LogoBox
-            onClick={
-              isLogin
-                ? () => history.push("/roomlist")
-                : () => history.push("/")
-            }
-          >
+          <LogoBox onClick={() => history.push("/")}>
             <img src={TextLogo} alt="협업돼지" />
           </LogoBox>
         </LeftSide>
@@ -49,7 +45,7 @@ const Header = () => {
           </LogoBox>
         </MobileContainer>
         <RightSide>
-          {!isLogin ? (
+          {!logged ? (
             <Nav>
               <List>
                 <Item onClick={() => history.push("/login")}>로그인</Item>

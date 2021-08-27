@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { debounce } from "lodash";
@@ -16,6 +16,20 @@ const SearchBar = ({ joinModal, addModal }) => {
   const [searchContent, setSearchContent] = useState("");
   const [isShowSearch, setIsShowSearch] = useState(false);
   const { searchedRoom } = useSelector((state) => state.room);
+  const searchRef = useRef();
+
+  const handleClickOutside = (e) => {
+    e.stopPropagation();
+    if (searchRef.current && !searchRef.current.contains(e.target)) {
+      setIsShowSearch(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [searchRef]);
+
 
   const openJoinModal = (e) => {
     if (searchContent.length > 0) {
@@ -52,7 +66,7 @@ const SearchBar = ({ joinModal, addModal }) => {
       <Wrapper>
         <WrapperMobileItem>
           {isShowSearch && (
-            <InputBox>
+            <InputBox ref={searchRef}>
               <SearchIconBox onClick={openMobileSearch}>
                 <Icon icon="search" size="24px" />
               </SearchIconBox>

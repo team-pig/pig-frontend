@@ -72,8 +72,9 @@ const MyStatus = () => {
                 name="desc"
                 value={editInfo.desc || ""}
                 onChange={onChangeHandler}
-                placeholder="팀원들에게 남기고 싶은 메시지를 입력하세요"
+                placeholder="나의 메시지를 입력하세요 (최대 25자)"
                 autoComplete="off"
+                maxLength="25"
               />
               <MyInfoEditInput
                 type="text"
@@ -82,6 +83,7 @@ const MyStatus = () => {
                 onChange={onChangeHandler}
                 placeholder="나의 역할 또는 태그로 나를 표현하세요"
                 autoComplete="off"
+                maxLength="200"
               />
             </>
           </form>

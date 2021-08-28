@@ -10,8 +10,7 @@ import { __createTodo, __loadTodos } from "../../redux/modules/todos";
 
 // compo & elem
 import Todo from "./Todo";
-import Icon from "../../components/Icon";
-import { body_3 } from "../../themes/textStyle";
+import { body_3, sub_2 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
 import CountText from "../../components/CountText";
 import { Text } from "../../elem";
@@ -36,17 +35,22 @@ const Todos = ({ cardId }) => {
 
     onSubmit: (todo, { resetForm }) => {
       resetForm();
+      if (todos.length === 10) {
+        window.alert("할일은 10개까지 입력가능합니다.");
+        return;
+      }
       dispatch(__createTodo(roomId, { cardId, todoTitle: todo.todoTitle }));
     },
   });
 
   return (
     <Container>
+      <Header>할 일</Header>
       <TodoList>
         {todos.length === 0 && (
           <TextBox>
             <Text type="body_3" color="grey">
-              이 카드에서 추가된 할 일이 없습니다.
+              이 카드에 할 일이 없군요
             </Text>
           </TextBox>
         )}
@@ -55,36 +59,35 @@ const Todos = ({ cardId }) => {
         ))}
       </TodoList>
       <TodoForm onSubmit={formik.handleSubmit}>
-        <Icon icon="plus-lg" size="20px" />
-        <TodoBox>
-          <TodoInput
-            autoComplete="off"
-            type="text"
-            name="todoTitle"
-            value={formik.values.todoTitle}
-            onChange={formik.handleChange}
-            placeholder="새로운 할 일을 추가하고 Enter ✨"
-            maxLength={20}
-          />
-          {CountText(20, formik.values.todoTitle.length)}
-        </TodoBox>
+        <TodoInput
+          autoComplete="off"
+          type="text"
+          name="todoTitle"
+          value={formik.values.todoTitle}
+          onChange={formik.handleChange}
+          placeholder="새로운 할 일을 추가하고 Enter"
+          maxLength={20}
+        />
+        {CountText(20, formik.values.todoTitle.length)}
       </TodoForm>
     </Container>
   );
 };
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  width: 100%;
   height: auto;
-  margin: 0 auto;
-  padding-bottom: 40px;
+`;
+
+const Header = styled.h1`
+  ${sub_2}
+  color: var(--black);
+  padding: 20px 40px;
 `;
 
 const TodoInput = styled.input`
   ${body_3}
-  width: 446px;
+  width: 100%;
   height: 46px;
   padding: 12px 14px;
   color: var(--black);
@@ -106,8 +109,8 @@ const TodoInput = styled.input`
 
 const TodoForm = styled.form`
   ${flex("between", "center")}
-  width: 478px;
-  margin: 10px auto;
+  margin: 50px 40px 0 40px;
+  position: relative;
 `;
 
 const TodoList = styled.div`
@@ -122,10 +125,7 @@ const TextBox = styled.div`
   ${flex()};
   width: 100%;
   height: 100%;
-`;
-
-const TodoBox = styled.div`
-  position: relative;
+  min-height: 150px;
 `;
 
 export default Todos;

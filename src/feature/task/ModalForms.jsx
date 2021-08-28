@@ -20,6 +20,7 @@ import { __editCardInfos, resetCard } from "../../redux/modules/board";
 import DateInput from "./DateInput";
 import BucketSelect from "../timeline/BucketSelect";
 import { resetCardTocalendar } from "../../redux/modules/calendar";
+import ReactTooltip from "react-tooltip";
 
 /**
  *
@@ -50,7 +51,26 @@ const ModalForms = ({ content, source }) => {
   return (
     <Container>
       {source === "calendar" && (
-        <BucketSelect bucketId={content.bucketId} cardId={content.cardId} />
+        <>
+          <BucketSelect
+            bucketId={content.bucketId}
+            cardId={content.cardId}
+            data-tip
+            data-for="bucketSelect"
+          />
+          <ReactTooltip
+            id="bucketSelect"
+            place="top"
+            type="light"
+            backgroundColor="var(--white)"
+            borderColor="var(--line)"
+            border={true}
+          >
+            <span>
+              현재 이 카드가 속한 버킷입니다. 버킷을 변경할 수 있어요!
+            </span>
+          </ReactTooltip>
+        </>
       )}
       <ModalHeader source={source}>
         <BoardDrop.Container
@@ -97,7 +117,7 @@ const ModalForms = ({ content, source }) => {
             value={content.desc}
             shape="textarea"
             saveFunc={editFunc}
-            limit={"제한없음"}
+            limit={200}
           />
         </TodoContainer>
       </DescContainer>

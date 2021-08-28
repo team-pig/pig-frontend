@@ -9,6 +9,7 @@ const Textarea = ({
   placeholder,
   rows,
   minHeight,
+  maxLength,
   ...rest
 }) => {
   const ref = useRef(null);
@@ -34,6 +35,7 @@ const Textarea = ({
 
   return (
     <Wrapper
+      maxLength={maxLength}
       value={value}
       name={name}
       onChange={_onChange}

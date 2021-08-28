@@ -56,6 +56,7 @@ const InputToggle = ({
             ref={myRef}
             rows="10"
             name={name}
+            maxLength={maxLength ? maxLength : limit}
             placeholder={placeholder}
             value={currentValue}
             onChange={(e) => setCurrentValue(e.target.value)}

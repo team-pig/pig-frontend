@@ -22,11 +22,11 @@ const ProjectStatus = () => {
     <Project>
       <Text type="body_1">프로젝트 현황</Text>
       <ProjectInfo>
-        <Text type="sub_2" color="">
-          {guagePercent}% 완료
+        <Text type="body_3" color="">
+          {`${guagePercent}% 완료(${checked} / ${checked + notChecked})`}
         </Text>
         <Line />
-        <Text type="sub_2" color="notice">
+        <Text type="body_3" color="notice">
           오늘도 힘찬 프로젝트!
         </Text>
       </ProjectInfo>

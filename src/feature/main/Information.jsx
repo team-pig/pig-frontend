@@ -8,7 +8,7 @@ import Tags from "./Tags";
 
 // elem
 import { Text, Textarea, IconBtn } from "../../elem";
-import { head_2, sub_2 } from "../../themes/textStyle";
+import { head_3, sub_2 } from "../../themes/textStyle";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
 
@@ -16,6 +16,7 @@ import flex from "../../themes/flex";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { __editRoomDetail } from "../../redux/modules/room";
+import { hiddenScroll } from "../../themes/hiddenScroll";
 
 const Information = () => {
   const { roomId } = useParams();
@@ -111,7 +112,7 @@ const Information = () => {
   return (
     <Container>
       <TitleBox>
-        <Text type="head_2" color="black">
+        <Text type="head_3" color="black">
           {roomName}
         </Text>
         {my === master && (
@@ -141,6 +142,7 @@ const Information = () => {
 };
 
 const Container = styled.section`
+  ${hiddenScroll};
   width: 100%;
   min-height: 40%;
   max-height: 60%;
@@ -157,7 +159,7 @@ const TitleBox = styled.div`
 `;
 
 const TitleInput = styled.input`
-  ${head_2};
+  ${head_3};
   width: 100%;
   height: 52px;
   color: var(--black);

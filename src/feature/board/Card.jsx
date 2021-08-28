@@ -112,15 +112,12 @@ const Card = ({ card, index, bucketId }) => {
       {Object.keys(modalContent).length !== 0 && (
         <CardModal showModal={showModal} setShowModal={setShowModal}>
           <ModalForms content={modalContent} source="board" />
-          <TodosHeader type="sub_2" color="black">
-            할 일
-          </TodosHeader>
           <Todos cardId={card.cardId} />
           <BtnBox>
             <Button
               type="button"
               shape="green-fill"
-              size="300"
+              size="200"
               _onClick={() => setShowModal(false)}
             >
               닫기
@@ -146,11 +143,6 @@ const Container = styled.div`
     border-radius: 4px;
     border: ${(props) => `1px solid ${props.theme.colors[props.bgColor]}`};
   }
-`;
-
-const TodosHeader = styled(Text)`
-  padding: 0 40px;
-  margin-bottom: 21px;
 `;
 
 const Dot = styled.div`
@@ -204,8 +196,8 @@ const StatCnt = styled.div`
 const BtnBox = styled.div`
   ${flex()};
   width: 100%;
-  margin-top: -10px;
-  margin-bottom: 40px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 `;
 
 export default Card;

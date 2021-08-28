@@ -153,7 +153,7 @@ export const __addRoom =
         ...contents,
         roomImage: roomImg
           ? roomImg
-          : "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png",
+          : "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B8%EB%8B%A4%EA%B8%B8%EC%96%B4.png1629891446393",
         tag: tagList,
       };
       //api post
@@ -172,7 +172,7 @@ export const __editRoom =
         ...contents,
         roomImage: roomImg
           ? roomImg
-          : "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png",
+          : "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B8%EB%8B%A4%EA%B8%B8%EC%96%B4.png1629891446393",
         tag: tagList,
         roomId,
       };

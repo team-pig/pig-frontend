@@ -1,28 +1,42 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
+// compo & elem
 import Icon from "../../components/Icon";
+import CardModal from "../task/CardModal";
+import ModalForms from "../task/ModalForms";
+import Todos from "../task/Todos";
+import { Button, IconBtn, Text } from "../../elem";
 
-import { IconBtn, Text } from "../../elem";
+// utill
 import flex from "../../themes/flex";
 
 // redux
 import { setModalId, __deleteSchedule } from "../../redux/modules/calendar.js";
 import { __addSchedule } from "../../redux/modules/calendar";
+import { __loadCardById } from "../../redux/modules/board";
 
-const CalendarInfo = ({ setShowModal }) => {
-  const { roomId } = useParams();
+const CalendarInfo = () => {
   const dispatch = useDispatch();
-
+  const modalId = useSelector((state) => state.calendar.modalId);
+  const currentContent = useSelector((state) => state.calendar.card);
   const { selectedDate } = useSelector((state) => state.date);
   const buckets = useSelector((state) => state.board.columns);
-
   const { scheduleList } = useSelector((state) => state.calendar);
 
+  const [modalContent, setModalContent] = useState({});
+  const [showModal, setShowModal] = useState(false);
+
+  const { roomId } = useParams();
   const targetFormat = selectedDate.clone().format("YYYYMMDD");
 
+  useEffect(() => {
+    setModalContent(currentContent);
+  }, [currentContent]);
+
+  // handler
   const currentSchedules = useMemo(() => {
     const schedules = scheduleList.filter(
       (schedule, idx) =>
@@ -42,8 +56,9 @@ const CalendarInfo = ({ setShowModal }) => {
     (cardId) => {
       setShowModal((pre) => !pre);
       dispatch(setModalId(cardId));
+      dispatch(__loadCardById(roomId, cardId));
     },
-    [dispatch, setShowModal]
+    [dispatch, setShowModal, roomId]
   );
 
   const deleteSchedule = useCallback(
@@ -101,6 +116,26 @@ const CalendarInfo = ({ setShowModal }) => {
               </RemoveBtn>
             </CurrentSchedule>
           ))}
+
+        {Object.keys(modalContent).length !== 0 && (
+          <CardModal showModal={showModal} setShowModal={setShowModal}>
+            <ModalForms content={modalContent} source="calendar" />
+            <TodosHeader type="sub_2" color="black">
+              할 일
+            </TodosHeader>
+            <Todos cardId={modalId} />
+            <BtnBox>
+              <Button
+                type="button"
+                shape="green-fill"
+                size="300"
+                _onClick={() => setShowModal(false)}
+              >
+                닫기
+              </Button>
+            </BtnBox>
+          </CardModal>
+        )}
       </Container>
     </>
   );
@@ -168,6 +203,18 @@ const ScheduleText = styled(Text)`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow-x: hidden;
+`;
+
+const TodosHeader = styled(Text)`
+  padding: 0 40px;
+  margin-bottom: 21px;
+`;
+
+const BtnBox = styled.div`
+  ${flex()};
+  width: 100%;
+  margin-top: -10px;
+  margin-bottom: 40px;
 `;
 
 export default CalendarInfo;

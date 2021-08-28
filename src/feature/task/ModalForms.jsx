@@ -19,6 +19,7 @@ import { resetTodos } from "../../redux/modules/todos";
 import { __editCardInfos, resetCard } from "../../redux/modules/board";
 import DateInput from "./DateInput";
 import BucketSelect from "../timeline/BucketSelect";
+import { resetCardTocalendar } from "../../redux/modules/calendar";
 
 /**
  *
@@ -28,12 +29,12 @@ import BucketSelect from "../timeline/BucketSelect";
 
 const ModalForms = ({ content, source }) => {
   const dispatch = useDispatch();
-  // 전역변수
   const { roomId } = useParams();
 
   useEffect(() => {
     return () => {
       dispatch(resetCard());
+      dispatch(resetCardTocalendar());
       dispatch(resetTodos());
     };
   }, [dispatch]);

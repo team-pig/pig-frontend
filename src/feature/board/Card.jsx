@@ -20,19 +20,18 @@ import { __loadCardById, __deleteCard } from "../../redux/modules/board";
 
 const Card = ({ card, index, bucketId }) => {
   const dispatch = useDispatch();
+  const { roomId } = useParams();
+
+  //task
   const currentContent = useSelector((state) => state.board.card);
-  // const todosCnt = useSelector((state) => state.todos.todosCount);
-  const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState({});
 
-  // 전역변수
-  const { roomId } = useParams();
+  // modal
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setModalContent(currentContent);
   }, [currentContent]);
-
-  const dDay = setDday(card.endDate);
 
   const limitText = (text, limit) => {
     if (text) {
@@ -88,7 +87,7 @@ const Card = ({ card, index, bucketId }) => {
                     {card.endDate}
                   </Text>
                   <Text type="body_4" color="notice">
-                    {dDay}
+                    {setDday(card.endDate)}
                   </Text>
                 </EndDate>
                 <CardStat>

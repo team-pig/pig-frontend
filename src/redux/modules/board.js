@@ -4,7 +4,7 @@ import produce from "immer";
 import { bucketApi } from "../../api/bucketApi";
 import { cardApi } from "../../api/cardApi";
 import { __reqError } from "./error";
-import { editSchedule } from "./calendar";
+import { editSchedule, loadCardByIdToCalendar } from "./calendar";
 
 /**
  * action type
@@ -195,6 +195,7 @@ export const __loadCardById = (roomId, cardId) => async (dispatch) => {
   try {
     const { data } = await cardApi.getCardById(roomId, cardId);
     dispatch(loadCardById(data));
+    dispatch(loadCardByIdToCalendar(data));
   } catch (e) {
     console.log(`카드 불러오기 실패 ${e}`);
   }

@@ -10,7 +10,7 @@ import { Text } from "../../elem";
 import { body_3, body_4 } from "../../themes/textStyle";
 import Icon from "../../components/Icon";
 
-const MemberStatus = ({ member, name }) => {
+const MemberStatus = ({ member, graphColor }) => {
   const [viewTag, setViewTag] = useState(false);
   const { checked, nickname, notChecked, desc, tags, avatar, color } = member;
   const memberPercent = isNaN(
@@ -36,7 +36,7 @@ const MemberStatus = ({ member, name }) => {
           <span>{nickname}</span>
         </ReactTooltip>
         <GraphBox>
-          <Graph color="mint" height="15px" percent={memberPercent} />
+          <Graph color={graphColor} height="15px" percent={memberPercent} />
         </GraphBox>
       </MemberMain>
       <Message>

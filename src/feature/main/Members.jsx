@@ -11,14 +11,19 @@ import { body_1 } from "../../themes/textStyle";
 
 const Members = () => {
   const memberStatus = useSelector((state) => state.todos.memberStatus);
+  const colorAry = ["yellow", "orange", "mint", "blue"];
 
   return (
     <Container>
       <MembersHeader>팀원 현황</MembersHeader>
       <MyStatus />
       {memberStatus &&
-        memberStatus.map((member) => (
-          <MemberStatus key={member.userId} member={member} />
+        memberStatus.map((member, idx) => (
+          <MemberStatus
+            key={member.userId}
+            member={member}
+            graphColor={colorAry[idx % 4]}
+          />
         ))}
     </Container>
   );

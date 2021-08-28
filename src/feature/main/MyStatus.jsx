@@ -1,18 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-import flex from "../../themes/flex";
-import { Text } from "../../elem";
-import Icon from "../../components/Icon";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import ReactTooltip from "react-tooltip";
+
 import Graph from "./Graph";
 import Tags from "./Tags";
+import Icon from "../../components/Icon";
+
+import flex from "../../themes/flex";
 import { body_4 } from "../../themes/textStyle";
-import ReactTooltip from "react-tooltip";
 import MyAvatar from "../../elem/MyAvatar";
+import { Text } from "../../elem";
 
 // redux & api
 import { __editMyStatus } from "../../redux/modules/todos";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 
 //etc
 const MyStatus = () => {
@@ -105,7 +107,7 @@ const MyStatus = () => {
           <span>{nickname}</span>
         </ReactTooltip>
         <GraphBox>
-          <Graph color="mint" height="15px" percent={memberPercent} />
+          <Graph color="blue" height="15px" percent={memberPercent} />
         </GraphBox>
         <ActiveEdit
           onClick={() => {

@@ -23,8 +23,11 @@ const EDIT_SCHEDULE_BUCKET = "calendar/EDIT_SCHEDULE_BUCKET";
 const DELETE_SCHEDULE = "calendar/DELETE_SCHEDULE";
 const GET_TODO_BY_SCHEDULE = "calendar/GET_TODO_BY_SCHEDULE";
 const RESET_TIMELINE = "calendar/RESET_TIMELINE";
+const LOAD_CARD_BY_ID = "calendar/LOAD_CARD_BY_ID";
+const RESET_CARD = "calendar/RESET_CARD";
 
 // action creator
+export const resetCardTocalendar = createAction(RESET_CARD);
 const loadBuckets = createAction(LOAD_BUCKETS, (buckets, bucketOrders) => ({
   buckets,
   bucketOrders,
@@ -54,6 +57,10 @@ const getTodoBySchedule = createAction(GET_TODO_BY_SCHEDULE, (todos) => ({
   todos,
 }));
 export const resetTimeline = createAction(RESET_TIMELINE);
+
+export const loadCardByIdToCalendar = createAction(LOAD_CARD_BY_ID, (card) => ({
+  card,
+}));
 
 // thunk
 export const __loadBuckets =
@@ -180,6 +187,7 @@ const initialState = {
   currentScheduleId: null,
   currentTodos: [],
   modalId: null,
+  card: {},
 };
 
 // reducer
@@ -225,6 +233,9 @@ const calendar = handleActions(
         for (const [key, value] of Object.entries(rest)) {
           draft.scheduleList[idx][key] = value;
         }
+        // 현재 모달에 띄어진 카드의 정보 업데이트
+        const newInfoKey = Object.keys(rest)[0];
+        draft.card[newInfoKey] = rest[newInfoKey];
       }),
     [EDIT_SCHEDULE_BUCKET]: (state, action) =>
       produce(state, (draft) => {
@@ -249,6 +260,18 @@ const calendar = handleActions(
     [RESET_TIMELINE]: (state, action) =>
       produce(action, (draft) => {
         Object.entries(initialState).forEach((ary) => (draft[ary[0]] = ary[1]));
+      }),
+
+    // 모달을 띄었을 때 cardId를 통해 1장의 카드 상세 정보 불러와서 모듈에 저장
+    [LOAD_CARD_BY_ID]: (state, { payload }) =>
+      produce(state, (draft) => {
+        console.log(payload);
+        draft.card = payload.card.result;
+      }),
+
+    [RESET_CARD]: (state, { payload }) =>
+      produce(state, (draft) => {
+        draft.card = {};
       }),
   },
   initialState

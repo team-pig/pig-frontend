@@ -1,24 +1,30 @@
-import React, { useState, forwardRef } from "react";
-import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import ko from "date-fns/locale/ko";
+import React, { forwardRef } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import flex from "../../themes/flex";
-import "../../themes/react-datepicker.css";
-import Icon from "../../components/Icon";
 import moment from "moment";
+
+// datepicker package
+import DatePicker, { registerLocale } from "react-datepicker";
+import ko from "date-fns/locale/ko";
+import "react-datepicker/dist/react-datepicker.css";
+import "../../themes/react-datepicker.css";
+
+// compo & elem & utill
+import flex from "../../themes/flex";
+import Icon from "../../components/Icon";
+
+// redux
 import { useDispatch } from "react-redux";
 import { __editCardInfos } from "../../redux/modules/board";
-import { useParams } from "react-router-dom";
-
 registerLocale("ko", ko);
 
 const DateInput = ({ type, source, card }) => {
-  console.log(source);
   const dispatch = useDispatch();
   const { roomId } = useParams();
-  const [startDate, setStartDate] = useState(new Date(card.startDate));
-  const [endDate, setEndDate] = useState(new Date(card.endDate));
+
+  /**
+   * react-datepicker 커스텀 인풋 : style 수정은 themes/react-datepicker.css 파일에서 적용
+   */
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <div className="example-custom-input" onClick={onClick} ref={ref}>
       {value}
@@ -59,11 +65,30 @@ const DateInput = ({ type, source, card }) => {
             </HeaderWrapper>
           );
         }}
-        selected={type === "start" ? startDate : endDate}
+        selected={
+          card && type === "start"
+            ? new Date(card.startDate)
+            : new Date(card.endDate)
+        }
         onChange={(date) => {
           const formatDate = moment(date).format("YYYY-MM-DD");
           if (type === "start") {
-            setStartDate(date);
+            const diffDay = moment(card.endDate).diff(
+              moment(date).format("YYYY-MM-DD"),
+              "days"
+            );
+            if (diffDay <= 0) {
+              dispatch(
+                __editCardInfos(
+                  roomId,
+                  {
+                    cardId: card.cardId,
+                    endDate: formatDate,
+                  },
+                  source
+                )
+              );
+            }
             dispatch(
               __editCardInfos(
                 roomId,
@@ -75,7 +100,6 @@ const DateInput = ({ type, source, card }) => {
               )
             );
           } else if (type === "end") {
-            setEndDate(date);
             dispatch(
               __editCardInfos(
                 roomId,

@@ -41,7 +41,7 @@ const JoinRoomModal = ({ showModal, joinModal }) => {
   const disabled = inviteCode === "";
   const join = () => {
     if (!disabled) {
-      dispatch(__joinRoom(inviteCode));
+      dispatch(__joinRoom({inviteCode}));
     }
     setInviteCode("");
     setIsInfo(false);

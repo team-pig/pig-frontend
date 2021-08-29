@@ -9,6 +9,7 @@ import { setCurrent } from "../../redux/modules/date";
 import { IconBtn, Text } from "../../elem";
 import flex from "../../themes/flex";
 import Icon from "../../components/Icon";
+import { body_2 } from "../../themes/textStyle";
 
 const CalendarHeader = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,9 @@ const CalendarHeader = () => {
       <Header>
         <Nav>
           <CurrentMonth>
-            <Text type="sub_1">{current.format("YYYY년 MM월")}</Text>
+            <CurrentText type="sub_1">
+              {current.format("YYYY년 MM월")}
+            </CurrentText>
           </CurrentMonth>
           <NavIcons>
             <IconBtn _onClick={showLastMonth} padding="5px">
@@ -53,14 +56,28 @@ const Header = styled.div`
   width: 100%;
   height: 60px;
   padding: 0 20px;
+
+  ${({ theme }) => theme.device.mobile} {
+    height: 50px;
+  }
 `;
 
 const CurrentMonth = styled.h2`
   margin-right: 12px;
+
+  ${({ theme }) => theme.device.mobile} {
+    margin-right: 9px;
+  }
 `;
 
 const Nav = styled.nav`
   ${flex()};
+`;
+
+const CurrentText = styled(Text)`
+  ${({ theme }) => theme.device.mobile} {
+    ${body_2};
+  }
 `;
 
 const NavIcons = styled.div`

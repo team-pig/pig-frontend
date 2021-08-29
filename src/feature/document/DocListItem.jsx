@@ -35,7 +35,7 @@ const DocListItem = memo(({ doc, isCurrentDoc }) => {
           </IconBox>
         ) : (
           <IconBox>
-            <Icon icon="document" size="20px" />
+            <Icon icon="document1" size="20px" />
           </IconBox>
         )}
         <Name isCurrentDoc={isCurrentDoc}>{doc.title}</Name>

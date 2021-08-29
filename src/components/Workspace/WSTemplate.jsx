@@ -26,6 +26,10 @@ const Template = styled.main`
   box-sizing: border-box;
   transition: width 500ms ease-in-out;
   overflow: hidden;
+
+  ${({ theme }) => theme.device.mobile} {
+    --mobileNav: 60px;
+  }
 `;
 
 export default WSTemplate;

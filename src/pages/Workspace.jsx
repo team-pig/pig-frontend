@@ -20,6 +20,7 @@ import { loadMessages, setPrevRoomId } from "../redux/modules/chat";
 import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
 
 import { mobileHidden, mobileOnly } from "../themes/responsive";
+import WSMobileNav from "../components/Workspace/WSMobileNav";
 
 const Workspace = () => {
   const dispatch = useDispatch();
@@ -86,6 +87,8 @@ const Workspace = () => {
           <WSSidebar />
         </HiddenMobile>
       </WSTemplate>
+
+      <WSMobileNav url={url} />
     </>
   );
 };

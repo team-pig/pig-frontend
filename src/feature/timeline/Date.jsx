@@ -64,6 +64,11 @@ const DateContainer = styled.div`
 
   ${({ theme }) => theme.device.mobile} {
     border-right: 0;
+    transition: background-color 100ms ease-in-out;
+
+    &:hover {
+      background-color: var(--line);
+    }
   }
 `;
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useRouteMatch } from "react-router-dom";
 
@@ -7,17 +8,18 @@ import WSRouter from "../shared/WSRouter";
 import WSSidebar from "../components/WSSidebar.jsx/WSSidebar";
 import WSTemplate from "../components/Workspace/WSTemplate";
 import SEO from "../components/SEO";
+import Header from "../components/Header";
 
 // redux & api
 import { __getDocs } from "../redux/modules/document";
+import { __getOneRoom } from "../redux/modules/room";
+import { __loadProjectTodo } from "../redux/modules/todos";
 import { loadMessages, setPrevRoomId } from "../redux/modules/chat";
 
 // socket
 import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
-import { __getOneRoom } from "../redux/modules/room";
-import styled from "styled-components";
-import { mobileHidden } from "../themes/responsive";
-import { __loadProjectTodo } from "../redux/modules/todos";
+
+import { mobileHidden, mobileOnly } from "../themes/responsive";
 
 const Workspace = () => {
   const dispatch = useDispatch();
@@ -71,7 +73,13 @@ const Workspace = () => {
   return (
     <>
       <SEO title={room.roomName} />
-      <WSHeader url={url} />
+      <HiddenMobile>
+        <WSHeader url={url} />
+      </HiddenMobile>
+      <OnlyMobile>
+        <Header />
+      </OnlyMobile>
+
       <WSTemplate>
         <WSRouter path={path} />
         <HiddenMobile>
@@ -81,6 +89,10 @@ const Workspace = () => {
     </>
   );
 };
+
+const OnlyMobile = styled.div`
+  ${mobileOnly}
+`;
 
 const HiddenMobile = styled.div`
   ${mobileHidden}

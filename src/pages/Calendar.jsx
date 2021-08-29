@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -24,6 +24,8 @@ const Calendar = () => {
 
   const current = useSelector((state) => state.date.current);
 
+  const rightRef = useRef();
+
   useEffect(() => {
     return () => dispatch(resetTimeline());
   }, [dispatch]);
@@ -36,12 +38,15 @@ const Calendar = () => {
     }
   }, [dispatch, current, roomId]);
 
+  console.log("right");
+  console.log(rightRef.current);
+
   return (
     <CalendarBox>
       <Left>
         <CalendarInfo />
       </Left>
-      <Right>
+      <Right ref={rightRef}>
         <CalendarHeader />
         <CalendarBody />
       </Right>

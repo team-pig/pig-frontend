@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -45,7 +45,7 @@ const WSHeader = ({ url }) => {
         <NameBtn onClick={() => history.push("/mypage")}>
           <NameTag name={user.nickname} />
         </NameBtn>
-        <HeaderBtn onClick={clickLogout}>
+        <HeaderBtn onClick={clickLogout} desktop>
           {/* 태블릿 버전에서 로그아웃은 아이콘으로 대체되어야 함 */}
           <Text type="button" color="var(--black)">
             로그아웃
@@ -67,6 +67,10 @@ const Container = styled.header`
   padding: 0 40px;
   background-color: var(--white);
   border-bottom: 1px solid var(--line);
+
+  ${({ theme }) => theme.device.tablet} {
+    padding: 0 20px;
+  }
 
   ${({ theme }) => theme.device.mobile} {
     padding: 0;
@@ -91,6 +95,7 @@ const TitleBox = styled.div`
   ${mobileHidden};
   width: 260px;
   color: var(--main);
+  white-space: nowrap;
 `;
 
 const Icons = styled.div`
@@ -104,6 +109,14 @@ const HeaderBtn = styled.button`
   height: 100%;
   padding: 0 14px;
   cursor: pointer;
+
+  ${(props) => {
+    if (props.desktop) {
+      return css`
+        ${desktopOnly}
+      `;
+    }
+  }}
 `;
 
 const NameBtn = styled.button`

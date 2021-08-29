@@ -12,7 +12,7 @@ import calendar from "./modules/calendar";
 import board from "./modules/board";
 import todos from "./modules/todos";
 import alert from "./modules/alert";
-
+import confirm from "./modules/confirm";
 import chat from "./modules/chat";
 import resize from "./modules/resize";
 import members from "./modules/members";
@@ -40,6 +40,7 @@ const appReducer = combineReducers({
   chat,
   resize,
   members,
+  confirm,
   router: connectRouter(history),
 });
 

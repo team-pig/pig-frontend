@@ -92,7 +92,10 @@ const RoomCard = ({
     // close와 합쳐보려고 하였으나 모달 닫기 시 e.stop...에서 에러가 남
     e.stopPropagation();
     setIsDisplayDrop(false);
-    setShowModModal(true);
+    if(userId === master){
+      setShowModModal(true);
+    }
+    
   };
 
   const closeModModal = () => {
@@ -120,6 +123,7 @@ const RoomCard = ({
         }}
       >
         <DropDown
+          roomId={roomId}
           userId={userId}
           master={master}
           isDisplayDrop={isDisplayDrop}

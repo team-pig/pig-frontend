@@ -51,8 +51,8 @@ const ImageModule = ({
     setImgObject(e.target.value);
     setRoomImg(e.target.value);
     if(e.target.value.length === 1){
-      setPreview("https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png");
-      setRoomImg("https://teampigbucket.s3.ap-northeast-2.amazonaws.com/teamPigLogo.png");
+      setPreview("https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B8%EB%8B%A4%EA%B8%B8%EC%96%B4.png1629891446393");
+      setRoomImg("https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B8%EB%8B%A4%EA%B8%B8%EC%96%B4.png1629891446393");
     }
   };
 

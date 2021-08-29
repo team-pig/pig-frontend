@@ -36,7 +36,7 @@ const Header = () => {
   const clickLogo = useCallback(() => {
     if (login) history.push("/roomlist");
     else history.push("/");
-  });
+  }, [login, history]);
 
   const clickMypage = useCallback(() => {
     if (login) history.push("/mypage");
@@ -55,8 +55,8 @@ const Header = () => {
           <LogoBox onClick={clickLogo}>
             <Logo src={MobileLogo} alt="협업돼지" />
           </LogoBox>
-          <IconBtn onClick={clickMypage}>
-            {!login && <Icon icon="my" size="24px" />}
+          <IconBtn onClick={clickMypage} login={login}>
+            {!login && <Icon icon="my" size="24px" color="black" />}
             {login && <MyAvatar />}
           </IconBtn>
         </MobileContainer>
@@ -166,14 +166,16 @@ const Btns = styled.div`
 `;
 
 const IconBtn = styled.button`
+  ${flex()};
   position: absolute;
   top: 50%;
   right: 0;
   height: 100%;
   padding: 7px 10px;
-  /* margin-top: 1px; */
   margin-right: -10px;
   transform: translateY(-50%);
+
+  ${(props) => (props.login ? `margin-bottom: 1px;` : `margin-top: 1px;`)};
 `;
 
 const NameBtn = styled.button`

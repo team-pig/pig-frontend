@@ -25,7 +25,6 @@ const Todo = ({ todo }) => {
   const my = useSelector((state) => state.todos.myStatus);
   const isCheckedList = todo.members; // 이 투두에 참여한 팀원
   const _all = team.concat(my); // 모든 팀원
-  console.log(_all);
 
   const [itemClicked, setItemClicked] = useState(false);
   const { roomId } = useParams();
@@ -103,6 +102,7 @@ const Todo = ({ todo }) => {
             saveFunc={editFunc}
             value={todo.todoTitle}
             padding
+            limit={20}
           />
         </TodoInputToggle>
         <TodoMembers>

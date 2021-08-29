@@ -8,7 +8,7 @@ import Tags from "./Tags";
 
 // elem
 import { Text, Textarea, IconBtn } from "../../elem";
-import { head_3, sub_2 } from "../../themes/textStyle";
+import { head_3, sub_2, sub_1 } from "../../themes/textStyle";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
 
@@ -82,6 +82,7 @@ const Information = () => {
             placeholder="제목을 입력하세요"
             value={editedInfo.roomName}
             onChange={(e) => handleChange("roomName", e.target.value)}
+            maxLength="10"
           />
           <TextBtn onClick={clickSave}>
             <Text type="button" color="darkgrey">
@@ -91,13 +92,15 @@ const Information = () => {
         </TitleBox>
         <TagContainer>
           <TagsInput
+            maxLength="100"
             type="text"
-            placeholder="태그는 ','으로 구분하여 입력해주세요."
+            placeholder="태그는 ','으로 구분하여 입력해주세요. (전체 100자 이하)"
             value={editedInfo.tag}
             onChange={(e) => handleChange("tag", e.target.value)}
           />
         </TagContainer>
         <Textarea
+          maxLength={500}
           value={editedInfo.subtitle}
           minHeight={40}
           _onChange={(e) => handleChange("subtitle", e.target.value)}
@@ -128,11 +131,7 @@ const Information = () => {
       <TagContainer>
         <Tags tag={tag} gap="14" textType="sub_2" color="dargrey" />
       </TagContainer>
-      {subtitle && (
-        <SubTitle type="sub_1" color="grey">
-          {subtitle}
-        </SubTitle>
-      )}
+      {subtitle && <SubTitle>{subtitle}</SubTitle>}
       <Line />
       <ViewerContainer padding={true}>
         {desc && <MarkDownViewer option={mainViewerOpt} />}
@@ -172,7 +171,7 @@ const TextBtn = styled.button`
 
 const TagContainer = styled.div`
   height: 30px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 `;
 
 const TagsInput = styled.input`
@@ -182,9 +181,11 @@ const TagsInput = styled.input`
 `;
 
 const SubTitle = styled(Text)`
+  ${sub_1}
+  color: var(--grey);
+  padding-top: 50px;
   min-height: 40px;
   word-break: break-all;
-  padding: 0 12px;
 `;
 
 const Line = styled.div`
@@ -202,6 +203,7 @@ const ViewerContainer = styled.div`
 `;
 
 const EditorContainer = styled.div`
+  margin-top: 20px;
   min-height: 200px;
 `;
 

@@ -23,8 +23,8 @@ import Icon from "../../components/Icon";
 
 const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
   const dispatch = useDispatch();
-  const bucketName = "제목 없음";
-  const cardTitle = "눌러서 제목 수정";
+  const bucketName = `제목없는 버킷`;
+  const cardTitle = "제목없는 카드";
   const initDate = moment().format("YYYY-MM-DD");
   const initColor = "blue";
 
@@ -108,7 +108,15 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
                     </IconButton>
                   )}
 
-                  <IconButton onClick={addBucket}>
+                  <IconButton
+                    onClick={() => {
+                      if (BucketCnt > 6) {
+                        window.alert("버킷은 6개까지 생성 가능합니다.");
+                        return;
+                      }
+                      addBucket();
+                    }}
+                  >
                     <Icon icon="plus-lg" size="24px" color="var(--darkgrey)" />
                   </IconButton>
                 </BucketHeadBtns>
@@ -159,7 +167,7 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
 const Container = styled.div`
   flex-shrink: 0;
   width: 300px;
-  min-height: 900px;
+  min-height: 500px;
   background-color: #f5f5f5;
   border-radius: 4px;
   border: 1px solid var(--line);
@@ -167,17 +175,11 @@ const Container = styled.div`
 `;
 
 const BucketList = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  ${flex("start", "cetner", false)}
+  padding-bottom: 24px;
   gap: 20px;
-  outline: none;
-  min-height: 900px;
-  /* position: relative; */
-  /* border: ${(props) => props.isDraggingOver && "1px solid #ff6b81"}; */
-  /* transition: background-color 0.2s ease; */
-  /* background-color: ${(props) => props.isDraggingOver && "#fbfbfb"}; */
   flex-grow: 1;
+  outline: none;
 `;
 const IconButton = styled.div`
   text-align: center;
@@ -191,7 +193,6 @@ const IconButton = styled.div`
 `;
 
 const AddCardBtn = styled.div`
-  /* ${IconButton}; */
   text-align: center;
   height: 20px;
   svg {
@@ -229,19 +230,3 @@ const BucketHeadBtns = styled.div`
 `;
 
 export default Bucket;
-
-// 👇 최적화 - 지금당장은 필요없음
-// class InnerList extends React.Component {
-//   shouldComponentUpdate(nextProps) {
-//     if (nextProps.cards === this.props.cards) {
-//       return false;
-//     }
-//     return true;
-//   }
-
-//   render() {
-//     return this.props.cards.map((card, index) => (
-//       <Task key={card.id} card={card} index={index} />
-//     ));
-//   }
-// }

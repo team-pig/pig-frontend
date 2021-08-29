@@ -123,15 +123,12 @@ const CalendarInfo = () => {
         {Object.keys(modalContent).length !== 0 && (
           <CardModal showModal={showModal} setShowModal={setShowModal}>
             <ModalForms content={modalContent} source="calendar" />
-            <TodosHeader type="sub_2" color="black">
-              할 일
-            </TodosHeader>
             <Todos cardId={modalId} />
             <BtnBox>
               <Button
                 type="button"
                 shape="green-fill"
-                size="300"
+                size="200"
                 _onClick={() => setShowModal(false)}
               >
                 닫기
@@ -233,16 +230,11 @@ const ScheduleText = styled(Text)`
   }
 `;
 
-const TodosHeader = styled(Text)`
-  padding: 0 40px;
-  margin-bottom: 21px;
-`;
-
 const BtnBox = styled.div`
   ${flex()};
   width: 100%;
-  margin-top: -10px;
-  margin-bottom: 40px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 `;
 
 const InfoText = styled(Text)`

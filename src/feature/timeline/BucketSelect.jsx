@@ -13,7 +13,7 @@ import { Text } from "../../elem";
 import { __loadBucket } from "../../redux/modules/board";
 import { __editScheduleBucket } from "../../redux/modules/calendar";
 
-const BucketSelect = ({ bucketId, cardId }) => {
+const BucketSelect = ({ bucketId, cardId, ...rest }) => {
   const { roomId } = useParams();
 
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ const BucketSelect = ({ bucketId, cardId }) => {
   return (
     <>
       {bucketValues.length !== 0 && target && (
-        <Select onClick={() => setIsShow((pre) => !pre)}>
+        <Select onClick={() => setIsShow((pre) => !pre)} {...rest}>
           <Text type="button" color="main">
             {target.bucketName ? target.bucketName : "제목 없음"}
           </Text>

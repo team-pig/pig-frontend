@@ -2,6 +2,7 @@ import { css } from "styled-components";
 
 export const scrollbar = css`
   &::-webkit-scrollbar {
+    display: block;
     width: 10px;
     height: 10px;
     background-color: var(--white);

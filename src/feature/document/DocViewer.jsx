@@ -83,17 +83,15 @@ const DocViewer = ({ left }) => {
 };
 
 const Container = styled.section`
-  --header: 48px;
-  --minusHeight: calc(var(--header));
-
   position: relative;
   top: 0;
   left: ${(props) => `${props.left}px;`};
   display: flex;
   flex-direction: column;
   width: ${(props) => `calc(100% - ${props.left}px)`};
-  min-height: calc(100vh - var(--minusHeight));
+  height: 100%;
   padding: var(--smMargin) var(--mdMargin);
+  overflow-y: auto;
 
   ${({ theme }) => theme.device.tablet} {
     padding: var(--smMargin);

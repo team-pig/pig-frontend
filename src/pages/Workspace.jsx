@@ -71,15 +71,13 @@ const Workspace = () => {
   return (
     <>
       <SEO title={room.roomName} />
-      <>
-        <WSHeader url={url} />
-        <WSTemplate>
-          <WSRouter path={path} />
-          <HiddenMobile>
-            <WSSidebar />
-          </HiddenMobile>
-        </WSTemplate>
-      </>
+      <WSHeader url={url} />
+      <WSTemplate>
+        <WSRouter path={path} />
+        <HiddenMobile>
+          <WSSidebar />
+        </HiddenMobile>
+      </WSTemplate>
     </>
   );
 };

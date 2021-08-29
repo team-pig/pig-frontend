@@ -1,19 +1,51 @@
 import React, { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
+import Confirm from "../../components/Confirm";
+import ConfirmModal from "../../components/ConfirmModal"; 
 import { button } from "../../themes/textStyle";
 
+import {__deleteRoom} from "../../redux/modules/room";
+
 const DropDown = ({
+  roomId,
   userId,
   master,
   openModModal,
-  deleteRoom,
   exitRoom,
   isDisplayDrop,
   setIsDisplayDrop,
 }) => {
+  const dispatch = useDispatch();
   const dropDownModal = useRef();
+  // show로 confirmModal 보이고 안보이고 결정
+  const show = useSelector((state)=>state.confirm.show)
+  // Confirm 컴포넌트에서 confirm 가져오기
+  // confirm(모달 열고, true, false 값 받기, promise사용해서 true, false 값 받은 뒤에 행동하도록 하는 역할)
+  const {confirm} = Confirm();
+  const showConfirm = async () => {
+    const isConfirmed = await confirm();
+    
+    if(isConfirmed) {
+      dispatch(__deleteRoom(roomId));
+      console.log("삭제완료");
+    }else{
+      console.log("삭제취소");
+    }
+  }
+
+  // openConfirm은 조건을 걸어서 showConfirm 실행하도록 하는 역할
+  const openConfirm = (e) => {
+    e.stopPropagation();
+    setIsDisplayDrop(false);
+    if(userId === master){
+      showConfirm();
+    }
+
+  }
+
 
   const handleClickOutside = (e) => {
     e.stopPropagation();
@@ -29,8 +61,11 @@ const DropDown = ({
 
   const disabled = !(userId === master);
 
+
+
   return (
     <>
+    {show && <ConfirmModal msg="🗑 정말 이 방을 삭제할까요?" />}
       {isDisplayDrop && (
         <Container ref={dropDownModal}>
           <Btn disabled={disabled} onClick={openModModal}>
@@ -39,7 +74,7 @@ const DropDown = ({
           <Btn disabled={!disabled} onClick={exitRoom}>
             나가기
           </Btn>
-          <Btn disabled={disabled} onClick={deleteRoom}>
+          <Btn disabled={disabled} onClick={openConfirm}>
             삭제
           </Btn>
         </Container>

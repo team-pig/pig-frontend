@@ -99,9 +99,13 @@ const DocView = (props) => {
 };
 
 const Container = styled.section`
+  --header: 48px;
+
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: calc(100vh - var(--header));
+  overflow-y: hidden;
 `;
 
 const Top = styled.div`
@@ -117,6 +121,7 @@ const Top = styled.div`
 const Bottom = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
 `;
 
 const ListContainer = styled.div`
@@ -133,6 +138,7 @@ const Overlay = styled.div`
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
   transition: display 500ms ease-in-out;
+  z-index: var(--indexSidebar);
 `;
 
 const MobileListContainer = styled.div`
@@ -143,7 +149,7 @@ const MobileListContainer = styled.div`
   left: ${(props) => (props.isOpenMobileList ? `0;` : `-260px;`)};
   width: 260px;
   transition: left 500ms ease-in-out;
-  z-index: 60;
+  z-index: var(--indexModal);
 `;
 
 export default DocView;

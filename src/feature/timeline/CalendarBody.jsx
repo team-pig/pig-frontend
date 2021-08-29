@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled, { css } from "styled-components";
 
 // component
@@ -11,8 +11,12 @@ import { Text } from "../../elem";
 const CalendarBody = () => {
   const days = ["일", "월", "화", "수", "목", "금", "토"];
 
+  const ref = useRef();
+
+  // console.log(ref);
+
   return (
-    <Container>
+    <Container ref={ref}>
       <CalendarDays>
         {days.map((day, idx) => (
           <Day key={idx}>
@@ -31,7 +35,6 @@ const CalendarBody = () => {
 
 const Container = styled.section`
   --calendarHeader: 60px;
-
   width: 100%;
   height: calc(100% - var(--calendarHeader));
 `;
@@ -39,6 +42,7 @@ const Container = styled.section`
 const CalendarGrid = css`
   display: grid;
   grid-template-columns: repeat(7, calc(100% / 7));
+  width: 100%;
   padding: 0 20px;
 `;
 

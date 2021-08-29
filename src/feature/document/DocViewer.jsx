@@ -83,27 +83,28 @@ const DocViewer = ({ left }) => {
 };
 
 const Container = styled.section`
-  --header: 48px;
-  --minusHeight: calc(var(--header));
-
   position: relative;
   top: 0;
   left: ${(props) => `${props.left}px;`};
   display: flex;
   flex-direction: column;
   width: ${(props) => `calc(100% - ${props.left}px)`};
-  min-height: calc(100vh - var(--minusHeight));
+  height: 100%;
   padding: var(--smMargin) var(--mdMargin);
+  overflow-y: auto;
 
   ${({ theme }) => theme.device.tablet} {
     padding: var(--smMargin);
   }
 
   ${({ theme }) => theme.device.mobile} {
+    --header: 48px;
     --docBar: 48px;
+    --nav: 60px;
+
     left: 0;
     width: 100%;
-    min-height: calc(100vh - var(--minusHeight) - var(--docBar));
+    height: calc(100vh - var(--header) - var(--docBar) - var(--nav));
   }
 `;
 

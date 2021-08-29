@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import { button, body_3 } from "../themes/textStyle";
 
@@ -63,13 +64,14 @@ const LinkBtn = styled.a`
   }
 
   ${({ theme }) => theme.device.mobile} {
-    width: 60px;
-    height: 60px;
+    top: 10px;
+    left: 20px;
+    width: 30px;
+    height: 30px;
+    animation: none;
 
     &::before {
-      ${body_3}
-      left: 0px;
-      font-family: "NanumSquareRound", sans-serif;
+      content: "";
     }
   }
 `;

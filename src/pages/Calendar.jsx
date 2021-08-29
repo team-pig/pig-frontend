@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -24,6 +24,8 @@ const Calendar = () => {
 
   const current = useSelector((state) => state.date.current);
 
+  const rightRef = useRef();
+
   useEffect(() => {
     return () => dispatch(resetTimeline());
   }, [dispatch]);
@@ -36,12 +38,15 @@ const Calendar = () => {
     }
   }, [dispatch, current, roomId]);
 
+  console.log("right");
+  console.log(rightRef.current);
+
   return (
     <CalendarBox>
       <Left>
         <CalendarInfo />
       </Left>
-      <Right>
+      <Right ref={rightRef}>
         <CalendarHeader />
         <CalendarBody />
       </Right>
@@ -57,17 +62,19 @@ const CalendarBox = styled.section`
   height: calc(100vh - var(--header));
 
   ${({ theme }) => theme.device.tablet} {
+    height: calc(100vh - var(--header));
     flex-direction: column-reverse;
     overflow: hidden;
   }
 `;
 
 const Left = styled.section`
-  width: 100%;
+  width: 260px;
   height: 100%;
+  flex-grow: 0;
 
   ${({ theme }) => theme.device.tablet} {
-    flex-shrink: 1;
+    width: 100%;
     overflow: hidden;
   }
 `;

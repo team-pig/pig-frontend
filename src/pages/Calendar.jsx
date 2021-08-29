@@ -55,16 +55,31 @@ const CalendarBox = styled.section`
   ${flex("start", "start")}
   width: 100%;
   height: calc(100vh - var(--header));
-  overflow-y: auto;
+
+  ${({ theme }) => theme.device.tablet} {
+    flex-direction: column-reverse;
+    overflow: hidden;
+  }
 `;
 
 const Left = styled.section`
+  width: 100%;
   height: 100%;
+
+  ${({ theme }) => theme.device.tablet} {
+    flex-shrink: 1;
+    overflow: hidden;
+  }
 `;
 
 const Right = styled.section`
   width: calc(100% - 260px);
   height: 100%;
+
+  ${({ theme }) => theme.device.tablet} {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export default Calendar;

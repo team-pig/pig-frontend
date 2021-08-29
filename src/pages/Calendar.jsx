@@ -62,6 +62,7 @@ const CalendarBox = styled.section`
   height: calc(100vh - var(--header));
 
   ${({ theme }) => theme.device.tablet} {
+    height: calc(100vh - var(--header));
     flex-direction: column-reverse;
     overflow: hidden;
   }

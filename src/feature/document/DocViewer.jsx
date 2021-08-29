@@ -98,10 +98,13 @@ const Container = styled.section`
   }
 
   ${({ theme }) => theme.device.mobile} {
+    --header: 48px;
     --docBar: 48px;
+    --nav: 60px;
+
     left: 0;
     width: 100%;
-    min-height: calc(100vh - var(--minusHeight) - var(--docBar));
+    height: calc(100vh - var(--header) - var(--docBar) - var(--nav));
   }
 `;
 

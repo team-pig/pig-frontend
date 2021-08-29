@@ -143,6 +143,7 @@ const CalendarInfo = () => {
 
 const Container = styled.section`
   --header: 48px;
+
   ${hiddenScroll};
   ${flex("start", "start", false)}
   width: 260px;
@@ -152,11 +153,11 @@ const Container = styled.section`
   overflow-y: auto;
 
   ${({ theme }) => theme.device.tablet} {
-    ${scrollbar};
-    -ms-overflow-style: initial; /* IE and Edge */
-    scrollbar-width: initial; /* Firefox */
+    --nav: 60px;
     width: 100%;
+    height: calc(100% - var(--nav));
     border-right: 0;
+    overflow-y: auto;
   }
 `;
 

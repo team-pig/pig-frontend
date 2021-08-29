@@ -142,10 +142,11 @@ const CalendarInfo = () => {
 };
 
 const Container = styled.section`
+  --header: 48px;
   ${hiddenScroll};
   ${flex("start", "start", false)}
   width: 260px;
-  height: 100%;
+  height: calc(100vh - var(--header));
   background-color: var(--white);
   border-right: 1px solid var(--line);
   overflow-y: auto;
@@ -200,6 +201,7 @@ const CurrentSchedule = styled.div`
   background-color: var(--white);
   padding: 0 20px;
   cursor: pointer;
+  margin-right: 0;
 
   &::before {
     flex-shrink: 0;

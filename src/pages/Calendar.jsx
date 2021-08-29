@@ -68,11 +68,12 @@ const CalendarBox = styled.section`
 `;
 
 const Left = styled.section`
-  width: 100%;
+  width: 260px;
   height: 100%;
+  flex-grow: 0;
 
   ${({ theme }) => theme.device.tablet} {
-    flex-shrink: 1;
+    width: 100%;
     overflow: hidden;
   }
 `;

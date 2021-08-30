@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { Input, Text } from "../../elem";
 import { useSelector } from "react-redux";
@@ -56,16 +56,6 @@ const Todo = ({ todo }) => {
     }
   };
 
-  const getAvatarObj = useCallback(() => {
-    const avatarIdx =
-      _all &&
-      isCheckedList.length > 0 &&
-      _all.findIndex((member) => member.userId === isCheckedList[0].memberId);
-
-    const avatarObj = avatarIdx === -1 ? false : _all[avatarIdx];
-    return avatarObj;
-  }, [_all, isCheckedList]);
-
   return (
     <Container>
       <>
@@ -106,39 +96,49 @@ const Todo = ({ todo }) => {
           />
         </TodoInputToggle>
         <TodoMembers>
-          <BoardDrop.Container
-            direction="right"
-            type="default"
-            avatar={getAvatarObj()}
-            shadow
-          >
-            {_all &&
-              _all.map((member, idx) => {
-                const target =
-                  isCheckedList.findIndex(
-                    (seletedMember) => seletedMember.memberId === member.userId
-                  ) === -1
-                    ? false
-                    : true;
-                return (
-                  <BoardDrop.Item
-                    key={idx}
-                    target={target}
-                    _onClick={() => {
-                      dispatch(
-                        __memberHandler(roomId, todo.todoId, member.userId)
-                      );
-                    }}
-                  >
-                    <Member target={target}>
-                      <Avatar target={member} size={24} />
-                      <Nickname type="body_3">{member.nickname}</Nickname>
-                    </Member>
-                  </BoardDrop.Item>
-                );
-              })}
-          </BoardDrop.Container>
-          <TodoMembersCnt> + {todo.members.length}</TodoMembersCnt>
+          <DropWrapper>
+            <BoardDrop.Container
+              direction="right"
+              type="default"
+              memberStatus={isCheckedList} // 월요일에 api 패치되면 isCheckedList로 변경해야 함 [예상기]
+              shadow
+            >
+              {_all &&
+                _all.map((member, idx) => {
+                  const target =
+                    isCheckedList.findIndex(
+                      (seletedMember) =>
+                        seletedMember.memberId === member.userId
+                    ) === -1
+                      ? false
+                      : true;
+                  return (
+                    <BoardDrop.Item
+                      key={idx}
+                      target={target}
+                      _onClick={() => {
+                        dispatch(
+                          __memberHandler(
+                            roomId,
+                            todo.todoId,
+                            member.userId,
+                            member.color,
+                            member.avatar,
+                            member.nickname
+                          )
+                        );
+                      }}
+                    >
+                      <Member target={target}>
+                        <Avatar target={member} size={24} />
+                        <Nickname type="body_3">{member.nickname}</Nickname>
+                      </Member>
+                    </BoardDrop.Item>
+                  );
+                })}
+            </BoardDrop.Container>
+          </DropWrapper>
+          {/* <TodoMembersCnt> {todo.members.length}명 </TodoMembersCnt> */}
         </TodoMembers>
         <RemoveTodoIcon>
           <Icon
@@ -157,6 +157,7 @@ const Container = styled.div`
   ${flex("between", "center")}
   width: 478px;
   margin: 0 auto;
+  gap: 5px;
 `;
 
 const RemoveTodoIcon = styled.div`
@@ -168,9 +169,9 @@ const RemoveTodoIcon = styled.div`
 
 const TodoItem = styled.div`
   ${flex("between", "center")};
-  width: 446px;
+  width: 100%;
   min-height: 46px;
-  padding: 0 12px;
+  padding: 0 5px;
   border: 1px solid var(--line);
   cursor: pointer;
 
@@ -192,21 +193,25 @@ const TodoItem = styled.div`
   }
 `;
 
+const DropWrapper = styled.div`
+  ${flex()}
+  width: 100px;
+`;
+
 const TodoMembers = styled.div`
   ${flex("between", "center")}
-  width: 60px;
+  padding: 0 5px;
   gap: 5px;
 `;
 
 const TodoMembersCnt = styled.div`
-  ${body_4}
-  color: var(--grey);
-  width: 20px;
+  ${body_4};
+  color: var(--darkgrey);
 `;
 
 const TodoInputToggle = styled.div`
-  ${body_3}
-  width: 300px;
+  ${body_3};
+  width: 65%;
 `;
 
 const CheckboxIcon = styled(Icon)`

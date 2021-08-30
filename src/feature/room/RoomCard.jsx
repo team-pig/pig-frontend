@@ -43,6 +43,15 @@ const RoomCard = ({
   const [isMarked, setIsMarked] = useState(false);
   const userId = useSelector((state) => state.room.userId);
   const history = useHistory();
+  const [convertedMember, setConvertedMember] = useState([]);
+
+  useEffect(() => {
+    const coverted = memberStatus.map((member) => {
+      return { ...member, memberName: member.nickname };
+    });
+
+    setConvertedMember(coverted);
+  }, [memberStatus]);
 
   useEffect(() => {
     setIsCheck();
@@ -89,13 +98,11 @@ const RoomCard = ({
   };
 
   const openModModal = (e) => {
-    // close와 합쳐보려고 하였으나 모달 닫기 시 e.stop...에서 에러가 남
     e.stopPropagation();
     setIsDisplayDrop(false);
-    if(userId === master){
+    if (userId === master) {
       setShowModModal(true);
     }
-    
   };
 
   const closeModModal = () => {
@@ -162,7 +169,7 @@ const RoomCard = ({
             </Text>
           </FooterItem>
           <FooterItem>
-            <MemberImg members={members} memberStatus={memberStatus} />
+            <MemberImg members={members} memberStatus={convertedMember} />
             <More dropDownModal={dropDownModal} />
           </FooterItem>
         </CardFooter>

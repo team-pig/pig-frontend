@@ -13,7 +13,6 @@ import Todo from "./Todo";
 import { body_3, sub_2 } from "../../themes/textStyle";
 import flex from "../../themes/flex";
 import CountText from "../../components/CountText";
-import { Text } from "../../elem";
 
 const Todos = ({ cardId }) => {
   const dispatch = useDispatch();
@@ -47,13 +46,7 @@ const Todos = ({ cardId }) => {
     <Container>
       <Header>할 일</Header>
       <TodoList>
-        {todos.length === 0 && (
-          <TextBox>
-            <Text type="body_3" color="grey">
-              이 카드에 할 일이 없군요
-            </Text>
-          </TextBox>
-        )}
+        {todos.length === 0 && <TextBox>이 카드의 할 일이 없습니다</TextBox>}
         {todos.map((todo) => (
           <Todo key={todo.todoId} todo={todo} roomId={roomId} />
         ))}
@@ -116,6 +109,7 @@ const TodoForm = styled.form`
 const TodoList = styled.div`
   display: flex;
   height: auto;
+  min-height: 150px;
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
@@ -123,6 +117,8 @@ const TodoList = styled.div`
 
 const TextBox = styled.div`
   ${flex()};
+  ${body_3}
+  color: var(--grey);
   width: 100%;
   height: 100%;
   min-height: 150px;

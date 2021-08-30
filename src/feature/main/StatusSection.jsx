@@ -17,9 +17,14 @@ const StatusSection = () => {
 const Container = styled.div`
   --header: 48px;
   --minusHeight: calc(var(--header));
-  width: 350px;
-  height: calc(100vh - var(--minusHeight));
   border-right: 1px solid var(--line);
+  grid-area: Status;
+
+  ${({ theme }) => theme.device.mobile} {
+    height: 100%;
+    border-bottom: 1px solid var(--line);
+    border-right: 0;
+  }
 `;
 
 export default React.memo(StatusSection);

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -25,8 +25,6 @@ const Calendar = () => {
 
   const current = useSelector((state) => state.date.current);
 
-  const rightRef = useRef();
-
   useEffect(() => {
     return () => dispatch(resetTimeline());
   }, [dispatch]);
@@ -47,7 +45,7 @@ const Calendar = () => {
       <Left>
         <CalendarInfo />
       </Left>
-      <Right ref={rightRef}>
+      <Right>
         <CalendarHeader />
         <CalendarBody />
       </Right>

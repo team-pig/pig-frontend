@@ -10,6 +10,7 @@ const Tags = ({ tag, gap, textType }) => {
     typeof tag === "string"
       ? tag.split(regex.commaAndTrim).filter(Boolean)
       : tag;
+
   return (
     <TagBox gap={gap}>
       {filterTag &&

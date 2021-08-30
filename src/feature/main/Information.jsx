@@ -8,7 +8,7 @@ import Tags from "./Tags";
 
 // elem
 import { Text, Textarea, IconBtn } from "../../elem";
-import { head_3, sub_2, sub_1 } from "../../themes/textStyle";
+import { head_3, sub_2, sub_1, body_4 } from "../../themes/textStyle";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
 
@@ -17,6 +17,7 @@ import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { __editRoomDetail } from "../../redux/modules/room";
 import { hiddenScroll } from "../../themes/hiddenScroll";
+import { desktopOnly, mobileOnly } from "../../themes/responsive";
 
 const Information = () => {
   const { roomId } = useParams();
@@ -26,7 +27,8 @@ const Information = () => {
   const dispatch = useDispatch();
   const room = useSelector((state) => state.room.roomInfos);
   const my = useSelector((state) => state.user.user.userId);
-  const { roomName, desc, tag, subtitle, master } = room;
+  const isMobile = useSelector((state) => state.resize.isMobile);
+  const { roomName, desc, tag, subtitle, master, roomImage } = room;
 
   useEffect(() => {
     setEditedInfo({ roomName, desc, tag, subtitle }); // onChange input value
@@ -114,11 +116,17 @@ const Information = () => {
 
   return (
     <Container>
+      <RoomImg src={roomImage} />
       <TitleBox>
-        <Text type="head_3" color="black">
+        <TitleText type="head_3" color="black">
           {roomName}
-        </Text>
-        {my === master && (
+        </TitleText>
+        {isMobile && (
+          <MoreText type="body_4" color="grey">
+            더보기 <Icon icon="arrow-right" size="14px" />
+          </MoreText>
+        )}
+        {!isMobile && my === master && (
           <IconBtn
             _onClick={() => {
               setEditMode((pre) => !pre);
@@ -129,7 +137,7 @@ const Information = () => {
         )}
       </TitleBox>
       <TagContainer>
-        <Tags tag={tag} gap="14" textType="sub_2" color="dargrey" />
+        <Tags tag={tag} gap="10" textType="sub_2" color="dargrey" />
       </TagContainer>
       {subtitle && <SubTitle>{subtitle}</SubTitle>}
       <Line />
@@ -143,11 +151,16 @@ const Information = () => {
 const Container = styled.section`
   ${hiddenScroll};
   width: 100%;
-  min-height: 40%;
-  max-height: 60%;
+  min-height: 250px;
   padding: 20px;
   border-bottom: 1px solid var(--line);
   overflow-y: auto;
+  grid-area: Information;
+
+  ${({ theme }) => theme.device.mobile} {
+    min-height: initial;
+    max-height: 50vh;
+  }
 `;
 
 const TitleBox = styled.div`
@@ -155,6 +168,29 @@ const TitleBox = styled.div`
   width: 100%;
   height: 52px;
   margin-bottom: 20px;
+
+  ${({ theme }) => theme.device.mobile} {
+    height: 26px;
+    margin-bottom: 8px;
+  }
+`;
+
+const RoomImg = styled.div`
+  ${mobileOnly};
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  background-image: ${(props) => `url(${props.src});`};
+  background-size: cover;
+  background-position: center center;
+`;
+
+const TitleText = styled(Text)`
+  ${({ theme }) => theme.device.mobile} {
+    ${sub_1}
+    font-weight: 700;
+  }
 `;
 
 const TitleInput = styled.input`
@@ -170,8 +206,12 @@ const TextBtn = styled.button`
 `;
 
 const TagContainer = styled.div`
-  height: 30px;
+  min-height: 30px;
   margin-bottom: 20px;
+
+  ${({ theme }) => theme.device.mobile} {
+    margin-bottom: 10x;
+  }
 `;
 
 const TagsInput = styled.input`
@@ -182,13 +222,19 @@ const TagsInput = styled.input`
 
 const SubTitle = styled(Text)`
   ${sub_1}
-  color: var(--grey);
-  padding-top: 50px;
+  color: var(--darkgrey);
   min-height: 40px;
   word-break: break-all;
+
+  ${({ theme }) => theme.device.mobile} {
+    ${body_4}
+    min-height: 18px;
+    margin-bottom: 10px;
+  }
 `;
 
 const Line = styled.div`
+  ${desktopOnly}
   height: 1px;
   width: 100%;
   margin: 18px 0;
@@ -200,11 +246,21 @@ const ViewerContainer = styled.div`
   max-width: 100%;
   padding: ${(props) => props.padding && "0 12px;"};
   padding-bottom: 18px;
+
+  ${({ theme }) => theme.device.mobile} {
+    padding: 0;
+    margin-bottom: -10px;
+  }
 `;
 
 const EditorContainer = styled.div`
   margin-top: 20px;
   min-height: 200px;
+`;
+
+const MoreText = styled(Text)`
+  ${flex("start", "center")}
+  cursor: pointer;
 `;
 
 export default React.memo(Information);

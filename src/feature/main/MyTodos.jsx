@@ -6,15 +6,17 @@ import { __switchTodoStat, __removeMyTodo } from "../../redux/modules/todos";
 import Icon from "../../components/Icon";
 
 import { IconBtn, Text, Input } from "../../elem";
-import { body_2 } from "../../themes/textStyle";
+import { body_2, sub_1 } from "../../themes/textStyle";
 import { hiddenScroll } from "../../themes/hiddenScroll";
 import flex from "../../themes/flex";
+import { mobileHidden } from "../../themes/responsive";
 
 const MyTodos = () => {
   const dispatch = useDispatch();
+  const { roomId } = useParams();
   const myId = useSelector((state) => state.user.user.userId);
   const { checkedTodo, notCheckedTodo } = useSelector((state) => state.todos);
-  const { roomId } = useParams();
+  const { isMobile } = useSelector((state) => state.resize);
 
   const [offsetHeight, setOffsetHeight] = useState();
 
@@ -37,9 +39,19 @@ const MyTodos = () => {
   return (
     <Container>
       <TitleBox>
-        <Text type="body_1" color="black">
+        <TitleText type="body_1" color="black">
           나의 할 일 목록
-        </Text>
+          {isMobile && (
+            <MoreText type="body_4" color="grey">
+              더보기 <Icon icon="arrow-right" size="14px" />
+            </MoreText>
+          )}
+        </TitleText>
+        {isMobile && (
+          <Text type="body_4" color="grey">
+            총 {notCheckedTodo.length}개의 할 일이 있어요!
+          </Text>
+        )}
       </TitleBox>
       <MyTodoList>
         <TodoBox>
@@ -162,16 +174,32 @@ const MyTodos = () => {
 const Container = styled.section`
   flex-grow: 1;
   width: 100%;
-  /* background-color: red; */
+
+  ${({ theme }) => theme.device.mobile} {
+    padding: 20px;
+  }
 `;
 
 const TitleBox = styled.div`
   padding: 20px 20px 30px 20px;
+
+  ${({ theme }) => theme.device.mobile} {
+    padding: 0;
+  }
+`;
+
+const TitleText = styled(Text)`
+  ${({ theme }) => theme.device.mobile} {
+    ${flex("between", "center")}
+    ${sub_1}
+    width: 100%;
+    margin-bottom: 10px;
+  }
 `;
 
 const MyTodoList = styled.div`
   ${flex("between", "start")}
-  /* flex-wrap: wrap; */
+  ${mobileHidden}
   width: 100%;
 `;
 
@@ -231,6 +259,11 @@ const TodosTitle = styled.div`
 `;
 
 const Label = styled.label`
+  cursor: pointer;
+`;
+
+const MoreText = styled(Text)`
+  ${flex("start", "center")}
   cursor: pointer;
 `;
 

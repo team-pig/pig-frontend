@@ -24,7 +24,10 @@ const Gauge = styled.div`
   left: 0;
   width: ${(props) => `${props.percent}%;`};
   height: 100%;
-  background-color: ${(props) => props.theme.colors[`${props.color}`]};
+  background-color: ${(props) =>
+    props.color === "point"
+      ? "var(--point)"
+      : props.theme.colors[`${props.color}`]};
   transition: width ease-in-out 200ms;
 `;
 

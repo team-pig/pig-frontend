@@ -46,7 +46,6 @@ const Container = ({
 }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const modalEl = useRef();
-  console.log(memberStatus);
 
   // ---- 다른 영역 클릭 시, 드랍다운 off ---- //
 

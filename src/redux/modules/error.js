@@ -8,6 +8,7 @@ export const __reqError =
   (e) =>
   (dispatch, getState, { history }) => {
     dispatch(reqError(e));
+    console.log(`api 에러 👉 `, e);
     if (e.response.status === 400 || 500) history.replace("/roomlist");
   };
 

@@ -15,18 +15,15 @@ import flex from "../../themes/flex";
 
 // redux
 import { setModalId, __deleteSchedule } from "../../redux/modules/calendar.js";
-import { __addSchedule } from "../../redux/modules/calendar";
 import { __loadCardById } from "../../redux/modules/board";
 import { body_2, body_3, sub_2 } from "../../themes/textStyle";
 import { hiddenScroll } from "../../themes/hiddenScroll";
-import { scrollbar } from "../../themes/scrollbar";
 
 const CalendarInfo = () => {
   const dispatch = useDispatch();
   const modalId = useSelector((state) => state.calendar.modalId);
   const currentContent = useSelector((state) => state.calendar.card);
   const { selectedDate } = useSelector((state) => state.date);
-  const buckets = useSelector((state) => state.board.columns);
   const { scheduleList } = useSelector((state) => state.calendar);
 
   const [modalContent, setModalContent] = useState({});
@@ -48,12 +45,6 @@ const CalendarInfo = () => {
     );
     return schedules;
   }, [scheduleList, targetFormat]);
-
-  const clickCreateBtn = useCallback(() => {
-    const bucketId = Object.keys(buckets)[0];
-    setShowModal((pre) => !pre);
-    dispatch(__addSchedule(roomId, bucketId));
-  }, [buckets, dispatch, roomId, setShowModal]);
 
   const clickSchedule = useCallback(
     (cardId) => {
@@ -87,9 +78,6 @@ const CalendarInfo = () => {
           <ClickedDate type="body_1" color="black">
             {selectedDate.clone().format("M월 D일")}
           </ClickedDate>
-          <AddBtn _onClick={clickCreateBtn} padding="5px">
-            <Icon icon="plus-lg" size="24px" color="var(--darkgrey)" />
-          </AddBtn>
         </TitleBox>
         {cardIsZero && (
           <Info>
@@ -243,13 +231,6 @@ const BtnBox = styled.div`
 const InfoText = styled(Text)`
   ${({ theme }) => theme.device.mobile} {
     ${body_3}
-  }
-`;
-
-const AddBtn = styled(IconBtn)`
-  ${({ theme }) => theme.device.mobile} {
-    /* 디자인 상 여기에서 숨겨지고 CalendarHeader에서 보여줘야 함. 결정 필요 */
-    /* visibility: hidden; */
   }
 `;
 

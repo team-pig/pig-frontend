@@ -17,6 +17,7 @@ import {
   __loadBuckets,
   __loadSchedules,
 } from "../redux/modules/calendar";
+import { __loadBucket } from "../redux/modules/board";
 
 const Calendar = () => {
   const dispatch = useDispatch();
@@ -30,16 +31,16 @@ const Calendar = () => {
     return () => dispatch(resetTimeline());
   }, [dispatch]);
 
-  useEffect(() => dispatch(__loadBuckets(roomId)), [dispatch, roomId]);
+  useEffect(() => {
+    dispatch(__loadBucket(roomId));
+    dispatch(__loadBuckets(roomId));
+  }, [dispatch, roomId]);
 
   useEffect(() => {
     if (current) {
       dispatch(__loadSchedules(roomId, current.clone().format("YYYYMM")));
     }
   }, [dispatch, current, roomId]);
-
-  console.log("right");
-  console.log(rightRef.current);
 
   return (
     <CalendarBox>

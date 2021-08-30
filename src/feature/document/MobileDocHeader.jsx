@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -15,12 +16,18 @@ const MobileDocHeader = ({ clickShowList }) => {
       <IconBtn padding="10px 20px" _onClick={clickShowList}>
         <Icon icon="hamburger" color="var(--darkgrey)" size="24px" />
       </IconBtn>
-      <Text type="body_3" color="main">
+      <TitleText type="body_3" color="main">
         {currentDoc && currentDoc.title}
         {!docId && "저장된 문서가 없습니다."}
-      </Text>
+      </TitleText>
     </>
   );
 };
+
+const TitleText = styled(Text)`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
+`;
 
 export default MobileDocHeader;

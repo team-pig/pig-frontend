@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
 //components
 import Template from "../components/Template";
@@ -63,6 +64,7 @@ const RoomList = () => {
     <>
       <SEO title="협업 방 목록" />
       <Template>
+        <Container>
         {!isJoin && <AddRoomModal showModal={showModal} addModal={addModal} />}
         {isJoin && (
           <JoinRoomModal showModal={showModal} joinModal={joinModal} />
@@ -78,9 +80,16 @@ const RoomList = () => {
           </>
         )}
         <SearchResult />
+        </Container>
       </Template>
     </>
   );
 };
 
+const Container = styled.div`
+/* position: fixed;
+top: 72px; */
+/* width: 100vw; */
+
+`;
 export default React.memo(RoomList);

@@ -66,9 +66,11 @@ const editTodoTitle = createAction(EDIT_TODO_TITLE, (todoId, newTodoTitle) => ({
   newTodoTitle,
 }));
 
-const addMember = createAction(ADD_MEMBER, (todoId, member) => ({
+const addMember = createAction(ADD_MEMBER, (todoId, member, color, avatar) => ({
   todoId,
   member,
+  color,
+  avatar,
 }));
 const removeMember = createAction(REMOVE_MEMBER, (todoId, memberId) => ({
   todoId,
@@ -200,7 +202,7 @@ export const __removeMyTodo =
   };
 
 export const __memberHandler =
-  (roomId, todoId, userId) => async (dispatch, getState) => {
+  (roomId, todoId, userId, color, avatar) => async (dispatch, getState) => {
     const currentTodo = getState().todos.todos;
 
     const targetTodoIndex = currentTodo.findIndex(
@@ -214,7 +216,7 @@ export const __memberHandler =
 
     if (includeIndex === -1) {
       await todoApi.addMember(roomId, todoId, userId);
-      dispatch(addMember(todoId, userId));
+      dispatch(addMember(todoId, userId, color, avatar));
     } else {
       await todoApi.removeMember(roomId, todoId, userId);
       dispatch(removeMember(todoId, userId));
@@ -265,12 +267,14 @@ export const todos = handleActions(
      */
     [ADD_MEMBER]: (state, { payload }) =>
       produce(state, (draft) => {
-        const { todoId, member } = payload;
+        const { todoId, member, color, avatar } = payload;
         const targetIdx = state.todos.findIndex(
           (todo) => todo.todoId === todoId
         );
         draft.todos[targetIdx].members.push({
           memberId: member,
+          color,
+          avatar,
           isChecked: true,
         });
       }),

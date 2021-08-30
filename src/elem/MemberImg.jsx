@@ -3,38 +3,41 @@ import styled from "styled-components";
 
 import { Text } from "./index";
 
-const MemberImg = ({ memberStatus, members, children, ...rest }) => {
+const MemberImg = ({ memberStatus, children, ...rest }) => {
   const [showAllMember, setShowAllMember] = useState(false);
 
   useEffect(() => {
-    if (members.length > 4) {
+    if (memberStatus.length > 3) {
       setShowAllMember(false);
     } else {
       setShowAllMember(true);
     }
-  }, []);
+  }, [memberStatus.length]);
+
   return (
     <>
-
       <MemberImgBox>
-        {/* members배열 나중에 membersImg로 바꿔주기 */}
         {showAllMember
           ? memberStatus.map((member, idx) => {
+              const nickname = member.nickname || member.memberName;
               return (
                 <ProfileImg
                   style={{
-                    left: (members.length - 1 - idx) * 6,
+                    left: (memberStatus.length - 1 - idx) * 6,
                   }}
                   key={member.userId}
                   src={member.avatar}
-                  bgColor={member.avatar==="" ? member.color : ""}
+                  bgColor={member.avatar === "" ? member.color : ""}
                   border={memberStatus.length > 1 ? "--white" : ""}
                 >
-                 {member.avatar==="" && <Nickname>{member.nickname[0].toLowerCase()}</Nickname>}
+                  {member.avatar === "" && (
+                    <Nickname>{nickname[0].toLowerCase()}</Nickname>
+                  )}
                 </ProfileImg>
               );
             })
           : memberStatus.slice(0, 3).map((member, idx) => {
+              const nickname = member.nickname || member.memberName;
               return (
                 <ProfileImg
                   style={{
@@ -43,10 +46,12 @@ const MemberImg = ({ memberStatus, members, children, ...rest }) => {
                   idx={idx}
                   key={member.userId}
                   src={member.avatar}
-                  bgColor={member.avatar==="" ?  member.color : ""}
+                  bgColor={member.avatar === "" ? member.color : ""}
                   border={"--white"}
                 >
-                  {member.avatar==="" && <Nickname>{member.nickname[0].toLowerCase()}</Nickname>}
+                  {member.avatar === "" && (
+                    <Nickname>{nickname[0].toLowerCase()}</Nickname>
+                  )}
                 </ProfileImg>
               );
             })}
@@ -73,7 +78,8 @@ const ProfileImg = styled.div`
   box-sizing: content-box;
   background-size: cover;
   background-position: center center;
-  ${(props) => (props.bgColor && `background-color: ${props.theme.colors[props.bgColor]};`)}
+  ${(props) =>
+    props.bgColor && `background-color: ${props.theme.colors[props.bgColor]};`}
   background-image: url("${(props) => props.src}");
   border: 1px solid var(${(props) => props.border});
   border-radius: 50%;

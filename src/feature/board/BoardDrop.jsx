@@ -3,8 +3,8 @@ import styled, { css } from "styled-components";
 
 // component & elem
 import Icon from "../../components/Icon";
-import Avatar from "../../elem/Avatar";
 import flex from "../../themes/flex";
+import MemberImg from "../../elem/MemberImg";
 
 const Item = ({ children, _onClick, componentType, color, target }) => {
   if (componentType === "colorPicker")
@@ -42,10 +42,11 @@ const Container = ({
   history,
   componentType,
   bgColor,
-  avatar,
+  memberStatus,
 }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const modalEl = useRef();
+  console.log(memberStatus);
 
   // ---- 다른 영역 클릭 시, 드랍다운 off ---- //
 
@@ -89,8 +90,11 @@ const Container = ({
           setIsMenuVisible((pre) => !pre);
         }}
       >
-        {!avatar && <Icon icon="member-plus" size="24px" color="var(--grey)" />}
-        {avatar && <Avatar target={avatar} size="30" />}
+        {memberStatus.length === 0 && (
+          <Icon icon="member-plus" size="24px" color="var(--grey)" />
+        )}
+        {memberStatus.length !== 0 && <MemberImg memberStatus={memberStatus} />}
+
         {isMenuVisible && (
           <ItemWrapper history={history} direction={direction} ref={modalEl}>
             {children}
@@ -180,6 +184,7 @@ const Link = styled.div`
         `;
       }
     }}
+  }
 `;
 
 const BoardDrop = {

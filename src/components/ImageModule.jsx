@@ -50,9 +50,13 @@ const ImageModule = ({
     setPreview(e.target.value);
     setImgObject(e.target.value);
     setRoomImg(e.target.value);
-    if(e.target.value.length === 1){
-      setPreview("https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B8%EB%8B%A4%EA%B8%B8%EC%96%B4.png1629891446393");
-      setRoomImg("https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B8%EB%8B%A4%EA%B8%B8%EC%96%B4.png1629891446393");
+    if (e.target.value.length === 1) {
+      setPreview(
+        "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B8%EB%8B%A4%EA%B8%B8%EC%96%B4.png1629891446393"
+      );
+      setRoomImg(
+        "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B8%EB%8B%A4%EA%B8%B8%EC%96%B4.png1629891446393"
+      );
     }
   };
 
@@ -121,7 +125,11 @@ const UrlInputBox = styled.div`
   height: 46px;
   margin-top: 40px;
   ${({ theme }) => theme.device.mobile} {
-    width: 320px;
+    /* width: 320px; */
+    width: 100%;
+    /* max-width: 324px; */
+    min-width: 250px;
+    /* padding: 0 10px 0 10px; */
   }
 `;
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { Input, Text } from "../../elem";
 import { useSelector } from "react-redux";
@@ -123,7 +123,8 @@ const Todo = ({ todo }) => {
                             todo.todoId,
                             member.userId,
                             member.color,
-                            member.avatar
+                            member.avatar,
+                            member.nickname
                           )
                         );
                       }}

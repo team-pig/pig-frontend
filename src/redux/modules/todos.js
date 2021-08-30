@@ -66,12 +66,16 @@ const editTodoTitle = createAction(EDIT_TODO_TITLE, (todoId, newTodoTitle) => ({
   newTodoTitle,
 }));
 
-const addMember = createAction(ADD_MEMBER, (todoId, member, color, avatar) => ({
-  todoId,
-  member,
-  color,
-  avatar,
-}));
+const addMember = createAction(
+  ADD_MEMBER,
+  (todoId, member, color, avatar, nickname) => ({
+    todoId,
+    member,
+    color,
+    avatar,
+    nickname,
+  })
+);
 const removeMember = createAction(REMOVE_MEMBER, (todoId, memberId) => ({
   todoId,
   memberId,
@@ -202,7 +206,8 @@ export const __removeMyTodo =
   };
 
 export const __memberHandler =
-  (roomId, todoId, userId, color, avatar) => async (dispatch, getState) => {
+  (roomId, todoId, userId, color, avatar, nickname) =>
+  async (dispatch, getState) => {
     const currentTodo = getState().todos.todos;
 
     const targetTodoIndex = currentTodo.findIndex(
@@ -216,7 +221,7 @@ export const __memberHandler =
 
     if (includeIndex === -1) {
       await todoApi.addMember(roomId, todoId, userId);
-      dispatch(addMember(todoId, userId, color, avatar));
+      dispatch(addMember(todoId, userId, color, avatar, nickname));
     } else {
       await todoApi.removeMember(roomId, todoId, userId);
       dispatch(removeMember(todoId, userId));
@@ -267,7 +272,7 @@ export const todos = handleActions(
      */
     [ADD_MEMBER]: (state, { payload }) =>
       produce(state, (draft) => {
-        const { todoId, member, color, avatar } = payload;
+        const { todoId, member, color, avatar, nickname } = payload;
         const targetIdx = state.todos.findIndex(
           (todo) => todo.todoId === todoId
         );
@@ -275,6 +280,8 @@ export const todos = handleActions(
           memberId: member,
           color,
           avatar,
+          nickname,
+          memberName: nickname,
           isChecked: true,
         });
       }),

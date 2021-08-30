@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
 import { Text } from "./index";
 
-const MemberImg = ({ memberStatus, children, ...rest }) => {
+const MemberImg = ({ memberStatus }) => {
   const [showAllMember, setShowAllMember] = useState(false);
 
   useEffect(() => {
@@ -17,9 +16,8 @@ const MemberImg = ({ memberStatus, children, ...rest }) => {
   return (
     <>
       <MemberImgBox>
-        {showAllMember
+        {memberStatus.length !== 0 && showAllMember
           ? memberStatus.map((member, idx) => {
-              const nickname = member.nickname || member.memberName;
               return (
                 <ProfileImg
                   style={{
@@ -31,13 +29,12 @@ const MemberImg = ({ memberStatus, children, ...rest }) => {
                   border={memberStatus.length > 1 ? "--white" : ""}
                 >
                   {member.avatar === "" && (
-                    <Nickname>{nickname[0].toLowerCase()}</Nickname>
+                    <Nickname>{member.memberName[0].toLowerCase()}</Nickname>
                   )}
                 </ProfileImg>
               );
             })
           : memberStatus.slice(0, 3).map((member, idx) => {
-              const nickname = member.nickname || member.memberName;
               return (
                 <ProfileImg
                   style={{
@@ -50,12 +47,12 @@ const MemberImg = ({ memberStatus, children, ...rest }) => {
                   border={"--white"}
                 >
                   {member.avatar === "" && (
-                    <Nickname>{nickname[0].toLowerCase()}</Nickname>
+                    <Nickname>{member.memberName[0].toLowerCase()}</Nickname>
                   )}
                 </ProfileImg>
               );
             })}
-        {!showAllMember && (
+        {memberStatus.length !== 0 && !showAllMember && (
           <MemberCount>
             <Text type="body_3" color="grey">
               +{memberStatus.length - 3}

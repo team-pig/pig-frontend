@@ -73,6 +73,7 @@ const ModalContent = styled.div`
   left: 0;
   z-index: var(--indexModal);
   width: 560px;
+  min-height: 813px;
   height: auto;
   margin: auto auto;
   background-color: white;

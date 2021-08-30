@@ -7,7 +7,7 @@ import { body_3 } from "../themes/textStyle";
 
 const Alert = ({ dispatcher, alertOption }) => {
   const { value, msg, option } = alertOption;
-  console.log(option);
+
   const dispatch = useDispatch();
   return (
     <>

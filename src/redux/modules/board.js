@@ -412,9 +412,12 @@ export const board = handleActions(
 
         draft.columns[destinationBucketId].cardOrder = destinationBucketOrder;
         draft.columns[sourceBucketId].cardOrder = sourceBucketOrder;
-        if (state.cards) {
-          draft.cards[payload.cardId].bucketId = destinationBucketId;
-        }
+        // 아래 코드 주석 후에도 정상 작동으로 보여, 일단 임시로 주석처리함 (카드 복사 버그 수정과 관련된 코드 였음)
+        // if (state.cards) {
+        //   // console.log(state.cards);
+        //   // console.log(payload.cardId);
+        //   // draft.cards[payload.cardId].bucketId = destinationBucketId;
+        // }
       }),
 
     [UPDATE_CARD_INFOS]: (state, { payload }) =>

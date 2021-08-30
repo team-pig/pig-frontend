@@ -10,12 +10,10 @@ import flex from "../../themes/flex";
 import { Text } from "../../elem";
 
 // redux & api
-import { __loadBucket } from "../../redux/modules/board";
 import { __editScheduleBucket } from "../../redux/modules/calendar";
 
 const BucketSelect = ({ bucketId, cardId, ...rest }) => {
   const { roomId } = useParams();
-
   const dispatch = useDispatch();
 
   const buckets = useSelector((state) => state.board.columns);
@@ -27,9 +25,6 @@ const BucketSelect = ({ bucketId, cardId, ...rest }) => {
     bucketValues.filter((bucket) => bucket.bucketId === currentId)[0] ||
       bucketValues[0]
   );
-  useEffect(() => {
-    dispatch(__loadBucket(roomId));
-  }, [dispatch, roomId]);
 
   useEffect(() => {
     setTarget(

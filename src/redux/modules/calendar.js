@@ -15,7 +15,6 @@ const LOAD_BUCKETS = "calendar/LOAD_BUCKETS";
 const SET_CURRENT_ID = "calendar/SET_CURRENT_ID";
 const SET_MODAL_ID = "calendar/SET_MODAL_ID";
 const LOAD_SCHEDULES = "calendar/LOAD_SCHEDULES";
-const LOAD_DETAIL = "calendar/LOAD_DETAIL";
 const LOAD_DAY_SCHEDULES = "calendar/LOAD_DAY_SCHEDULES";
 const ADD_SCHEDULE = "calendar/ADD_SCHEDULE";
 const EDIT_SCHEDULE = "calendar/EDIT_SCHEDULE";
@@ -133,7 +132,7 @@ export const __editScheduleBucket =
         cardId,
       ];
 
-      const { data } = await cardApi.editCardLocation(
+      await cardApi.editCardLocation(
         roomId,
         cardOrder,
         cardId,
@@ -185,6 +184,7 @@ const initialState = {
   scheduleList: [],
   currentList: [],
   currentScheduleId: null,
+  currentSchedule: {},
   currentTodos: [],
   modalId: null,
   card: {},
@@ -218,12 +218,15 @@ const calendar = handleActions(
         );
         draft.currentList = newAry;
       }),
+
     [ADD_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
         const { schedule } = action.payload;
         draft.modalId = schedule.cardId;
-        draft.scheduleList.push(action.payload.schedule);
+        draft.scheduleList.push(schedule);
+        draft.currentSchedule = schedule;
       }),
+
     [EDIT_SCHEDULE]: (state, action) =>
       produce(state, (draft) => {
         const { cardId, ...rest } = action.payload.scheduleObj;
@@ -265,7 +268,6 @@ const calendar = handleActions(
     // 모달을 띄었을 때 cardId를 통해 1장의 카드 상세 정보 불러와서 모듈에 저장
     [LOAD_CARD_BY_ID]: (state, { payload }) =>
       produce(state, (draft) => {
-        console.log(payload);
         draft.card = payload.card.result;
       }),
 

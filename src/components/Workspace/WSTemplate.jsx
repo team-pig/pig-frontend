@@ -27,6 +27,11 @@ const Template = styled.main`
   transition: width 500ms ease-in-out;
   overflow: hidden;
 
+  ${({ theme }) => theme.device.tablet} {
+    width: 100%;
+    overflow: auto;
+  }
+
   ${({ theme }) => theme.device.mobile} {
     --mobileNav: 60px;
   }

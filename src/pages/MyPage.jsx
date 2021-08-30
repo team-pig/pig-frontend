@@ -22,9 +22,12 @@ const MyPage = () => {
   } = useSelector((state) => state.user);
   const alertOption = useSelector((state) => state.alert);
 
-  const changePasswordHandler = useCallback((email) => {
-    dispatch(__resetPassword(email));
-  }, []);
+  const changePasswordHandler = useCallback(
+    (email) => {
+      dispatch(__resetPassword(email));
+    },
+    [dispatch]
+  );
 
   return (
     <>
@@ -62,6 +65,7 @@ const Container = styled.section`
   margin: 0 auto;
   ${flex("start", "center", false)};
   margin-top: 100px;
+
   ${({ theme }) => theme.device.mobile} {
     --minPadding: 18px;
     width: 100%;
@@ -103,7 +107,6 @@ const UserInfo = styled.div`
 
 const NonVisibleWrapper = styled.div`
   text-align: right;
-  padding-left: 16px;
   width: 100%;
   height: 46px;
 `;

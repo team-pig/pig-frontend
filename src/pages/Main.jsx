@@ -10,6 +10,7 @@ import { __loadMyTodos, __loadProjectTodo } from "../redux/modules/todos";
 
 import { useParams } from "react-router-dom";
 import MyTodos from "../feature/main/MyTodos";
+import { hiddenScroll } from "../themes/hiddenScroll";
 
 const Main = () => {
   const dispatch = useDispatch();
@@ -22,13 +23,9 @@ const Main = () => {
 
   return (
     <Container>
-      <LeftSide>
-        <StatusSection />
-      </LeftSide>
-      <RightSide>
-        <Information />
-        <MyTodos />
-      </RightSide>
+      <StatusSection />
+      <Information />
+      <MyTodos />
     </Container>
   );
 };
@@ -37,23 +34,25 @@ const Container = styled.article`
   --header: 48px;
   --minusHeight: calc(var(--header));
 
-  ${flex("start", "start")};
   width: 100%;
   height: calc(100vh - var(--minusHeight));
-`;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  grid-template-rows: 40% 1fr;
+  grid-template-areas:
+    "Status Information"
+    "Status MyTodos";
 
-const LeftSide = styled.aside`
-  flex-shrink: 0;
-  width: 350px; // 8.22 width 수정 (425 -> 350)
-  height: 100%;
-`;
-
-const RightSide = styled.section`
-  --leftSide: 350px; // 8.22 width 수정 (425 -> 350)
-
-  ${flex("start", "start", false)};
-  width: calc(100% - var(--leftSide));
-  height: 100%;
+  ${({ theme }) => theme.device.mobile} {
+    ${hiddenScroll}
+    height: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 180px minmax(200px, auto);
+    grid-template-areas:
+      "Information"
+      "Status"
+      "MyTodos";
+  }
 `;
 
 export default Main;

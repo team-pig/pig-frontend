@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 
 // component
@@ -11,12 +11,8 @@ import { Text } from "../../elem";
 const CalendarBody = () => {
   const days = ["일", "월", "화", "수", "목", "금", "토"];
 
-  const ref = useRef();
-
-  // console.log(ref);
-
   return (
-    <Container ref={ref}>
+    <Container>
       <CalendarDays>
         {days.map((day, idx) => (
           <Day key={idx}>

@@ -19,7 +19,7 @@ import { loadMessages, setPrevRoomId } from "../redux/modules/chat";
 // socket
 import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
 
-import { mobileHidden, mobileOnly } from "../themes/responsive";
+import { mobileHidden, mobileOnly, desktopOnly } from "../themes/responsive";
 import WSMobileNav from "../components/Workspace/WSMobileNav";
 
 const Workspace = () => {
@@ -83,9 +83,9 @@ const Workspace = () => {
 
       <WSTemplate>
         <WSRouter path={path} />
-        <HiddenMobile>
+        <OnlyDesktop>
           <WSSidebar />
-        </HiddenMobile>
+        </OnlyDesktop>
       </WSTemplate>
 
       <WSMobileNav url={url} />
@@ -99,6 +99,10 @@ const OnlyMobile = styled.div`
 
 const HiddenMobile = styled.div`
   ${mobileHidden}
+`;
+
+const OnlyDesktop = styled.div`
+  ${desktopOnly}
 `;
 
 export default React.memo(Workspace);

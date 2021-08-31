@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory, useRouteMatch } from "react-router-dom";
+
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { __switchTodoStat, __removeMyTodo } from "../../redux/modules/todos";
@@ -13,7 +14,10 @@ import { mobileHidden } from "../../themes/responsive";
 
 const MyTodos = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const { url } = useRouteMatch();
   const { roomId } = useParams();
+
   const myId = useSelector((state) => state.user.user.userId);
   const { checkedTodo, notCheckedTodo } = useSelector((state) => state.todos);
   const { isMobile } = useSelector((state) => state.resize);
@@ -42,9 +46,14 @@ const MyTodos = () => {
         <TitleText type="body_1" color="black">
           나의 할 일 목록
           {isMobile && (
-            <MoreText type="body_4" color="grey">
-              더보기 <Icon icon="arrow-right" size="14px" />
-            </MoreText>
+            <button
+              type="button"
+              onClick={() => history.push(`${url}/main/mytodos`)}
+            >
+              <MoreText type="body_4" color="grey">
+                더보기 <Icon icon="arrow-right" size="14px" />
+              </MoreText>
+            </button>
           )}
         </TitleText>
         {isMobile && (

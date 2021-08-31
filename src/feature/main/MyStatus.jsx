@@ -175,6 +175,11 @@ const MyStatus = () => {
 
 const Container = styled.article`
   border-bottom: 1px solid var(--line);
+  ${({ theme }) => theme.device.mobile} {
+    border: 1px solid red;
+    width: 100%;
+    padding: 20px;
+  }
 `;
 
 // 수정모드

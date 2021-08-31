@@ -20,7 +20,8 @@ const Alert = ({ dispatcher, alertOption }) => {
                 {option && (
                   <Button
                     size="150"
-                    _onClick={() => {
+                    _onClick={(e) => {
+                      e.stopPropagation();
                       dispatch(
                         dispatcher({ value: null, msg: null, option: null })
                       );

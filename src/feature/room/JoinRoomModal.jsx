@@ -171,6 +171,10 @@ const DefaultImage = styled.div`
 const ImageBox = styled.div`
   margin: 0 auto;
   padding-top: 46px;
+  ${({ theme }) => theme.device.mobile} {
+    padding-top: 0;
+    padding-bottom: 30px;
+  }
 `;
 
 const Image = styled.div`
@@ -221,8 +225,8 @@ const BtnBox = styled.div`
   padding-bottom: 46px;
   ${({ theme }) => theme.device.mobile} {
     max-width: 280px;
-    min-width: 250px;
-    padding: 0 10px 46px 10px;
+    min-width: 240px;
+    padding: 30px 10px 46px 10px;
   }
 `;
 

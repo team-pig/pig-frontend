@@ -18,8 +18,6 @@ import More from "./More";
 
 //redux
 import {
-  __deleteRoom,
-  __exitRoom,
   __toggleBookmark,
 } from "../../redux/modules/room";
 
@@ -77,26 +75,6 @@ const RoomCard = ({
     }
   };
 
-  const exitRoom = (e) => {
-    e.stopPropagation();
-    setIsDisplayDrop(false);
-
-    if (userId !== master) {
-      const exitCheck = window.confirm("👋 정말 이 방을 나가시겠어요?");
-      exitCheck && dispatch(__exitRoom(roomId));
-    }
-  };
-
-  const deleteRoom = (e) => {
-    e.stopPropagation();
-    setIsDisplayDrop(false);
-
-    if (userId === master) {
-      const deleteCheck = window.confirm("🗑 정말 이 방을 삭제할까요?");
-      deleteCheck && dispatch(__deleteRoom(roomId));
-    }
-  };
-
   const openModModal = (e) => {
     e.stopPropagation();
     setIsDisplayDrop(false);
@@ -135,8 +113,6 @@ const RoomCard = ({
             master={master}
             isDisplayDrop={isDisplayDrop}
             setIsDisplayDrop={setIsDisplayDrop}
-            exitRoom={exitRoom}
-            deleteRoom={deleteRoom}
             openModModal={openModModal}
           ></DropDown>
           <IconMobileBox>

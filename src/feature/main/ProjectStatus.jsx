@@ -36,7 +36,7 @@ const ProjectStatus = ({ inMore }) => {
     : ((checked / (checked + notChecked)) * 100).toFixed(0);
 
   return (
-    <Project>
+    <Project className="project">
       <ProjectTitle type="body_1">
         프로젝트 현황
         {isMobile && !inMore && (

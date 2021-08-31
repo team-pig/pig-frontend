@@ -10,6 +10,8 @@ import CardModal from "../task/CardModal";
 import ModalForms from "../task/ModalForms";
 import Icon from "../../components/Icon";
 import flex from "../../themes/flex";
+import JoyrideContainer from "../../feature/tutorial/JoyrideContainer";
+import { modalSteps } from "../../feature/tutorial/tutorialSteps";
 
 // function
 import setDday from "../../functions/setDday";
@@ -24,6 +26,7 @@ const Card = ({ card, index, bucketId }) => {
 
   //task
   const currentContent = useSelector((state) => state.board.card);
+  const tutorial = useSelector((state) => state.user.tutorial);
   const [modalContent, setModalContent] = useState({});
 
   // modal
@@ -40,8 +43,28 @@ const Card = ({ card, index, bucketId }) => {
     return;
   };
 
+  // Joyride(튜토리얼)
+  const [isShowTutorial, setIsShowTutorial] = useState(false);
+
+  useEffect(() => {
+    if (
+      showModal &&
+      tutorial &&
+      tutorial["modal"] === true &&
+      isShowTutorial === false
+    ) {
+      setIsShowTutorial(true);
+    }
+  }, [tutorial]);
+
   return (
     <>
+      <JoyrideContainer
+        run={isShowTutorial}
+        setRun={setIsShowTutorial}
+        steps={modalSteps}
+        page="modal"
+      />
       <Draggable draggableId={card.cardId} index={index}>
         {(provided, snapshot) => {
           return (

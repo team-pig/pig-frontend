@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -10,9 +10,11 @@ import ResizeWidth from "../components/ResizeWidth";
 import flex from "../themes/flex";
 import { mobileHidden, mobileOnly } from "../themes/responsive";
 import MobileDocHeader from "../feature/document/MobileDocHeader";
+import JoyrideContainer from "../feature/tutorial/JoyrideContainer";
 
 // redux & api
 import { resizeDocList } from "../redux/modules/resize";
+import { docSteps } from "../feature/tutorial/tutorialSteps";
 
 const DocBlank = () => {
   const history = useHistory();
@@ -20,6 +22,7 @@ const DocBlank = () => {
 
   const docList = useSelector((state) => state.document.docList) || [];
   const { isMobile, docListWidth } = useSelector((state) => state.resize);
+  const tutorial = useSelector((state) => state.user.tutorial);
 
   const [isOpenMobileList, setIsOpenMobileList] = useState(false);
 
@@ -47,41 +50,58 @@ const DocBlank = () => {
 
   const clickShowList = () => setIsOpenMobileList((pre) => !pre);
 
+  // Joyride(튜토리얼)
+  const [isShowTutorial, setIsShowTutorial] = useState(false);
+
+  useEffect(() => {
+    if (tutorial && tutorial["document"] === true && isShowTutorial === false) {
+      setIsShowTutorial(true);
+    }
+  }, [tutorial, isShowTutorial]);
+
   return (
-    <Container>
-      <Top>
-        <MobileDocHeader clickShowList={clickShowList} />
-      </Top>
-      <Bottom>
-        <ListContainer>
-          <ResizeWidth
-            size={size}
-            handleSize={handleSize}
-            drag="right"
-            option={option}
-            storeSaveFunc={resizeDocList}
-          >
-            <DocList docList={docList} />
-          </ResizeWidth>
-        </ListContainer>
-        <Content left={size.width}>
-          <ImgBox>
-            <BlankImgBox src={BlankImg} />
-          </ImgBox>
-        </Content>
-      </Bottom>
-      {isMobile && (
-        <>
-          <MobileListContainer isOpenMobileList={isOpenMobileList}>
-            <DocList docList={docList} />
-          </MobileListContainer>
-          <Overlay
-            isOpenMobileList={isOpenMobileList}
-            onClick={clickShowList}
-          ></Overlay>
-        </>
-      )}
-    </Container>
+    <>
+      <JoyrideContainer
+        run={isShowTutorial}
+        setRun={setIsShowTutorial}
+        steps={docSteps}
+        page="document"
+      />
+      <Container className="ws-doc-blank">
+        <Top>
+          <MobileDocHeader clickShowList={clickShowList} />
+        </Top>
+        <Bottom>
+          <ListContainer>
+            <ResizeWidth
+              size={size}
+              handleSize={handleSize}
+              drag="right"
+              option={option}
+              storeSaveFunc={resizeDocList}
+            >
+              <DocList docList={docList} />
+            </ResizeWidth>
+          </ListContainer>
+          <Content className="doc-blank-content" left={size.width}>
+            <ImgBox>
+              <BlankImgBox src={BlankImg} />
+            </ImgBox>
+          </Content>
+        </Bottom>
+        {isMobile && (
+          <>
+            <MobileListContainer isOpenMobileList={isOpenMobileList}>
+              <DocList docList={docList} />
+            </MobileListContainer>
+            <Overlay
+              isOpenMobileList={isOpenMobileList}
+              onClick={clickShowList}
+            ></Overlay>
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 
@@ -131,8 +151,9 @@ const Content = styled.section`
   left: ${(props) => `${props.left}px;`};
   width: ${(props) => `calc(100% - ${props.left}px)`};
   height: 100%;
-  font-size: 2rem;
   min-height: calc(100vh - var(--header));
+  background-color: var(--white);
+  font-size: 2rem;
   overflow: hidden;
 
   ${({ theme }) => theme.device.mobile} {

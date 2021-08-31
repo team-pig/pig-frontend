@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -7,6 +7,8 @@ import styled from "styled-components";
 import CalendarHeader from "../feature/timeline/CalendarHeader";
 import CalendarBody from "../feature/timeline/CalendarBody";
 import CalendarInfo from "../feature/timeline/CalendarInfo";
+import JoyrideContainer from "../feature/tutorial/JoyrideContainer";
+import { calendarSteps } from "../feature/tutorial/tutorialSteps";
 
 // utill
 import flex from "../themes/flex";
@@ -24,6 +26,7 @@ const Calendar = () => {
   const { roomId } = useParams();
 
   const current = useSelector((state) => state.date.current);
+  const tutorial = useSelector((state) => state.user.tutorial);
 
   useEffect(() => {
     return () => dispatch(resetTimeline());
@@ -40,16 +43,34 @@ const Calendar = () => {
     }
   }, [dispatch, current, roomId]);
 
+  // Joyride(튜토리얼)
+  const [isShowTutorial, setIsShowTutorial] = useState(false);
+
+  useEffect(() => {
+    // 스펠링 변경하기
+    if (tutorial && tutorial["calender"] === true && isShowTutorial === false) {
+      setIsShowTutorial(true);
+    }
+  }, [tutorial]);
+
   return (
-    <CalendarBox>
-      <Left>
-        <CalendarInfo />
-      </Left>
-      <Right>
-        <CalendarHeader />
-        <CalendarBody />
-      </Right>
-    </CalendarBox>
+    <>
+      <JoyrideContainer
+        run={isShowTutorial}
+        setRun={setIsShowTutorial}
+        steps={calendarSteps}
+        page="calender" // 스펠링 변경하기
+      />
+      <CalendarBox className="ws-calendar">
+        <Left>
+          <CalendarInfo />
+        </Left>
+        <Right>
+          <CalendarHeader />
+          <CalendarBody />
+        </Right>
+      </CalendarBox>
+    </>
   );
 };
 

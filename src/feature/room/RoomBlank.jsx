@@ -7,7 +7,7 @@ import RoomBlankImg from "../../assets/img/room-blank-img.jpg";
 const RoomBlank = () => {
   return (
     <>
-      <ImgBox>
+      <ImgBox className="room-list">
         <BlankImg src={RoomBlankImg} />
       </ImgBox>
     </>

@@ -64,7 +64,11 @@ const CalendarHeader = () => {
           </NavIcons>
         </Nav>
         <>
-          <AddBtn _onClick={clickCreateBtn} padding="5px">
+          <AddBtn
+            _onClick={clickCreateBtn}
+            padding="5px"
+            className="add-schedule"
+          >
             <Icon icon="plus-lg" size="24px" color="var(--darkgrey)" />
           </AddBtn>
         </>
@@ -95,6 +99,7 @@ const Header = styled.div`
   width: 100%;
   height: 60px;
   padding: 0 20px;
+  background-color: var(--white);
 
   ${({ theme }) => theme.device.mobile} {
     height: 50px;

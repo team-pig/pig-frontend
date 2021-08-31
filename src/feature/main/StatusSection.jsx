@@ -7,7 +7,7 @@ import Members from "./Members";
 
 const StatusSection = () => {
   return (
-    <Container>
+    <Container className="status">
       <ProjectStatus />
       <Members />
     </Container>
@@ -17,8 +17,9 @@ const StatusSection = () => {
 const Container = styled.div`
   --header: 48px;
   --minusHeight: calc(var(--header));
-  border-right: 1px solid var(--line);
   grid-area: Status;
+  border-right: 1px solid var(--line);
+  background-color: var(--white);
 
   ${({ theme }) => theme.device.mobile} {
     height: 100%;

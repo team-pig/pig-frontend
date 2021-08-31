@@ -30,7 +30,6 @@ const SearchBar = ({ joinModal, addModal }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [searchRef]);
 
-
   const openJoinModal = (e) => {
     if (searchContent.length > 0) {
       dispatch(__searchRoom(""));
@@ -119,7 +118,7 @@ const SearchBar = ({ joinModal, addModal }) => {
           </InputBox>
           <BtnContainer>
             <Button size="150" onClick={openAddModal}>
-              <Btn>
+              <Btn className="make-room">
                 <BtnContent>
                   <Icon icon="plus-lg" size="24px" />
                   <Span>방 만들기</Span>
@@ -128,7 +127,7 @@ const SearchBar = ({ joinModal, addModal }) => {
             </Button>
             <BtnBox>
               <Button shape="green-outline" size="150" onClick={openJoinModal}>
-                <Btn>
+                <Btn className="enter-room">
                   <BtnContent>
                     <Icon icon="enter" size="24px" /> <Span>방 입장</Span>
                   </BtnContent>
@@ -199,7 +198,6 @@ const WrapperItem = styled.div`
   width: 100%;
   padding: 0 70px;
   margin: 15px auto 0 auto;
-
 `;
 
 const InputBox = styled.div`

@@ -79,7 +79,7 @@ const Information = ({ detailpage }) => {
   return (
     <>
       {detailpage && <InfoHeader clickSave={clickSave} url={url} {...infos} />}
-      <Container detailpage={detailpage}>
+      <Container detailpage={detailpage} className="information">
         <RoomImg src={roomImage} />
         <InfoTitle clickSave={clickSave} {...infos} />
         <InfoTags {...infos} />
@@ -99,6 +99,7 @@ const Container = styled.section`
   border-bottom: 1px solid var(--line);
   overflow-y: auto;
   grid-area: Information;
+  background-color: var(--white);
 
   ${({ theme }) => theme.device.mobile} {
     min-height: initial;

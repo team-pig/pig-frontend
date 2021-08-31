@@ -73,7 +73,7 @@ const CalendarInfo = () => {
 
   return (
     <>
-      <Container>
+      <Container className="calendar-info">
         <TitleBox>
           <ClickedDate type="body_1" color="black">
             {selectedDate.clone().format("M월 D일")}

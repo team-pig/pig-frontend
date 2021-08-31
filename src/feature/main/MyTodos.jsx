@@ -41,7 +41,7 @@ const MyTodos = () => {
   }
 
   return (
-    <Container>
+    <Container className="mytodos">
       <TitleBox>
         <TitleText type="body_1" color="black">
           나의 할 일 목록
@@ -183,6 +183,7 @@ const MyTodos = () => {
 const Container = styled.section`
   flex-grow: 1;
   width: 100%;
+  background-color: var(--white);
 
   ${({ theme }) => theme.device.mobile} {
     padding: 20px;

@@ -64,9 +64,6 @@ const CalendarHeader = () => {
           </NavIcons>
         </Nav>
         <>
-          {/* <IconBtn _onClick={() => {}} padding="5px">
-            <Icon icon="search" size="24px" color="var(--darkgrey)" />
-          </IconBtn> */}
           <AddBtn _onClick={clickCreateBtn} padding="5px">
             <Icon icon="plus-lg" size="24px" color="var(--darkgrey)" />
           </AddBtn>
@@ -132,6 +129,9 @@ const BtnBox = styled.div`
   width: 100%;
   margin-top: 30px;
   margin-bottom: 30px;
+  ${({ theme }) => theme.device.mobile} {
+    margin-bottom: 0;
+  }
 `;
 
 const AddBtn = styled(IconBtn)`

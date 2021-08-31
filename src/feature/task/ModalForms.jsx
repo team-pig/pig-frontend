@@ -20,7 +20,6 @@ import { __editCardInfos, resetCard } from "../../redux/modules/board";
 import DateInput from "./DateInput";
 import BucketSelect from "../timeline/BucketSelect";
 import { resetCardTocalendar } from "../../redux/modules/calendar";
-import ReactTooltip from "react-tooltip";
 
 /**
  *
@@ -51,26 +50,7 @@ const ModalForms = ({ content, source }) => {
   return (
     <Container>
       {source === "calendar" && (
-        <>
-          <BucketSelect
-            bucketId={content.bucketId}
-            cardId={content.cardId}
-            data-tip
-            data-for="bucketSelect"
-          />
-          <ReactTooltip
-            id="bucketSelect"
-            place="top"
-            type="light"
-            backgroundColor="var(--white)"
-            borderColor="var(--line)"
-            border={true}
-          >
-            <span>
-              현재 이 카드가 속한 버킷입니다. 버킷을 변경할 수 있어요!
-            </span>
-          </ReactTooltip>
-        </>
+        <BucketSelect bucketId={content.bucketId} cardId={content.cardId} />
       )}
       <ModalHeader source={source}>
         <BoardDrop.Container
@@ -126,14 +106,18 @@ const ModalForms = ({ content, source }) => {
 };
 
 const Container = styled.div`
-  padding: 40px;
+  padding: 20px;
   position: relative;
+
+  ${({ theme }) => theme.device.mobile} {
+    padding: 20px;
+  }
 `;
 
 const ModalHeader = styled.div`
   ${flex("start", "center")};
   gap: 10px;
-  padding: 10px 0 0 0;
+  padding: 20px 0 0 0;
   margin-top: ${(props) => props.source === "calendar" && "30px"};
   margin-bottom: 24px;
 `;
@@ -144,10 +128,13 @@ const Title = styled.h1`
 `;
 
 const DescContainer = styled.div`
-  width: 480px;
+  width: 100%;
   height: 180px;
   padding: 10px;
   border: 1px solid var(--line);
+  ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+  }
 `;
 
 const DueDate = styled.div`

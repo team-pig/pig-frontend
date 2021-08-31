@@ -15,7 +15,7 @@ const Footer = () => {
         <Info>&copy; 2021 Teampig</Info>
         <Info
           onClick={() => {
-            console.log("8.26.15:18 하.. 버그가 넘 많다 ㅎ..");
+            console.log("최종 배포만 남았다..!");
           }}
         >
           ver 1.0.0
@@ -26,10 +26,11 @@ const Footer = () => {
 };
 
 const Container = styled.footer`
+  ${flex("between", "start", false)}
   width: 100%;
-  height: 241px;
+  height: 240px;
   background-color: var(--main);
-  padding: 57px 87px 39px 87px;
+  padding: 20px;
 `;
 
 const Header = styled.div`
@@ -39,14 +40,18 @@ const Header = styled.div`
 const Info = styled.div`
   ${body_3}
   color: var(--white);
-  margin-top: 96px;
-  margin-bottom: 39px;
   text-align: center;
-  width: 200px;
+  width: 33.333%;
+
+  ${({ theme }) => theme.device.mobile} {
+    margin: 0;
+    width: 100%;
+  }
 `;
 
 const FooInfos = styled.div`
-  ${flex("between")}
+  width: 100%;
+  ${flex("between", "center")}
 `;
 
 const Logo = styled.img``;

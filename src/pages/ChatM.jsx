@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import Chat from "../feature/chat/Chat";
 import Icon from "../components/Icon";
 import flex from "../themes/flex";
-import { mobileHidden } from "../themes/responsive";
+import { desktopHidden } from "../themes/responsive";
 import { IconBtn, Text } from "../elem";
 
 const ChatM = () => {
@@ -18,12 +18,14 @@ const ChatM = () => {
   useEffect(() => {
     window.addEventListener(
       "resize",
-      (e) => e.innerWidth >= 1024 && history.replace(`/workspace/${roomId}`)
+      (e) =>
+        e.target.innerWidth >= 1024 && history.replace(`/workspace/${roomId}`)
     );
     return () =>
       window.addEventListener(
         "resize",
-        (e) => e.innerWidth >= 1024 && history.replace(`/workspace/${roomId}`)
+        (e) =>
+          e.target.innerWidth >= 1024 && history.replace(`/workspace/${roomId}`)
       );
   }, [roomId, history]);
 
@@ -49,7 +51,7 @@ const Container = styled.div`
   --header: 48px;
   --nav: 60px;
 
-  ${mobileHidden};
+  ${desktopHidden}
   width: 100%;
   height: ${`${window.innerHeight - 48}px;`};
 `;

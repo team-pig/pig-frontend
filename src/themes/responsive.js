@@ -24,7 +24,7 @@ export const desktopOnly = css`
 `;
 
 // 데스크탑에서만 안보임 (모바일: 보임 / 태블릿: 보임 / 데스크탑: 안보임)
-export const hiddenDesktop = css`
+export const desktopHidden = css`
   display: none;
 
   ${({ theme }) => theme.device.tablet} {

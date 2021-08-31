@@ -56,7 +56,12 @@ const WSMobileNav = ({ url }) => {
   };
 
   const checkMain = () => {
-    if (!checkTab("doc") && !checkTab("board") && !checkTab("timeline"))
+    if (
+      !checkTab("doc") &&
+      !checkTab("board") &&
+      !checkTab("timeline") &&
+      !checkTab("chat")
+    )
       return true;
     else return false;
   };
@@ -79,8 +84,8 @@ const WSMobileNav = ({ url }) => {
         <Icon icon="calendar" size="24px" />
         <NavText>타임라인</NavText>
       </NavBtn>
-      <NavBtn onClick={toChat}>
-        <Icon icon="chat" size="24px" here={checkTab("chat")} />
+      <NavBtn onClick={toChat} here={checkTab("chat")}>
+        <Icon icon="chat" size="24px" />
         <NavText>채팅</NavText>
       </NavBtn>
     </MobileNav>

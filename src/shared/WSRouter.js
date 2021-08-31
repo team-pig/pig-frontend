@@ -11,6 +11,7 @@ import Calendar from "../pages/Calendar";
 import InformationM from "../pages/InformationM";
 import StatusM from "../pages/StatusM";
 import MytodosM from "../pages/MytodosM";
+import ChatM from "../pages/ChatM";
 
 const WSRouter = ({ path }) => {
   return (
@@ -25,6 +26,7 @@ const WSRouter = ({ path }) => {
       <Route path={`${path}/main/information`} component={InformationM} exact />
       <Route path={`${path}/main/status`} component={StatusM} exact />
       <Route path={`${path}/main/mytodos`} component={MytodosM} exact />
+      <Route path={`${path}/chat`} component={ChatM} exact />
     </Switch>
   );
 };

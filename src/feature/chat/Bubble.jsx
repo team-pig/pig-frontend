@@ -55,6 +55,7 @@ const Bubble = ({ message, type }) => {
 };
 
 const ChatStyle = css`
+  max-width: 100%;
   margin-top: 10px;
 `;
 
@@ -70,8 +71,10 @@ const CommonChat = styled.div`
 
 const BubbleStyle = css`
   ${body_4};
+  max-width: 100%;
   padding: 8px 10px;
   border-radius: 4px;
+  white-space: pre-wrap;
 `;
 
 const MyBubble = styled.div`

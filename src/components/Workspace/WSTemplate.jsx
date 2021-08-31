@@ -1,16 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import flex from "../../themes/flex";
-import EventBtn from "../EventBtn";
+import ChatBtn from "../../feature/chat/ChatBtn";
+import checkDesktop from "../../functions/checkDesktop";
+// import EventBtn from "../EventBtn";
 
 const WSTemplate = ({ children }) => {
   const isShowSidebar = useSelector((state) => state.resize.isShowSidebar);
+  const { pathname } = useLocation();
 
   return (
     <Template sidebar={isShowSidebar}>
       {children}
-      <EventBtn />
+      {pathname.includes("chat") === false &&
+        (!checkDesktop() || window.innerWidth < 1024) && <ChatBtn />}
+      {/* <EventBtn /> */}
     </Template>
   );
 };
@@ -30,10 +36,6 @@ const Template = styled.main`
   ${({ theme }) => theme.device.tablet} {
     width: 100%;
     overflow: auto;
-  }
-
-  ${({ theme }) => theme.device.mobile} {
-    --mobileNav: 60px;
   }
 `;
 

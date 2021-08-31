@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { __logout } from "../../redux/modules/user";
@@ -23,6 +23,7 @@ import MyAvatar from "../../elem/MyAvatar";
 
 const Header = () => {
   const history = useHistory();
+  const { pathname } = useLocation();
 
   const dispatch = useDispatch();
   const { user, isLogin: login } = useSelector((state) => state.user);
@@ -44,7 +45,7 @@ const Header = () => {
   }, [login, history]);
 
   return (
-    <Container>
+    <Container pathname={pathname}>
       <InsideBox>
         <LeftSide>
           <LogoBox onClick={() => history.push("/")}>
@@ -93,6 +94,8 @@ const Container = styled.header`
   height: 72px;
   background-color: var(--white);
   border-bottom: 1px solid var(--line);
+  ${(props) => props.pathname.includes("chat") && `display: none`};
+
   ${({ theme }) => theme.device.mobile} {
     height: 50px;
   }

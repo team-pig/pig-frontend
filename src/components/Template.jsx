@@ -1,14 +1,13 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import EventBtn from "./EventBtn";
+// import EventBtn from "./EventBtn";
 
 const Template = ({ children }) => {
-  const { roomId } = useParams;
+  // const { roomId } = useParams;
   return (
     <Main>
       {children}
-      {!roomId && <EventBtn fixed="fixed" />}
+      {/* {!roomId && <EventBtn fixed="fixed" />} */}
     </Main>
   );
 };

@@ -46,6 +46,10 @@ const WSMobileNav = ({ url }) => {
     history.push(`${pureUrl}/timeline`);
   };
 
+  const toChat = () => {
+    history.push(`${pureUrl}/chat`);
+  };
+
   const checkTab = (keyword) => {
     if (history.location.pathname.includes(keyword) === true) return true;
     else return false;
@@ -75,8 +79,8 @@ const WSMobileNav = ({ url }) => {
         <Icon icon="calendar" size="24px" />
         <NavText>타임라인</NavText>
       </NavBtn>
-      <NavBtn>
-        <Icon icon="chat" size="24px" />
+      <NavBtn onClick={toChat}>
+        <Icon icon="chat" size="24px" here={checkTab("chat")} />
         <NavText>채팅</NavText>
       </NavBtn>
     </MobileNav>

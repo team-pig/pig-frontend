@@ -87,9 +87,6 @@ const RoomList = () => {
 };
 
 const Container = styled.div`
-/* position: fixed;
-top: 72px; */
-/* width: 100vw; */
 
 `;
 export default React.memo(RoomList);

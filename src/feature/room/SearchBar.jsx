@@ -178,7 +178,7 @@ const WrapperMobileItem = styled.div`
 const IconSet = styled.div`
   display: flex;
   justify-content: flex-end;
-  min-width: 270px;
+  min-width: 300px;
 `;
 
 const IconBox = styled.div`
@@ -209,7 +209,6 @@ const InputBox = styled.div`
   margin: 0 auto;
   ${({ theme }) => theme.device.mobile} {
     width: 90%;
-   
   }
 `;
 
@@ -242,7 +241,6 @@ const BtnContent = styled.div`
 const BtnBox = styled.div`
   position: relative;
   height: 50px;
-  /* margin-left: -1px; */
   margin-left: 20px;
 `;
 
@@ -252,8 +250,6 @@ const BtnContainer = styled.div`
   width: 330px;
   height: 50px;
   margin-left: 40px;
-  /* ${({ theme }) => theme.device.mobile} {
-  } */
 `;
 
 export default SearchBar;

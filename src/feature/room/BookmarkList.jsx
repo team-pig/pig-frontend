@@ -7,13 +7,12 @@ import { Text } from "../../elem/index.js";
 import RoomCard from "./RoomCard";
 
 const BookmarkList = () => {
-  const { markedList, userId } = useSelector(
-    (state) => state.room
-  );
+  const { markedList, userId } = useSelector((state) => state.room);
 
   return (
     <>
-        {markedList && markedList.length > 0 && <BookmarkContainer>
+      {markedList && markedList.length > 0 && (
+        <BookmarkContainer>
           <TitleWrapper>
             <BookmarkTitle>
               <Text type="body_1">즐겨찾기 방 목록</Text>
@@ -33,7 +32,8 @@ const BookmarkList = () => {
               );
             })}
           </BookmarkBox>
-        </BookmarkContainer>}
+        </BookmarkContainer>
+      )}
     </>
   );
 };
@@ -58,44 +58,43 @@ const BookmarkTitle = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  max-width: 1440px;
   width: 100%;
-  padding: 0 80px;
-
+  max-width: 1440px;
+  min-width: 300px;
+  padding: 0 100px;
   margin: 0 auto;
-
-  @media (max-width: 1440px) {
-    display: flex;
-    /* justify-content: center; */
-    flex-wrap: wrap;
-    padding: 0 10px;
-  }
   ${({ theme }) => theme.device.mobile} {
     display: flex;
     justify-content: center;
+    padding: 0;
   }
 `;
 
 const BookmarkBox = styled.div`
   display: grid;
-  /* overflow-y: auto;
-  -ms-overflow-style: none;
-  height: 299px; */
+  grid-template-columns: repeat(auto-fill, minmax(274px, 1fr));
   grid-gap: 25px;
-  grid-template-columns: repeat(4, 1fr);
+  width: 70vw;
   margin: 0 auto;
-  padding-bottom: 25px;
   border-bottom: 1px solid var(--line);
+  padding: 0 25px 25px 25px;
+
+  /* 즐겨찾기 스크롤 */
+  /* overflow-y: auto;
+-ms-overflow-style: none;
+height: 299px; */
   /* ::-webkit-scrollbar {
-    display: none;
-  } */
-  @media (max-width: 960px) {
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 10px;
-    padding-bottom: 10px;
+  display: none;
+} */
+
+  ${({ theme }) => theme.device.tablet} {
+    padding: 0 45px 25px 45px;
   }
   ${({ theme }) => theme.device.mobile} {
     grid-template-columns: repeat(1, 1fr);
+    width: 100%;
+    min-width: 302px;
+    padding: 0 0 25px 0;
   }
 `;
 

@@ -48,15 +48,12 @@ const ImageModule = ({
     if (!useSaveAvartar) getImgUrlFromS3(uploadFile, file);
   };
 
-  const imgUrlRegex =  new RegExp(
-    /(http[s]*:\/\/)([a-z\-_0-9\/.]+)\.([a-z.]{2,3})\/([a-z0-9\-_\/._~:?#\[\]@!$&'()*+,;=%]*)([a-z0-9]+\.)(jpg|jpeg|png)/i)
-
   const changeImgUrl = (e) => {
     setImgUrl(e.target.value);
     setPreview(e.target.value);
     setImgObject(e.target.value);
     setRoomImg(e.target.value);
-    if (!/imgUrlRegex/.test(e.target.value)) {
+    if (e.target.value.length === 1) {
       setPreview(
         "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B8%EB%8B%A4%EA%B8%B8%EC%96%B4.png1629891446393"
       );

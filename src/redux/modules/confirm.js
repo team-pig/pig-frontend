@@ -7,22 +7,23 @@ export const HIDE_CONFIRM = "confirm/HIDE_CONFIRM";
 const initialState = {
   result: false,
   show: false,
-  text: "",
+  msg: "",
 };
 
-export const showConfirm = createAction(SHOW_CONFIRM, () => ({}));
+export const showConfirm = createAction(SHOW_CONFIRM, (show, msg) => ({
+  show,
+  msg,
+}));
 export const hideConfirm = createAction(HIDE_CONFIRM, () => ({}));
 
 export const __confirm =
-  (show) =>
+  (show, msg) =>
   async (dispatch, getState, { history }) => {
     try {
       if (show === false) {
-        dispatch(showConfirm(show));
-        console.log("show");
+        dispatch(showConfirm(show, msg));
       } else if (show === true) {
         dispatch(hideConfirm(show));
-        console.log("show 끄기");
       }
     } catch (e) {
       console.log(e);
@@ -34,12 +35,12 @@ const confirm = handleActions(
     [SHOW_CONFIRM]: (state, action) =>
       produce(state, (draft) => {
         draft.show = true;
-        draft.text = action.payload.text;
+        draft.msg = action.payload.msg;
       }),
     [HIDE_CONFIRM]: (state, action) =>
       produce(state, (draft) => {
         draft.show = false;
-        draft.text = "";
+        draft.msg = "";
       }),
   },
   initialState

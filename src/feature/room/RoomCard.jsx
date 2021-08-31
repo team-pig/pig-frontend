@@ -123,76 +123,81 @@ const RoomCard = ({
         showModModal={showModModal}
         closeModModal={closeModModal}
       />
-
-      <Container
-        onClick={() => {
-          history.push(`/workspace/${roomId}`);
-        }}
-      >
-        <DropDown
-          roomId={roomId}
-          userId={userId}
-          master={master}
-          isDisplayDrop={isDisplayDrop}
-          setIsDisplayDrop={setIsDisplayDrop}
-          exitRoom={exitRoom}
-          deleteRoom={deleteRoom}
-          openModModal={openModModal}
-        ></DropDown>
-        <IconMobileBox>
-          <LinkIcon inviteCode={inviteCode} />
-          <BookMark isMarked={isMarked} clickBookmark={clickBookmark} />
-          <More dropDownModal={dropDownModal} />
-        </IconMobileBox>
-        <IconBox>
-          <LinkIcon inviteCode={inviteCode} />
-          <BookMark isMarked={isMarked} clickBookmark={clickBookmark} />
-        </IconBox>
-        <CardSection>
-          <CardProfile>
-            <RoundImg url={roomImage} />
-            <TextBox>
-              <RoomNameBox>
-                <Text type="sub_1">{roomName}</Text>
-              </RoomNameBox>
-              <TagBox>
-                <RoomTags tag={tag} />
-              </TagBox>
-            </TextBox>
-          </CardProfile>
-          <SubTitleBox>{subtitle}</SubTitleBox>
-        </CardSection>
-        <CardFooter>
-          <FooterItem>
-            <Text type="body_4" color="grey">
-              {createDate[0] + ". " + createDate[1] + ". " + createDate[2]}
-            </Text>
-          </FooterItem>
-          <FooterItem>
-            <MemberImg members={members} memberStatus={convertedMember} />
+      <Wrapper>
+        <Container
+          onClick={() => {
+            history.push(`/workspace/${roomId}`);
+          }}
+        >
+          <DropDown
+            roomId={roomId}
+            userId={userId}
+            master={master}
+            isDisplayDrop={isDisplayDrop}
+            setIsDisplayDrop={setIsDisplayDrop}
+            exitRoom={exitRoom}
+            deleteRoom={deleteRoom}
+            openModModal={openModModal}
+          ></DropDown>
+          <IconMobileBox>
+            <LinkIcon inviteCode={inviteCode} />
+            <BookMark isMarked={isMarked} clickBookmark={clickBookmark} />
             <More dropDownModal={dropDownModal} />
-          </FooterItem>
-        </CardFooter>
-      </Container>
+          </IconMobileBox>
+          <IconBox>
+            <LinkIcon inviteCode={inviteCode} />
+            <BookMark isMarked={isMarked} clickBookmark={clickBookmark} />
+          </IconBox>
+          <CardSection>
+            <CardProfile>
+              <RoundImg url={roomImage} />
+              <TextBox>
+                <RoomNameBox>
+                  <Text type="sub_1">{roomName}</Text>
+                </RoomNameBox>
+                <TagBox>
+                  <RoomTags tag={tag} />
+                </TagBox>
+              </TextBox>
+            </CardProfile>
+            <SubTitleBox>{subtitle}</SubTitleBox>
+          </CardSection>
+          <CardFooter>
+            <FooterItem>
+              <Text type="body_4" color="grey">
+                {createDate[0] + ". " + createDate[1] + ". " + createDate[2]}
+              </Text>
+            </FooterItem>
+            <FooterItem>
+              <MemberImg members={members} memberStatus={convertedMember} />
+              <More dropDownModal={dropDownModal} />
+            </FooterItem>
+          </CardFooter>
+        </Container>
+      </Wrapper>
     </>
   );
 };
+
+const Wrapper = styled.div`
+  ${({ theme }) => theme.device.mobile} {
+    padding: 0 10px 0 10px;
+  }
+`;
 
 const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 302px;
-  height: 274px;
+  width: 100%;
+  min-width: 302px;
+  max-height: 274px;
   border: 1.2px solid var(--grey);
   border-radius: 5px;
   cursor: pointer;
-  @media (max-width: 960px) {
-    margin-bottom: 15px;
-  }
   ${({ theme }) => theme.device.mobile} {
-    width: 320px;
     height: 154px;
+    min-width: 260px;
   }
 `;
 
@@ -200,7 +205,7 @@ const CardSection = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 302px;
+  width: 100%;
   height: 202px;
   padding: 20px 20px 15px 20px;
 `;
@@ -213,7 +218,6 @@ const IconMobileBox = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100px;
-
   @media screen and (min-width: 768px) {
     display: none;
   }
@@ -260,7 +264,8 @@ const TextBox = styled.div`
   height: 100px;
   ${({ theme }) => theme.device.mobile} {
     left: 70px;
-    width: 206px;
+    right: 70px;
+    width: 70%;
   }
 `;
 const RoomNameBox = styled.div`
@@ -273,7 +278,7 @@ const RoomNameBox = styled.div`
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   ${({ theme }) => theme.device.mobile} {
-    width: 206px;
+    width: 100%;
     -webkit-line-clamp: 1;
   }
 `;
@@ -301,13 +306,12 @@ const SubTitleBox = styled.div`
   color: var(--darkgrey);
   line-height: 140%;
   text-overflow: ellipsis;
-
   @media screen and (min-width: 768px) {
     white-space: nowrap;
   }
-
   ${({ theme }) => theme.device.mobile} {
     display: -webkit-box;
+    width: 100%;
     margin-top: 15px;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
@@ -7,7 +7,7 @@ import Confirm from "../../components/Confirm";
 import ConfirmModal from "../../components/ConfirmModal"; 
 import { button } from "../../themes/textStyle";
 
-import {__deleteRoom} from "../../redux/modules/room";
+import {__deleteRoom,__exitRoom} from "../../redux/modules/room";
 
 const DropDown = ({
   roomId,
@@ -22,28 +22,38 @@ const DropDown = ({
   const dropDownModal = useRef();
   // show로 confirmModal 보이고 안보이고 결정
   const show = useSelector((state)=>state.confirm.show)
+  const isMaster = userId === master ? true : false;
+  const msg = useSelector((state) => state.confirm.msg)
   // Confirm 컴포넌트에서 confirm 가져오기
   // confirm(모달 열고, true, false 값 받기, promise사용해서 true, false 값 받은 뒤에 행동하도록 하는 역할)
   const {confirm} = Confirm();
-  const showConfirm = async () => {
-    const isConfirmed = await confirm();
+  const showConfirm = async (show, msg) => {
+    const isConfirmed = await confirm(show, msg);
     
-    if(isConfirmed) {
+    if(isConfirmed && isMaster) {
       dispatch(__deleteRoom(roomId));
-      console.log("삭제완료");
+    }else if(isConfirmed && !isMaster){
+      dispatch(__exitRoom(roomId));
     }else{
-      console.log("삭제취소");
+      console.log("취소");
     }
   }
 
   // openConfirm은 조건을 걸어서 showConfirm 실행하도록 하는 역할
-  const openConfirm = (e) => {
+  const  openDeleteConfirm = (e) => {
     e.stopPropagation();
     setIsDisplayDrop(false);
-    if(userId === master){
-      showConfirm();
+    if(isMaster){
+      showConfirm(show, "🗑 정말 이 방을 삭제할까요?");
     }
+  }
 
+  const openExitConfirm = (e) => {
+    e.stopPropagation();
+    setIsDisplayDrop(false);
+    if(!isMaster){
+      showConfirm(show, "👋 정말 이 방을 나가시겠어요?");
+    }
   }
 
 
@@ -61,20 +71,18 @@ const DropDown = ({
 
   const disabled = !(userId === master);
 
-
-
   return (
     <>
-    {show && <ConfirmModal msg="🗑 정말 이 방을 삭제할까요?" />}
+    {show && <ConfirmModal msg={msg} />}
       {isDisplayDrop && (
         <Container ref={dropDownModal}>
           <Btn disabled={disabled} onClick={openModModal}>
             수정
           </Btn>
-          <Btn disabled={!disabled} onClick={exitRoom}>
+          <Btn disabled={!disabled} onClick={openExitConfirm}>
             나가기
           </Btn>
-          <Btn disabled={disabled} onClick={openConfirm}>
+          <Btn disabled={disabled} onClick={openDeleteConfirm}>
             삭제
           </Btn>
         </Container>

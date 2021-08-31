@@ -172,11 +172,13 @@ const Wrapper = styled.div`
 const WrapperMobileItem = styled.div`
   ${mobileOnly};
   width: 100%;
+  margin-bottom: 25px;
 `;
 
 const IconSet = styled.div`
   display: flex;
   justify-content: flex-end;
+  min-width: 300px;
 `;
 
 const IconBox = styled.div`
@@ -195,12 +197,9 @@ const WrapperItem = styled.div`
   align-items: center;
   max-width: 1440px;
   width: 100%;
-  padding: 0 80px;
+  padding: 0 70px;
   margin: 15px auto 0 auto;
-  @media (max-width: 1440px) {
-    justify-content: center;
-    padding: 0 10px;
-  }
+
 `;
 
 const InputBox = styled.div`
@@ -209,7 +208,7 @@ const InputBox = styled.div`
   height: 50px;
   margin: 0 auto;
   ${({ theme }) => theme.device.mobile} {
-    width: 320px;
+    width: 90%;
   }
 `;
 
@@ -242,7 +241,6 @@ const BtnContent = styled.div`
 const BtnBox = styled.div`
   position: relative;
   height: 50px;
-  /* margin-left: -1px; */
   margin-left: 20px;
 `;
 
@@ -252,8 +250,6 @@ const BtnContainer = styled.div`
   width: 330px;
   height: 50px;
   margin-left: 40px;
-  /* ${({ theme }) => theme.device.mobile} {
-  } */
 `;
 
 export default SearchBar;

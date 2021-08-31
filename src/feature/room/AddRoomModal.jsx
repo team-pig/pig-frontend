@@ -166,6 +166,9 @@ const ModalContent = styled.div`
 const ImageBox = styled.div`
   margin: 0 auto;
   padding-top: 46px;
+  ${({ theme }) => theme.device.mobile} {
+    padding-top: 0;
+  }
 `;
 
 const InputBox = styled.div`
@@ -186,8 +189,8 @@ const BtnBox = styled.div`
   padding-bottom: 46px;
   ${({ theme }) => theme.device.mobile} {
     max-width: 280px;
-    min-width: 250px;
-    padding: 46px 10px 46px 10px;
+    min-width: 240px;
+    padding: 30px 10px 46px 10px;
   }
 `;
 

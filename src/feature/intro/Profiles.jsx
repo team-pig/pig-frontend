@@ -85,10 +85,25 @@ const Grid = styled.article`
   column-gap: 25px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+
+  ${({ theme }) => theme.device.tablet} {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 20px;
+  }
+
+  ${({ theme }) => theme.device.mobile} {
+    grid-template-columns: repeat(1, 1fr);
+    row-gap: 20px;
+    padding: 0 20px;
+  }
 `;
 const Title = styled.h1`
   ${head_7}
   padding: 0 80px;
   margin-bottom: 58px;
+
+  ${({ theme }) => theme.device.mobile} {
+    padding: 0 20px;
+  }
 `;
 export default Profiles;

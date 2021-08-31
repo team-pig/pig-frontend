@@ -14,38 +14,38 @@ import FeatFourth from "../feature/intro/FeatFourth";
 import FeatFifth from "../feature/intro/FeatFifth";
 import Profiles from "../feature/intro/Profiles";
 import Footer from "../components/Footer";
+import { useSelector } from "react-redux";
 
 const Intro = () => {
   const history = useHistory();
+  const isMobile = useSelector((state) => state.resize.isMobile);
   return (
-    <>
+    <Template>
       <SEO title="홈" />
-      <Template>
-        <Container>
-          <Headline>
-            <Title>쉽고, 빠르고, 가벼운, 협업 솔루션</Title>
-            <SubTitle>진정한 협업이 궁금하다면</SubTitle>
-            <Button
-              onClick={() => {
-                history.push("/login");
-              }}
-            >
-              협업돼지 시작하기
-            </Button>
-            <Gradation>
-              <HeadLineImg src="/img/head.svg" />
-            </Gradation>
-          </Headline>
-          <FeatFirst />
-          <FeatSecond />
-          <FeatThird />
-          <FeatFourth />
-          <FeatFifth />
-          <Profiles />
-        </Container>
-        <Footer />
-      </Template>
-    </>
+      <Container>
+        <Headline>
+          <Title>쉽고, 빠르고, 가벼운, 협업 솔루션</Title>
+          <SubTitle>진정한 협업이 궁금하다면</SubTitle>
+          <Button
+            onClick={() => {
+              history.push("/login");
+            }}
+          >
+            협업돼지 시작하기
+          </Button>
+          <Gradation>
+            <MainImage src={!isMobile ? `img/_main.svg` : `img/_main_m.svg`} />
+          </Gradation>
+        </Headline>
+        <FeatFirst />
+        <FeatSecond />
+        <FeatThird />
+        <FeatFourth />
+        <FeatFifth />
+        <Profiles />
+      </Container>
+      <Footer />
+    </Template>
   );
 };
 
@@ -57,6 +57,10 @@ const Container = styled.section`
 const Headline = styled.article`
   ${flex("center", "cetner", false)}
   margin-top: 106px;
+
+  ${({ theme }) => theme.device.mobile} {
+    margin-top: 50px;
+  }
 `;
 
 const Button = styled.button`
@@ -69,39 +73,68 @@ const Button = styled.button`
     background-color: var(--main);
     color: var(--white);
   }
+
+  ${({ theme }) => theme.device.mobile} {
+    width: 200px;
+  }
 `;
 
 const Gradation = styled.div`
+  position: relative;
   width: 100%;
   height: 700px;
-  background: rgb(255, 255, 255);
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 1) 0%,
     rgba(255, 218, 218, 0.4) 100%,
     rgba(255, 204, 204, 1) 100%
   );
-  position: relative;
   overflow: hidden;
+
+  ${({ theme }) => theme.device.tablet} {
+    height: 500px;
+  }
+
+  ${({ theme }) => theme.device.mobile} {
+    height: 600px;
+  }
 `;
 
-const HeadLineImg = styled.img`
+const MainImage = styled.img`
   position: absolute;
-  bottom: -140px;
+  top: 10%;
   left: 50%;
   transform: translate(-50%);
+  width: 90%;
+
+  ${({ theme }) => theme.device.tablet} {
+    width: 80%;
+  }
+
+  ${({ theme }) => theme.device.mobile} {
+    width: 70%;
+  }
 `;
 
 // local elem
 const Title = styled.h1`
   ${head_2}
   margin-bottom: 30px;
+
+  ${({ theme }) => theme.device.mobile} {
+    ${head_6}
+  }
 `;
 
 const SubTitle = styled.h2`
   ${head_6}
   margin-bottom: 58px;
   color: var(--darkgrey);
+
+  ${({ theme }) => theme.device.mobile} {
+    font-size: 1.6rem;
+    margin-bottom: 40px;
+  }
 `;
 
 export default Intro;

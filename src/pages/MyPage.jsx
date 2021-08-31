@@ -3,17 +3,19 @@ import styled from "styled-components";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { __resetPassword } from "../redux/modules/user";
+import { __resetPassword, __logout } from "../redux/modules/user";
 
 // elem & compo
 import SEO from "../components/SEO";
 import Template from "../components/Template";
 import MyAvatar from "../elem/MyAvatar";
 import flex from "../themes/flex";
-import { body_3, head_3, head_5 } from "../themes/textStyle";
+import { body_3, head_3, head_5, button } from "../themes/textStyle";
 import { Button, Text } from "../elem";
 import Alert from "../components/Alert";
 import { pop } from "../redux/modules/alert";
+import { mobileOnly } from "../themes/responsive";
+import { resetReducer } from "../redux/configStore";
 
 const MyPage = () => {
   const dispatch = useDispatch();
@@ -28,6 +30,11 @@ const MyPage = () => {
     },
     [dispatch]
   );
+
+  const clickLogout = () => {
+    dispatch(__logout());
+    dispatch(resetReducer());
+  };
 
   return (
     <>
@@ -54,6 +61,7 @@ const MyPage = () => {
               </NonVisibleWrapper>
             )}
           </MyInfoContainer>
+          <LogOutBtn onClick={clickLogout}>로그아웃</LogOutBtn>
         </Container>
       </Template>
     </>
@@ -109,6 +117,17 @@ const NonVisibleWrapper = styled.div`
   text-align: right;
   width: 100%;
   height: 46px;
+`;
+
+const LogOutBtn = styled.div`
+  ${mobileOnly}
+  ${button};
+  margin: 30px 0 0 0;
+  text-align: center;
+  color: var(--grey);
+  text-decoration: underline;
+  text-underline-position: under;
+  cursor: pointer;
 `;
 
 export default React.memo(MyPage);

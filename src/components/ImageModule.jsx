@@ -7,12 +7,15 @@ import flex from "../themes/flex";
 import Icon from "./Icon";
 import RoomInput from "../feature/room/RoomInput";
 
+// import regex from "../shared/regex";
+
 const ImageModule = ({
   children,
   getImgUrlFromS3,
   useInitPreview = true,
   useSaveAvartar = false,
   setRoomImg,
+  // imgUrl 로그인에서는 필요없는 부분이라 구분하기 위해 option 사용
   option,
   ...rest
 }) => {
@@ -45,12 +48,15 @@ const ImageModule = ({
     if (!useSaveAvartar) getImgUrlFromS3(uploadFile, file);
   };
 
+  const imgUrlRegex =  new RegExp(
+    /(http[s]*:\/\/)([a-z\-_0-9\/.]+)\.([a-z.]{2,3})\/([a-z0-9\-_\/._~:?#\[\]@!$&'()*+,;=%]*)([a-z0-9]+\.)(jpg|jpeg|png)/i)
+
   const changeImgUrl = (e) => {
     setImgUrl(e.target.value);
     setPreview(e.target.value);
     setImgObject(e.target.value);
     setRoomImg(e.target.value);
-    if (e.target.value.length === 1) {
+    if (!/imgUrlRegex/.test(e.target.value)) {
       setPreview(
         "https://teampigbucket.s3.ap-northeast-2.amazonaws.com/%EA%B8%B8%EB%8B%A4%EA%B8%B8%EC%96%B4.png1629891446393"
       );
@@ -125,11 +131,8 @@ const UrlInputBox = styled.div`
   height: 46px;
   margin-top: 40px;
   ${({ theme }) => theme.device.mobile} {
-    /* width: 320px; */
     width: 100%;
-    /* max-width: 324px; */
     min-width: 250px;
-    /* padding: 0 10px 0 10px; */
   }
 `;
 

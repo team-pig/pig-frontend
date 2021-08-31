@@ -21,6 +21,7 @@ import { joinRoom, leaveRoom, getMessages } from "../shared/useSocket";
 
 import { mobileHidden, mobileOnly, desktopOnly } from "../themes/responsive";
 import WSMobileNav from "../components/Workspace/WSMobileNav";
+import checkDesktop from "../functions/checkDesktop";
 
 const Workspace = () => {
   const dispatch = useDispatch();
@@ -83,9 +84,11 @@ const Workspace = () => {
 
       <WSTemplate>
         <WSRouter path={path} />
-        <OnlyDesktop>
-          <WSSidebar />
-        </OnlyDesktop>
+        {checkDesktop() && (
+          <OnlyDesktop>
+            <WSSidebar />
+          </OnlyDesktop>
+        )}
       </WSTemplate>
 
       <WSMobileNav url={url} />

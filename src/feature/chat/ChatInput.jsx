@@ -81,6 +81,11 @@ const InputBox = styled.form`
   border-bottom: none;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+
+  ${({ theme }) => theme.device.tablet} {
+    border: none;
+    border-top: 1px solid var(--line);
+  }
 `;
 
 const Input = styled.input`
@@ -102,6 +107,10 @@ const PickerContainer = styled.div`
   position: absolute;
   right: 0;
   bottom: var(--inputbox);
+
+  ${({ theme }) => theme.device.tablet} {
+    max-width: 300px;
+  }
 `;
 
 export default ChatInput;

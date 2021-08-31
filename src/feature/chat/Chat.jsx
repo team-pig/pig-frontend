@@ -36,6 +36,14 @@ const Container = styled.section`
   width: 100%;
   height: calc(100vh - var(--minusHeight));
   overflow: hidden;
+
+  ${({ theme }) => theme.device.tablet} {
+    height: 100%;
+  }
+
+  ${({ theme }) => theme.device.mobile} {
+    height: calc(100% - 60px);
+  }
 `;
 
 export default Chat;

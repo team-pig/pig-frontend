@@ -174,6 +174,7 @@ const initialState = {
     document: null,
     board: null,
     calendar: null,
+    modal: null,
   },
 };
 const user = handleActions(

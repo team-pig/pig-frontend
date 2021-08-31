@@ -154,6 +154,7 @@ const StatusM = () => {
 // common
 const Container = styled.div`
   width: 100%;
+  padding-bottom: 60px;
 `;
 
 // My status

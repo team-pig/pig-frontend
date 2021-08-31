@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 // component
 import MarkDownEditor from "../../components/MarkDownEditor";
@@ -20,7 +21,10 @@ import { hiddenScroll } from "../../themes/hiddenScroll";
 import { desktopOnly, mobileOnly } from "../../themes/responsive";
 
 const Information = () => {
+  const history = useHistory();
+
   const { roomId } = useParams();
+  const { url } = useRouteMatch();
   const [editMode, setEditMode] = useState(false);
   const [editedInfo, setEditedInfo] = useState({});
   const editorRef = useRef();
@@ -122,9 +126,14 @@ const Information = () => {
           {roomName}
         </TitleText>
         {isMobile && (
-          <MoreText type="body_4" color="grey">
-            더보기 <Icon icon="arrow-right" size="14px" />
-          </MoreText>
+          <button
+            type="button"
+            onClick={() => history.push(`${url}/main/information`)}
+          >
+            <MoreText type="body_4" color="grey">
+              더보기 <Icon icon="arrow-right" size="14px" />
+            </MoreText>
+          </button>
         )}
         {!isMobile && my === master && (
           <IconBtn

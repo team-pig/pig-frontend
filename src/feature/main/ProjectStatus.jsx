@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 // component & elem
 import Graph from "./Graph";
@@ -11,6 +12,9 @@ import Icon from "../../components/Icon";
 import { sub_1 } from "../../themes/textStyle";
 
 const ProjectStatus = () => {
+  const history = useHistory();
+  const { url } = useRouteMatch();
+
   const { checked, notChecked } = useSelector(
     (state) => state.todos.projectStatus
   );
@@ -28,9 +32,14 @@ const ProjectStatus = () => {
       <ProjectTitle type="body_1">
         프로젝트 현황
         {isMobile && (
-          <MoreText type="body_4" color="grey">
-            더보기 <Icon icon="arrow-right" size="14px" />
-          </MoreText>
+          <button
+            type="button"
+            onClick={() => history.push(`${url}/main/status`)}
+          >
+            <MoreText type="body_4" color="grey">
+              더보기 <Icon icon="arrow-right" size="14px" />
+            </MoreText>
+          </button>
         )}
       </ProjectTitle>
       <ProjectInfo>

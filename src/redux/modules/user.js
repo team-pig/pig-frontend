@@ -17,9 +17,10 @@ const SUBMIT_NEW_PASSWORD = "user/SUBMIT_NEW_PASSWORD";
 
 // action creator
 const login = createAction(LOGIN, (userInfo) => ({ userInfo }));
-const loginCheck = createAction(LOGIN_CHECK, (isLogin, user) => ({
+const loginCheck = createAction(LOGIN_CHECK, (isLogin, user, tutorial) => ({
   isLogin,
   ...user,
+  tutorial,
 }));
 const logout = createAction(LOGOUT, (userInfo) => ({ userInfo }));
 const resetPassword = createAction(RESET_PASSWORD, (userInfo) => ({
@@ -118,10 +119,11 @@ export const __loginCheck =
   async (dispatch, getState, { history }) => {
     try {
       const {
-        data: { ok: isLogin, user },
+        data: { ok: isLogin, user, tutorial },
       } = await userApi.loginCheck();
-
-      dispatch(loginCheck(isLogin, user));
+      console.log(user);
+      console.log(tutorial);
+      dispatch(loginCheck(isLogin, user, tutorial));
     } catch (e) {}
   };
 
@@ -148,6 +150,13 @@ const initialState = {
     avatar: null,
     color: null,
   },
+  tutorial: {
+    roomlist: null,
+    main: null,
+    document: null,
+    board: null,
+    calendar: null,
+  },
 };
 const user = handleActions(
   {
@@ -164,6 +173,7 @@ const user = handleActions(
         draft.user.userId = action.payload._id;
         draft.user.avatar = action.payload.avatar;
         draft.user.color = action.payload.color;
+        draft.tutorial = action.payload.tutorial;
       }),
 
     [LOGOUT]: (state, action) =>

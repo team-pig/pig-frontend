@@ -16,7 +16,7 @@ import { useParams } from "react-router-dom";
 import Icon from "../../components/Icon";
 import InputToggle from "../../components/InputToggle";
 import flex from "../../themes/flex";
-import { body_3, body_4, button } from "../../themes/textStyle";
+import { body_3, button } from "../../themes/textStyle";
 import Avatar from "../../elem/Avatar";
 
 const Todo = ({ todo }) => {
@@ -77,7 +77,6 @@ const Todo = ({ todo }) => {
           )}
         </label>
       </>
-
       <TodoItem
         itemClicked={itemClicked}
         ref={ItemEl}
@@ -95,55 +94,49 @@ const Todo = ({ todo }) => {
             limit={20}
           />
         </TodoInputToggle>
-        <TodoMembers>
-          <DropWrapper>
-            <BoardDrop.Container
-              direction="right"
-              type="default"
-              memberStatus={isCheckedList} // 월요일에 api 패치되면 isCheckedList로 변경해야 함 [예상기]
-              shadow
-            >
-              {_all &&
-                _all.map((member, idx) => {
-                  const target =
-                    isCheckedList.findIndex(
-                      (seletedMember) =>
-                        seletedMember.memberId === member.userId
-                    ) === -1
-                      ? false
-                      : true;
-                  return (
-                    <BoardDrop.Item
-                      key={idx}
-                      target={target}
-                      _onClick={() => {
-                        dispatch(
-                          __memberHandler(
-                            roomId,
-                            todo.todoId,
-                            member.userId,
-                            member.color,
-                            member.avatar,
-                            member.nickname
-                          )
-                        );
-                      }}
-                    >
-                      <Member target={target}>
-                        <Avatar target={member} size={24} />
-                        <Nickname type="body_3">{member.nickname}</Nickname>
-                      </Member>
-                    </BoardDrop.Item>
-                  );
-                })}
-            </BoardDrop.Container>
-          </DropWrapper>
-          {/* <TodoMembersCnt> {todo.members.length}명 </TodoMembersCnt> */}
-        </TodoMembers>
+        <BoardDrop.Container
+          direction="right"
+          type="default"
+          memberStatus={isCheckedList}
+          shadow
+        >
+          {_all &&
+            _all.map((member, idx) => {
+              const target =
+                isCheckedList.findIndex(
+                  (seletedMember) => seletedMember.memberId === member.userId
+                ) === -1
+                  ? false
+                  : true;
+              return (
+                <BoardDrop.Item
+                  key={idx}
+                  target={target}
+                  _onClick={() => {
+                    dispatch(
+                      __memberHandler(
+                        roomId,
+                        todo.todoId,
+                        member.userId,
+                        member.color,
+                        member.avatar,
+                        member.nickname
+                      )
+                    );
+                  }}
+                >
+                  <Member target={target}>
+                    <Avatar target={member} size={24} />
+                    <Nickname>{member.nickname}</Nickname>
+                  </Member>
+                </BoardDrop.Item>
+              );
+            })}
+        </BoardDrop.Container>
         <RemoveTodoIcon>
           <Icon
             icon="remove"
-            size="14px"
+            size="20px"
             color="var(--grey)"
             onClick={deleteTodoHandler}
           />
@@ -155,63 +148,29 @@ const Todo = ({ todo }) => {
 
 const Container = styled.div`
   ${flex("between", "center")}
-  width: 478px;
-  margin: 0 auto;
-  gap: 5px;
+  width: 100%;
+  padding: 0 20px;
+  gap: 10px;
 `;
 
 const RemoveTodoIcon = styled.div`
   ${flex("center", "cetner")}
-  visibility: hidden;
-  width: 20px;
-  height: 20px;
+  margin-left: 10px;
+  cursor: pointer;
 `;
 
 const TodoItem = styled.div`
   ${flex("between", "center")};
   width: 100%;
   min-height: 46px;
-  padding: 0 5px;
   border: 1px solid var(--line);
+  padding: 0 10px;
   cursor: pointer;
-
-  ${(props) =>
-    props.itemClicked
-      ? css`
-          border: 1px solid var(--main);
-
-          ${RemoveTodoIcon} {
-            visibility: visible;
-          }
-        `
-      : ""}
-
-  &:hover {
-    ${RemoveTodoIcon} {
-      visibility: visible;
-    }
-  }
-`;
-
-const DropWrapper = styled.div`
-  ${flex()}
-  width: 100px;
-`;
-
-const TodoMembers = styled.div`
-  ${flex("between", "center")}
-  padding: 0 5px;
-  gap: 5px;
-`;
-
-const TodoMembersCnt = styled.div`
-  ${body_4};
-  color: var(--darkgrey);
 `;
 
 const TodoInputToggle = styled.div`
   ${body_3};
-  width: 65%;
+  width: 70%;
 `;
 
 const CheckboxIcon = styled(Icon)`
@@ -220,7 +179,8 @@ const CheckboxIcon = styled(Icon)`
   height: 20px;
 `;
 
-const Nickname = styled(Text)`
+const Nickname = styled.div`
+  ${body_3};
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -231,7 +191,6 @@ const Member = styled.div`
   width: 100px;
   ${flex("start", "cetner")}
   ${button}
-
   ${Nickname} {
     margin-left: 10px;
     color: ${(props) => (props.target ? "var(--white)" : "var(--darkgrey)")};

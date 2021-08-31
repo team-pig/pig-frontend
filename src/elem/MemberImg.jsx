@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import flex from "../themes/flex";
 import { Text } from "./index";
 
 const MemberImg = ({ memberStatus }) => {
@@ -65,30 +66,29 @@ const MemberImg = ({ memberStatus }) => {
 };
 
 const ProfileImg = styled.div`
+  ${flex()}
   position: relative;
-  display: flex;
   flex-shrink: 0;
-  right: 20px;
   width: 30px;
   height: 30px;
-  margin: 0;
   box-sizing: content-box;
   background-size: cover;
   background-position: center center;
   ${(props) =>
     props.bgColor && `background-color: ${props.theme.colors[props.bgColor]};`}
-  background-image: url("${(props) => props.src}");
-  border: 1px solid var(${(props) => props.border});
+  background-image: url(${(props) => props.src});
+  border: 1px solid var(--white);
   border-radius: 50%;
+  ${({ theme }) => theme.device.mobile} {
+    width: 20px;
+    height: 20px;
+    font-size: 1rem;
+  }
 `;
 
-const Nickname = styled.span`
-  margin: 0 auto;
+const Nickname = styled.div`
   color: var(--white);
-  font-size: 17px;
-  font-weight: 800;
-  line-height: 30px;
-  vertical-align: middle;
+  font-size: 1.4rem;
 `;
 
 const MemberImgBox = styled.div`
@@ -101,15 +101,5 @@ const MemberImgBox = styled.div`
   margin-right: 5px;
 `;
 
-const MemberCount = styled.div`
-  position: relative;
-  left: -7px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  width: 30px;
-  height: 30px;
-`;
+const MemberCount = styled.div``;
 export default MemberImg;

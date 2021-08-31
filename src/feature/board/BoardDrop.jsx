@@ -106,6 +106,7 @@ const Container = ({
 
 // ---- color picker ---- //
 const ColorPicker = styled.div`
+  flex-shrink: 0;
   width: 20px;
   height: 20px;
   background-color: ${(props) => props.theme.colors[props.bgColor]};
@@ -132,10 +133,10 @@ const ColorItem = styled.div`
 
 // ---- default drop down ---- //
 const DropdownBtn = styled.div`
-  ${flex("center", "center")}
+  ${flex("end", "center")}
   position: relative;
   cursor: pointer;
-  width: 30px;
+  width: 130px;
   height: 30px;
   background-color: var(--white);
 `;
@@ -152,12 +153,6 @@ const ItemWrapper = styled.div`
   -moz-box-shadow: 6px 6px 20px 0px rgba(21, 21, 21, 0.15);
   z-index: var(--indexDrop);
   overflow: hidden;
-  /* div:nth-child(1) {
-    border-radius: 4px 4px 0 0;
-  }
-  div:last-child {
-    border-radius: 0 0 4px 4px;
-  } */
 `;
 
 const Link = styled.div`

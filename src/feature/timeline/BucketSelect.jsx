@@ -75,7 +75,7 @@ const Select = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 58px;
+  height: 48px;
   padding: 0 40px;
   border: none;
   border-bottom: 1px solid var(--line);
@@ -83,6 +83,10 @@ const Select = styled.div`
   cursor: pointer;
   z-index: var(--indexDrop);
   box-sizing: border-box;
+
+  ${({ theme }) => theme.device.mobile} {
+    height: 40px;
+  }
 `;
 
 const Options = styled.ul`

@@ -5,9 +5,7 @@ import flex from "../themes/flex";
 import { head_2 } from "../themes/textStyle";
 
 const MyAvatar = ({ large, medium, ...rest }) => {
-  const { color, avatar, nickname, email } = useSelector(
-    (state) => state.user.user
-  );
+  const { color, avatar, nickname } = useSelector((state) => state.user.user);
 
   return (
     <Container
@@ -62,7 +60,6 @@ const Container = styled.div`
     }
     return "var(--white);";
   }};
-  margin: 0 auto;
   flex-shrink: 0;
   color: var(--white);
 `;

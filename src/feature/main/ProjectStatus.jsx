@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useHistory, useRouteMatch } from "react-router-dom";
+import moment from "moment";
 
 // component & elem
 import Graph from "./Graph";
@@ -9,9 +10,9 @@ import { Text } from "../../elem";
 import flex from "../../themes/flex";
 import Icon from "../../components/Icon";
 
-import { sub_1 } from "../../themes/textStyle";
+import { body_3, body_4, sub_1 } from "../../themes/textStyle";
 
-const ProjectStatus = () => {
+const ProjectStatus = ({ inMore }) => {
   const history = useHistory();
   const { url } = useRouteMatch();
 
@@ -31,7 +32,7 @@ const ProjectStatus = () => {
     <Project>
       <ProjectTitle type="body_1">
         프로젝트 현황
-        {isMobile && (
+        {isMobile && !inMore && (
           <button
             type="button"
             onClick={() => history.push(`${url}/main/status`)}
@@ -47,9 +48,9 @@ const ProjectStatus = () => {
           {`${guagePercent}% 완료(${checked} / ${checked + notChecked})`}
         </Text>
         <Line />
-        <Text type="body_3" color="notice">
-          오늘도 힘찬 프로젝트!
-        </Text>
+        <TodayDate>
+          오늘은 {moment(Date.now()).format("YY년 M월 DD일")} 입니다.
+        </TodayDate>
       </ProjectInfo>
       <Graph
         color="point"
@@ -101,6 +102,14 @@ const Line = styled.div`
 const MoreText = styled(Text)`
   ${flex("start", "center")}
   cursor: pointer;
+`;
+
+const TodayDate = styled.div`
+  ${body_3};
+  color: var(--notice);
+  ${({ theme }) => theme.device.mobile} {
+    ${body_4}
+  }
 `;
 
 export default ProjectStatus;

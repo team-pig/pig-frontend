@@ -114,6 +114,9 @@ const Avatar = styled.div`
 
 const Container = styled.article`
   border-bottom: 1px solid var(--line);
+  ${({ theme }) => theme.device.mobile} {
+    padding: 20px;
+  }
 `;
 
 const MemberMain = styled.div`
@@ -125,7 +128,11 @@ const MemberMain = styled.div`
 const GraphBox = styled.div`
   width: 200px;
   margin-left: 23px;
-  flex-shrink: 0;
+
+  ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    max-width: 300px;
+  }
 `;
 
 const Desc = styled.div`

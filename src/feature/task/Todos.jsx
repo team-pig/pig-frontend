@@ -73,9 +73,9 @@ const Container = styled.div`
 `;
 
 const Header = styled.h1`
-  ${sub_2}
+  ${sub_2};
   color: var(--black);
-  padding: 20px 40px;
+  padding: 20px;
 `;
 
 const TodoInput = styled.input`
@@ -102,8 +102,13 @@ const TodoInput = styled.input`
 
 const TodoForm = styled.form`
   ${flex("between", "center")}
-  margin: 50px 40px 0 40px;
+  margin: 50px 20px 0 20px;
   position: relative;
+
+  ${({ theme }) => theme.device.mobile} {
+    margin: 30px 0 0 0;
+    width: 100%;
+  }
 `;
 
 const TodoList = styled.div`

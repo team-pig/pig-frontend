@@ -15,6 +15,7 @@ const InfoTitle = ({
   editedInfo,
   handleChange,
   clickSave,
+  detailpage,
 }) => {
   const history = useHistory();
   const { url } = useRouteMatch();
@@ -34,11 +35,13 @@ const InfoTitle = ({
           onChange={(e) => handleChange("roomName", e.target.value)}
           maxLength="10"
         />
-        <TextBtn onClick={clickSave}>
-          <Text type="button" color="darkgrey">
-            완료
-          </Text>
-        </TextBtn>
+        {!isMobile && (
+          <TextBtn onClick={clickSave}>
+            <Text type="button" color="darkgrey">
+              완료
+            </Text>
+          </TextBtn>
+        )}
       </TitleBox>
     );
   }
@@ -48,7 +51,7 @@ const InfoTitle = ({
       <TitleText type="head_3" color="black">
         {roomName}
       </TitleText>
-      {isMobile && (
+      {isMobile && !detailpage && (
         <button
           type="button"
           onClick={() => history.push(`${url}/main/information`)}
@@ -95,6 +98,13 @@ const TitleInput = styled.input`
   width: 100%;
   height: 52px;
   color: var(--black);
+
+  ${({ theme }) => theme.device.mobile} {
+    ${sub_1}
+    height: 26px;
+    margin-top: 10px;
+    font-weight: 700;
+  }
 `;
 
 const TextBtn = styled.button`

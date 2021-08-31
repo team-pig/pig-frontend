@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 import Tags from "./Tags";
 
-import { sub_2 } from "../../themes/textStyle";
+import { body_3, sub_2 } from "../../themes/textStyle";
 
 const InfoTags = ({ editMode, editedInfo, handleChange }) => {
   const room = useSelector((state) => state.room.roomInfos);
@@ -36,7 +36,7 @@ const TagContainer = styled.div`
   margin-bottom: 20px;
 
   ${({ theme }) => theme.device.mobile} {
-    margin-bottom: 10x;
+    margin-bottom: 10px;
   }
 `;
 
@@ -44,6 +44,12 @@ const TagsInput = styled.input`
   ${sub_2};
   width: 100%;
   height: 100%;
+
+  ${({ theme }) => theme.device.mobile} {
+    ${body_3};
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 `;
 
 export default InfoTags;

@@ -5,7 +5,8 @@ import { useSelector } from "react-redux";
 import MarkDownEditor from "../../components/MarkDownEditor";
 import MarkDownViewer from "../../components/MarkDownViewer";
 
-const InfoDesc = forwardRef(({ editMode }, ref) => {
+const InfoDesc = forwardRef(({ editMode, detailpage }, ref) => {
+  const isMobile = useSelector((state) => state.resize.isMobile);
   const room = useSelector((state) => state.room.roomInfos);
   const { desc } = room;
 
@@ -15,7 +16,7 @@ const InfoDesc = forwardRef(({ editMode }, ref) => {
     initialEditType: "markdown",
     useCommandShortcut: true,
     previewHighlight: false,
-    height: "200px",
+    height: detailpage ? "40vh" : "200px",
     ref: ref,
     initialValue: desc,
   };
@@ -24,7 +25,7 @@ const InfoDesc = forwardRef(({ editMode }, ref) => {
     initialValue: desc,
   };
 
-  if (editMode) {
+  if (editMode && !isMobile) {
     return (
       <EditorContainer>
         <MarkDownEditor option={mainEditorOpt} />
@@ -51,6 +52,7 @@ const ViewerContainer = styled.div`
 
   ${({ theme }) => theme.device.mobile} {
     padding: 0;
+    margin-top: 10px;
     margin-bottom: -10px;
   }
 `;

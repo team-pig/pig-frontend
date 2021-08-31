@@ -14,7 +14,8 @@ const InfoSubTitle = ({ editMode, editedInfo, handleChange }) => {
       <Textarea
         maxLength={500}
         value={editedInfo.subtitle}
-        minHeight={40}
+        minHeight={20}
+        mobileText="body_3"
         _onChange={(e) => handleChange("subtitle", e.target.value)}
       />
     );

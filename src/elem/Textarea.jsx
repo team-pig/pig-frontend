@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { sub_1 } from "../themes/textStyle";
+import { body_3, sub_1 } from "../themes/textStyle";
 
 const Textarea = ({
   value,
@@ -54,5 +54,9 @@ const Wrapper = styled.textarea`
   width: 100%;
   resize: none;
   overflow-y: visible;
+
+  ${({ theme }) => theme.device.mobile} {
+    ${(props) => props.mobileText === "body_3" && `${body_3}`}
+  }
 `;
 export default Textarea;

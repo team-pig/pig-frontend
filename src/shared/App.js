@@ -27,7 +27,7 @@ const App = () => {
   } = useSelector((state) => state.router);
 
   const result =
-    pathname.includes("workspace") || pathname.includes("password");
+    pathname.includes("workspace") || pathname.includes("resetPassword");
 
   useEffect(() => {
     if (window.innerWidth < 768) {

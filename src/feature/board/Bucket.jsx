@@ -55,6 +55,7 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
               {...provided.draggableProps}
               ref={provided.innerRef}
               isDragging={snap.isDragging}
+              className="buckets"
             >
               <BucketHeader {...provided.dragHandleProps}>
                 <BucketTitle>
@@ -127,7 +128,7 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
                 {(provided, snapshot) => {
                   return (
                     <>
-                      <AddCardBtn>
+                      <AddCardBtn className="add-card">
                         <Icon
                           icon="plus-circle"
                           size="20px"

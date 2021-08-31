@@ -18,7 +18,7 @@ const WSSidebar = () => {
 
   return (
     <>
-      <Container sidebar={isShowSidebar}>
+      <Container sidebar={isShowSidebar} className="chat-sidebar">
         <Notice _onClick={handleSidebar} />
         {/* <RoomMember /> */}
         <Chat />

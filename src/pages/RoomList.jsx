@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
@@ -12,8 +12,6 @@ import BookmarkList from "../feature/room/BookmarkList";
 import SearchBar from "../feature/room/SearchBar";
 import DefaultRoomList from "../feature/room/DefaultRoomList";
 
-//elements
-
 //redux
 import {
   __getRoomList,
@@ -23,13 +21,25 @@ import {
 import SEO from "../components/SEO";
 import { initMyTodos } from "../redux/modules/todos";
 import { initBoard } from "../redux/modules/board";
+import JoyrideContainer from "../feature/tutorial/JoyrideContainer";
+import { roomListSteps } from "../feature/tutorial/tutorialSteps";
 
 const RoomList = () => {
   const dispatch = useDispatch();
+
   const [showModal, setShowModal] = useState(false);
   const [isJoin, setIsJoin] = useState(false);
   const [showImg, setShowImg] = useState(false);
   const { room, searchKeyword } = useSelector((state) => state.room) || [];
+  const tutorial = useSelector((state) => state.user.tutorial);
+
+  const roomBlankImg = useCallback(() => {
+    if (room && room.length > 0) {
+      setShowImg(false);
+    } else {
+      setShowImg(true);
+    }
+  }, [room]);
 
   useEffect(() => {
     const getRoom = async () => {
@@ -44,51 +54,60 @@ const RoomList = () => {
     dispatch(initMyTodos());
   }, [room]);
 
-  const roomBlankImg = () => {
-    if (room && room.length > 0) {
-      setShowImg(false);
-    } else {
-      setShowImg(true);
-    }
-  };
-
-  const joinModal = () => {
+  const joinModal = useCallback(() => {
     setShowModal((pre) => !pre);
     setIsJoin(true);
-  };
+  }, []);
 
-  const addModal = () => {
+  const addModal = useCallback(() => {
     setShowModal((pre) => !pre);
     setIsJoin(false);
-  };
+  }, []);
+
+  // Joyride(튜토리얼)
+  const [isShowTutorial, setIsShowTutorial] = useState(false);
+
+  useEffect(() => {
+    if (tutorial && tutorial["roomlist"] === true && isShowTutorial === false) {
+      setIsShowTutorial(true);
+    }
+  }, [tutorial, isShowTutorial]);
 
   return (
     <>
       <SEO title="협업 방 목록" />
+      {isShowTutorial && (
+        <JoyrideContainer
+          run={isShowTutorial}
+          setRun={setIsShowTutorial}
+          steps={roomListSteps}
+          page="roomlist"
+        />
+      )}
       <Template>
         <Container>
-        {!isJoin && <AddRoomModal showModal={showModal} addModal={addModal} />}
-        {isJoin && (
-          <JoinRoomModal showModal={showModal} joinModal={joinModal} />
-        )}
-        <SearchBar joinModal={joinModal} addModal={addModal} />
-        {showImg && <RoomBlank />}
-        {searchKeyword && searchKeyword.length > 0 ? (
-          ""
-        ) : (
-          <>
-            <BookmarkList />
-            <DefaultRoomList />
-          </>
-        )}
-        <SearchResult />
+          {!isJoin && (
+            <AddRoomModal showModal={showModal} addModal={addModal} />
+          )}
+          {isJoin && (
+            <JoinRoomModal showModal={showModal} joinModal={joinModal} />
+          )}
+          <SearchBar joinModal={joinModal} addModal={addModal} />
+          {showImg && <RoomBlank />}
+          {searchKeyword && searchKeyword.length > 0 ? (
+            ""
+          ) : (
+            <>
+              <BookmarkList />
+              <DefaultRoomList />
+            </>
+          )}
+          <SearchResult />
         </Container>
       </Template>
     </>
   );
 };
 
-const Container = styled.div`
-
-`;
+const Container = styled.div``;
 export default React.memo(RoomList);

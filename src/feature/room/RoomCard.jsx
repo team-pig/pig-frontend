@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 import ModifyRoomModal from "./ModifyRoomModal";
 import DropDown from "./DropDown";
 //elements
-import { mobileHidden, mobileOnly } from "../../themes/responsive";
+import { mobileHidden } from "../../themes/responsive";
 import { Text } from "../../elem/index";
 import { body_3 } from "../../themes/textStyle";
 import MemberImg from "../../elem/MemberImg";
@@ -17,9 +17,7 @@ import LinkIcon from "./LinkIcon";
 import More from "./More";
 
 //redux
-import {
-  __toggleBookmark,
-} from "../../redux/modules/room";
+import { __toggleBookmark } from "../../redux/modules/room";
 
 //roomList map의 list에서 받아오는 값
 const RoomCard = ({
@@ -121,7 +119,7 @@ const RoomCard = ({
             <More dropDownModal={dropDownModal} />
           </IconMobileBox>
           <IconBox>
-            <LinkIcon inviteCode={inviteCode} />
+            <LinkIcon className="invitation-code" inviteCode={inviteCode} />
             <BookMark isMarked={isMarked} clickBookmark={clickBookmark} />
           </IconBox>
           <CardSection>

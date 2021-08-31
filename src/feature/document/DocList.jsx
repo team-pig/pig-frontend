@@ -20,11 +20,11 @@ const DocList = ({ docList }) => {
       <TitleBox>
         {/* 문서 목록은 나중에 검색으로 이용할 예정. inputToggle 사용 가능 */}
         <Text type="body_1">문서 목록</Text>
-        <PlusBtn onClick={toDocAdd}>
+        <PlusBtn onClick={toDocAdd} className="doc-add-btn">
           <Icon icon="plus-lg" size="24px" color="var(--darkgrey)" />
         </PlusBtn>
       </TitleBox>
-      <List>
+      <List className="doc-list">
         {docList.map((doc) => (
           <DocListItem
             key={doc.docId}

@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { resetReducer } from "../../redux/configStore";
@@ -15,6 +15,8 @@ import { Text } from "../../elem";
 
 const WSHeader = ({ url }) => {
   const history = useHistory();
+  const { pathname } = useLocation();
+
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.user);
@@ -26,7 +28,7 @@ const WSHeader = ({ url }) => {
   };
 
   return (
-    <Container>
+    <Container pathname={pathname}>
       <LeftSide>
         <TitleBox>
           <Text type="sub_1">{room && room.roomName}</Text>
@@ -67,6 +69,7 @@ const Container = styled.header`
   padding: 0 40px;
   background-color: var(--white);
   border-bottom: 1px solid var(--line);
+  ${(props) => props.pathname.includes("chat") && `display: none;`}
 
   ${({ theme }) => theme.device.tablet} {
     padding: 0 20px;

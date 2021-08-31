@@ -8,7 +8,7 @@ export const userApi = {
     instance.post("resetPassword/sendEmail", {
       email,
     }),
-
+  modifyTutorialStatus: (info) => instance.patch("/tutorial", info),
   submitNewPassword: (id, resetInfo) =>
     instance.post(`/resetPassword/${id}`, resetInfo),
 };

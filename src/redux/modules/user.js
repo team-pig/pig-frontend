@@ -14,6 +14,7 @@ const LOGIN_CHECK = "user/LOGIN_CHECK";
 const LOGOUT = "user/LOGOUT";
 const RESET_PASSWORD = "user/RESET_PASSWORD";
 const SUBMIT_NEW_PASSWORD = "user/SUBMIT_NEW_PASSWORD";
+const MODIFY_TUTORIAL_STATUS = "user/MODIFY_TUTORIAL_STATUS";
 
 // action creator
 const login = createAction(LOGIN, (userInfo) => ({ userInfo }));
@@ -26,6 +27,10 @@ const logout = createAction(LOGOUT, (userInfo) => ({ userInfo }));
 const resetPassword = createAction(RESET_PASSWORD, (userInfo) => ({
   userInfo,
 }));
+const modifyTutorialStatus = createAction(
+  MODIFY_TUTORIAL_STATUS,
+  (pageName) => ({ pageName })
+);
 
 // Thunk
 export const __submitNewPassword = (id, resetInfo) => async (dispatch) => {
@@ -121,8 +126,6 @@ export const __loginCheck =
       const {
         data: { ok: isLogin, user, tutorial },
       } = await userApi.loginCheck();
-      console.log(user);
-      console.log(tutorial);
       dispatch(loginCheck(isLogin, user, tutorial));
     } catch (e) {}
   };
@@ -134,6 +137,21 @@ export const __register =
       await userApi.register(userInfo);
       window.alert("회원가입이 완료되었습니다! ✨");
       history.replace("/login");
+    } catch (e) {
+      dispatch(
+        pop({ value: true, msg: e.response.data.errorMessage, option: true })
+      );
+    }
+  };
+
+export const __modifyTutorialStatus =
+  (page) =>
+  async (dispatch, getState, { history }) => {
+    try {
+      const obj = {};
+      obj[`${page}`] = false;
+      const { data } = await userApi.modifyTutorialStatus({ tutorial: obj });
+      dispatch(modifyTutorialStatus(page));
     } catch (e) {
       dispatch(
         pop({ value: true, msg: e.response.data.errorMessage, option: true })
@@ -182,6 +200,10 @@ const user = handleActions(
         draft.user.email = null;
         draft.user.nickname = null;
         draft.user.userId = null;
+      }),
+    [MODIFY_TUTORIAL_STATUS]: (state, action) =>
+      produce(state, (draft) => {
+        draft.tutorial[`${action.payload.pageName}`] = false;
       }),
   },
   initialState

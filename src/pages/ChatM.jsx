@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import Chat from "../feature/chat/Chat";
 import Icon from "../components/Icon";
 import flex from "../themes/flex";
-import { IconBtn, Text } from "../elem";
 import { mobileHidden } from "../themes/responsive";
+import { IconBtn, Text } from "../elem";
 
 const ChatM = () => {
   const history = useHistory();
+  const { roomId } = useParams();
 
   const room = useSelector((state) => state.room.roomInfos);
+
+  useEffect(() => {
+    window.addEventListener(
+      "resize",
+      (e) => e.innerWidth >= 1024 && history.replace(`/workspace/${roomId}`)
+    );
+    return () =>
+      window.addEventListener(
+        "resize",
+        (e) => e.innerWidth >= 1024 && history.replace(`/workspace/${roomId}`)
+      );
+  }, [roomId, history]);
 
   return (
     <Container>

@@ -10,7 +10,14 @@ import { Text } from "../../elem";
 import flex from "../../themes/flex";
 import Icon from "../../components/Icon";
 
-import { body_3, body_4, sub_1 } from "../../themes/textStyle";
+import {
+  body_3,
+  body_4,
+  caption,
+  head_6,
+  sub_1,
+  sub_2,
+} from "../../themes/textStyle";
 
 const ProjectStatus = ({ inMore }) => {
   const history = useHistory();
@@ -44,12 +51,12 @@ const ProjectStatus = ({ inMore }) => {
         )}
       </ProjectTitle>
       <ProjectInfo>
-        <Text type="body_2" color="">
-          {`${guagePercent}% 완료(${checked} / ${checked + notChecked})`}
-        </Text>
+        <Complete>
+          {`${guagePercent}% 완료 ::: (${checked} / ${checked + notChecked})`}
+        </Complete>
         <Line />
         <TodayDate>
-          오늘은 {moment(Date.now()).format("YY년 M월 DD일")} 입니다.
+          {moment(Date.now()).format("YYYY년 M월 DD일 (ddd)")}
         </TodayDate>
       </ProjectInfo>
       <Graph
@@ -84,12 +91,20 @@ const ProjectTitle = styled(Text)`
 
 const ProjectInfo = styled.div`
   ${flex("start", "center")};
+  width: 100%;
   margin-top: 31px;
   margin-bottom: 10px;
 
   ${({ theme }) => theme.device.mobile} {
     margin-top: 14px;
   }
+`;
+
+const Complete = styled.div`
+  ${body_3};
+  width: 100%;
+  text-align: center;
+  color: var(--darkgrey);
 `;
 
 const Line = styled.div`
@@ -105,10 +120,12 @@ const MoreText = styled(Text)`
 `;
 
 const TodayDate = styled.div`
-  ${body_3};
+  width: 100%;
+  ${body_4};
   color: var(--notice);
+  text-align: center;
   ${({ theme }) => theme.device.mobile} {
-    ${body_4}
+    ${body_4};
   }
 `;
 

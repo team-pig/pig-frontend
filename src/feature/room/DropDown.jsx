@@ -23,12 +23,12 @@ const DropDown = ({
   // show로 confirmModal 보이고 안보이고 결정
   const show = useSelector((state)=>state.confirm.show)
   const isMaster = userId === master ? true : false;
-
+  const msg = useSelector((state) => state.confirm.msg)
   // Confirm 컴포넌트에서 confirm 가져오기
   // confirm(모달 열고, true, false 값 받기, promise사용해서 true, false 값 받은 뒤에 행동하도록 하는 역할)
   const {confirm} = Confirm();
-  const showConfirm = async () => {
-    const isConfirmed = await confirm();
+  const showConfirm = async (show, msg) => {
+    const isConfirmed = await confirm(show, msg);
     
     if(isConfirmed && isMaster) {
       dispatch(__deleteRoom(roomId));
@@ -40,19 +40,19 @@ const DropDown = ({
   }
 
   // openConfirm은 조건을 걸어서 showConfirm 실행하도록 하는 역할
-  const  openDeleteConfirm = async (e) => {
+  const  openDeleteConfirm = (e) => {
     e.stopPropagation();
     setIsDisplayDrop(false);
     if(isMaster){
-      showConfirm();
+      showConfirm(show, "🗑 정말 이 방을 삭제할까요?");
     }
   }
 
-  const openExitConfirm = async (e) => {
+  const openExitConfirm = (e) => {
     e.stopPropagation();
     setIsDisplayDrop(false);
     if(!isMaster){
-      showConfirm();
+      showConfirm(show, "👋 정말 이 방을 나가시겠어요?");
     }
   }
 
@@ -73,7 +73,7 @@ const DropDown = ({
 
   return (
     <>
-    {show && <ConfirmModal msg="정말...할까요?" />}
+    {show && <ConfirmModal msg={msg} />}
       {isDisplayDrop && (
         <Container ref={dropDownModal}>
           <Btn disabled={disabled} onClick={openModModal}>

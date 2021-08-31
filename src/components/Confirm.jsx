@@ -21,8 +21,8 @@ const Confirm = () => {
     closeConfirm(show);
     resolveCallback(false);
   };
-  const confirm = () => {
-    dispatch(__confirm(show));
+  const confirm = (show, msg) => {
+    dispatch(__confirm(show, msg));
     return new Promise((res, rej) => {
       resolveCallback = res;
     });

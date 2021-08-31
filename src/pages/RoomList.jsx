@@ -21,6 +21,7 @@ import {
 } from "../redux/modules/room";
 import SEO from "../components/SEO";
 import { initMyTodos } from "../redux/modules/todos";
+import { initBoard } from "../redux/modules/board";
 
 const RoomList = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const RoomList = () => {
     getRoom();
 
     dispatch(initRoom({}));
+    dispatch(initBoard());
     dispatch(initMyTodos());
   }, [room]);
 

@@ -187,7 +187,9 @@ export const __loadCard = (roomId) => async (dispatch) => {
     });
 
     dispatch(loadCard(loadedCards));
-  } catch (e) {}
+  } catch (e) {
+    dispatch(__reqError(e));
+  }
 };
 
 // 카드상세조회
@@ -197,7 +199,7 @@ export const __loadCardById = (roomId, cardId) => async (dispatch) => {
     dispatch(loadCardById(data));
     dispatch(loadCardByIdToCalendar(data));
   } catch (e) {
-    console.log(`카드 불러오기 실패 ${e}`);
+    dispatch(__reqError(e));
   }
 };
 
@@ -229,7 +231,7 @@ export const __createCard =
 
       dispatch(createCard(newCard, newCardOrder, bucketId));
     } catch (e) {
-      console.log(`카드 생성 실패! ${e}`);
+      dispatch(__reqError(e));
     }
   };
 
@@ -252,7 +254,7 @@ export const __updateCardLocate =
       dispatch(updateCardLocate(cardId, buckets));
       await cardApi.editCardLocation(roomId, paramBuckets);
     } catch (e) {
-      console.log(`card 옮기기 실패! ${e}`);
+      dispatch(__reqError(e));
     }
   };
 
@@ -281,7 +283,7 @@ export const __updateCardLocateOtherBucket =
         destinationBucketId
       );
     } catch (e) {
-      console.log(`card 옮기기 실패! ${e}`);
+      dispatch(__reqError(e));
     }
   };
 
@@ -321,7 +323,7 @@ export const __deleteCard =
       const newCardOrder = currentCardOrder.filter((card) => card !== cardId);
       dispatch(deleteCard(bucketId, newCardOrder, newCards));
     } catch (e) {
-      console.log(`카드 삭제실패! ${e}`);
+      dispatch(__reqError(e));
     }
   };
 

@@ -75,7 +75,7 @@ const WSTabs = ({ url }) => {
       </Item>
       <Item onClick={toCalendar}>
         <MenuText type="body_1" here={checkTab("timeline")}>
-          타임라인
+          일정
         </MenuText>
       </Item>
     </List>

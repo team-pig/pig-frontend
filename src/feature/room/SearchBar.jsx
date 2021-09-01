@@ -9,7 +9,7 @@ import { Button } from "../../elem/index";
 import { head_2 } from "../../themes/textStyle";
 import RoomInput from "./RoomInput";
 
-import { __searchRoom } from "../../redux/modules/room";
+import { __searchRoom, __getInviteCodeRoom } from "../../redux/modules/room";
 
 const SearchBar = ({ joinModal, addModal }) => {
   const dispatch = useDispatch();
@@ -34,6 +34,7 @@ const SearchBar = ({ joinModal, addModal }) => {
     if (searchContent.length > 0) {
       dispatch(__searchRoom(""));
     }
+    dispatch(__getInviteCodeRoom(""));
     joinModal();
   };
   const openAddModal = (e) => {

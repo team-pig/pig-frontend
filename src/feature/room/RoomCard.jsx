@@ -15,9 +15,13 @@ import BookMark from "./BookMark";
 import RoomTags from "./RoomTags";
 import LinkIcon from "./LinkIcon";
 import More from "./More";
+import Alert from "../../components/Alert";
+
 
 //redux
 import { __toggleBookmark } from "../../redux/modules/room";
+import { pop } from "../../redux/modules/alert";
+
 
 //roomList map의 list에서 받아오는 값
 const RoomCard = ({
@@ -38,6 +42,7 @@ const RoomCard = ({
   const [isDisplayDrop, setIsDisplayDrop] = useState(false);
   const [isMarked, setIsMarked] = useState(false);
   const userId = useSelector((state) => state.room.userId);
+  const alertOption = useSelector((state) => state.alert);
   const history = useHistory();
   const [convertedMember, setConvertedMember] = useState([]);
 
@@ -94,6 +99,8 @@ const RoomCard = ({
 
   return (
     <>
+      <Alert dispatcher={pop} alertOption={alertOption} />
+
       <ModifyRoomModal
         roomId={roomId}
         showModModal={showModModal}

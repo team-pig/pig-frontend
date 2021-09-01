@@ -51,7 +51,7 @@ const ModalOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.01);
+  background-color: rgba(0, 0, 0, 0.08);
 `;
 
 const Desc = styled.div`
@@ -70,7 +70,7 @@ const ModalContent = styled.div`
   width: 404px;
   height: 200px;
   background-color: var(--white);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03), 0 6px 6px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.07), 0 6px 6px rgba(0, 0, 0, 0.07);
   ${({ theme }) => theme.device.mobile} {
     width: 280px;
   }

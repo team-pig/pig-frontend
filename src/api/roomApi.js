@@ -9,7 +9,14 @@ export const roomApi = {
       },
     }),
 
-  getInviteCodeRoom: (inviteCode) => instance.get(`/rooms/room/${inviteCode}`),
+  // getInviteCodeRoom: (inviteCode) => instance.get(`/rooms/room/${inviteCode}`),
+  getInviteCodeRoom: (inviteCode) =>
+    instance.get("/rooms/room/", {
+      params: {
+        inviteCode: inviteCode,
+      },
+    }),
+
   getOneRoom: (roomId) => instance.get(`/room/${roomId}/main`),
 
   addRoom: (room) => instance.post("/room", room),

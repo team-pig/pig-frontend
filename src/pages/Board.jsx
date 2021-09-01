@@ -22,7 +22,7 @@ const Board = () => {
   const [isShowTutorial, setIsShowTutorial] = useState(false);
 
   useEffect(() => {
-    if (tutorial && tutorial["main"] === true && isShowTutorial === false) {
+    if (tutorial && tutorial["board"] === true && isShowTutorial === false) {
       setIsShowTutorial(true);
     }
   }, [tutorial]);

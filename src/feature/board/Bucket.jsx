@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { useParams } from "react-router";
@@ -23,7 +23,7 @@ import Icon from "../../components/Icon";
 
 const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
   const dispatch = useDispatch();
-  const bucketName = `제목없는 버킷`;
+  const bucketName = "제목없는 버킷";
   const cardTitle = "제목없는 카드";
   const initDate = moment().format("YYYY-MM-DD");
   const initColor = "blue";
@@ -33,18 +33,21 @@ const Bucket = ({ bucket, index, bucketCards, BucketCnt }) => {
   const bucketId = bucket.bucketId;
 
   // 카드생성 handler
-  const addCard = () => {
+  const addCard = useCallback(() => {
     dispatch(__createCard(roomId, bucketId, cardTitle, initDate, initColor));
-  };
+  }, [roomId, bucketId, initDate, dispatch]);
 
   // 버킷생성
-  const addBucket = () => {
+  const addBucket = useCallback(() => {
     dispatch(__createBucket(roomId, bucketName));
-  };
+  }, [roomId, dispatch]);
 
-  const editFunc = (key, value) => {
-    dispatch(__updateBucketTitle(roomId, { bucketId, [key]: value }));
-  };
+  const editFunc = useCallback(
+    (key, value) => {
+      dispatch(__updateBucketTitle(roomId, { bucketId, [key]: value }));
+    },
+    [roomId, bucketId, dispatch]
+  );
 
   return (
     <>
@@ -178,6 +181,7 @@ const Container = styled.div`
 const BucketList = styled.div`
   ${flex("start", "cetner", false)}
   padding-bottom: 24px;
+  min-height: 600px;
   gap: 20px;
   flex-grow: 1;
   outline: none;
@@ -215,7 +219,7 @@ const BucketHeader = styled.div`
 const BucketHeaderBar = styled.div`
   width: 260px;
   height: 4px;
-  background-color: ${(props) => props.theme.colors["mint"]};
+  background-color: var(--main);
   margin: 0 auto;
   border-radius: 0px 4px 4px 0px;
   margin-bottom: 14px;

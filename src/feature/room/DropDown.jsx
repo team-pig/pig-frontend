@@ -39,7 +39,7 @@ const DropDown = ({
     }
   }
 
-  // openConfirm은 조건을 걸어서 showConfirm 실행하도록 하는 역할
+  // openDeleteConfirm은 방 삭제 showConfirm 실행하도록 하는 역할
   const  openDeleteConfirm = (e) => {
     e.stopPropagation();
     setIsDisplayDrop(false);
@@ -48,6 +48,7 @@ const DropDown = ({
     }
   }
 
+  // openDeleteConfirm은 방 나가기 showConfirm 실행하도록 하는 역할
   const openExitConfirm = (e) => {
     e.stopPropagation();
     setIsDisplayDrop(false);
@@ -56,7 +57,7 @@ const DropDown = ({
     }
   }
 
-
+// 드랍다운 외부 클릭 시 드랍 다운 닫힘
   const handleClickOutside = (e) => {
     e.stopPropagation();
     if (dropDownModal.current && !dropDownModal.current.contains(e.target)) {

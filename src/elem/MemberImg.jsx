@@ -7,6 +7,7 @@ const MemberImg = ({ memberStatus }) => {
   const [showAllMember, setShowAllMember] = useState(false);
 
   useEffect(() => {
+      // member 수가 3보다 클 때 잘라서 화면에 표기
     if (memberStatus.length > 3) {
       setShowAllMember(false);
     } else {
@@ -29,6 +30,7 @@ const MemberImg = ({ memberStatus }) => {
                   bgColor={member.avatar === "" ? member.color : ""}
                   border={memberStatus.length > 1 ? "--white" : ""}
                 >
+                   {/* 멤버의 아바타 이미지 없으면 닉네임으로 표시 */}
                   {member.avatar === "" && (
                     <Nickname>{member.memberName[0].toLowerCase()}</Nickname>
                   )}
@@ -36,6 +38,7 @@ const MemberImg = ({ memberStatus }) => {
               );
             })
           : memberStatus.slice(0, 3).map((member, idx) => {
+            // 모든 멤버 표시 x => 3명만 표시
               return (
                 <ProfileImg
                   style={{
@@ -47,6 +50,7 @@ const MemberImg = ({ memberStatus }) => {
                   bgColor={member.avatar === "" ? member.color : ""}
                   border={"--white"}
                 >
+                  {/* 멤버의 아바타 이미지 없으면 닉네임으로 표시 */}
                   {member.avatar === "" && (
                     <Nickname>{member.memberName[0].toLowerCase()}</Nickname>
                   )}

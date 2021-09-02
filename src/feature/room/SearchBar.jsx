@@ -11,6 +11,7 @@ import RoomInput from "./RoomInput";
 
 import { __searchRoom, __getInviteCodeRoom } from "../../redux/modules/room";
 
+// 검색창
 const SearchBar = ({ joinModal, addModal }) => {
   const dispatch = useDispatch();
   const [searchContent, setSearchContent] = useState("");
@@ -18,6 +19,7 @@ const SearchBar = ({ joinModal, addModal }) => {
   const { searchedRoom } = useSelector((state) => state.room);
   const searchRef = useRef();
 
+  // 모바일에서 검색창 바깥 클릭 시 검색창 안보이도록 함
   const handleClickOutside = (e) => {
     e.stopPropagation();
     if (searchRef.current && !searchRef.current.contains(e.target)) {
@@ -30,13 +32,19 @@ const SearchBar = ({ joinModal, addModal }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [searchRef]);
 
+  // 방 입장하기 버튼 클릭 시 JoinModal 열기
   const openJoinModal = (e) => {
+    // 검색 키워드 있는 상태에서 JoinModal 열면, 
+    // 검색 화면 사라지도록 함
     if (searchContent.length > 0) {
       dispatch(__searchRoom(""));
     }
+    // 방 정보 초기화하고 모달 열기
     dispatch(__getInviteCodeRoom(""));
     joinModal();
   };
+
+  // 방 만들기 버튼 클릭 시 AddModal 열기
   const openAddModal = (e) => {
     if (searchContent.length > 0) {
       dispatch(__searchRoom(""));
@@ -44,19 +52,23 @@ const SearchBar = ({ joinModal, addModal }) => {
     addModal();
   };
 
+  // 검색키워드 저장
   const changeSearchContent = (keyword) => {
     dispatch(__searchRoom(keyword));
     setSearchContent(keyword);
   };
 
+  // onKeyUp과 debounce를 사용하여 서버 요청을 줄임
   const delay = debounce(changeSearchContent, 500);
 
+  // onKeyPress 사용하여 enter 사용 시 검색
   const _onKeyPress = (e) => {
     if (e.key === "Enter") {
       dispatch(__searchRoom(searchContent));
     }
   };
 
+  // 모바일 화면에서 검색창 display 기능
   const openMobileSearch = () => {
     setIsShowSearch((pre) => !pre);
   };

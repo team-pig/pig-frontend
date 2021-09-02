@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Text } from "../../elem/index";
 
-//joinModal 띄울 때
+//joinModal 띄울 때 태그
 const RoomTags = ({ tag, type }) => {
   if (type === "modal") {
     return (
@@ -14,6 +14,7 @@ const RoomTags = ({ tag, type }) => {
       </>
     );
   } else {
+    // RoomCard의 태그
   return (
     <>
       <Text type="body_2">

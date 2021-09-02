@@ -15,6 +15,7 @@ import RoomInput from "./RoomInput";
 //redux
 import { __getInviteCodeRoom, __joinRoom } from "../../redux/modules/room";
 
+// 방 입장하기 모달(다른 사람이 만든 방에 초대코드로 입장)
 const JoinRoomModal = ({ showModal, joinModal }) => {
   const dispatch = useDispatch();
   const [inviteCode, setInviteCode] = useState("");
@@ -24,10 +25,12 @@ const JoinRoomModal = ({ showModal, joinModal }) => {
   const isInviteRoom =
     _room.inviteCode === inviteCode.inviteCode ? true : false;
 
+  // 초대코드 입력 시 방 정보를 미리 띄우기 위해 리덕스에서 방 정보 받아옴 
   const { roomImage, roomName, tag } = useSelector(
     (state) => state.room.inviteCodeRoom
   );
 
+  // inviteCode(36자) 입력, 방 정보 서버에 요청
   const changeHandler = async (keyword) => {
     setInviteCode(keyword);
     if (keyword.length === 36) {
@@ -36,9 +39,12 @@ const JoinRoomModal = ({ showModal, joinModal }) => {
     }
   };
 
+  // inviteCode 요청 수 줄이기 위해 debounce 사용
   const debounceFunc = debounce(changeHandler, 200);
 
+  // inviteCode===""이라면 disabled 처리
   const disabled = inviteCode === "";
+  // disabled 아닐 때 방 입장하기
   const join = () => {
     if (!disabled) {
       dispatch(__joinRoom({ inviteCode }));

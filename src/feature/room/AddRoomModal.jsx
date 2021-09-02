@@ -13,6 +13,7 @@ import RoomInput from "./RoomInput";
 import { __addRoom } from "../../redux/modules/room";
 import ImageModule from "../../components/ImageModule";
 
+// 방 만들기 기능 수행하는 모달
 const AddRoomModal = ({ showModal, addModal }) => {
   const dispatch = useDispatch();
   const [roomImg, setRoomImg] = useState("");
@@ -25,12 +26,14 @@ const AddRoomModal = ({ showModal, addModal }) => {
     tag: "",
   });
 
+  // ImageModule의 함수, s3 이용해 url 형태로 파일 저장
   const getImgUrlFromS3 = async (callback, file) => {
     const result = await callback(file);
     setRoomImg(result);
     setImgUrl("");
   };
 
+  //방 정보를 저장, 방 정보가 바뀔 때마다 실행
   const changeHandler = (e) => {
     const { value, name } = e.target;
     setContents({ ...contents, [name]: value });
@@ -44,23 +47,29 @@ const AddRoomModal = ({ showModal, addModal }) => {
     setImgUrl(e.target.value);
   };
 
+  //tag를 받아서 , 기준으로 나누어 배열로 만듦
   const tagList = tagText.tag.split(",");
 
+  //방 이름이 없으면 disabled 처리
   const disabled = contents.roomName === "";
+  
+  //서버에 방 정보 저장 => 방 만들기
   const saveFile = () => {
     if (!disabled) {
       dispatch(__addRoom(contents, roomImg, tagList));
     }
+    //방 정보 초기화(이후 모달 띄울 때 기본 화면 띄우기 위해)
     setContents({
       roomName: "",
       subtitle: "",
       tag: "",
     });
-    addModal();
+    addModal(); //모달 끄기
     setImgUrl("");
     setRoomImg("");
   };
 
+  //방 만들기 취소
   const cancelFile = () => {
     addModal();
     setImgUrl("");

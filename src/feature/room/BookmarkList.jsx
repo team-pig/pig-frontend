@@ -6,6 +6,8 @@ import { Text } from "../../elem/index.js";
 
 import RoomCard from "./RoomCard";
 
+// 즐겨찾기 된 리스트, RoomList Page 상단에 띄움
+// isCheck 기준으로 즐겨찾기 표시
 const BookmarkList = () => {
   const { markedList, userId } = useSelector((state) => state.room);
 

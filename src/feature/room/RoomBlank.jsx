@@ -4,6 +4,7 @@ import styled from "styled-components";
 //component
 import RoomBlankImg from "../../assets/img/room-blank-img.jpg";
 
+// 방이 없을 때 보이는 이미지
 const RoomBlank = () => {
   return (
     <>

@@ -105,6 +105,8 @@ export const getMarkedList = createAction(
 export const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 
 //thunk function
+
+// 방 입장하기(다른 사람이 만든 방 초대코드로 입장하기)
 export const __joinRoom =
   (inviteCode) =>
   async (dispatch, getState, { history }) => {
@@ -117,6 +119,7 @@ export const __joinRoom =
     }
   };
 
+// 방 나가기(다른 사람이 만든 방 나가기)
 export const __exitRoom =
   (roomId) =>
   async (dispatch, getState, { history }) => {
@@ -128,14 +131,17 @@ export const __exitRoom =
     }
   };
 
+// 방 검색하기(방 이름으로 검색 가능)
 export const __searchRoom =
   (searchContent, page) =>
   async (dispatch, getState, { history }) => {
     try {
       if (searchContent === "" || searchContent === null) {
+        // 검색어가 없을 때, 기존의 RoomList를 화면에 띄우도록 한다.
         const _room = getState().room.room;
         dispatch(searchRoom(_room));
       } else {
+        // 검색어가 있을 경우 서버에서 받아온 RoomList를 화면에 띄운다.
         const { data } = await roomApi.searchRoom(searchContent);
         dispatch(searchRoom(data, searchContent));
       }
@@ -144,6 +150,7 @@ export const __searchRoom =
     }
   };
 
+// 방 만들기
 export const __addRoom =
   (contents, roomImg, tagList) =>
   async (dispatch, getState, { history }) => {
@@ -164,6 +171,7 @@ export const __addRoom =
     }
   };
 
+// 방 수정하기
 export const __editRoom =
   (roomId, contents, roomImg, tagList) =>
   async (dispatch, getState, { history }) => {
@@ -203,6 +211,7 @@ export const __editRoomDetail = (roomId, newRoominfos) => async (dispatch) => {
   }
 };
 
+// 즐겨찾기 된 방 조회하기
 export const __getMarkedList =
   (isMarked) =>
   async (dispatch, getState, { history }) => {
@@ -214,15 +223,18 @@ export const __getMarkedList =
     }
   };
 
+// 방 조회하기
 export const __getRoomList =
   () =>
   async (dispatch, getState, { history }) => {
     try {
+      // next, page, size를 이용해서 무한스크롤이 되도록 만들어준다
       const _next = getState().room.paging.next;
       const _page = getState().room.paging.page;
       const _size = getState().room.paging.size;
       if (_page === false && _next === false) return;
 
+      // 서버에 다음 페이지 요청
       const { data } = await roomApi.getRoomList(_page, _size);
 
       const totalPages = data.totalPages;
@@ -233,12 +245,14 @@ export const __getRoomList =
         next: _page === totalPages ? false : true,
         size: _size,
       };
+      // 서버에서 받아온 페이지 리듀서로 전달
       dispatch(getRoomList(data.room, paging, userId));
     } catch (e) {
       dispatch(__reqError(e));
     }
   };
 
+// 방 정보 조회(초대코드 입력 시)
 export const __getInviteCodeRoom =
   (inviteCode) =>
   async (dispatch, getState, { history }) => {
@@ -249,7 +263,7 @@ export const __getInviteCodeRoom =
       dispatch(__reqError(e));
     }
   };
-
+// 방 하나의 정보 불러오기
 export const __getOneRoom =
   (roomId) =>
   async (dispatch, getState, { history }) => {
@@ -262,7 +276,7 @@ export const __getOneRoom =
       dispatch(__reqError(e));
     }
   };
-
+// 방 삭제하기
 export const __deleteRoom =
   (roomId) =>
   async (dispatch, getState, { history }) => {
@@ -273,14 +287,17 @@ export const __deleteRoom =
       dispatch(__reqError(e));
     }
   };
-
+// 즐겨찾기 기능
 export const __toggleBookmark =
   (roomId, isMarked) =>
   async (dispatch, getState, { history }) => {
     try {
+      // 즐겨찾기 안되어 있을 때 즐겨찾기 하기
       if (isMarked === false) {
         const data = await roomApi.addBookmark(roomId);
+        // 즐겨찾기 리스트 받아오기
         const markedList = data.data.markedList;
+        // 현재 즐겨찾기 된 방 받아오기
         const room = data.data.bookmarkedRoom;
         dispatch(addBookmark(room, roomId, markedList));
       } else if (isMarked === true) {
@@ -339,6 +356,7 @@ const room = handleActions(
         draft.isMarked = true;
       }),
 
+    // 즐겨찾기 리스트, 기본 방 리스트에서 모두 수정 가능
     [EDIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
         let defaultRoomIdx = draft.room.findIndex(
@@ -358,7 +376,7 @@ const room = handleActions(
           ...action.payload.room.room,
         };
       }),
-
+    // 즐겨찾기 리스트, 기본 방 리스트에서 모두 삭제 가능
     [DELETE_ROOM]: (state, action) =>
       produce(state, (draft) => {
         let defaultRoomIdx = draft.room.findIndex(
@@ -376,7 +394,7 @@ const room = handleActions(
           draft.markedList.splice(markedRoomIdx, 1);
         }
       }),
-
+    // 즐겨찾기 리스트, 기본 방 리스트에서 모두 나가기 가능
     [EXIT_ROOM]: (state, action) =>
       produce(state, (draft) => {
         let defaultRoomIdx = draft.room.findIndex(

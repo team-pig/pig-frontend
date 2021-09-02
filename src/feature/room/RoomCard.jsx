@@ -59,6 +59,8 @@ const RoomCard = ({
     return () => setIsCheck(false);
   }, [isCheck]);
 
+  // 즐겨찾기 목록과 defaultRoomList의 즐겨찾기 해제 동시성을 위해 useEffect 사용하여 화면에 보여줌
+
   const setIsCheck = () => {
     if (isCheck) {
       setIsMarked(true);

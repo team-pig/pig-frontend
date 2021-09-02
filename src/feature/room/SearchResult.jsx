@@ -11,8 +11,7 @@ const SearchResult = () => {
     <>
       <RoomContainer>
         <RoomBox>
-          {/* userIdList room.bookmarkedMembers 안에 딕셔너리로 userId 들어가있어서 
-          북마크 여부 확인하기 위해 userId를 뽑아내서 확인함 */}
+          {/* 즐겨찾기 표시를 위해 즐겨찾기된 리스트에 검색된 방 index가 있는 지 찾기 */}
           {searchedRoom &&
             searchedRoom.map((room, idx) => {
               const markedIdx = markedList.findIndex(
@@ -21,6 +20,7 @@ const SearchResult = () => {
 
               return (
                 <RoomCard
+                // 찾은 index로 즐겨찾기 체크
                   isCheck={markedIdx === -1 ? false : true}
                   key={room.roomId}
                   {...room}

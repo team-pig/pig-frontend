@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Icon from "../../components/Icon";
 import IconBtn from "../../elem/IconBtn";
 
+// 더 보기 아이콘, 클릭하면 드롭다운이 보인다
 const More = ({ dropDownModal }) => {
   return (
     <Box>

@@ -4,7 +4,7 @@ import { cookies } from "../shared/cookie";
 const env = process.env.NODE_ENV;
 
 const targetServer =
-  env === "development" ? "http://13.125.222.70/" : "https://itda.shop/";
+  env === "development" ? "http://3.35.238.222/" : "https://itda.shop/";
 
 export const instance = axios.create({
   baseURL: targetServer,

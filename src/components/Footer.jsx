@@ -15,7 +15,7 @@ const Footer = () => {
         <Info>&copy; 2021 Teampig</Info>
         <Info
           onClick={() => {
-            console.log("최종 배포만 남았다..!");
+            console.log("고생했어요 우리팀원들..!");
           }}
         >
           ver 1.0.0

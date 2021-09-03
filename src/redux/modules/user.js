@@ -138,9 +138,19 @@ export const __register =
       window.alert("회원가입이 완료되었습니다! ✨");
       history.replace("/login");
     } catch (e) {
-      dispatch(
-        pop({ value: true, msg: e.response.data.errorMessage, option: true })
-      );
+      if (e.response.status === 500) {
+        dispatch(
+          pop({
+            value: true,
+            msg: "유효하지 않은 아이디 형식입니다.",
+            option: true,
+          })
+        );
+      } else {
+        dispatch(
+          pop({ value: true, msg: e.response.data.errorMessage, option: true })
+        );
+      }
     }
   };
 

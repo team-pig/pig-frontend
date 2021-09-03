@@ -93,7 +93,7 @@ const Login = (props) => {
               placeholder="비밀번호"
             />
             <InputBottom>
-              <SaveMyId>
+              {/* <SaveMyId>
                 <SaveId
                   id="saveId"
                   type="checkbox"
@@ -109,7 +109,7 @@ const Login = (props) => {
                   )}
                 </Label>
                 <div>아이디 저장</div>
-              </SaveMyId>
+              </SaveMyId> */}
               <Password onClick={() => history.push("/serach-password")}>
                 비밀번호를 분실했어요
               </Password>
@@ -138,7 +138,7 @@ const SaveId = styled.input`
 `;
 
 const InputBottom = styled.div`
-  ${flex("between")}
+  ${flex("end")}
 `;
 const SaveMyId = styled.div`
   ${flex()}

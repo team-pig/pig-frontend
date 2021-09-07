@@ -76,14 +76,15 @@
 
 : 유틸리티 서비스 특성 상 유저가 어떤 기기에서도 정보를 확인할 수 있고, 최대한 편집이 가능하도록 반응형 웹을 구현했습니다.
 
-<img src="https://drive.google.com/uc?id=16_i3IFzA--LLu6ezgvPwP-4SVBLBmt0L" alt="반응형 웹" />
+![teampig_responsvie](https://user-images.githubusercontent.com/72782239/132382724-b2cbf1eb-0b35-454f-ad34-2e26969a1a7b.png)
+
 
 
 ### 튜토리얼
 : 처음 서비스를 사용하는 유저를 위해 페이지마다 튜토리얼을 제공하고 있습니다.  
  현재는 최초 사용자에게만 안내하고 있지만, 추후 각 페이지에서 '도움'버튼을 통해 튜토리얼을 제공할 수 있도록 업데이트 예정입니다.
  
-<img src="https://drive.google.com/uc?id=1u-mKvEbSa8EqeJiyxolRK1JZhIQQIMZU" alt="튜토리얼" width="500px"/>
+![bucket-tutorial](https://user-images.githubusercontent.com/72782239/132382803-cfd95bca-88b2-4df7-8256-e34508ff41a8.png)
 
 
 

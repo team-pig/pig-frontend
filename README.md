@@ -50,6 +50,8 @@
 
 <br />
 
+## <a href="https://github.com/team-pig/pig-frontend/wiki">협업돼지 프론트엔드의 고민 살펴보기 - WIKI</a>
+
 ## 🔧주요 기능
 <a href="https://github.com/team-pig/pig-frontend/wiki/%E2%9C%A8-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C">자세한 기능 소개 바로가기 - Wiki</a>
 

@@ -3,7 +3,7 @@ import { cookies } from "../shared/cookie";
 
 const env = process.env.NODE_ENV;
 
-const targetServer = "http://152.67.195.96:80";
+const targetServer = "https://guqdjqehowl.shop/";
 // env === "development" ? "http://3.35.238.222/" : "https://guqdjqehowl.shop";
 
 export const instance = axios.create({
